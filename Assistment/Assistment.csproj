@@ -47,6 +47,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Parsing\ArithmetikParser.cs" />
     <Compile Include="Texts\CString.cs" />
     <Compile Include="Texts\DrawBox.cs" />
     <Compile Include="Texts\DrawContext.cs" />
