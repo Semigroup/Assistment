@@ -6,15 +6,28 @@ using System.Text.RegularExpressions;
 
 namespace Assistment.Parsing
 {
-    public abstract class ArithmetischerAusdruck
+    public class Typus
+    {
+        public string name { get; private set; }
+
+        public Typus generisch;
+
+        public Typus(string name)
+        {
+            this.name = name;
+        }
+
+        public static Typus Void = new Typus("Void");
+    }
+
+    public abstract class Prog
     {
         protected List<Token> vorzeichen;
 
-        public ArithmetischerAusdruck(List<Token> vorzeichen)
+        public Prog(List<Token> vorzeichen)
         {
             setVorzeichen(vorzeichen);
         }
-
         public void setVorzeichen(List<Token> vorzeichen)
         {
             this.vorzeichen = new List<Token>();
@@ -38,6 +51,8 @@ namespace Assistment.Parsing
                 }
         }
 
+        public abstract Typus getReturnType();
+
         public override string ToString()
         {
             StringBuilder sb = new StringBuilder(vorzeichen.Count);
@@ -46,10 +61,17 @@ namespace Assistment.Parsing
             return sb.ToString();
         }
     }
-    public class Reihe : ArithmetischerAusdruck
+    public class LeerProg : Prog
+    {
+        public override Typus getReturnType()
+        {
+            return Typus.Void;
+        }
+    }
+    public class Reihe : Prog
     {
         public List<Token> operatoren = new List<Token>();
-        public List<ArithmetischerAusdruck> ausdrucke = new List<ArithmetischerAusdruck>();
+        public List<Prog> ausdrucke = new List<Prog>();
 
         public Reihe(List<Token> vorzeichen)
             : base(vorzeichen)
@@ -57,7 +79,7 @@ namespace Assistment.Parsing
 
         }
 
-        public void addKlammer(ArithmetischerAusdruck klammer)
+        public void addKlammer(Prog klammer)
         {
             this.ausdrucke.Add(klammer);
         }
@@ -70,10 +92,10 @@ namespace Assistment.Parsing
             operatoren.Add(token);
         }
 
-        public ArithmetischerAusdruck ordne()
+        public Prog ordne()
         {
             List<Token> operatoren = new List<Token>(this.operatoren);
-            List<ArithmetischerAusdruck> ausdrucke = new List<ArithmetischerAusdruck>(this.ausdrucke);
+            List<Prog> ausdrucke = new List<Prog>(this.ausdrucke);
             for (int i = 0; i < Token.getPrecedence(TokenType.Max); i++)
             {
                 List<int> ops = new List<int>();
@@ -109,7 +131,7 @@ namespace Assistment.Parsing
         public override string ToString()
         {
             StringBuilder sb = new StringBuilder();
-            IEnumerator<ArithmetischerAusdruck> en = ausdrucke.GetEnumerator();
+            IEnumerator<Prog> en = ausdrucke.GetEnumerator();
             sb.Append(base.ToString());
             sb.Append("[");
             en.MoveNext();
@@ -123,13 +145,18 @@ namespace Assistment.Parsing
             sb.Append("]");
             return sb.ToString();
         }
+
+        public override Typus getReturnType()
+        {
+            return ordne().getReturnType();
+        }
     }
-    public class Operation : ArithmetischerAusdruck
+    public class Operation : Prog
     {
         public Token operation;
-        public ArithmetischerAusdruck operand1, operand2;
+        public Prog operand1, operand2;
 
-        public Operation(List<Token> vorzeichen, Token operation, ArithmetischerAusdruck operand1, ArithmetischerAusdruck operand2)
+        public Operation(List<Token> vorzeichen, Token operation, Prog operand1, Prog operand2)
             : base(vorzeichen)
         {
             this.operation = operation;
@@ -141,8 +168,12 @@ namespace Assistment.Parsing
         {
             return base.ToString() + "(" + operand1.ToString() + " " + operation.text + " " + operand2.ToString() + ")";
         }
+        public override Typus getReturnType()
+        {
+            return operand1.getReturnType();
+        }
     }
-    public class Ausdruck : ArithmetischerAusdruck
+    public class Ausdruck : Prog
     {
         Token token;
         public Ausdruck(List<Token> vorzeichen, Token token)
@@ -155,10 +186,67 @@ namespace Assistment.Parsing
             return base.ToString() + token.text;
         }
     }
+    public class ListProg : Prog
+    {
+        List<Prog> progs;
+        public ListProg(List<Token> vorzeichen, List<Prog> progs)
+            : base(vorzeichen)
+        {
+            this.progs = progs;
+        }
+    }
+    public class IfProg : Prog
+    {
+        Prog ifProg;
+        Prog thenProg;
+        Prog elseProg;
+
+        public IfProg(List<Token> vorzeichen, Prog ifProg, Prog thenProg, Prog elseProg)
+            : base(vorzeichen)
+        {
+            this.ifProg = ifProg;
+            this.thenProg = thenProg;
+            this.elseProg = elseProg;
+        }
+        public IfProg(List<Token> vorzeichen, Prog ifProg, Prog thenProg)
+            : base(vorzeichen)
+        {
+            this.ifProg = ifProg;
+            this.thenProg = thenProg;
+            this.elseProg = new LeerProg();
+        }
+    }
+    public class ForProg : Prog
+    {
+        Constraint forCons;
+        Prog doProg;
+
+        public ForProg(List<Token> vorzeichen, Constraint forCons, Prog doProg)
+            : base(vorzeichen)
+        {
+            this.forCons = forCons;
+            this.doProg = doProg;
+        }
+    }
+    public class WhileProg : Prog
+    {
+        Prog whileProg;
+        Prog doProg;
+
+        public WhileProg(List<Token> vorzeichen, Prog whileProg, Prog doProg)
+            : base(vorzeichen)
+        {
+            this.whileProg = whileProg;
+            this.doProg = doProg;
+        }
+    }
+
+    public abstract class Constraint
+    {
+    }
 
     public class Parser
     {
-
         public string code;
         private IEnumerator<Token> token;
 
@@ -169,19 +257,64 @@ namespace Assistment.Parsing
             token = t.tokenize(code).GetEnumerator();
             token.MoveNext();
 
-            ArithmetischerAusdruck a = parseReihe(null).ordne();//.ordne();
+            Prog a = parseReihe(null).ordne();//.ordne();
 
             System.Windows.Forms.MessageBox.Show(a.ToString());
         }
 
-        public ArithmetischerAusdruck parseKlammer(List<Token> vorzeichen)
+        public Prog parseProg(List<Token> vorzeichen)
+        {
+            switch (token.Current.type)
+            {
+                case TokenType.KlammerAuf:
+                    return parseKlammer(vorzeichen);
+                default:
+                    return parseReihe(vorzeichen);
+                case TokenType.Stern:
+                case TokenType.Plus:
+                case TokenType.Minus:
+                case TokenType.Slash:
+                case TokenType.Nicht:
+                    vorzeichen.Add(token.Current);
+                    break;
+                case TokenType.If:
+                    token.MoveNext();
+                    Prog ifProg = parseKlammer(new List<Token>());
+                    Prog thenProg = parseKlammer(new List<Token>());
+                    if (token.Current.type == TokenType.Else)
+                    {
+                        token.MoveNext();
+                        Prog elseProg = parseKlammer(new List<Token>());
+                        return new IfProg(vorzeichen, ifProg, thenProg, elseProg);
+                    }
+                    else
+                        return new IfProg(vorzeichen, ifProg, thenProg);
+                case TokenType.For:
+                    token.MoveNext();
+                    return new ForProg(vorzeichen, parseConstraint(), parseKlammer(new List<Token>()));
+                case TokenType.While:
+                    token.MoveNext();
+                    return new WhileProg(vorzeichen, parseKlammer(new List<Token>()), parseKlammer(new List<Token>()));
+                case TokenType.Return:
+                    token.MoveNext();
+                    return parseReihe(vorzeichen);
+            }
+            throw new NotImplementedException();
+        }
+
+        public Constraint parseConstraint()
+        {
+            throw new NotImplementedException();
+        }
+        public Prog parseKlammer(List<Token> vorzeichen)
         {
             if (token.Current.type != TokenType.KlammerAuf) throw new Exception();
             token.MoveNext();
-            ArithmetischerAusdruck a = parseReihe(vorzeichen).ordne();
-            if (token.Current.type != TokenType.KlammerZu) throw new Exception();
+            List<Prog> progs = new List<Prog>();
+            while (token.Current.type != TokenType.KlammerZu)
+                progs.Add(parseProg(new List<Token>()));
             token.MoveNext();
-            return a;
+            return new ListProg(vorzeichen, progs);
         }
         public Reihe parseReihe(List<Token> vorzeichen)
         {
@@ -270,7 +403,6 @@ namespace Assistment.Parsing
     public enum TokenType
     {
         //ZeilenEnde,
-        Wort,
         String,
 
         KlammerAuf,
@@ -305,6 +437,13 @@ namespace Assistment.Parsing
         Größer,
         KleinerGleich,
         GrößerGleich,
+
+        If,
+        Else,
+        For,
+        While,
+        Return,
+        Wort,
 
         Gleich,
         HutGleich,
@@ -444,7 +583,6 @@ namespace Assistment.Parsing
         private static Regex xZeilenende = new Regex("$");
 
         private static Regex xString = new Regex("\".*\"", RegexOptions.Singleline);
-        private static Regex xWort = new Regex("[A-Za-z][A-Za-z0-9]*");
         private static Regex xKlammerAuf = new Regex(@"\(");
         private static Regex xKlammerZu = new Regex(@"\)");
         private static Regex xSchweifAuf = new Regex(@"{");
@@ -478,6 +616,12 @@ namespace Assistment.Parsing
         private static Regex xGrosser = new Regex(@">(?!=)");
         private static Regex xGrosserGleich = new Regex(@">=");
 
+        private static Regex xIf = new Regex(@"(?<![a-zA-Z])if(?![a-zA-Z])");
+        private static Regex xFor = new Regex(@"(?<![a-zA-Z])for(?![a-zA-Z])");
+        private static Regex xWhile = new Regex(@"(?<![a-zA-Z])while(?![a-zA-Z])");
+        private static Regex xReturn = new Regex(@"(?<![a-zA-Z])return(?![a-zA-Z])");
+        private static Regex xWort = new Regex("[A-Za-z][A-Za-z0-9]*");
+
         private static Regex xGleich = new Regex(@"(?<![=\*/\^\+\-%&\|<>])=(?![=<>])");
         private static Regex xGleichGleich = new Regex(@"==");
         private static Regex xNichtGleich = new Regex(@"!=");
@@ -506,8 +650,6 @@ namespace Assistment.Parsing
                 //    return xZeilenende;
                 case TokenType.String:
                     return xString;
-                case TokenType.Wort:
-                    return xWort;
                 case TokenType.KlammerAuf:
                     return xKlammerAuf;
                 case TokenType.KlammerZu:
@@ -566,6 +708,17 @@ namespace Assistment.Parsing
                     return xKleinerGleich;
                 case TokenType.GrößerGleich:
                     return xGrosserGleich;
+
+                case TokenType.If:
+                    return xIf;
+                case TokenType.For:
+                    return xFor;
+                case TokenType.While:
+                    return xWhile;
+                case TokenType.Return:
+                    return xReturn;
+                case TokenType.Wort:
+                    return xWort;
 
                 case TokenType.SlashGleich:
                     return xSlashGleich;
