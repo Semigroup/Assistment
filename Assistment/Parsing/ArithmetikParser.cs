@@ -6,18 +6,62 @@ using System.Text.RegularExpressions;
 
 namespace Assistment.Parsing
 {
+    public struct Objekt
+    {
+        Typus typ;
+        object objekt;
+        string bezeichner;
+    }
+
+    public class Generika
+    {
+    }
     public class Typus
     {
         public string name { get; private set; }
-
-        public Typus generisch;
+        public bool generisch;
+        public Generika schema;
+        public Typus generus;
+        public SortedDictionary<string, Methode> methoden = new SortedDictionary<string,Methode>();
+        public SortedDictionary<TokenType, Operator> operatoren = new SortedDictionary<TokenType,Operator>();
+        public SortedDictionary<TokenType, Vorzeichen> vorzeichen = new SortedDictionary<TokenType,Vorzeichen>();
+        public SortedDictionary<Typus, Konversator> konversatoren = new SortedDictionary<Typus,Konversator>();
 
         public Typus(string name)
         {
             this.name = name;
+            this.generisch = false;
         }
 
-        public static Typus Void = new Typus("Void");
+        public static Typus Void = new Typus("void");
+        public static Typus Any = new Typus("any");
+        public static Typus Ganzzahl = new Typus("int");
+        public static Typus Fliesskommazahl = new Typus("float");
+    }
+
+    public abstract class Methode
+    {
+        public Typus aufruferTyp;
+        public string bezeichner;
+        public Typus ruckgabeTyp;
+        public Typus[] eingabeTypen;
+        /// <summary>
+        /// Anzahl der Eingabe Werte
+        /// </summary>
+        public int stelligkeit;
+
+        public abstract Objekt execute(Objekt aufrufer, List<Objekt> eingabe);
+    }
+    public abstract class Operator : Methode
+    {
+        TokenType token;
+    }
+    public abstract class Vorzeichen : Methode
+    {
+        TokenType token;
+    }
+    public abstract class Konversator : Methode
+    {
     }
 
     public abstract class Prog
@@ -63,6 +107,11 @@ namespace Assistment.Parsing
     }
     public class LeerProg : Prog
     {
+        public LeerProg()
+            : base(null)
+        {
+
+        }
         public override Typus getReturnType()
         {
             return Typus.Void;
@@ -173,6 +222,13 @@ namespace Assistment.Parsing
             return operand1.getReturnType();
         }
     }
+    public class Bezeichnerkette : Prog
+    {
+        public override Typus getReturnType()
+        {
+            throw new NotImplementedException();
+        }
+    }
     public class Ausdruck : Prog
     {
         Token token;
@@ -185,6 +241,11 @@ namespace Assistment.Parsing
         {
             return base.ToString() + token.text;
         }
+
+        public override Typus getReturnType()
+        {
+            throw new NotImplementedException();
+        }
     }
     public class ListProg : Prog
     {
@@ -193,6 +254,11 @@ namespace Assistment.Parsing
             : base(vorzeichen)
         {
             this.progs = progs;
+        }
+
+        public override Typus getReturnType()
+        {
+            throw new NotImplementedException();
         }
     }
     public class IfProg : Prog
@@ -215,6 +281,11 @@ namespace Assistment.Parsing
             this.thenProg = thenProg;
             this.elseProg = new LeerProg();
         }
+
+        public override Typus getReturnType()
+        {
+            throw new NotImplementedException();
+        }
     }
     public class ForProg : Prog
     {
@@ -227,6 +298,11 @@ namespace Assistment.Parsing
             this.forCons = forCons;
             this.doProg = doProg;
         }
+
+        public override Typus getReturnType()
+        {
+            throw new NotImplementedException();
+        }
     }
     public class WhileProg : Prog
     {
@@ -238,6 +314,11 @@ namespace Assistment.Parsing
         {
             this.whileProg = whileProg;
             this.doProg = doProg;
+        }
+
+        public override Typus getReturnType()
+        {
+            throw new NotImplementedException();
         }
     }
 
@@ -617,6 +698,7 @@ namespace Assistment.Parsing
         private static Regex xGrosserGleich = new Regex(@">=");
 
         private static Regex xIf = new Regex(@"(?<![a-zA-Z])if(?![a-zA-Z])");
+        private static Regex xElse = new Regex(@"(?<![a-zA-Z])else(?![a-zA-Z])");
         private static Regex xFor = new Regex(@"(?<![a-zA-Z])for(?![a-zA-Z])");
         private static Regex xWhile = new Regex(@"(?<![a-zA-Z])while(?![a-zA-Z])");
         private static Regex xReturn = new Regex(@"(?<![a-zA-Z])return(?![a-zA-Z])");
@@ -711,6 +793,8 @@ namespace Assistment.Parsing
 
                 case TokenType.If:
                     return xIf;
+                case TokenType.Else:
+                    return xElse;
                 case TokenType.For:
                     return xFor;
                 case TokenType.While:
