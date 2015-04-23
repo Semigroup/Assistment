@@ -22,10 +22,7 @@ namespace Assistment.Parsing
         public bool generisch;
         public Generika schema;
         public Typus generus;
-        public SortedDictionary<string, Methode> methoden = new SortedDictionary<string,Methode>();
-        public SortedDictionary<TokenType, Operator> operatoren = new SortedDictionary<TokenType,Operator>();
-        public SortedDictionary<TokenType, Vorzeichen> vorzeichen = new SortedDictionary<TokenType,Vorzeichen>();
-        public SortedDictionary<Typus, Konversator> konversatoren = new SortedDictionary<Typus,Konversator>();
+        public SortedDictionary<string, Methode> methoden = new SortedDictionary<string, Methode>();
 
         public Typus(string name)
         {
@@ -37,6 +34,7 @@ namespace Assistment.Parsing
         public static Typus Any = new Typus("any");
         public static Typus Ganzzahl = new Typus("int");
         public static Typus Fliesskommazahl = new Typus("float");
+        public static Typus Basis = new Typus("basis");
     }
 
     public abstract class Methode
@@ -70,29 +68,12 @@ namespace Assistment.Parsing
 
         public Prog(List<Token> vorzeichen)
         {
-            setVorzeichen(vorzeichen);
+            this.vorzeichen = vorzeichen;
         }
+
         public void setVorzeichen(List<Token> vorzeichen)
         {
-            this.vorzeichen = new List<Token>();
-            if (vorzeichen != null)
-                foreach (var item in vorzeichen)
-                {
-                    switch (item.type)
-                    {
-                        case TokenType.Stern:
-                        case TokenType.Plus:
-                            break;
-                        case TokenType.Hut:
-                        case TokenType.Minus:
-                        case TokenType.Slash:
-                        case TokenType.Nicht:
-                            this.vorzeichen.Add(item);
-                            break;
-                        default:
-                            throw new NotImplementedException();
-                    }
-                }
+            this.vorzeichen = vorzeichen;
         }
 
         public abstract Typus getReturnType();
@@ -166,7 +147,7 @@ namespace Assistment.Parsing
                 foreach (var index in ops)
                 {
                     int k = links ? index - j++ : index;
-                    Operation op = new Operation(null, operatoren[k], ausdrucke[k], ausdrucke[k + 1]);
+                    Operation op = new Operation(new List<Token>(), operatoren[k], ausdrucke[k], ausdrucke[k + 1]);
                     ausdrucke[k] = op;
                     ausdrucke.RemoveAt(k + 1);
                     operatoren.RemoveAt(k);
@@ -224,6 +205,11 @@ namespace Assistment.Parsing
     }
     public class Bezeichnerkette : Prog
     {
+        public Bezeichnerkette(List<Token> vorzeichen)
+            : base(vorzeichen)
+        {
+
+        }
         public override Typus getReturnType()
         {
             throw new NotImplementedException();
@@ -254,6 +240,20 @@ namespace Assistment.Parsing
             : base(vorzeichen)
         {
             this.progs = progs;
+        }
+
+        public override string ToString()
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.Append(base.ToString());
+            sb.Append("{");
+            foreach (var item in progs)
+            {
+                sb.AppendLine();
+                sb.Append(item.ToString());
+            }
+            sb.Append("}");
+            return sb.ToString();
         }
 
         public override Typus getReturnType()
@@ -338,27 +338,31 @@ namespace Assistment.Parsing
             token = t.tokenize(code).GetEnumerator();
             token.MoveNext();
 
-            Prog a = parseReihe(null).ordne();//.ordne();
+            Prog a = parseProg(new List<Token>());
 
             System.Windows.Forms.MessageBox.Show(a.ToString());
         }
 
         public Prog parseProg(List<Token> vorzeichen)
         {
+            List<Token> subVorzeichen = new List<Token>();
             switch (token.Current.type)
             {
+                case TokenType.STOP:
+                    halt();
+                    break;
                 case TokenType.KlammerAuf:
-                    return parseKlammer(vorzeichen);
-                default:
-                    return parseReihe(vorzeichen);
+                    vorzeichen.AddRange(subVorzeichen);
+                    return parseKlammer(subVorzeichen);
                 case TokenType.Stern:
                 case TokenType.Plus:
                 case TokenType.Minus:
                 case TokenType.Slash:
                 case TokenType.Nicht:
-                    vorzeichen.Add(token.Current);
+                    subVorzeichen.Add(token.Current);
                     break;
                 case TokenType.If:
+                    vorzeichen.AddRange(subVorzeichen);
                     token.MoveNext();
                     Prog ifProg = parseKlammer(new List<Token>());
                     Prog thenProg = parseKlammer(new List<Token>());
@@ -371,16 +375,26 @@ namespace Assistment.Parsing
                     else
                         return new IfProg(vorzeichen, ifProg, thenProg);
                 case TokenType.For:
+                    vorzeichen.AddRange(subVorzeichen);
                     token.MoveNext();
                     return new ForProg(vorzeichen, parseConstraint(), parseKlammer(new List<Token>()));
                 case TokenType.While:
+                    vorzeichen.AddRange(subVorzeichen);
                     token.MoveNext();
                     return new WhileProg(vorzeichen, parseKlammer(new List<Token>()), parseKlammer(new List<Token>()));
                 case TokenType.Return:
                     token.MoveNext();
-                    return parseReihe(vorzeichen);
+                    return parseReihe(vorzeichen, subVorzeichen);
+                default:
+                    return parseReihe(vorzeichen, subVorzeichen);
             }
             throw new NotImplementedException();
+        }
+
+        public void halt()
+        {
+            System.Diagnostics.Debugger.Break();
+            token.MoveNext();
         }
 
         public Constraint parseConstraint()
@@ -397,23 +411,25 @@ namespace Assistment.Parsing
             token.MoveNext();
             return new ListProg(vorzeichen, progs);
         }
-        public Reihe parseReihe(List<Token> vorzeichen)
+        public Prog parseReihe(List<Token> vorzeichen, List<Token> subVorzeichen)
         {
-            List<Token> subVorzeichen = new List<Token>();
             bool operatorErwartet = false;
             Reihe r = new Reihe(vorzeichen);
             do
             {
                 switch (token.Current.type)
                 {
+                    case TokenType.STOP:
+                        halt();
+                        break;
                     case TokenType.Wort:
                     case TokenType.String:
                     case TokenType.Zahl:
                     case TokenType.KommaZahl:
                         if (operatorErwartet)
-                            throw new NotImplementedException();
+                            return r.ordne();
                         r.addAusdruck(subVorzeichen, token.Current);
-                        subVorzeichen.Clear();
+                        subVorzeichen = new List<Token>();
                         operatorErwartet = true;
                         break;
 
@@ -421,7 +437,7 @@ namespace Assistment.Parsing
                         if (operatorErwartet)
                             throw new NotImplementedException();
                         r.ausdrucke.Add(parseKlammer(subVorzeichen));
-                        subVorzeichen.Clear();
+                        subVorzeichen = new List<Token>();
                         operatorErwartet = true;
                         break;
 
@@ -469,7 +485,7 @@ namespace Assistment.Parsing
                     case TokenType.KlammerZu:
                         if (subVorzeichen.Count > 0)
                             throw new NotImplementedException();
-                        return r;
+                        return r.ordne();
 
                     default:
                         throw new NotImplementedException();
@@ -477,12 +493,17 @@ namespace Assistment.Parsing
             } while (token.MoveNext());
             if (subVorzeichen.Count > 0)
                 throw new NotImplementedException();
-            return r;
+            return r.ordne();
         }
     }
 
     public enum TokenType
     {
+        /// <summary>
+        /// Teilt dem Parser mit an dieser Stelle innezuhalten
+        /// </summary>
+        STOP,
+
         //ZeilenEnde,
         String,
 
@@ -663,6 +684,7 @@ namespace Assistment.Parsing
     {
         private static Regex xZeilenende = new Regex("$");
 
+        private static Regex xSTOP = new Regex("#");
         private static Regex xString = new Regex("\".*\"", RegexOptions.Singleline);
         private static Regex xKlammerAuf = new Regex(@"\(");
         private static Regex xKlammerZu = new Regex(@"\)");
@@ -728,6 +750,8 @@ namespace Assistment.Parsing
         {
             switch (token)
             {
+                case TokenType.STOP:
+                    return xSTOP;
                 //case Token.ZeilenEnde:
                 //    return xZeilenende;
                 case TokenType.String:
