@@ -244,6 +244,10 @@ namespace Assistment.Parsing
 
         public override string ToString()
         {
+            if (this.progs.Count == 0)
+                return "()";
+            else if (this.progs.Count == 1)
+                return progs[0].ToString();
             StringBuilder sb = new StringBuilder();
             sb.Append(base.ToString());
             sb.Append("{");
@@ -252,6 +256,7 @@ namespace Assistment.Parsing
                 sb.AppendLine();
                 sb.Append(item.ToString());
             }
+            sb.AppendLine();
             sb.Append("}");
             return sb.ToString();
         }
@@ -280,6 +285,17 @@ namespace Assistment.Parsing
             this.ifProg = ifProg;
             this.thenProg = thenProg;
             this.elseProg = new LeerProg();
+        }
+
+        public override string ToString()
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.Append("if ");
+            sb.AppendLine(ifProg.ToString());
+            sb.AppendLine(thenProg.ToString());
+            sb.AppendLine("else");
+            sb.AppendLine(elseProg.ToString());
+            return sb.ToString();
         }
 
         public override Typus getReturnType()
@@ -378,10 +394,10 @@ namespace Assistment.Parsing
                     vorzeichen.AddRange(subVorzeichen);
                     token.MoveNext();
                     return new ForProg(vorzeichen, parseConstraint(), parseKlammer(new List<Token>()));
-                case TokenType.While:
-                    vorzeichen.AddRange(subVorzeichen);
-                    token.MoveNext();
-                    return new WhileProg(vorzeichen, parseKlammer(new List<Token>()), parseKlammer(new List<Token>()));
+                //case TokenType.While:
+                //    vorzeichen.AddRange(subVorzeichen);
+                //    token.MoveNext();
+                //    return new WhileProg(vorzeichen, parseKlammer(new List<Token>()), parseKlammer(new List<Token>()));
                 case TokenType.Return:
                     token.MoveNext();
                     return parseReihe(vorzeichen, subVorzeichen);
@@ -407,7 +423,10 @@ namespace Assistment.Parsing
             token.MoveNext();
             List<Prog> progs = new List<Prog>();
             while (token.Current.type != TokenType.KlammerZu)
-                progs.Add(parseProg(new List<Token>()));
+                if (token.Current.text == null)
+                    return new ListProg(vorzeichen, progs);
+                else
+                    progs.Add(parseProg(new List<Token>()));
             token.MoveNext();
             return new ListProg(vorzeichen, progs);
         }
@@ -415,7 +434,7 @@ namespace Assistment.Parsing
         {
             bool operatorErwartet = false;
             Reihe r = new Reihe(vorzeichen);
-            do
+            while (true)
             {
                 switch (token.Current.type)
                 {
@@ -431,6 +450,7 @@ namespace Assistment.Parsing
                         r.addAusdruck(subVorzeichen, token.Current);
                         subVorzeichen = new List<Token>();
                         operatorErwartet = true;
+                        token.MoveNext();
                         break;
 
                     case TokenType.KlammerAuf:
@@ -480,6 +500,7 @@ namespace Assistment.Parsing
                         }
                         else
                             subVorzeichen.Add(token.Current);
+                        token.MoveNext();
                         break;
 
                     case TokenType.KlammerZu:
@@ -490,7 +511,7 @@ namespace Assistment.Parsing
                     default:
                         throw new NotImplementedException();
                 }
-            } while (token.MoveNext());
+            }
             if (subVorzeichen.Count > 0)
                 throw new NotImplementedException();
             return r.ordne();
@@ -543,7 +564,7 @@ namespace Assistment.Parsing
         If,
         Else,
         For,
-        While,
+        //While,
         Return,
         Wort,
 
@@ -821,8 +842,8 @@ namespace Assistment.Parsing
                     return xElse;
                 case TokenType.For:
                     return xFor;
-                case TokenType.While:
-                    return xWhile;
+                //case TokenType.While:
+                //    return xWhile;
                 case TokenType.Return:
                     return xReturn;
                 case TokenType.Wort:
