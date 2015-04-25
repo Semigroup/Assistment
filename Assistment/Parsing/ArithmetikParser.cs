@@ -22,12 +22,42 @@ namespace Assistment.Parsing
         public bool generisch;
         public Generika schema;
         public Typus generus;
-        public SortedDictionary<string, Methode> methoden = new SortedDictionary<string, Methode>();
+        public SortedDictionary<string, List<Methode>> methoden = new SortedDictionary<string, List<Methode>>();
+        public SortedDictionary<Typus, Konversator> konversionen = new SortedDictionary<Typus, Konversator>();
+        public SortedDictionary<string, Feld> felder = new SortedDictionary<string, Feld>();
 
         public Typus(string name)
         {
             this.name = name;
             this.generisch = false;
+        }
+
+        public bool istFeld(string bezeichner)
+        {
+            return felder.ContainsKey(bezeichner);
+        }
+        public Methode getMethode(Signatur signatur)
+        {
+            List<Methode> m;
+            if (methoden.TryGetValue(signatur.bezeichner, out m))
+            {
+
+            }
+            else
+            {
+                throw new NotImplementedException();
+            }
+        }
+        /// <summary>
+        /// gibt an, ob dieser Typ spezieller ist als allgemeinerTyp
+        /// </summary>
+        /// <param name="allgemeinerTyp"></param>
+        /// <returns></returns>
+        public bool ist(Typus allgemeinerTyp)
+        {
+            if (this == allgemeinerTyp) 
+                return true;
+            return konversionen.ContainsKey(allgemeinerTyp);
         }
 
         public static Typus Void = new Typus("void");
@@ -36,17 +66,38 @@ namespace Assistment.Parsing
         public static Typus Fliesskommazahl = new Typus("float");
         public static Typus Basis = new Typus("basis");
     }
+    public struct Signatur
+    {
+        public string bezeichner;
+        public Typus[] eingabeTypen;
+        public int stelligkeit;
 
+        /// <summary>
+        /// gibt an, ob diese Signatur spezieller ist als die gegebene
+        /// <para>ignoriert die bezeichner</para>
+        /// </summary>
+        /// <param name="signatur"></param>
+        /// <returns></returns>
+        public bool konvertierbarZu(Signatur signatur)
+        {
+            if (stelligkeit == signatur.stelligkeit)
+            {
+                for (int i = 0; i < stelligkeit; i++)
+                    if (!eingabeTypen[i].ist(signatur.eingabeTypen[i]))
+                        return false;
+                return true;
+            }
+            else return false;
+        }
+    }
     public abstract class Methode
     {
+        public Signatur signatur;
         public Typus aufruferTyp;
-        public string bezeichner;
         public Typus ruckgabeTyp;
-        public Typus[] eingabeTypen;
         /// <summary>
         /// Anzahl der Eingabe Werte
         /// </summary>
-        public int stelligkeit;
 
         public abstract Objekt execute(Objekt aufrufer, List<Objekt> eingabe);
     }
@@ -60,6 +111,13 @@ namespace Assistment.Parsing
     }
     public abstract class Konversator : Methode
     {
+    }
+    public abstract class Feld
+    {
+        public Typus aufruferTyp;
+        public string bezeichner;
+        public Typus feldTyp;
+        public bool beschreibbar;
     }
 
     public abstract class Prog
@@ -205,7 +263,9 @@ namespace Assistment.Parsing
     }
     public class Bezeichnerkette : Prog
     {
-        public Bezeichnerkette(List<Token> vorzeichen)
+        List<Token> bezeichner;
+        List<Prog> funktionsArgumente;
+        public Bezeichnerkette(List<Token> vorzeichen, List<Token> bezeichner, List<Prog> funktionsArgumente)
             : base(vorzeichen)
         {
 
@@ -346,6 +406,7 @@ namespace Assistment.Parsing
     {
         public string code;
         private IEnumerator<Token> token;
+        public Typus basisTyp;
 
         public void parse(string code)
         {
@@ -398,9 +459,9 @@ namespace Assistment.Parsing
                 //    vorzeichen.AddRange(subVorzeichen);
                 //    token.MoveNext();
                 //    return new WhileProg(vorzeichen, parseKlammer(new List<Token>()), parseKlammer(new List<Token>()));
-                case TokenType.Return:
-                    token.MoveNext();
-                    return parseReihe(vorzeichen, subVorzeichen);
+                //case TokenType.Return:
+                //    token.MoveNext();
+                //    return parseReihe(vorzeichen, subVorzeichen);
                 default:
                     return parseReihe(vorzeichen, subVorzeichen);
             }
@@ -516,6 +577,61 @@ namespace Assistment.Parsing
                 throw new NotImplementedException();
             return r.ordne();
         }
+        public Prog parseBezeichner(List<Token> vorzeichen)
+        {
+            List<Token> bezeichner = new List<Token>();
+            bool wortErwartet = true;
+            while (true)
+            {
+                switch (token.Current.type)
+                {
+                    case TokenType.STOP:
+                        halt();
+                        break;
+                    case TokenType.Wort:
+                        if (wortErwartet)
+                            wortErwartet = false;
+                        else 
+                            throw new NotImplementedException();
+                        bezeichner.Add(token.Current);
+                        break;
+                    case TokenType.KlammerAuf:
+                        if (wortErwartet)
+                            throw new NotImplementedException();
+                        return new Bezeichnerkette(vorzeichen, bezeichner, parseArgumente());
+                    case TokenType.Punkt:
+                        if (wortErwartet)
+                            throw new NotImplementedException();
+                        wortErwartet = false;
+                        break;           
+                    default:
+                        throw new NotImplementedException();
+                }
+                token.MoveNext();
+            }
+            throw new NotImplementedException();
+        }
+        public List<Prog> parseArgumente()
+        {
+            if (token.Current.type != TokenType.KlammerAuf) throw new NotImplementedException();
+            List<Prog> args = new List<Prog>();
+            bool argErwartet = true;
+
+            while (token.Current.type != TokenType.KlammerZu)
+            {
+                switch (token.Current.type)
+                {
+                    case TokenType.STOP:
+                        halt();
+                        break;
+                    case TokenType.Komma:
+                        break;
+                }
+            }
+            token.MoveNext();
+
+            return args;
+        }
     }
 
     public enum TokenType
@@ -565,7 +681,7 @@ namespace Assistment.Parsing
         Else,
         For,
         //While,
-        Return,
+        //Return,
         Wort,
 
         Gleich,
@@ -844,8 +960,8 @@ namespace Assistment.Parsing
                     return xFor;
                 //case TokenType.While:
                 //    return xWhile;
-                case TokenType.Return:
-                    return xReturn;
+                //case TokenType.Return:
+                //    return xReturn;
                 case TokenType.Wort:
                     return xWort;
 
