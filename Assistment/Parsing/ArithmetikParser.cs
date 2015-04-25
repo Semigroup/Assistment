@@ -32,21 +32,23 @@ namespace Assistment.Parsing
             this.generisch = false;
         }
 
-        public bool istFeld(string bezeichner)
+        public bool hatFeld(string bezeichner, out Feld feld)
         {
-            return felder.ContainsKey(bezeichner);
+            return felder.TryGetValue(bezeichner, out feld);
         }
-        public Methode getMethode(Signatur signatur)
+        public bool getMethode(Signatur signatur, out Methode methode)
         {
-            List<Methode> m;
-            if (methoden.TryGetValue(signatur.bezeichner, out m))
-            {
+            List<Methode> methoden;
+            if (this.methoden.TryGetValue(signatur.bezeichner, out methoden))
+                foreach (Methode item in methoden)
+                    if (signatur.konvertierbarZu(item.signatur))
+                    {
+                        methode = item;
+                        return true;
+                    }
 
-            }
-            else
-            {
-                throw new NotImplementedException();
-            }
+            methode = null;
+            return false;
         }
         /// <summary>
         /// gibt an, ob dieser Typ spezieller ist als allgemeinerTyp
@@ -55,7 +57,7 @@ namespace Assistment.Parsing
         /// <returns></returns>
         public bool ist(Typus allgemeinerTyp)
         {
-            if (this == allgemeinerTyp) 
+            if (this == allgemeinerTyp)
                 return true;
             return konversionen.ContainsKey(allgemeinerTyp);
         }
@@ -264,12 +266,32 @@ namespace Assistment.Parsing
     public class Bezeichnerkette : Prog
     {
         List<Token> bezeichner;
-        List<Prog> funktionsArgumente;
-        public Bezeichnerkette(List<Token> vorzeichen, List<Token> bezeichner, List<Prog> funktionsArgumente)
+        List<Prog> argumente;
+        Typus basisTyp;
+        public Bezeichnerkette(List<Token> vorzeichen,Typus basisTyp, List<Token> bezeichner)
             : base(vorzeichen)
         {
-
+            this.basisTyp = basisTyp;
+            this.bezeichner = bezeichner;
         }
+
+        public bool istMethode()
+        {
+            Typus upper = basisTyp;
+            foreach (var item in bezeichner)
+            {
+                if (upper.)
+                {
+                    
+                }
+            }
+        }
+
+        public void setArgumente(List<Prog> argumente)
+        {
+            this.argumente = argumente;
+        }
+
         public override Typus getReturnType()
         {
             throw new NotImplementedException();
@@ -591,7 +613,7 @@ namespace Assistment.Parsing
                     case TokenType.Wort:
                         if (wortErwartet)
                             wortErwartet = false;
-                        else 
+                        else
                             throw new NotImplementedException();
                         bezeichner.Add(token.Current);
                         break;
@@ -603,7 +625,7 @@ namespace Assistment.Parsing
                         if (wortErwartet)
                             throw new NotImplementedException();
                         wortErwartet = false;
-                        break;           
+                        break;
                     default:
                         throw new NotImplementedException();
                 }
@@ -1017,7 +1039,6 @@ namespace Assistment.Parsing
             int a = 0;
             int b = 0;
             while (b < code.Length)
-            {
                 switch (code[b])
                 {
                     case '\n':
@@ -1044,7 +1065,6 @@ namespace Assistment.Parsing
                         b++;
                         break;
                 }
-            }
             add(a, b);
         }
 
@@ -1060,7 +1080,6 @@ namespace Assistment.Parsing
             {
                 p = 0;
                 while (p < wort.Length)
-                {
                     for (int i = 0; i < (int)TokenType.Max; i++)
                     {
                         TokenType t = (TokenType)i;
@@ -1072,7 +1091,6 @@ namespace Assistment.Parsing
                             break;
                         }
                     }
-                }
             }
 
             return l;
