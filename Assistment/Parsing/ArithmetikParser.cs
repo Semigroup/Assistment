@@ -50,6 +50,10 @@ namespace Assistment.Parsing
             methode = null;
             return false;
         }
+        public bool hatMethode(string bezeichner)
+        {
+            return methoden.ContainsKey(bezeichner);
+        }
         /// <summary>
         /// gibt an, ob dieser Typ spezieller ist als allgemeinerTyp
         /// </summary>
@@ -61,6 +65,7 @@ namespace Assistment.Parsing
                 return true;
             return konversionen.ContainsKey(allgemeinerTyp);
         }
+
 
         public static Typus Void = new Typus("void");
         public static Typus Any = new Typus("any");
@@ -114,12 +119,37 @@ namespace Assistment.Parsing
     public abstract class Konversator : Methode
     {
     }
-    public abstract class Feld
+    public class Feld
     {
         public Typus aufruferTyp;
         public string bezeichner;
         public Typus feldTyp;
         public bool beschreibbar;
+
+        public bool hatFeld(string bezeichner)
+        {
+            return feldTyp.felder.ContainsKey(bezeichner);
+        }
+        public Feld getFeld(string bezeichner)
+        {
+            Feld f;
+            if (feldTyp.hatFeld(bezeichner, out f))
+                return f;
+            else
+                throw new NotImplementedException();
+        }
+        public bool hatMethode(string bezeichner)
+        {
+            return feldTyp.methoden.ContainsKey(bezeichner);
+        }
+        public Methode getMethode(Signatur signatur)
+        {
+            Methode m;
+            if (feldTyp.getMethode(signatur, out m))
+                return m;
+            else
+                throw new NotImplementedException();
+        }
     }
 
     public abstract class Prog
@@ -267,25 +297,33 @@ namespace Assistment.Parsing
     {
         List<Token> bezeichner;
         List<Prog> argumente;
-        Typus basisTyp;
-        public Bezeichnerkette(List<Token> vorzeichen,Typus basisTyp, List<Token> bezeichner)
+
+        List<Feld> typenKette = new List<Feld>();
+
+        public Bezeichnerkette(List<Token> vorzeichen, Feld startFeld, List<Token> bezeichner)
             : base(vorzeichen)
         {
-            this.basisTyp = basisTyp;
+            this.typenKette.Add(startFeld);
             this.bezeichner = bezeichner;
         }
 
-        public bool istMethode()
-        {
-            Typus upper = basisTyp;
-            foreach (var item in bezeichner)
-            {
-                if (upper.)
-                {
-                    
-                }
-            }
-        }
+        //public bool istMethode()
+        //{
+        //    Feld upper = typenKette.First();
+        //    foreach (var item in bezeichner)
+        //    {
+        //        Feld next;
+        //        if (upper.feldTyp.hatFeld(item.text, out next))
+        //        {
+        //            typenKette.Add(next);
+        //            upper = next;
+        //        }
+        //        else if (upper.feldTyp.getMethode()
+        //        {
+
+        //        }
+        //    }
+        //}
 
         public void setArgumente(List<Prog> argumente)
         {
@@ -295,6 +333,26 @@ namespace Assistment.Parsing
         public override Typus getReturnType()
         {
             throw new NotImplementedException();
+        }
+    }
+    public class Aufruf : Prog
+    {
+        Prog basis;
+        string aufruf;
+        bool istMethode;
+        List<Prog> argumente;
+
+        public Aufruf(List<Token> vorzeichen, Prog basis, string aufruf)
+            : base(vorzeichen)
+        {
+            this.basis = basis;
+            this.aufruf = aufruf;
+            this.istMethode = basis.getReturnType().hatMethode(aufruf);
+        }
+
+        public void setArgumente(List<Prog> argumente)
+        {
+            this.argumente = argumente;
         }
     }
     public class Ausdruck : Prog
