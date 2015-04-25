@@ -48,6 +48,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Parsing\ArithmetikParser.cs" />
+    <Compile Include="Parsing\Testing\Tester.cs" />
     <Compile Include="Texts\CString.cs" />
     <Compile Include="Texts\DrawBox.cs" />
     <Compile Include="Texts\DrawContext.cs" />
