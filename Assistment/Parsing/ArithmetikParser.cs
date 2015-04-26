@@ -32,6 +32,11 @@ namespace Assistment.Parsing
             this.generisch = false;
         }
 
+        public void addFeld(string bezeichner, Typus typ, bool beschreibbar)
+        {
+            felder.Add(bezeichner, new Feld(this, bezeichner, typ, beschreibbar));
+        }
+
         public bool hatFeld(string bezeichner, out Feld feld)
         {
             return felder.TryGetValue(bezeichner, out feld);
@@ -126,6 +131,11 @@ namespace Assistment.Parsing
         public Typus feldTyp;
         public bool beschreibbar;
 
+        public Feld(Typus aufruferTyp, string bezeichner, Typus feldTyp, bool beschreibbar)
+        {
+
+        }
+
         public bool hatFeld(string bezeichner)
         {
             return feldTyp.felder.ContainsKey(bezeichner);
@@ -202,6 +212,10 @@ namespace Assistment.Parsing
         public void addKlammer(Prog klammer)
         {
             this.ausdrucke.Add(klammer);
+        }
+        public void addAusdruck(Prog prog)
+        {
+            ausdrucke.Add(prog);
         }
         public void addAusdruck(List<Token> vorzeichen, Token token)
         {
@@ -293,53 +307,12 @@ namespace Assistment.Parsing
             return operand1.getReturnType();
         }
     }
-    public class Bezeichnerkette : Prog
-    {
-        List<Token> bezeichner;
-        List<Prog> argumente;
-
-        List<Feld> typenKette = new List<Feld>();
-
-        public Bezeichnerkette(List<Token> vorzeichen, Feld startFeld, List<Token> bezeichner)
-            : base(vorzeichen)
-        {
-            this.typenKette.Add(startFeld);
-            this.bezeichner = bezeichner;
-        }
-
-        //public bool istMethode()
-        //{
-        //    Feld upper = typenKette.First();
-        //    foreach (var item in bezeichner)
-        //    {
-        //        Feld next;
-        //        if (upper.feldTyp.hatFeld(item.text, out next))
-        //        {
-        //            typenKette.Add(next);
-        //            upper = next;
-        //        }
-        //        else if (upper.feldTyp.getMethode()
-        //        {
-
-        //        }
-        //    }
-        //}
-
-        public void setArgumente(List<Prog> argumente)
-        {
-            this.argumente = argumente;
-        }
-
-        public override Typus getReturnType()
-        {
-            throw new NotImplementedException();
-        }
-    }
     public class Aufruf : Prog
     {
         Prog basis;
         string aufruf;
         public bool istMethode;
+        public bool istHaupt = false;
         List<Prog> argumente;
 
         public Aufruf(Prog basis, string aufruf)
@@ -347,7 +320,10 @@ namespace Assistment.Parsing
         {
             this.basis = basis;
             this.aufruf = aufruf;
-            this.istMethode = basis.getReturnType().hatMethode(aufruf);
+            if (basis != null)
+                this.istMethode = basis.getReturnType().hatMethode(aufruf);
+            else
+                this.istMethode = false;
         }
 
         public void setArgumente(List<Prog> argumente)
@@ -355,9 +331,49 @@ namespace Assistment.Parsing
             this.argumente = argumente;
         }
 
+        public override string ToString()
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.Append(base.ToString());
+            if (basis)
+            {
+                
+            }
+            sb.Append(basis.ToString());
+            sb.Append("." + aufruf);
+            if (istMethode)
+            {
+                sb.Append("(");
+                foreach (var item in argumente)
+                    sb.Append(item.ToString());
+                sb.Append(")");
+            }
+            return sb.ToString();
+        }
+
         public override Typus getReturnType()
         {
             throw new NotImplementedException();
+        }
+    }
+    public class BasisAufruf : Aufruf
+    {
+        Typus basisTyp;
+        public BasisAufruf(Typus basisTyp)
+            : base(null, basisTyp.name)
+        {
+            this.basisTyp = basisTyp;
+            this.istHaupt = true;
+        }
+
+        public override string ToString()
+        {
+            return basisTyp.name;
+        }
+
+        public override Typus getReturnType()
+        {
+            return basisTyp;
         }
     }
     public class Ausdruck : Prog
@@ -493,6 +509,16 @@ namespace Assistment.Parsing
         private IEnumerator<Token> token;
         public Aufruf basis;
 
+        public void setBasis(Typus basisTyp)
+        {
+            this.basis = new BasisAufruf(basisTyp);
+            basisTyp.addFeld("a", Typus.Ganzzahl, true);
+            basisTyp.addFeld("b", Typus.Ganzzahl, true);
+            basisTyp.addFeld("c", Typus.Ganzzahl, true);
+            basisTyp.addFeld("d", Typus.Ganzzahl, true);
+            basisTyp.addFeld("e", Typus.Ganzzahl, true);
+        }
+
         public Prog parse(string code)
         {
             this.code = code;
@@ -579,6 +605,15 @@ namespace Assistment.Parsing
                         halt();
                         break;
                     case TokenType.Wort:
+                        if (operatorErwartet)
+                            fertig = true;
+                        else
+                        {
+                            r.addAusdruck(parseBezeichner(subVorzeichen));
+                            subVorzeichen = new List<Token>();
+                            operatorErwartet = true;
+                        }
+                        break;
                     case TokenType.String:
                     case TokenType.Zahl:
                     case TokenType.KommaZahl:
@@ -589,7 +624,7 @@ namespace Assistment.Parsing
                             r.addAusdruck(subVorzeichen, token.Current);
                             subVorzeichen = new List<Token>();
                             operatorErwartet = true;
-                            token.MoveNext();
+                            fertig = !token.MoveNext();
                         }
                         break;
 
@@ -615,7 +650,6 @@ namespace Assistment.Parsing
                     case TokenType.SternGleich:
                     case TokenType.UndGleich:
                     case TokenType.UndUndGleich:
-
                     case TokenType.Punkt:
                     case TokenType.Stern:
                     case TokenType.Hut:
@@ -643,18 +677,19 @@ namespace Assistment.Parsing
                         }
                         else
                             subVorzeichen.Add(token.Current);
-                        token.MoveNext();
+                        fertig = !token.MoveNext();
                         break;
-
                     case TokenType.KlammerZu:
-                        if (subVorzeichen.Count > 0)
-                            throw new NotImplementedException();
                         fertig = true;
                         break;
                     default:
                         throw new NotImplementedException();
                 }
             }
+            if (subVorzeichen.Count > 0)
+                throw new NotImplementedException();
+            if (!operatorErwartet)
+                throw new NotImplementedException();
             return r.ordne();
         }
         public Prog parseBezeichner(List<Token> vorzeichen)
@@ -696,7 +731,8 @@ namespace Assistment.Parsing
                             fertig = true;
                         break;
                 }
-                token.MoveNext();
+                if (!fertig)
+                    fertig = !token.MoveNext();
             }
             upper.setVorzeichen(vorzeichen);
             return upper;

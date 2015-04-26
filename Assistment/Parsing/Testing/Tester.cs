@@ -10,6 +10,11 @@ namespace Assistment.Parsing.Testing
     {
         private static Parser parser = new Parser();
 
+        static Tester()
+        {
+            parser.setBasis(Typus.Basis);
+        }
+
         public static void runTests(string directory)
         {
             string[] files = Directory.GetFiles(directory, "*.spell");
@@ -24,7 +29,10 @@ namespace Assistment.Parsing.Testing
                 else
                 {
                     string soll = File.ReadAllText(sollFile);
-                    if (!soll.Equals(ergebnis)) throw new Exception();
+                    if (!soll.Equals(ergebnis))
+                    {
+                        System.Windows.Forms.MessageBox.Show(ergebnis);
+                    }
                 }
             }
         }
