@@ -180,22 +180,14 @@ namespace Assistment.Parsing
 
         public override string ToString()
         {
-            StringBuilder sb = new StringBuilder(vorzeichen.Count);
-            foreach (var item in vorzeichen)
-                sb.Append(item.text);
+            StringBuilder sb = new StringBuilder();
+            this.IntoFormat(sb, "");
             return sb.ToString();
         }
-    }
-    public class LeerProg : Prog
-    {
-        public LeerProg()
-            : base(null)
+        public virtual void IntoFormat(StringBuilder format, string einschub)
         {
-
-        }
-        public override Typus getReturnType()
-        {
-            return Typus.Void;
+            foreach (var item in vorzeichen)
+                format.Append(item.text);
         }
     }
     public class Reihe : Prog
@@ -262,22 +254,20 @@ namespace Assistment.Parsing
             return ausdrucke[0];
         }
 
-        public override string ToString()
+        public override void IntoFormat(StringBuilder format, string einschub)
         {
-            StringBuilder sb = new StringBuilder();
             IEnumerator<Prog> en = ausdrucke.GetEnumerator();
-            sb.Append(base.ToString());
-            sb.Append("[");
+            base.IntoFormat(format, einschub);
+            format.Append("[");
             en.MoveNext();
-            sb.Append(en.Current.ToString());
+            format.Append(en.Current.ToString());
             foreach (var item in operatoren)
             {
-                sb.Append(" " + item.text + " ");
+                format.Append(" " + item.text + " ");
                 en.MoveNext();
-                sb.Append(en.Current.ToString());
+                en.Current.IntoFormat(format, einschub);
             }
-            sb.Append("]");
-            return sb.ToString();
+            format.Append("]");
         }
 
         public override Typus getReturnType()
@@ -298,24 +288,29 @@ namespace Assistment.Parsing
             this.operand2 = operand2;
         }
 
-        public override string ToString()
-        {
-            return base.ToString() + "(" + operand1.ToString() + " " + operation.text + " " + operand2.ToString() + ")";
-        }
         public override Typus getReturnType()
         {
             return operand1.getReturnType();
         }
+        public override void IntoFormat(StringBuilder format, string einschub)
+        {
+            base.IntoFormat(format, einschub);
+            format.Append("(");
+            operand1.IntoFormat(format, einschub);
+            format.Append(" " + operation.text + " ");
+            operand2.IntoFormat(format, einschub);
+            format.Append(")");
+        }
     }
     public class Aufruf : Prog
     {
-        Prog basis;
+        Aufruf basis;
         string aufruf;
         public bool istMethode;
         public bool istHaupt = false;
         List<Prog> argumente;
 
-        public Aufruf(Prog basis, string aufruf)
+        public Aufruf(Aufruf basis, string aufruf)
             : base(new List<Token>())
         {
             this.basis = basis;
@@ -331,24 +326,22 @@ namespace Assistment.Parsing
             this.argumente = argumente;
         }
 
-        public override string ToString()
+        public override void IntoFormat(StringBuilder format, string einschub)
         {
-            StringBuilder sb = new StringBuilder();
-            sb.Append(base.ToString());
-            if (basis)
+            base.IntoFormat(format, einschub);
+            if (!basis.istHaupt)
             {
-                
+                basis.IntoFormat(format, einschub);
+                format.Append(".");
             }
-            sb.Append(basis.ToString());
-            sb.Append("." + aufruf);
+            format.Append(aufruf);
             if (istMethode)
             {
-                sb.Append("(");
+                format.Append("(");
                 foreach (var item in argumente)
-                    sb.Append(item.ToString());
-                sb.Append(")");
+                    item.IntoFormat(format, einschub);
+                format.Append(")");
             }
-            return sb.ToString();
         }
 
         public override Typus getReturnType()
@@ -366,9 +359,8 @@ namespace Assistment.Parsing
             this.istHaupt = true;
         }
 
-        public override string ToString()
+        public override void IntoFormat(StringBuilder format, string einschub)
         {
-            return basisTyp.name;
         }
 
         public override Typus getReturnType()
@@ -384,9 +376,10 @@ namespace Assistment.Parsing
         {
             this.token = token;
         }
-        public override string ToString()
+        public override void IntoFormat(StringBuilder format, string einschub)
         {
-            return base.ToString() + token.text;
+            base.IntoFormat(format, einschub);
+            format.Append(token.text);
         }
 
         public override Typus getReturnType()
@@ -403,23 +396,28 @@ namespace Assistment.Parsing
             this.progs = progs;
         }
 
-        public override string ToString()
+        public override void IntoFormat(StringBuilder format, string einschub)
         {
+            base.IntoFormat(format, einschub);
             if (this.progs.Count == 0)
-                return "()";
+                format.Append("()");
             else if (this.progs.Count == 1)
-                return progs[0].ToString();
-            StringBuilder sb = new StringBuilder();
-            sb.Append(base.ToString());
-            sb.Append("{");
-            foreach (var item in progs)
+                progs[0].IntoFormat(format, einschub);
+            else
             {
-                sb.AppendLine();
-                sb.Append(item.ToString());
+                base.IntoFormat(format, einschub);
+                format.Append("(");
+                string extraEinschub = einschub + "\t";
+                foreach (var item in progs)
+                {
+                    format.AppendLine();
+                    format.Append(extraEinschub);
+                    item.IntoFormat(format, extraEinschub);
+                }
+                format.AppendLine();
+                format.Append(einschub);
+                format.Append(")");
             }
-            sb.AppendLine();
-            sb.Append("}");
-            return sb.ToString();
         }
 
         public override Typus getReturnType()
@@ -440,23 +438,24 @@ namespace Assistment.Parsing
             this.thenProg = thenProg;
             this.elseProg = elseProg;
         }
-        public IfProg(List<Token> vorzeichen, Prog ifProg, Prog thenProg)
-            : base(vorzeichen)
-        {
-            this.ifProg = ifProg;
-            this.thenProg = thenProg;
-            this.elseProg = new LeerProg();
-        }
 
-        public override string ToString()
+        public override void IntoFormat(StringBuilder format, string einschub)
         {
-            StringBuilder sb = new StringBuilder();
-            sb.Append("if ");
-            sb.AppendLine(ifProg.ToString());
-            sb.AppendLine(thenProg.ToString());
-            sb.AppendLine("else");
-            sb.AppendLine(elseProg.ToString());
-            return sb.ToString();
+            //string extraEinschub = einschub + "\t";
+            base.IntoFormat(format, einschub);
+            format.Append("if ");
+            ifProg.IntoFormat(format, einschub);
+            format.Append(" ");
+            //format.AppendLine();
+            //format.Append(einschub);
+            thenProg.IntoFormat(format, einschub);
+            format.Append(" ");
+            //format.AppendLine();
+            //format.Append(einschub);
+            //format.Append(" else ");
+            //format.AppendLine();
+            //format.Append(einschub);
+            elseProg.IntoFormat(format, einschub);
         }
 
         public override Typus getReturnType()
@@ -473,23 +472,6 @@ namespace Assistment.Parsing
             : base(vorzeichen)
         {
             this.forCons = forCons;
-            this.doProg = doProg;
-        }
-
-        public override Typus getReturnType()
-        {
-            throw new NotImplementedException();
-        }
-    }
-    public class WhileProg : Prog
-    {
-        Prog whileProg;
-        Prog doProg;
-
-        public WhileProg(List<Token> vorzeichen, Prog whileProg, Prog doProg)
-            : base(vorzeichen)
-        {
-            this.whileProg = whileProg;
             this.doProg = doProg;
         }
 
@@ -548,32 +530,53 @@ namespace Assistment.Parsing
                     case TokenType.KlammerAuf:
                         subVorzeichen.AddRange(vorzeichen);
                         return parseKlammer(subVorzeichen);
+                    case TokenType.Gleich:
+                    case TokenType.HutGleich:
+                    case TokenType.MinusGleich:
+                    case TokenType.OderGleich:
+                    case TokenType.OderOderGleich:
+                    case TokenType.PlusGleich:
+                    case TokenType.ProzentGleich:
+                    case TokenType.SlashGleich:
+                    case TokenType.SternGleich:
+                    case TokenType.UndGleich:
+                    case TokenType.UndUndGleich:
+                    case TokenType.Punkt:
                     case TokenType.Stern:
+                    case TokenType.Hut:
                     case TokenType.Plus:
                     case TokenType.Minus:
                     case TokenType.Slash:
+                    case TokenType.Prozent:
+                    case TokenType.Und:
+                    case TokenType.UndUnd:
+                    case TokenType.Oder:
+                    case TokenType.OderOder:
                     case TokenType.Nicht:
+                    case TokenType.WennDann:
+                    case TokenType.DannWenn:
+                    case TokenType.Kleiner:
+                    case TokenType.Größer:
+                    case TokenType.KleinerGleich:
+                    case TokenType.GrößerGleich:
+                    case TokenType.GleichGleich:
+                    case TokenType.NichtGleich:
                         subVorzeichen.Add(token.Current);
                         token.MoveNext();
                         break;
                     case TokenType.If:
                         subVorzeichen.AddRange(vorzeichen);
                         token.MoveNext();
-                        Prog ifProg = parseKlammer(new List<Token>());
-                        Prog thenProg = parseKlammer(new List<Token>());
-                        if (token.Current.type == TokenType.Else)
-                        {
-                            token.MoveNext();
-                            Prog elseProg = parseKlammer(new List<Token>());
-                            return new IfProg(subVorzeichen, ifProg, thenProg, elseProg);
-                        }
-                        else
-                            return new IfProg(subVorzeichen, ifProg, thenProg);
+                        //Prog ifProg = parseKlammer(new List<Token>());
+                        //Prog thenProg = parseKlammer(new List<Token>());
+                        //Prog elseProg = parseKlammer(new List<Token>());
+                        return new IfProg(subVorzeichen, parseProg(new List<Token>()), parseProg(new List<Token>()), parseProg(new List<Token>()));
                     case TokenType.For:
                         subVorzeichen.AddRange(vorzeichen);
                         token.MoveNext();
                         return new ForProg(subVorzeichen, parseConstraint(), parseKlammer(new List<Token>()));
                     default:
+                        string s = token.Current.text;
                         return parseReihe(vorzeichen, subVorzeichen);
                 }
             }
@@ -683,7 +686,16 @@ namespace Assistment.Parsing
                         fertig = true;
                         break;
                     default:
-                        throw new NotImplementedException();
+                        if (operatorErwartet)
+                            fertig = true;
+                        else
+                        {
+                            r.addAusdruck(parseProg(subVorzeichen));
+                            subVorzeichen = new List<Token>();
+                            operatorErwartet = true;
+                            fertig = !token.MoveNext();
+                        }
+                        break;
                 }
             }
             if (subVorzeichen.Count > 0)
@@ -706,10 +718,12 @@ namespace Assistment.Parsing
                         break;
                     case TokenType.Wort:
                         if (wortErwartet)
+                        {
+                            upper = new Aufruf(upper, token.Current.text);
                             wortErwartet = false;
+                        }
                         else
-                            throw new NotImplementedException();
-                        upper = new Aufruf(upper, token.Current.text);
+                            fertig = true;
                         break;
                     case TokenType.KlammerAuf:
                         if (wortErwartet)
@@ -734,6 +748,8 @@ namespace Assistment.Parsing
                 if (!fertig)
                     fertig = !token.MoveNext();
             }
+            if (upper == basis)
+                throw new NotImplementedException();
             upper.setVorzeichen(vorzeichen);
             return upper;
         }
@@ -808,7 +824,7 @@ namespace Assistment.Parsing
         GrößerGleich,
 
         If,
-        Else,
+        //Else,
         For,
         //While,
         //Return,
@@ -1084,8 +1100,8 @@ namespace Assistment.Parsing
 
                 case TokenType.If:
                     return xIf;
-                case TokenType.Else:
-                    return xElse;
+                //case TokenType.Else:
+                //    return xElse;
                 case TokenType.For:
                     return xFor;
                 //case TokenType.While:
