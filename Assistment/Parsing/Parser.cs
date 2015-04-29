@@ -71,89 +71,33 @@ namespace Assistment.Parsing
                                 return new IfProg(subVorzeichen, parseProg(new List<Token>()), parseProg(new List<Token>()), parseProg(new List<Token>()));
                             case TokenType.For:
                                 token.MoveNext();
-                                return new ForProg(subVorzeichen, parseConstraint(), parseKlammer(new List<Token>()));
+                                return new ForProg(subVorzeichen, parseConstraint(), parseProg(new List<Token>()));
                             default:
                                 throw new NotImplementedException();
                         }
                     case TokenMetaType.Interpunktion:
-                        switch (token.Current.type)
-                        {
-                            case TokenType.Komma:
-                                fertig = true;
-                                break;
-                            default:
-                                throw new NotImplementedException();
-                        }
-                        break;
+                        throw new NotImplementedException();
                     default:
                         return parseReihe(vorzeichen, subVorzeichen);
                 }
-                //switch (token.Current.type)
-                //{
-                //    case TokenType.STOP:
-                //        halt();
-                //        break;
-                //    case TokenType.KlammerAuf:
-                //        subVorzeichen.AddRange(vorzeichen);
-                //        return parseKlammer(subVorzeichen);
-                //    case TokenType.Gleich:
-                //    case TokenType.HutGleich:
-                //    case TokenType.MinusGleich:
-                //    case TokenType.OderGleich:
-                //    case TokenType.OderOderGleich:
-                //    case TokenType.PlusGleich:
-                //    case TokenType.ProzentGleich:
-                //    case TokenType.SlashGleich:
-                //    case TokenType.SternGleich:
-                //    case TokenType.UndGleich:
-                //    case TokenType.UndUndGleich:
-                //    case TokenType.Punkt:
-                //    case TokenType.Stern:
-                //    case TokenType.Hut:
-                //    case TokenType.Plus:
-                //    case TokenType.Minus:
-                //    case TokenType.Slash:
-                //    case TokenType.Prozent:
-                //    case TokenType.Und:
-                //    case TokenType.UndUnd:
-                //    case TokenType.Oder:
-                //    case TokenType.OderOder:
-                //    case TokenType.Nicht:
-                //    case TokenType.WennDann:
-                //    case TokenType.DannWenn:
-                //    case TokenType.Kleiner:
-                //    case TokenType.Größer:
-                //    case TokenType.KleinerGleich:
-                //    case TokenType.GrößerGleich:
-                //    case TokenType.GleichGleich:
-                //    case TokenType.NichtGleich:
-                //        subVorzeichen.Add(token.Current);
-                //        token.MoveNext();
-                //        break;
-                //    case TokenType.If:
-                //        subVorzeichen.AddRange(vorzeichen);
-                //        token.MoveNext();
-                //        return new IfProg(subVorzeichen, parseProg(new List<Token>()), parseProg(new List<Token>()), parseProg(new List<Token>()));
-                //    case TokenType.For:
-                //        subVorzeichen.AddRange(vorzeichen);
-                //        token.MoveNext();
-                //        return new ForProg(subVorzeichen, parseConstraint(), parseKlammer(new List<Token>()));
-                //    default:
-                //        return parseReihe(vorzeichen, subVorzeichen);
-                //}
             }
             throw new NotImplementedException();
         }
         public Prog parseKlammer(List<Token> vorzeichen)
         {
             if (token.Current.type != TokenType.KlammerAuf) throw new Exception();
-            if (!token.MoveNext()) throw new Exception();
+            token.MoveNext();
             List<Prog> progs = new List<Prog>();
             while (token.Current.type != TokenType.KlammerZu)
                 if (token.Current.type == TokenType.EndOfFile)
                     throw new NotImplementedException();
+                else if (token.Current.type == TokenType.Komma)
+                    throw new NotImplementedException();
+                else if (token.Current.type == TokenType.Semikolon)
+                    throw new NotImplementedException();
                 else
                     progs.Add(parseProg(new List<Token>()));
+
             token.MoveNext();
             return new ListProg(vorzeichen, progs);
         }
@@ -255,7 +199,7 @@ namespace Assistment.Parsing
                             r.addAusdruck(parseProg(subVorzeichen));
                             subVorzeichen = new List<Token>();
                             operatorErwartet = true;
-                            fertig = !token.MoveNext();
+                            //fertig = !token.MoveNext();
                         }
                         break;
                 }
