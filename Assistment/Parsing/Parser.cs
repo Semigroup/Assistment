@@ -101,13 +101,49 @@ namespace Assistment.Parsing
             token.MoveNext();
             return new ListProg(vorzeichen, progs);
         }
+        public Prog parseAusdruck(List<Token> vorzeichen);
         public Prog parseReihe(List<Token> vorzeichen, List<Token> subVorzeichen)
         {
             bool operatorErwartet = false;
+            bool ausdruckErwartet = true;
             bool fertig = false;
             Reihe r = new Reihe(vorzeichen);
             while (!fertig)
             {
+                switch (token.Current.metaType)
+                {
+                    case TokenMetaType.STOP:
+                        halt();
+                        break;
+                    case TokenMetaType.Klammer:
+                        break;
+                    case TokenMetaType.Operation:
+                        break;
+                    case TokenMetaType.Ausdruck:
+                        if (ausdruckErwartet)
+                            r.addAusdruck(parseAusdruck(subVorzeichen));
+                        else
+                            fertig = true;
+                        break;
+                    case TokenMetaType.Steuerwort:
+                        if (ausdruckErwartet)
+                            r.addAusdruck(parseProg(subVorzeichen));
+                        else
+                            fertig = true;
+                        break;
+                    case TokenMetaType.Interpunktion:
+                        break;
+                    case TokenMetaType.EndOfFile:
+                        if (ausdruckErwartet)
+                            throw new NotImplementedException();
+                        else
+                            fertig = true;
+                        break;
+                    default:
+                        throw new NotImplementedException();
+                }
+                return r.ordne();
+
                 switch (token.Current.type)
                 {
                     case TokenType.STOP:
