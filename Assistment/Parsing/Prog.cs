@@ -20,10 +20,10 @@ namespace Assistment.Parsing
         {
             ausdrucke.Add(prog);
         }
-        public void addAusdruck(List<Token> vorzeichen, Token token)
-        {
-            ausdrucke.Add(new Ausdruck(vorzeichen, token));
-        }
+        //public void addAusdruck(List<Token> vorzeichen, Token token)
+        //{
+        //    ausdrucke.Add(new Ausdruck(vorzeichen, token));
+        //}
         public void addOperator(Token token)
         {
             operatoren.Add(token);
@@ -205,10 +205,10 @@ namespace Assistment.Parsing
             return basisTyp;
         }
     }
-    public class Ausdruck : Prog
+    public class Konstante : Prog
     {
         Token token;
-        public Ausdruck(List<Token> vorzeichen, Token token)
+        public Konstante(List<Token> vorzeichen, Token token)
             : base(vorzeichen)
         {
             this.token = token;

@@ -101,10 +101,26 @@ namespace Assistment.Parsing
             token.MoveNext();
             return new ListProg(vorzeichen, progs);
         }
-        public Prog parseAusdruck(List<Token> vorzeichen);
+        public Prog parseAusdruck(List<Token> vorzeichen)
+        {
+            if (token.Current.metaType != TokenMetaType.Ausdruck) throw new NotImplementedException();
+
+            switch (token.Current.type)
+            {
+                case TokenType.Zahl:
+                case TokenType.KommaZahl:
+                case TokenType.String:
+                    Konstante konst = new Konstante(vorzeichen, token.Current);
+                    token.MoveNext();
+                    return konst;
+                case TokenType.Wort:
+                    return parseBezeichner(vorzeichen);
+                default:
+                    throw new NotImplementedException();
+            }
+        }
         public Prog parseReihe(List<Token> vorzeichen, List<Token> subVorzeichen)
         {
-            bool operatorErwartet = false;
             bool ausdruckErwartet = true;
             bool fertig = false;
             Reihe r = new Reihe(vorzeichen);
@@ -116,22 +132,50 @@ namespace Assistment.Parsing
                         halt();
                         break;
                     case TokenMetaType.Klammer:
+                        if (ausdruckErwartet)
+                        {
+                            r.addAusdruck(parseKlammer(subVorzeichen));
+                            subVorzeichen = new List<Token>();
+                            ausdruckErwartet = false;
+                        }
+                        else
+                            fertig = true;
                         break;
                     case TokenMetaType.Operation:
+                        if (ausdruckErwartet)
+                            subVorzeichen.Add(token.Current);
+                        else
+                        {
+                            r.addOperator(token.Current);
+                            ausdruckErwartet = true;
+                        }
+                        token.MoveNext();
                         break;
                     case TokenMetaType.Ausdruck:
                         if (ausdruckErwartet)
+                        {
                             r.addAusdruck(parseAusdruck(subVorzeichen));
+                            subVorzeichen = new List<Token>();
+                            ausdruckErwartet = false;
+                        }
                         else
                             fertig = true;
                         break;
                     case TokenMetaType.Steuerwort:
                         if (ausdruckErwartet)
+                        {
                             r.addAusdruck(parseProg(subVorzeichen));
+                            subVorzeichen = new List<Token>();
+                            ausdruckErwartet = false;
+                        }
                         else
                             fertig = true;
                         break;
                     case TokenMetaType.Interpunktion:
+                        if (ausdruckErwartet)
+                            throw new NotImplementedException();
+                        else
+                            fertig = true;
                         break;
                     case TokenMetaType.EndOfFile:
                         if (ausdruckErwartet)
@@ -142,107 +186,8 @@ namespace Assistment.Parsing
                     default:
                         throw new NotImplementedException();
                 }
-                return r.ordne();
-
-                switch (token.Current.type)
-                {
-                    case TokenType.STOP:
-                        halt();
-                        break;
-                    case TokenType.Wort:
-                        if (operatorErwartet)
-                            fertig = true;
-                        else
-                        {
-                            r.addAusdruck(parseBezeichner(subVorzeichen));
-                            subVorzeichen = new List<Token>();
-                            operatorErwartet = true;
-                        }
-                        break;
-                    case TokenType.String:
-                    case TokenType.Zahl:
-                    case TokenType.KommaZahl:
-                        if (operatorErwartet)
-                            fertig = true;
-                        else
-                        {
-                            r.addAusdruck(subVorzeichen, token.Current);
-                            subVorzeichen = new List<Token>();
-                            operatorErwartet = true;
-                            fertig = !token.MoveNext();
-                        }
-                        break;
-
-                    case TokenType.KlammerAuf:
-                        if (operatorErwartet)
-                            fertig = true;
-                        else
-                        {
-                            r.ausdrucke.Add(parseKlammer(subVorzeichen));
-                            subVorzeichen = new List<Token>();
-                            operatorErwartet = true;
-                        }
-                        break;
-
-                    case TokenType.Gleich:
-                    case TokenType.HutGleich:
-                    case TokenType.MinusGleich:
-                    case TokenType.OderGleich:
-                    case TokenType.OderOderGleich:
-                    case TokenType.PlusGleich:
-                    case TokenType.ProzentGleich:
-                    case TokenType.SlashGleich:
-                    case TokenType.SternGleich:
-                    case TokenType.UndGleich:
-                    case TokenType.UndUndGleich:
-                    case TokenType.Punkt:
-                    case TokenType.Stern:
-                    case TokenType.Hut:
-                    case TokenType.Plus:
-                    case TokenType.Minus:
-                    case TokenType.Slash:
-                    case TokenType.Prozent:
-                    case TokenType.Und:
-                    case TokenType.UndUnd:
-                    case TokenType.Oder:
-                    case TokenType.OderOder:
-                    case TokenType.Nicht:
-                    case TokenType.WennDann:
-                    case TokenType.DannWenn:
-                    case TokenType.Kleiner:
-                    case TokenType.Größer:
-                    case TokenType.KleinerGleich:
-                    case TokenType.GrößerGleich:
-                    case TokenType.GleichGleich:
-                    case TokenType.NichtGleich:
-                        if (operatorErwartet)
-                        {
-                            r.addOperator(token.Current);
-                            operatorErwartet = false;
-                        }
-                        else
-                            subVorzeichen.Add(token.Current);
-                        fertig = !token.MoveNext();
-                        break;
-                    case TokenType.KlammerZu:
-                        fertig = true;
-                        break;
-                    default:
-                        if (operatorErwartet)
-                            fertig = true;
-                        else
-                        {
-                            r.addAusdruck(parseProg(subVorzeichen));
-                            subVorzeichen = new List<Token>();
-                            operatorErwartet = true;
-                            //fertig = !token.MoveNext();
-                        }
-                        break;
-                }
             }
-            if (subVorzeichen.Count > 0)
-                throw new NotImplementedException();
-            if (!operatorErwartet)
+            if (ausdruckErwartet)
                 throw new NotImplementedException();
             return r.ordne();
         }
