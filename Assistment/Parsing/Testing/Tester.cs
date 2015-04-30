@@ -8,7 +8,7 @@ namespace Assistment.Parsing.Testing
 {
     public static class Tester
     {
-        private static Parser parser = new Parser();
+        private static Parser2 parser = new Parser2();
 
         static Tester()
         {

@@ -42,6 +42,28 @@ namespace Assistment.Parsing
             return token.MoveNext();
         }
 
+        public List<Token> parseVorzeichen()
+        {
+            List<Token> vorzeichen = new List<Token>();
+            bool fertig = false;
+            while (!fertig)
+            {
+                switch (token.Current.metaType)
+                {
+                    case TokenMetaType.STOP:
+                        halt();
+                        break;
+                    case TokenMetaType.Operation:
+                        vorzeichen.Add(token.Current);
+                        token.MoveNext();
+                        break;
+                    default:
+                        fertig = true;
+                        break;
+                }
+            }
+            return vorzeichen;
+        }
         public Prog parseProg(List<Token> vorzeichen)
         {
             List<Token> subVorzeichen = new List<Token>();
@@ -206,7 +228,7 @@ namespace Assistment.Parsing
                     case TokenType.Wort:
                         if (wortErwartet)
                         {
-                            upper = new Aufruf(upper, token.Current.text);
+                            upper = new Aufruf(upper, token.Current);
                             wortErwartet = false;
                         }
                         else

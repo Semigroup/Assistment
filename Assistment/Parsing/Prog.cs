@@ -15,6 +15,10 @@ namespace Assistment.Parsing
         {
             this.vorzeichen = vorzeichen;
         }
+        public Reihe()
+        {
+            vorzeichen = new List<Token>();
+        }
 
         public void addAusdruck(Prog prog)
         {
@@ -90,6 +94,11 @@ namespace Assistment.Parsing
     {
         protected List<Token> vorzeichen;
 
+        public Prog()
+        {
+
+        }
+
         public Prog(List<Token> vorzeichen)
         {
             this.vorzeichen = vorzeichen;
@@ -144,17 +153,17 @@ namespace Assistment.Parsing
     public class Aufruf : Prog
     {
         Prog basis;
-        string aufruf;
+        Token aufruf;
         public bool istMethode;
         List<Prog> argumente;
 
-        public Aufruf(Prog basis, string aufruf)
+        public Aufruf(Prog basis, Token aufruf)
             : base(new List<Token>())
         {
             this.basis = basis;
             this.aufruf = aufruf;
             if (basis != null)
-                this.istMethode = basis.getReturnType().hatMethode(aufruf);
+                this.istMethode = basis.getReturnType().hatMethode(aufruf.text);
             else
                 this.istMethode = false;
         }
@@ -172,7 +181,7 @@ namespace Assistment.Parsing
                 basis.IntoFormat(format, einschub);
                 format.Append(".");
             }
-            format.Append(aufruf);
+            format.Append(aufruf.text);
             if (istMethode)
             {
                 format.Append("(");
@@ -191,7 +200,7 @@ namespace Assistment.Parsing
     {
         Typus basisTyp;
         public BasisAufruf(Typus basisTyp)
-            : base(null, basisTyp.name)
+            : base(null, new Token())
         {
             this.basisTyp = basisTyp;
         }
@@ -213,6 +222,11 @@ namespace Assistment.Parsing
         {
             this.token = token;
         }
+        public Konstante(Token token)
+            : base(new List<Token>())
+        {
+            this.token = token;
+        }
         public override void IntoFormat(StringBuilder format, string einschub)
         {
             base.IntoFormat(format, einschub);
@@ -226,11 +240,21 @@ namespace Assistment.Parsing
     }
     public class ListProg : Prog
     {
-        List<Prog> progs;
+        List<Prog> progs = new List<Prog>();
         public ListProg(List<Token> vorzeichen, List<Prog> progs)
             : base(vorzeichen)
         {
             this.progs = progs;
+        }
+
+        public ListProg()
+            : base(new List<Token>())
+        {
+
+        }
+        public void addProg(Prog prog)
+        {
+            progs.Add(prog);
         }
 
         public override void IntoFormat(StringBuilder format, string einschub)
@@ -268,6 +292,12 @@ namespace Assistment.Parsing
         Prog thenProg;
         Prog elseProg;
 
+        public IfProg(Prog ifProg, Prog thenProg, Prog elseProg)
+        {
+            this.ifProg = ifProg;
+            this.thenProg = thenProg;
+            this.elseProg = elseProg;
+        }
         public IfProg(List<Token> vorzeichen, Prog ifProg, Prog thenProg, Prog elseProg)
             : base(vorzeichen)
         {
@@ -307,6 +337,11 @@ namespace Assistment.Parsing
 
         public ForProg(List<Token> vorzeichen, Constraint forCons, Prog doProg)
             : base(vorzeichen)
+        {
+            this.forCons = forCons;
+            this.doProg = doProg;
+        }
+        public ForProg(Constraint forCons, Prog doProg)
         {
             this.forCons = forCons;
             this.doProg = doProg;

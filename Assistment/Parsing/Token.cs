@@ -23,10 +23,10 @@ namespace Assistment.Parsing
 
         KlammerAuf,
         KlammerZu,
-        //SchweifAuf,
-        //SchweifZu,
-        //EckAuf,
-        //EckZu,
+        SchweifAuf,
+        SchweifZu,
+        EckAuf,
+        EckZu,
 
         Komma,
         Punkt,
@@ -100,6 +100,45 @@ namespace Assistment.Parsing
             return type.ToString() + ": " + text;
         }
 
+        /// <summary>
+        /// true iff this == KlammerAuf | EckAuf | SchweifAuf
+        /// </summary>
+        /// <returns></returns>
+        public bool istAufgehendeKlammer()
+        {
+            return this.type == TokenType.KlammerAuf
+                || this.type == TokenType.EckAuf
+                || this.type == TokenType.SchweifAuf;
+        }
+        /// <summary>
+        /// true iff this == KlammerZu | EckZu | SchweifZu
+        /// </summary>
+        /// <returns></returns>
+        public bool istZugehendeKlammer()
+        {
+            return this.type == TokenType.KlammerZu
+                || this.type == TokenType.EckZu
+                || this.type == TokenType.SchweifZu;
+        }
+        /// <summary>
+        /// liefert den Type der zugehenden Klammer zu dieser aufgehenden Klammer
+        /// </summary>
+        /// <returns></returns>
+        public TokenType getZugehendeKlammer()
+        {
+            switch (type)
+            {
+                case TokenType.KlammerAuf:
+                    return TokenType.KlammerZu;
+                case TokenType.SchweifAuf:
+                    return TokenType.SchweifZu;
+                case TokenType.EckAuf:
+                    return TokenType.EckZu;
+                default:
+                    throw new NotImplementedException();
+            }
+        }
+
         public bool istLinksGeklammert()
         {
             return linksGeklammert(type);
@@ -122,6 +161,10 @@ namespace Assistment.Parsing
                 case TokenType.For:
                     return TokenMetaType.Steuerwort;
 
+                case TokenType.EckAuf:
+                case TokenType.EckZu:
+                case TokenType.SchweifAuf:
+                case TokenType.SchweifZu:
                 case TokenType.KlammerAuf:
                 case TokenType.KlammerZu:
                     return TokenMetaType.Klammer;
@@ -340,14 +383,14 @@ namespace Assistment.Parsing
                     return xKlammerAuf;
                 case TokenType.KlammerZu:
                     return xKlammerZu;
-                //case TokenType.EckAuf:
-                //    return xEckAuf;
-                //case TokenType.EckZu:
-                //    return xEckZu;
-                //case TokenType.SchweifAuf:
-                //    return xSchweifAuf;
-                //case TokenType.SchweifZu:
-                //    return xSchweifZu;
+                case TokenType.EckAuf:
+                    return xEckAuf;
+                case TokenType.EckZu:
+                    return xEckZu;
+                case TokenType.SchweifAuf:
+                    return xSchweifAuf;
+                case TokenType.SchweifZu:
+                    return xSchweifZu;
 
                 case TokenType.Zahl:
                     return xZahl;
