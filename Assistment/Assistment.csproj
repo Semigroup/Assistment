@@ -48,7 +48,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Parsing\Parser.cs" />
-    <Compile Include="Parsing\Parser2.cs" />
     <Compile Include="Parsing\Prog.cs" />
     <Compile Include="Parsing\Testing\Tester.cs" />
     <Compile Include="Parsing\Token.cs" />

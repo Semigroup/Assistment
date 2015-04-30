@@ -9,15 +9,9 @@ namespace Assistment.Parsing
     {
         public List<Token> operatoren = new List<Token>();
         public List<Prog> ausdrucke = new List<Prog>();
-        List<Token> vorzeichen;
 
-        public Reihe(List<Token> vorzeichen)
-        {
-            this.vorzeichen = vorzeichen;
-        }
         public Reihe()
         {
-            vorzeichen = new List<Token>();
         }
 
         public void addAusdruck(Prog prog)
@@ -58,14 +52,13 @@ namespace Assistment.Parsing
                 foreach (var index in ops)
                 {
                     int k = links ? index - j++ : index;
-                    Operation op = new Operation(new List<Token>(), operatoren[k], ausdrucke[k], ausdrucke[k + 1]);
+                    Operation op = new Operation(operatoren[k], ausdrucke[k], ausdrucke[k + 1]);
                     ausdrucke[k] = op;
                     ausdrucke.RemoveAt(k + 1);
                     operatoren.RemoveAt(k);
                 }
             }
 
-            ausdrucke[0].setVorzeichen(vorzeichen);
             return ausdrucke[0];
         }
 
@@ -90,18 +83,14 @@ namespace Assistment.Parsing
             return ordne().getReturnType();
         }
     }
+
     public abstract class Prog
     {
-        protected List<Token> vorzeichen;
+        private List<Token> vorzeichen;
 
         public Prog()
         {
 
-        }
-
-        public Prog(List<Token> vorzeichen)
-        {
-            this.vorzeichen = vorzeichen;
         }
 
         public void setVorzeichen(List<Token> vorzeichen)
@@ -125,15 +114,15 @@ namespace Assistment.Parsing
     }
     public class Operation : Prog
     {
-        public Token operation;
-        public Prog operand1, operand2;
+        private Token operation;
+        private Prog operand1, operand2;
 
-        public Operation(List<Token> vorzeichen, Token operation, Prog operand1, Prog operand2)
-            : base(vorzeichen)
+        public Operation(Token operation, Prog operand1, Prog operand2)
         {
             this.operation = operation;
             this.operand1 = operand1;
             this.operand2 = operand2;
+            setVorzeichen(new List<Token>());
         }
 
         public override Typus getReturnType()
@@ -152,13 +141,12 @@ namespace Assistment.Parsing
     }
     public class Aufruf : Prog
     {
-        Prog basis;
-        Token aufruf;
-        public bool istMethode;
-        List<Prog> argumente;
+        private Prog basis;
+        private Token aufruf;
+        public bool istMethode { get; private set; }
+        private List<Prog> argumente;
 
         public Aufruf(Prog basis, Token aufruf)
-            : base(new List<Token>())
         {
             this.basis = basis;
             this.aufruf = aufruf;
@@ -172,7 +160,6 @@ namespace Assistment.Parsing
         {
             this.argumente = argumente;
         }
-
         public override void IntoFormat(StringBuilder format, string einschub)
         {
             base.IntoFormat(format, einschub);
@@ -190,17 +177,15 @@ namespace Assistment.Parsing
                 format.Append(")");
             }
         }
-
         public override Typus getReturnType()
         {
             throw new NotImplementedException();
         }
     }
-    public class BasisAufruf : Aufruf
+    public class BasisAufruf : Prog
     {
-        Typus basisTyp;
+        private Typus basisTyp;
         public BasisAufruf(Typus basisTyp)
-            : base(null, new Token())
         {
             this.basisTyp = basisTyp;
         }
@@ -216,23 +201,18 @@ namespace Assistment.Parsing
     }
     public class Konstante : Prog
     {
-        Token token;
-        public Konstante(List<Token> vorzeichen, Token token)
-            : base(vorzeichen)
-        {
-            this.token = token;
-        }
+        private Token token;
+
         public Konstante(Token token)
-            : base(new List<Token>())
         {
             this.token = token;
         }
+
         public override void IntoFormat(StringBuilder format, string einschub)
         {
             base.IntoFormat(format, einschub);
             format.Append(token.text);
         }
-
         public override Typus getReturnType()
         {
             throw new NotImplementedException();
@@ -240,18 +220,13 @@ namespace Assistment.Parsing
     }
     public class ListProg : Prog
     {
-        List<Prog> progs = new List<Prog>();
-        public ListProg(List<Token> vorzeichen, List<Prog> progs)
-            : base(vorzeichen)
-        {
-            this.progs = progs;
-        }
+        private List<Prog> progs = new List<Prog>();
 
         public ListProg()
-            : base(new List<Token>())
         {
 
         }
+
         public void addProg(Prog prog)
         {
             progs.Add(prog);
@@ -288,18 +263,11 @@ namespace Assistment.Parsing
     }
     public class IfProg : Prog
     {
-        Prog ifProg;
-        Prog thenProg;
-        Prog elseProg;
+        private Prog ifProg;
+        private Prog thenProg;
+        private Prog elseProg;
 
         public IfProg(Prog ifProg, Prog thenProg, Prog elseProg)
-        {
-            this.ifProg = ifProg;
-            this.thenProg = thenProg;
-            this.elseProg = elseProg;
-        }
-        public IfProg(List<Token> vorzeichen, Prog ifProg, Prog thenProg, Prog elseProg)
-            : base(vorzeichen)
         {
             this.ifProg = ifProg;
             this.thenProg = thenProg;
@@ -308,20 +276,12 @@ namespace Assistment.Parsing
 
         public override void IntoFormat(StringBuilder format, string einschub)
         {
-            //string extraEinschub = einschub + "\t";
             base.IntoFormat(format, einschub);
             format.Append("if ");
             ifProg.IntoFormat(format, einschub);
             format.Append(" ");
-            //format.AppendLine();
-            //format.Append(einschub);
             thenProg.IntoFormat(format, einschub);
             format.Append(" ");
-            //format.AppendLine();
-            //format.Append(einschub);
-            //format.Append(" else ");
-            //format.AppendLine();
-            //format.Append(einschub);
             elseProg.IntoFormat(format, einschub);
         }
 
@@ -332,15 +292,9 @@ namespace Assistment.Parsing
     }
     public class ForProg : Prog
     {
-        Constraint forCons;
-        Prog doProg;
+        private Constraint forCons;
+        private Prog doProg;
 
-        public ForProg(List<Token> vorzeichen, Constraint forCons, Prog doProg)
-            : base(vorzeichen)
-        {
-            this.forCons = forCons;
-            this.doProg = doProg;
-        }
         public ForProg(Constraint forCons, Prog doProg)
         {
             this.forCons = forCons;
@@ -351,5 +305,9 @@ namespace Assistment.Parsing
         {
             throw new NotImplementedException();
         }
+    }
+
+    public abstract class Constraint
+    {
     }
 }

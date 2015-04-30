@@ -6,56 +6,95 @@ using System.Text.RegularExpressions;
 
 namespace Assistment.Parsing
 {
-    public abstract class Constraint
-    {
-    }
-
     public class Parser
     {
-        public string code;
-        private IEnumerator<Token> token;
-        public Aufruf basis;
+        private IEnumerator<Token> tokenEnumerator;
+        private Token token
+        {
+            get
+            {
+                return tokenEnumerator.Current;
+            }
+        }
+        private TokenMetaType meta
+        {
+            get
+            {
+                return token.metaType;
+            }
+        }
+        private TokenType type
+        {
+            get
+            {
+                return token.type;
+            }
+        }
+
+        private BasisAufruf basis;
 
         public void setBasis(Typus basisTyp)
         {
             this.basis = new BasisAufruf(basisTyp);
-            basisTyp.addFeld("a", Typus.Ganzzahl, true);
-            basisTyp.addFeld("b", Typus.Ganzzahl, true);
-            basisTyp.addFeld("c", Typus.Ganzzahl, true);
-            basisTyp.addFeld("d", Typus.Ganzzahl, true);
-            basisTyp.addFeld("e", Typus.Ganzzahl, true);
         }
-
         public Prog parse(string code)
         {
-            this.code = code;
             Tokenizer t = new Tokenizer();
             List<Token> list = t.tokenize(code);
-            token = list.GetEnumerator();
-            token.MoveNext();
-            return parseProg(new List<Token>());
+            tokenEnumerator = list.GetEnumerator();
+            next();
+            return parseProgramm();
         }
 
-        public bool halt()
+        private void next()
+        {
+            tokenEnumerator.MoveNext();
+        }
+        private void halt()
         {
             System.Diagnostics.Debugger.Break();
-            return token.MoveNext();
+            next();
         }
 
-        public List<Token> parseVorzeichen()
+        public Prog parseProgramm()
         {
-            List<Token> vorzeichen = new List<Token>();
             bool fertig = false;
+            Reihe reihe = new Reihe();
+            reihe.addAusdruck(parseAufruf());
+
             while (!fertig)
             {
-                switch (token.Current.metaType)
+                switch (meta)
                 {
                     case TokenMetaType.STOP:
                         halt();
                         break;
                     case TokenMetaType.Operation:
-                        vorzeichen.Add(token.Current);
-                        token.MoveNext();
+                        reihe.addOperator(token);
+                        next();
+                        reihe.addAusdruck(parseAufruf());
+                        break;
+                    default:
+                        fertig = true;
+                        break;
+                }
+            }
+            return reihe.ordne();
+        }
+        public List<Token> parseVorzeichen()
+        {
+            bool fertig = false;
+            List<Token> vorzeichen = new List<Token>();
+            while (!fertig)
+            {
+                switch (meta)
+                {
+                    case TokenMetaType.STOP:
+                        halt();
+                        break;
+                    case TokenMetaType.Operation:
+                        vorzeichen.Add(token);
+                        next();
                         break;
                     default:
                         fertig = true;
@@ -64,223 +103,156 @@ namespace Assistment.Parsing
             }
             return vorzeichen;
         }
-        public Prog parseProg(List<Token> vorzeichen)
+        public Prog parseAufruf()
         {
-            List<Token> subVorzeichen = new List<Token>();
             bool fertig = false;
+            bool wortErwartet = false;
+            List<Token> vorzeichen = parseVorzeichen();
+            Prog ausdruck = parseAusdruck();
             while (!fertig)
             {
-                switch (token.Current.metaType)
-                {
-                    case TokenMetaType.STOP:
-                        halt();
-                        break;
-                    case TokenMetaType.EndOfFile:
-                        throw new NotImplementedException();
-                    case TokenMetaType.Klammer:
-                        subVorzeichen.AddRange(vorzeichen);
-                        return parseKlammer(subVorzeichen);
-                    case TokenMetaType.Operation:
-                        subVorzeichen.Add(token.Current);
-                        token.MoveNext();
-                        break;
-                    case TokenMetaType.Steuerwort:
-                        subVorzeichen.AddRange(vorzeichen);
-                        switch (token.Current.type)
-                        {
-                            case TokenType.If:
-                                token.MoveNext();
-                                return new IfProg(subVorzeichen, parseProg(new List<Token>()), parseProg(new List<Token>()), parseProg(new List<Token>()));
-                            case TokenType.For:
-                                token.MoveNext();
-                                return new ForProg(subVorzeichen, parseConstraint(), parseProg(new List<Token>()));
-                            default:
-                                throw new NotImplementedException();
-                        }
-                    case TokenMetaType.Interpunktion:
-                        throw new NotImplementedException();
-                    default:
-                        return parseReihe(vorzeichen, subVorzeichen);
-                }
-            }
-            throw new NotImplementedException();
-        }
-        public Prog parseKlammer(List<Token> vorzeichen)
-        {
-            if (token.Current.type != TokenType.KlammerAuf) throw new Exception();
-            token.MoveNext();
-            List<Prog> progs = new List<Prog>();
-            while (token.Current.type != TokenType.KlammerZu)
-                if (token.Current.type == TokenType.EndOfFile)
-                    throw new NotImplementedException();
-                else if (token.Current.type == TokenType.Komma)
-                    throw new NotImplementedException();
-                else if (token.Current.type == TokenType.Semikolon)
-                    throw new NotImplementedException();
-                else
-                    progs.Add(parseProg(new List<Token>()));
-
-            token.MoveNext();
-            return new ListProg(vorzeichen, progs);
-        }
-        public Prog parseAusdruck(List<Token> vorzeichen)
-        {
-            if (token.Current.metaType != TokenMetaType.Ausdruck) throw new NotImplementedException();
-
-            switch (token.Current.type)
-            {
-                case TokenType.Zahl:
-                case TokenType.KommaZahl:
-                case TokenType.String:
-                    Konstante konst = new Konstante(vorzeichen, token.Current);
-                    token.MoveNext();
-                    return konst;
-                case TokenType.Wort:
-                    return parseBezeichner(vorzeichen);
-                default:
-                    throw new NotImplementedException();
-            }
-        }
-        public Prog parseReihe(List<Token> vorzeichen, List<Token> subVorzeichen)
-        {
-            bool ausdruckErwartet = true;
-            bool fertig = false;
-            Reihe r = new Reihe(vorzeichen);
-            while (!fertig)
-            {
-                switch (token.Current.metaType)
-                {
-                    case TokenMetaType.STOP:
-                        halt();
-                        break;
-                    case TokenMetaType.Klammer:
-                        if (ausdruckErwartet)
-                        {
-                            r.addAusdruck(parseKlammer(subVorzeichen));
-                            subVorzeichen = new List<Token>();
-                            ausdruckErwartet = false;
-                        }
-                        else
-                            fertig = true;
-                        break;
-                    case TokenMetaType.Operation:
-                        if (ausdruckErwartet)
-                            subVorzeichen.Add(token.Current);
-                        else
-                        {
-                            r.addOperator(token.Current);
-                            ausdruckErwartet = true;
-                        }
-                        token.MoveNext();
-                        break;
-                    case TokenMetaType.Ausdruck:
-                        if (ausdruckErwartet)
-                        {
-                            r.addAusdruck(parseAusdruck(subVorzeichen));
-                            subVorzeichen = new List<Token>();
-                            ausdruckErwartet = false;
-                        }
-                        else
-                            fertig = true;
-                        break;
-                    case TokenMetaType.Steuerwort:
-                        if (ausdruckErwartet)
-                        {
-                            r.addAusdruck(parseProg(subVorzeichen));
-                            subVorzeichen = new List<Token>();
-                            ausdruckErwartet = false;
-                        }
-                        else
-                            fertig = true;
-                        break;
-                    case TokenMetaType.Interpunktion:
-                        if (ausdruckErwartet)
-                            throw new NotImplementedException();
-                        else
-                            fertig = true;
-                        break;
-                    case TokenMetaType.EndOfFile:
-                        if (ausdruckErwartet)
-                            throw new NotImplementedException();
-                        else
-                            fertig = true;
-                        break;
-                    default:
-                        throw new NotImplementedException();
-                }
-            }
-            if (ausdruckErwartet)
-                throw new NotImplementedException();
-            return r.ordne();
-        }
-        public Prog parseBezeichner(List<Token> vorzeichen)
-        {
-            Aufruf upper = basis;
-            bool wortErwartet = true;
-            bool fertig = false;
-            while (!fertig)
-            {
-                switch (token.Current.type)
+                switch (type)
                 {
                     case TokenType.STOP:
                         halt();
-                        break;
-                    case TokenType.Wort:
-                        if (wortErwartet)
-                        {
-                            upper = new Aufruf(upper, token.Current);
-                            wortErwartet = false;
-                        }
-                        else
-                            fertig = true;
-                        break;
-                    case TokenType.KlammerAuf:
-                        if (wortErwartet)
-                            throw new NotImplementedException();
-                        if (upper.istMethode)
-                            upper.setArgumente(parseArgumente());
-                        else
-                            fertig = true;
                         break;
                     case TokenType.Punkt:
                         if (wortErwartet)
                             throw new NotImplementedException();
-                        wortErwartet = true;
+                        else
+                        {
+                            wortErwartet = true;
+                            next();
+                        }
                         break;
-                    default:
+                    case TokenType.Wort:
                         if (wortErwartet)
-                            throw new NotImplementedException();
+                        {
+                            Aufruf aufruf = new Aufruf(ausdruck, token);
+                            ausdruck = aufruf;
+                            next();
+                            wortErwartet = false;
+                            if (aufruf.istMethode)
+                                aufruf.setArgumente(parseArgumente());
+                        }
                         else
                             fertig = true;
                         break;
+                    default:
+                        fertig = true;
+                        break;
                 }
-                if (!fertig)
-                    fertig = !token.MoveNext();
             }
-            if (upper == basis)
-                throw new NotImplementedException();
-            upper.setVorzeichen(vorzeichen);
-            return upper;
+            ausdruck.setVorzeichen(vorzeichen);
+            return ausdruck;
         }
-        public List<Prog> parseArgumente()
+        public Prog parseAusdruck()
         {
-            if (token.Current.type != TokenType.KlammerAuf) throw new NotImplementedException();
-            List<Prog> args = new List<Prog>();
-            while (token.Current.type != TokenType.KlammerZu)
-            {
-                switch (token.Current.type)
+            while (true)
+                switch (meta)
+                {
+                    case TokenMetaType.STOP:
+                        halt();
+                        break;
+                    case TokenMetaType.Klammer:
+                        return parseKlammer();
+                    case TokenMetaType.Ausdruck:
+                        switch (token.type)
+                        {
+                            case TokenType.Zahl:
+                            case TokenType.KommaZahl:
+                            case TokenType.String:
+                                Konstante konstante = new Konstante(token);
+                                next();
+                                return konstante;
+                            case TokenType.Wort:
+                                Aufruf aufruf = new Aufruf(basis, token);
+                                next();
+                                if (aufruf.istMethode)
+                                    aufruf.setArgumente(parseArgumente());
+                                return aufruf;
+                            default:
+                                throw new NotImplementedException();
+                        }
+                    case TokenMetaType.Steuerwort:
+                        return parseSteuerwort();
+                    case TokenMetaType.Interpunktion:
+                        throw new NotImplementedException();
+                    case TokenMetaType.EndOfFile:
+                        throw new NotImplementedException();
+                    default:
+                        throw new NotImplementedException();
+                }
+        }
+        public Prog parseSteuerwort()
+        {
+            while (true)
+                switch (type)
                 {
                     case TokenType.STOP:
                         halt();
                         break;
-                    case TokenType.Komma:
-                        token.MoveNext();
-                        parseProg(new List<Token>());
+                    case TokenType.If:
+                        next();
+                        return new IfProg(parseProgramm(),
+                                          parseProgramm(),
+                                          parseProgramm());
+                    case TokenType.For:
+                        next();
+                        return new ForProg(parseConstraint(),
+                                           parseProgramm());
+                    default:
+                        throw new NotImplementedException();
+                }
+        }
+        public Prog parseKlammer()
+        {
+            if (!token.istAufgehendeKlammer()) throw new NotImplementedException();
+            TokenType erwarteterSchluss = token.getZugehendeKlammer();
+            next();
+            ListProg list = new ListProg();
+            while (!token.istZugehendeKlammer())
+                switch (meta)
+                {
+                    case TokenMetaType.STOP:
+                        halt();
+                        break;
+                    case TokenMetaType.EndOfFile:
+                        throw new NotImplementedException();
+                    default:
+                        list.addProg(parseProgramm());
+                        break;
+                }
+            if (token.type != erwarteterSchluss) throw new NotImplementedException();
+            next();
+            return list;
+        }
+        public List<Prog> parseArgumente()
+        {
+            List<Prog> args = new List<Prog>();
+            if (type != TokenType.KlammerAuf) throw new NotImplementedException();
+            next();
+            while (type != TokenType.KlammerZu)
+            {
+                switch (meta)
+                {
+                    case TokenMetaType.STOP:
+                        halt();
+                        break;
+                    case TokenMetaType.Interpunktion:
+                        if (type == TokenType.Komma)
+                            next();
+                        else
+                            throw new NotImplementedException();
+                        break;
+                    case TokenMetaType.EndOfFile:
+                        throw new NotImplementedException();
+                    default:
+                        args.Add(parseProgramm());
                         break;
                 }
             }
-            token.MoveNext();
-
+            next();
             return args;
         }
         public Constraint parseConstraint()
