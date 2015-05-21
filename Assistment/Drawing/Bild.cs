@@ -207,6 +207,11 @@ namespace Assistment.Drawing
             return new PointF(P.X / scale - offset.X, P.Y / scale - offset.Y);
         }
 
+        public RectangleF getDrawingRegion()
+        {
+            return align(new RectangleF(0, 0, width, height));
+        }
+
         public void drawGrid(int zeilen, int spalten, float breite, float hohe, Pen stift)
         {
             for (int i = 1; i < zeilen; i++)

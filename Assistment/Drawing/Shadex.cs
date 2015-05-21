@@ -5,632 +5,10 @@ using System.Text;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
+using Assistment.Drawing.Graph;
 
 namespace Assistment.Drawing
 {
-    public delegate PointF Weg(float t);
-    public delegate float Hohe(float t);
-    public delegate PointF Punkt(float x, float y);
-    public unsafe delegate void AddierPolygone(PointF* p, PointF* q);
-    public unsafe delegate void ModPolygon(PointF* p);
-    public delegate void Mach();
-
-    public struct Gerade
-    {
-        public PointF Punkt;
-        public PointF Vektor;
-
-        public Gerade(PointF Punkt, PointF Vektor)
-        {
-            this.Punkt = Punkt;
-            this.Vektor = Vektor;
-        }
-
-        public Gerade(float x, float y, float dx, float dy)
-        {
-            this.Punkt = new PointF(x, y);
-            this.Vektor = new PointF(dx, dy);
-        }
-    }
-
-    public class orientierbarerWeg
-    {
-        /// <summary>
-        /// sollte konstante ableitung besitzen
-        /// <para>(damit alle Wegstücke gleich groß sind)</para>
-        /// </summary>
-        public Weg weg;
-        /// <summary>
-        /// normalenvektor muss auf wegpunkt drauf addiert werden
-        /// <para>die normale muss normiert sein!</para>
-        /// </summary>
-        public Weg normale;
-        /// <summary>
-        /// konstanter Wert der Norm der Ableitung
-        /// <para>und Länge des Weges</para>
-        /// </summary>
-        public float L;
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="weg">sollte konstante ableitung besitzen
-        /// <para>(damit alle Wegstücke gleich groß sind)</para></param>
-        /// <param name="normale">normalenvektor muss auf wegpunkt drauf addiert werden
-        /// <para>die normale muss normiert sein!</para></param>
-        /// <param name="c">konstanter Wert der Norm der Ableitung</param>
-        public orientierbarerWeg(Weg weg, Weg normale, float L)
-        {
-            this.weg = weg;
-            this.normale = normale;
-            this.L = L;
-        }
-        /// <summary>
-        /// Zieht einen Weg von A nach B
-        /// <para>Normale zeigt links von A->B</para>
-        /// <para>(mathematisch rechts..., y-Achse wird gespiegelt!)</para>
-        /// </summary>
-        /// <param name="A"></param>
-        /// <param name="B"></param>
-        public orientierbarerWeg(PointF A, PointF B)
-        {
-            float dx = B.X - A.X;
-            float dy = B.Y - A.Y;
-
-            L = sqrt(dx * dx + dy * dy);
-            weg = t => new PointF(A.X + dx * t, A.Y + dy * t);
-            PointF n = new PointF(dy / L, -dx / L);
-            normale = x => n;
-        }
-        /// <summary>
-        /// <para>Länge wird ganz billig approximiert!</para>
-        /// </summary>
-        /// <param name="A"></param>
-        /// <param name="dA"></param>
-        /// <param name="B"></param>
-        /// <param name="dB"></param>
-        public orientierbarerWeg(PointF A, PointF dA, PointF B, PointF dB)
-        {
-            float ddx = dA.X + dB.X;
-            float ppx = A.X - B.X;
-            float ax = ddx + 2 * ppx;
-            float bx = -3 * ppx - ddx - dA.X;
-            float ddy = dA.Y + dB.Y;
-            float ppy = A.Y - B.Y;
-            float ay = ddy + 2 * ppy;
-            float by = -3 * ppy - ddy - dA.Y;
-            weg = t =>
-            {
-                float tt = t * t;
-                PointF P = saxpy(A, t, dA);
-                P.X += bx * tt;
-                P.Y += by * tt;
-                tt *= t;
-                P.X += ax * tt;
-                P.Y += ay * tt;
-                return P;
-            };
-            normale = t =>
-            {
-                PointF P = new PointF(dA.Y, -dA.X);
-                P.X += 2 * by * t;
-                P.Y -= 2 * bx * t;
-                t *= t;
-                P.X += 3 * ay * t;
-                P.Y -= 3 * ax * t;
-                float norm = (float)Math.Sqrt(P.X * P.X + P.Y * P.Y);
-                P.X /= norm;
-                P.Y /= norm;
-                return P;
-            };
-            #region Länge
-            {
-                double l = 0;
-                double dx, dy;
-                PointF[] punkte = getPolygon(10, 0, 1);
-                for (int i = 0; i < punkte.Length - 1; i++)
-                {
-                    dx = punkte[i + 1].X - punkte[i].X;
-                    dy = punkte[i + 1].Y - punkte[i].Y;
-                    l += Math.Sqrt(dx * dx + dy * dy);
-                }
-                L = (float)l;
-            }
-            #endregion
-        }
-        /// <summary>
-        /// <para>Länge wird ganz billig approximiert!</para>
-        /// </summary>
-        /// <param name="A"></param>
-        /// <param name="dA"></param>
-        /// <param name="B"></param>
-        /// <param name="dB"></param>
-        public orientierbarerWeg(Gerade A, Gerade B)
-            : this(A.Punkt, A.Vektor, B.Punkt, B.Vektor)
-        {
-
-        }
-
-        /// <summary>
-        /// setzt P[offset],...P[offset + samples - 1] auf weg(t0), ..., weg(t1-d)
-        /// </summary>
-        /// <param name="P"></param>
-        /// <param name="offset"></param>
-        /// <param name="samples"></param>
-        /// <param name="t0"></param>
-        /// <param name="t1"></param>
-        public void getPolygon(PointF[] P, int offset, int samples, float t0, float t1)
-        {
-            float d = (t1 - t0) / (samples);
-            for (int i = 0; i < samples; i++)
-                P[i + offset] = weg(i * d + t0);
-        }
-        public PointF[] getPolygon(int samples, float t0, float t1)
-        {
-            PointF[] P = new PointF[samples];
-            float d = (t1 - t0) / (samples);
-            for (int i = 0; i < samples; i++)
-                P[i] = weg(i * d + t0);
-            return P;
-        }
-        /// <summary>
-        /// setzt P[offset],...P[offset + samples - 1] auf (weg+hohe*n)(t0), ..., (weg+hohe*n)(t1-d)
-        /// </summary>
-        /// <param name="P"></param>
-        /// <param name="offset"></param>
-        /// <param name="samples"></param>
-        /// <param name="t0"></param>
-        /// <param name="t1"></param>
-        public void getPolygon(PointF[] P, int offset, int samples, float t0, float t1, Hohe hohe)
-        {
-            float d = (t1 - t0) / (samples);
-            float f;
-            for (int i = 0; i < samples; i++)
-            {
-                f = i * d + t0;
-                P[i + offset] = saxpy(weg(f), hohe(f), normale(f));
-            }
-        }
-        public PointF[] getPolygon(int samples, float t0, float t1, Hohe hohe)
-        {
-            PointF[] P = new PointF[samples];
-            float d = (t1 - t0) / (samples);
-            float f;
-            for (int i = 0; i < samples; i++)
-            {
-                f = i * d + t0;
-                P[i] = saxpy(weg(f), hohe(f), normale(f));
-            }
-            return P;
-        }
-        /// <summary>
-        /// liefert ein Polygon mit 2*samples viele Punkte
-        /// <para>die ersten samples Punkte sind der Weg von t0 bis t1</para>
-        /// <para>die letzten samples Punkte sind der Weg + normale*hohe von t1 nach t0</para>
-        /// </summary>
-        /// <param name="samples"></param>
-        /// <param name="t0"></param>
-        /// <param name="t1"></param>
-        /// <param name="hohe"></param>
-        /// <returns></returns>
-        public PointF[] getCircularPolygon(int samples, float t0, float t1, Hohe hohe)
-        {
-            PointF[] P = new PointF[2 * samples];
-            float d = (t1 - t0) / (samples - 1);
-            float f;
-            int sam2 = 2 * samples - 1;
-            for (int i = 0; i < samples; i++)
-            {
-                f = i * d + t0;
-                P[i] = weg(f);
-                P[sam2 - i] = saxpy(P[i], hohe(f), normale(f));
-            }
-            return P;
-        }
-
-        /// <summary>
-        /// dreht das Vorzeichen der Normalen um
-        /// </summary>
-        public void invertier()
-        {
-            Weg norm = this.normale;
-            this.normale = t =>
-            {
-                PointF n = norm(t);
-                return new PointF(-n.X, -n.Y);
-            };
-        }
-        /// <summary>
-        /// Kreiert ein Testbild namens test.png
-        /// </summary>
-        /// <param name="width"></param>
-        /// <param name="height"></param>
-        /// <param name="hohe"></param>
-        public void print(int width, int height, float hohe)
-        {
-            Bitmap b = new Bitmap(width, height);
-            Graphics g = Graphics.FromImage(b);
-            g.Clear(Color.White);
-            PointF P;
-            float f;
-            float d = 3f / L;
-            for (int i = 0; i < (int)L / 3; i++)
-            {
-                f = i * d;
-                P = weg(f);
-                g.DrawLine(Pens.Black, P, saxpy(P, hohe, normale(f)));
-            }
-            b.Save("test.png");
-        }
-
-        private static Weg add(Weg y, PointF p)
-        {
-            return t =>
-            {
-                PointF yt = y(t);
-                yt.X += p.X;
-                yt.Y += p.Y;
-                return yt;
-            };
-        }
-        private static Hohe add(Hohe h, Hohe g)
-        {
-            return t => h(t) + g(t);
-        }
-        private static PointF saxpy(PointF p, float a, PointF q)
-        {
-            return new PointF(p.X + a * q.X, p.Y + a * q.Y);
-        }
-        private static float sqrt(float t)
-        {
-            return (float)(Math.Sqrt(Math.Abs(t)));
-        }
-
-        public static orientierbarerWeg operator *(orientierbarerWeg gamma1, orientierbarerWeg gamma2)
-        {
-            float L = gamma1.L + gamma2.L;
-            float m = gamma1.L / (gamma1.L + gamma2.L);
-            float m2 = gamma2.L / (gamma1.L + gamma2.L);
-            return new orientierbarerWeg(t =>
-            {
-                if (t <= m)
-                    return gamma1.weg(t / m);
-                else
-                    return gamma2.weg((t - m) / m2);
-            }, t =>
-            {
-                if (t <= m)
-                    return gamma1.normale(t / m);
-                else
-                    return gamma2.normale((t - m) / m2);
-            }, L);
-        }
-        public static orientierbarerWeg operator +(orientierbarerWeg gamma, PointF point)
-        {
-            return new orientierbarerWeg(add(gamma.weg, point), gamma.normale, gamma.L);
-        }
-    }
-
-    public class Knoten
-    {
-        private const float TAU = Shadex.Tau;
-        private static Random d = Shadex.dice;
-
-        public struct Kante
-        {
-            /// <summary>
-            /// endknoten
-            /// </summary>
-            public Knoten ziel;
-            public Pen stift;
-        }
-        public abstract class ZeichenObjekt
-        {
-            public Brush back;
-            public Pen rand;
-            public PointF ort;
-
-            public ZeichenObjekt(PointF ort, Brush back, Pen rand)
-            {
-                this.ort = ort;
-                this.back = back;
-                this.rand = rand;
-            }
-
-            /// <summary>
-            /// gibt das Ziel einer Kante an, die bei start beginnt und diesen Knoten erreichen soll
-            /// </summary>
-            /// <param name="start"></param>
-            public abstract PointF getPoint(PointF start);
-            public abstract void draw(Graphics g);
-            public abstract void draw(Bild b);
-        }
-        public class Kreis : ZeichenObjekt
-        {
-            public float radius;
-
-            public Kreis(float X, float Y, float radius, Brush back, Pen rand)
-                : this(new PointF(X, Y), radius, back, rand)
-            {
-
-            }
-            public Kreis(PointF mittelPunkt, float radius, Brush back, Pen rand)
-                : base(mittelPunkt, back, rand)
-            {
-                this.radius = radius;
-            }
-
-            public override void draw(Graphics g)
-            {
-                RectangleF r = new RectangleF(ort.X - radius, ort.Y - radius, 2 * radius, 2 * radius);
-                if (back != null)
-                    g.FillEllipse(back, r);
-                if (rand != null)
-                    g.DrawEllipse(rand, r);
-            }
-            public override PointF getPoint(PointF start)
-            {
-                float X = start.X - ort.X;
-                float Y = start.Y - ort.Y;
-                float norm = (float)(radius / Math.Sqrt(X * X + Y * Y));
-                return new PointF(ort.X + X * norm, ort.Y + Y * norm);
-            }
-            public override void draw(Bild b)
-            {
-                RectangleF r = b.align(new RectangleF(ort.X - radius, ort.Y - radius, 2 * radius, 2 * radius));
-                if (back != null)
-                    b.g.FillEllipse(back, r);
-                if (rand != null)
-                    b.g.DrawEllipse(rand, r);
-            }
-        }
-        public class RegelEck : ZeichenObjekt
-        {
-            public float radius;
-            public float drehwinkel;
-            public PointF[] ecken;
-
-            public RegelEck(float X, float Y, float radius, int anzahlEcken, float drehwinkel, Brush back, Pen rand)
-                : this(new PointF(X, Y), radius, anzahlEcken, drehwinkel, back, rand)
-            {
-            }
-
-            public RegelEck(PointF mittelPunkt, float radius, int anzahlEcken, float drehwinkel, Brush back, Pen rand)
-                : base(mittelPunkt, back, rand)
-            {
-                this.radius = radius;
-                this.ecken = new PointF[anzahlEcken + 1];
-                this.drehwinkel = (drehwinkel + TAU) % TAU;
-                float winkel = drehwinkel;
-                float dWinkel = TAU / anzahlEcken;
-                for (int i = 0; i < anzahlEcken; i++)
-                {
-                    ecken[i] = new PointF((float)(mittelPunkt.X + Math.Cos(winkel) * radius), (float)(mittelPunkt.Y + Math.Sin(winkel) * radius));
-                    winkel += dWinkel;
-                }
-                ecken[anzahlEcken] = ecken[0];
-            }
-
-            public override void draw(Graphics g)
-            {
-                if (back != null)
-                    g.FillPolygon(back, ecken);
-                if (rand != null)
-                    g.DrawPolygon(rand, ecken);
-            }
-            public override PointF getPoint(PointF start)
-            {
-                float X = start.X - ort.X;
-                float Y = start.Y - ort.Y;
-                float winkel = (float)((Math.Atan2(Y, X) + 2 * TAU - drehwinkel) % TAU);
-                float off = winkel * (ecken.Length - 1) / TAU;
-                int n = (int)off;
-                off -= n;
-                return new PointF((1 - off) * ecken[n].X + off * ecken[n + 1].X, (1 - off) * ecken[n].Y + off * ecken[n + 1].Y);
-            }
-            public override void draw(Bild b)
-            {
-                PointF[] p = b.align(ecken);
-                if (back != null)
-                    b.g.FillPolygon(back, p);
-                if (rand != null)
-                    b.g.DrawPolygon(rand, p);
-            }
-        }
-        public class Punkt : ZeichenObjekt
-        {
-            public Punkt(float X, float Y, Pen rand)
-                : this(new PointF(X, Y), rand)
-            {
-            }
-            public Punkt(PointF ort, Pen rand)
-                : base(ort, null, rand)
-            {
-
-            }
-
-            public override void draw(Graphics g)
-            {
-                if (rand != null)
-                    g.DrawLine(rand, ort, ort);
-            }
-            public override PointF getPoint(PointF start)
-            {
-                return ort;
-            }
-            public override void draw(Bild b)
-            {
-                if (rand != null)
-                {
-                    PointF P = b.align(ort);
-                    b.g.DrawLine(rand, P, P);
-                }
-            }
-        }
-
-        public int token;
-        /// <summary>
-        /// von diesem Knoten weiterführende Kanten
-        /// </summary>
-        public List<Kante> kanten;
-        public ZeichenObjekt objekt;
-
-        public PointF ort
-        {
-            get
-            {
-                return objekt.ort;
-            }
-            set
-            {
-                objekt.ort = value;
-            }
-        }
-        public float X
-        {
-            get
-            {
-                return objekt.ort.X;
-            }
-            set
-            {
-                objekt.ort.X = value;
-            }
-        }
-        public float Y
-        {
-            get
-            {
-                return objekt.ort.Y;
-            }
-            set
-            {
-                objekt.ort.Y = value;
-            }
-        }
-
-        public Knoten(float X, float Y)
-            : this(new PointF(X, Y), null)
-        {
-        }
-        public Knoten(PointF ort, Pen rand)
-        {
-            this.kanten = new List<Kante>();
-            this.token = d.Next();
-            this.objekt = new Punkt(ort, rand);
-        }
-        public Knoten(ZeichenObjekt objekt)
-        {
-            this.kanten = new List<Kante>();
-            this.token = d.Next();
-            this.objekt = objekt;
-        }
-
-        /// <summary>
-        /// malt alle ausgehenden Kanten
-        /// </summary>
-        /// <param name="g"></param>
-        public void drawKanten(Graphics g)
-        {
-            PointF ziel, start;
-            foreach (Kante kante in kanten)
-            {
-                ziel = kante.ziel.getPoint(this.objekt.ort);
-                start = getPoint(ziel);
-                g.DrawLine(kante.stift, start, ziel);
-            }
-        }
-        private void drawKaskade(Graphics g, int token)
-        {
-            if (token == this.token)
-                return;
-            this.token = token;
-            drawKanten(g);
-            draw(g);
-            foreach (Kante kante in kanten)
-                kante.ziel.drawKaskade(g, token);
-        }
-        public void drawKaskade(Graphics g)
-        {
-            this.drawKaskade(g, d.Next());
-        }
-        public void draw(Graphics g)
-        {
-            objekt.draw(g);
-        }
-
-        /// <summary>
-        /// malt alle ausgehenden Kanten
-        /// </summary>
-        /// <param name="g"></param>
-        public void drawKanten(Bild b)
-        {
-            PointF ziel, start;
-            foreach (Kante kante in kanten)
-            {
-                ziel = b.align(kante.ziel.getPoint(this.objekt.ort));
-                start = b.align(getPoint(ziel));
-                b.g.DrawLine(kante.stift, start, ziel);
-            }
-        }
-        private void drawKaskade(Bild b, int token)
-        {
-            if (token == this.token)
-                return;
-            this.token = token;
-            drawKanten(b);
-            draw(b);
-            foreach (Kante kante in kanten)
-                kante.ziel.drawKaskade(b, token);
-        }
-        public void drawKaskade(Bild b)
-        {
-            this.drawKaskade(b, d.Next());
-        }
-        public void draw(Bild b)
-        {
-            objekt.draw(b);
-        }
-
-        /// <summary>
-        /// gibt das Ziel einer Kante an, die bei start beginnt und diesen Knoten erreichen soll
-        /// </summary>
-        /// <param name="start"></param>
-        public PointF getPoint(PointF start)
-        {
-            return objekt.getPoint(start);
-        }
-
-        public void addKante(Pen stift, Knoten ziel)
-        {
-            Kante k;
-            k.stift = stift;
-            k.ziel = ziel;
-            this.kanten.Add(k);
-        }
-
-        /// <summary>
-        /// gibt eine Liste aller erreichbaren Knoten
-        /// </summary>
-        /// <returns></returns>
-        public List<Knoten> getKnoten()
-        {
-            List<Knoten> lKnoten = new List<Knoten>();
-            Queue<Knoten> queue = new Queue<Knoten>();
-            queue.Enqueue(this);
-            int tok = d.Next();
-            while (queue.Count > 0)
-            {
-                Knoten knoten = queue.Dequeue();
-                lKnoten.Add(knoten);
-                knoten.token = tok;
-                foreach (Kante kante in knoten.kanten)
-                    if (kante.ziel.token != tok)
-                        queue.Enqueue(kante.ziel);
-            }
-            return lKnoten;
-        }
-    }
-
     public static class Shadex
     {
         private class knotenHohenVergleicher : IComparer<Knoten>
@@ -742,56 +120,7 @@ namespace Assistment.Drawing
         {
             return t => h(t) + g;
         }
-        public static orientierbarerWeg RundesRechteck(RectangleF r, float radius)
-        {
-            orientierbarerWeg ecke1, ecke2, ecke3, ecke4;
-            orientierbarerWeg rand1, rand2, rand3, rand4;
 
-            float bm = Rho * radius;
-            ecke1 = new orientierbarerWeg(t => new PointF(r.X + radius + radius * cos(t / 4 + 0.25f), r.Y + radius - radius * sin(t / 4 + 0.25f)),
-                t => new PointF(cos(t / 4 + 0.25f), -sin(t / 4 + 0.25f)),
-             bm);
-            ecke2 = new orientierbarerWeg(t => new PointF(r.X + radius + radius * cos(t / 4 + 0.5f), r.Bottom - radius - radius * sin(t / 4 + 0.5f)),
-                t => new PointF(cos(t / 4 + 0.5f), -sin(t / 4 + 0.5f)),
-             bm);
-            ecke3 = new orientierbarerWeg(t => new PointF(r.Right - radius + radius * cos(t / 4 + 0.75f), r.Bottom - radius - radius * sin(t / 4 + 0.75f)),
-                t => new PointF(cos(t / 4 + 0.75f), -sin(t / 4 + 0.75f)),
-             bm);
-            ecke4 = new orientierbarerWeg(t => new PointF(r.Right - radius + radius * cos(t / 4), r.Y + radius - radius * sin(t / 4)),
-                t => new PointF(cos(t / 4), -sin(t / 4)),
-             bm);
-
-            float Lv = r.Height - 2 * radius;
-            float Lh = r.Width - 2 * radius;
-            rand1 = new orientierbarerWeg(t => new PointF(r.X, Lv * t + radius + r.Y),
-                t => new PointF(-1, 0),
-                Lv);
-            rand2 = new orientierbarerWeg(t => new PointF(Lh * t + radius + r.X, r.Bottom),
-                t => new PointF(0, 1),
-                Lh);
-            rand3 = new orientierbarerWeg(t => new PointF(r.Right, r.Bottom - radius - t * Lv),
-                t => new PointF(1, 0),
-                Lv);
-            rand4 = new orientierbarerWeg(t => new PointF(r.Right - radius - t * Lh, r.Y),
-                t => new PointF(0, -1),
-                Lh);
-
-            return ((ecke1 * rand1) * (ecke2 * rand2)) * ((ecke3 * rand3) * (ecke4 * rand4));
-        }
-        public static orientierbarerWeg Ellipse(RectangleF r)
-        {
-            PointF M = new PointF((r.Right + r.Left) / 2, (r.Bottom + r.Top) / 2);
-            PointF rad = new PointF((r.Right - r.Left) / 2, (r.Bottom - r.Top) / 2);
-            Weg y = t => new PointF(M.X + rad.X * cos(t), M.Y + rad.Y * sin(t));
-            Weg n = t =>
-                {
-                    PointF p = new PointF(rad.Y * cos(t), rad.X * sin(t));
-                    float norm = sqrt(p.X * p.X + p.Y * p.Y);
-                    return new PointF(p.X / norm, p.Y / norm);
-                };
-            //Länge nur eine Annäherung
-            return new orientierbarerWeg(y, n, Rho * (r.Width + r.Height));
-        }
         public static Hohe bezierStachelrand(Hohe h, int stachel)
         {
             float f = 1.0f / stachel;
@@ -890,7 +219,7 @@ namespace Assistment.Drawing
         /// <param name="basis"></param>
         /// <param name="samples"></param>
         /// <param name="stachel"></param>
-        public static void malBezierrand(Graphics g, Brush[] brushes, orientierbarerWeg y, Hohe hohe, int samples, int stachel)
+        public static void malBezierrand(Graphics g, Brush[] brushes, OrientierbarerWeg y, Hohe hohe, int samples, int stachel)
         {
             int layer = brushes.Length;
             Hohe h = bezierStachelrand(t => hohe(t) / layer, stachel);
@@ -929,7 +258,7 @@ namespace Assistment.Drawing
         /// <param name="basis"></param>
         /// <param name="samples"></param>
         /// <param name="stachel"></param>
-        public static void malBezierhulle(Graphics g, Brush[] brushes, orientierbarerWeg y, Hohe hohe, int samples, int stachel)
+        public static void malBezierhulle(Graphics g, Brush[] brushes, OrientierbarerWeg y, Hohe hohe, int samples, int stachel)
         {
             int layer = brushes.Length;
             Hohe h = bezierStachelrand(t => hohe(t) / layer, stachel);
@@ -987,30 +316,6 @@ namespace Assistment.Drawing
             else
                 dy = (r.Top - p.Y) / tan.Y;
             return Math.Min(dx, dy);
-        }
-        /// <summary>
-        /// eine kreislinie von winkel alpha*2*Pi bis beta*2*Pi
-        /// <para>beachte: winkel 0 ist rechts und das ding dreht sich im uhrzeigersinn (pi/2 ist unten also (1,0))</para>
-        /// <para>die normal schaut nach außen</para>
-        /// </summary>
-        /// <param name="radius"></param>
-        /// <param name="alpha"></param>
-        /// <param name="beta"></param>
-        /// <returns></returns>
-        public static orientierbarerWeg kreisbogen(float radius, float alpha, float beta)
-        {
-            float delta = beta - alpha;
-            Weg y = t =>
-            {
-                float omega = alpha + t * delta;
-                return new PointF(radius * cos(omega), radius * sin(omega));
-            };
-            Weg n = t =>
-            {
-                float omega = alpha + t * delta;
-                return new PointF(cos(omega), sin(omega));
-            };
-            return new orientierbarerWeg(y, n, Math.Abs(delta * Tau * radius));
         }
 
         /// <summary>
@@ -1146,6 +451,18 @@ namespace Assistment.Drawing
         /// <param name="layers">layers.count = 2 + 4*n !</param>
         /// <param name="burst"></param>
         /// <param name="strings"></param>
+        public static unsafe void knisterBack(Graphics g, RectangleF r, Schema schema)
+        {
+            knisterBack(g, r, schema.farben, schema.burst, schema.strings);
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="g"></param>
+        /// <param name="r"></param>
+        /// <param name="layers">layers.count = 2 + 4*n !</param>
+        /// <param name="burst"></param>
+        /// <param name="strings"></param>
         public static unsafe void knisterBack(Graphics g, RectangleF r, Brush[] layers, float burst, int strings)
         {
             float nenner = r.Width / (strings - 1);
@@ -1221,7 +538,7 @@ namespace Assistment.Drawing
         /// <param name="strings"></param>
         /// <param name="hohe"></param>
         /// <param name="samples"></param>
-        public static unsafe void chaosWeg(Graphics g, orientierbarerWeg y, Brush[] layers, float burst, int strings, Hohe hohe, int samples)
+        public static unsafe void chaosWeg(Graphics g, OrientierbarerWeg y, Brush[] layers, float burst, int strings, Hohe hohe, int samples)
         {
             PointF[] p13 = new PointF[2 * samples];
             PointF[] p24 = new PointF[2 * samples];
@@ -1313,6 +630,10 @@ namespace Assistment.Drawing
                 #endregion
             }
         }
+        public static unsafe void chaosWeg(Graphics g, OrientierbarerWeg y, Schema schema)
+        {
+            chaosWeg(g, y, schema.farben, schema.burst, schema.strings, schema.hohe, (int)(schema.sampleRate * y.L));
+        }
 
         public static Rectangle spannAuf(Point A, Point B)
         {
@@ -1385,7 +706,7 @@ namespace Assistment.Drawing
 
                     if ((f < CHANCEA_KREIS) && (it.Value != linesLinks))
                     {
-                        it.Key.objekt = new Knoten.Kreis(it.Key.ort, radius, null, stift);
+                        it.Key.objekt = new Kreis(it.Key.ort, radius, null, stift);
                         offen[it.Value] = false;
                     }
                     else if (f < CHANCEC_RECHTS)
@@ -1397,17 +718,17 @@ namespace Assistment.Drawing
                         {
                             Knoten knotBranch = new Knoten(breite * (branch - linesLinks), hohe);
                             offen[branch] = true;
-                            it.Key.addKante(stift, knotBranch);
-                            knotBranch.addKante(stift, knotBranch);
+                            it.Key.Add(stift, knotBranch);
+                            knotBranch.Add(stift, knotBranch);
                             Knoten knotMain = new Knoten(breite * (it.Value - linesLinks), hohe);
-                            it.Key.addKante(stift, knotMain);
+                            it.Key.Add(stift, knotMain);
                             sortedHohen.Add(knotMain, it.Value);
                             sortedHohen.Add(knotBranch, branch);
                         }
                         else
                         {
                             Knoten knotMain = new Knoten(breite * (it.Value - linesLinks), hohe);
-                            it.Key.addKante(stift, knotMain);
+                            it.Key.Add(stift, knotMain);
                             sortedHohen.Add(knotMain, it.Value);
                         }
                     }
@@ -1415,20 +736,20 @@ namespace Assistment.Drawing
                     {
                         float hohe = Math.Min(burst * dice.NextFloat() + it.Key.Y, streckenStucke[i]);
                         Knoten knotMain = new Knoten(breite * (it.Value - linesLinks), hohe);
-                        it.Key.addKante(stift, knotMain);
+                        it.Key.Add(stift, knotMain);
                         sortedHohen.Add(knotMain, it.Value);
                     }
                 }
             }
             foreach (var item in sortedHohen)
                 if (item.Value != linesLinks)
-                    item.Key.objekt = new Knoten.Kreis(item.Key.ort, radius, null, stift);
+                    item.Key.objekt = new Kreis(item.Key.ort, radius, null, stift);
 
-            Transformiere(Strecke, wurzel.getKnoten());
+            Transformiere(Strecke, wurzel);
 
             return wurzel;
         }
-        public static void Transformiere(PointF[] Punkte, List<Knoten> knoten)
+        public static void Transformiere(PointF[] Punkte, IEnumerable<Knoten> knoten)
         {
             int n = Punkte.Length - 1;
             float[] lange = new float[n];
