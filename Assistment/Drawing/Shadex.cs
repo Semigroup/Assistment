@@ -547,6 +547,7 @@ namespace Assistment.Drawing
             PointF[] norm = new PointF[samples];
             float[] werte = new float[strings];
             Hohe app;
+            int layersLength = layers.Length + ((2 - layers.Length) % 4);
             #region Vorrechnen
             float e, d = 1f / (samples - 1);
             for (int i = 0; i < samples; i++)
@@ -606,7 +607,7 @@ namespace Assistment.Drawing
                 g.FillPolygon(layers[0], p13);
                 #endregion
                 #region Schritt
-                for (int i = 1; i < layers.Length - 1; )
+                for (int i = 1; i < layersLength - 1; )
                 {
 
                     ADD();
@@ -626,7 +627,7 @@ namespace Assistment.Drawing
                 #region Ende
                 for (int i = 0; i < samples; i++)
                     *(p3 - i) = ladder[i];
-                g.FillPolygon(layers.Last(), p13);
+                g.FillPolygon(layers[layersLength - 1], p13);
                 #endregion
             }
         }

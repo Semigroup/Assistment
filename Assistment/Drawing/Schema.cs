@@ -24,13 +24,14 @@ namespace Assistment.Drawing
             int n = farbe.Length - 1;
             farben = new Brush[anzahlPerioden * schrittGrose * n];
             for (int i = 0; i < n; i++)
+            {
+                int off = i * schrittGrose;
+                Color basis = farbe[i];
+                Color diff = farbe[i + 1].sub(basis);
+
                 for (int j = 0; j < schrittGrose; j++)
-                {
-                    float t = j * 1f / schrittGrose;
-                    Color basis = farbe[i];
-                    Color diff = farbe[i + 1].sub(basis);
-                    farben[j + i * schrittGrose] = new SolidBrush(basis.saxpy(t, diff));
-                }
+                    farben[j + off] = new SolidBrush(basis.saxpy(j * 1f / schrittGrose, diff));
+            }
             wiederholeFarben(n * schrittGrose);
         }
         public void setFarbmuster(int anzahlPerioden, int schrittGrose, int alpha, params Color[] farbe)
