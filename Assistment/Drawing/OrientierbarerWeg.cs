@@ -164,12 +164,39 @@ namespace Assistment.Drawing
             for (int i = 0; i < samples; i++)
                 P[i + offset] = weg(i * d + t0);
         }
+        /// <summary>
+        /// result[i] = weg((t1 - t0)*i/(samples-1) + t0)
+        /// </summary>
+        /// <param name="samples"></param>
+        /// <param name="t0"></param>
+        /// <param name="t1"></param>
+        /// <returns></returns>
         public PointF[] getPolygon(int samples, float t0, float t1)
         {
             PointF[] P = new PointF[samples];
-            float d = (t1 - t0) / (samples);
+            float d = (t1 - t0) / (samples - 1);
             for (int i = 0; i < samples; i++)
                 P[i] = weg(i * d + t0);
+            return P;
+        }
+        /// <summary>
+        /// result[i] = normale(t) * hohe(t)
+        /// <para>t = t0 + i*(t1-t0)/(samples-1)</para>
+        /// </summary>
+        /// <param name="samples"></param>
+        /// <param name="t0"></param>
+        /// <param name="t1"></param>
+        /// <param name="hohe"></param>
+        /// <returns></returns>
+        public PointF[] getNormalenPolygon(int samples, float t0, float t1, Hohe hohe)
+        {
+            PointF[] P = new PointF[samples];
+            float d = (t1 - t0) / (samples - 1);
+            for (int i = 0; i < samples; i++)
+            {
+                float t = d * i + t0;
+                P[i] = normale(t).mul(hohe(t));
+            }
             return P;
         }
         /// <summary>

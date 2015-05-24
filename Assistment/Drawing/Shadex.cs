@@ -6,6 +6,8 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
 using Assistment.Drawing.Graph;
+using System.Drawing.Drawing2D;
+using Assistment.Drawing.LinearAlgebra;
 
 namespace Assistment.Drawing
 {
@@ -793,6 +795,23 @@ namespace Assistment.Drawing
                 float f = knot.Y / lange[i];
                 knot.ort = new PointF(Punkte[i].X + f * weg[i].X + knot.X * ((1 - f) * normale[i].X + f * normale[i + 1].X),
                                       Punkte[i].Y + f * weg[i].Y + knot.X * ((1 - f) * normale[i].Y + f * normale[i + 1].Y));
+            }
+        }
+        public static void malSchatten(Graphics g, OrientierbarerWeg weg, Color wegFarbe, Color schattenFarbe, PointF lichtRichtung, int samples, Hohe hohe)
+        {
+            PointF[] punkte = weg.getPolygon(samples, 0, 1);
+            PointF[] normale = weg.getNormalenPolygon(samples, 0, 1, hohe);
+            PointF[] punkteOff = new PointF[samples];
+
+            for (int i = 0; i < samples; i++)
+                punkteOff[i] = punkte[i].saxpy(lichtRichtung.SKP(normale[i]) / lichtRichtung.norm(), lichtRichtung);
+
+            for (int i = 0; i < samples - 1; i++)
+            {
+                LinearGradientBrush brush = new LinearGradientBrush(punkte[i], punkteOff[i], wegFarbe, schattenFarbe);
+                //brush.Transform = new Matrix();
+                PointF[] poly = { punkte[i], punkte[i + 1], punkteOff[i + 1], punkteOff[i], punkte[i] };
+                g.FillPolygon(brush, poly);
             }
         }
 

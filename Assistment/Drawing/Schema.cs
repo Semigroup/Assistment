@@ -18,7 +18,6 @@ namespace Assistment.Drawing
         /// </summary>
         public float sampleRate;
 
-
         public void setFarbmuster(int anzahlPerioden, int schrittGrose, params Color[] farbe)
         {
             int n = farbe.Length - 1;
@@ -26,11 +25,8 @@ namespace Assistment.Drawing
             for (int i = 0; i < n; i++)
             {
                 int off = i * schrittGrose;
-                Color basis = farbe[i];
-                Color diff = farbe[i + 1].sub(basis);
-
                 for (int j = 0; j < schrittGrose; j++)
-                    farben[j + off] = new SolidBrush(basis.saxpy(j * 1f / schrittGrose, diff));
+                    farben[j + off] = new SolidBrush(farbe[i].tween(farbe[i + 1], j * 1f / schrittGrose));
             }
             wiederholeFarben(n * schrittGrose);
         }

@@ -117,33 +117,18 @@ namespace Assistment.Drawing.LinearAlgebra
     public static class ColorErweiterer
     {
         /// <summary>
-        /// erzeugt eine neue Farbe, die diese minus der Subtrahend ist
+        /// erzeugt this * (1 - t) + t * b 
         /// </summary>
-        /// <param name="minuend"></param>
-        /// <param name="subtrahend"></param>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <param name="t"></param>
         /// <returns></returns>
-        public static Color sub(this Color minuend, Color subtrahend)
+        public static Color tween(this Color a, Color b, float t)
         {
-            return Color.FromArgb(
-                (minuend.A - subtrahend.A + 256) % 256,
-                (minuend.R - subtrahend.R + 256) % 256,
-                (minuend.G - subtrahend.G + 256) % 256,
-                (minuend.B - subtrahend.B + 256) % 256);
-        }
-        /// <summary>
-        /// erzeugt this + faktor * summand
-        /// </summary>
-        /// <param name="summand1"></param>
-        /// <param name="faktor"></param>
-        /// <param name="summand"></param>
-        /// <returns></returns>
-        public static Color saxpy(this Color summand1, float faktor, Color summand)
-        {
-            return Color.FromArgb(
-                                    ((int)(summand1.A + faktor * summand.A + 256)) % 256,
-                                    ((int)(summand1.R + faktor * summand.R + 256)) % 256,
-                                    ((int)(summand1.G + faktor * summand.G + 256)) % 256,
-                                    ((int)(summand1.B + faktor * summand.B + 256)) % 256);
+            return Color.FromArgb((int)(a.A * (1 - t) + t * b.A),
+                                (int)(a.R * (1 - t) + t * b.R),
+                                (int)(a.G * (1 - t) + t * b.G),
+                                (int)(a.B * (1 - t) + t * b.B));
         }
     }
 }
