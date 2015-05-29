@@ -797,6 +797,16 @@ namespace Assistment.Drawing
                                       Punkte[i].Y + f * weg[i].Y + knot.X * ((1 - f) * normale[i].Y + f * normale[i + 1].Y));
             }
         }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="g"></param>
+        /// <param name="weg"></param>
+        /// <param name="wegFarbe"></param>
+        /// <param name="schattenFarbe"></param>
+        /// <param name="lichtRichtung">muss normiert sein</param>
+        /// <param name="samples"></param>
+        /// <param name="hohe"></param>
         public static void malSchatten(Graphics g, OrientierbarerWeg weg, Color wegFarbe, Color schattenFarbe, PointF lichtRichtung, int samples, Hohe hohe)
         {
             PointF[] punkte = weg.getPolygon(samples, 0, 1);
@@ -804,16 +814,34 @@ namespace Assistment.Drawing
             PointF[] punkteOff = new PointF[samples];
 
             for (int i = 0; i < samples; i++)
-                punkteOff[i] = punkte[i].saxpy(lichtRichtung.SKP(normale[i]) / lichtRichtung.norm(), lichtRichtung);
+            {
+                float skp = lichtRichtung.SKP(normale[i]);
+                if (skp < 0)
+                {
+                    skp *= -1;
+                    normale[i] = normale[i].mul(-1);
+                }
+                punkteOff[i] = punkte[i].saxpy(skp, lichtRichtung);
+            }
 
             for (int i = 0; i < samples - 1; i++)
             {
-                LinearGradientBrush brush = new LinearGradientBrush(punkte[i], punkteOff[i], wegFarbe, schattenFarbe);
+                LinearGradientBrush brush = new LinearGradientBrush(punkte[i], punkte[i].add(normale[i]), wegFarbe, schattenFarbe);
                 //brush.Transform = new Matrix();
+                //brush.Transform.Shear(lichtRichtung.X * 100, lichtRichtung.Y * 100);
                 PointF[] poly = { punkte[i], punkte[i + 1], punkteOff[i + 1], punkteOff[i], punkte[i] };
                 g.FillPolygon(brush, poly);
             }
         }
+        public static void malWeg(Graphics g, OrientierbarerWeg weg, Pen stift, Brush pinsel, int samples)
+        {
+            PointF[] poly = weg.getPolygon(samples, 0, 1);
+            if (pinsel != null)
+                g.FillPolygon(pinsel, poly);
+            if (stift != null)
+                g.DrawPolygon(stift, poly);
+        }
+
 
         public static void list(PointF[] poly)
         {
