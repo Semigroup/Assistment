@@ -153,6 +153,14 @@ namespace Assistment.Drawing
         {
             g.DrawEllipse(pen, scale * (re.X + offset.X), scale * (re.Y + offset.Y), scale * re.Width, scale * re.Height);
         }
+        public void DrawImage(Image image, PointF point)
+        {
+            DrawImage(image, point.X, point.Y);
+        }
+        public void DrawImage(Image image, float x, float y)
+        {
+            g.DrawImage(image, align(new RectangleF(x, y, image.Width, image.Height)));
+        }
 
         public void FillEllipse(Brush brush, RectangleF re)
         {
@@ -167,6 +175,11 @@ namespace Assistment.Drawing
             g.FillRectangle(brush, align(re));
         }
 
+        /// <summary>
+        /// macht aus einem eingabe Rectangle ein tatsächliches Rectangle
+        /// </summary>
+        /// <param name="R"></param>
+        /// <returns></returns>
         public RectangleF align(RectangleF R)
         {
             R = new RectangleF(align(R.Location), new SizeF(R.Width * scale, R.Height * scale));
