@@ -53,6 +53,14 @@
     <Compile Include="Drawing\OrientierbarerWeg.cs" />
     <Compile Include="Drawing\LinearAlgebra\PointFErweiterer.cs" />
     <Compile Include="Drawing\Schema.cs" />
+    <Compile Include="Extensions\EnumerableExtender.cs" />
+    <Compile Include="Extensions\EnumeratorExtender.cs" />
+    <Compile Include="Sound\Notes\AddHeight.cs" />
+    <Compile Include="Sound\Notes\Composition.cs" />
+    <Compile Include="Sound\Notes\Note.cs" />
+    <Compile Include="Sound\Notes\Product.cs" />
+    <Compile Include="Sound\Notes\Sum.cs" />
+    <Compile Include="Sound\WaveWriter.cs" />
     <Compile Include="Texts\CString.cs" />
     <Compile Include="Texts\DrawBox.cs" />
     <Compile Include="Texts\DrawContext.cs" />
@@ -98,6 +106,7 @@
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
