@@ -104,7 +104,7 @@ namespace Assistment.Sound
                 Write(sample[i]);
         }
         /// <summary>
-        /// sample = UInt32[channekls]
+        /// sample = UInt32[channels]
         /// <para>nur benutzen, falls bitsProSample == 16</para>
         /// </summary>
         /// <param name="sample"></param>
@@ -121,8 +121,7 @@ namespace Assistment.Sound
         public void WriteData(UInt16[][] data)
         {
             for (int i = 0; i < data.Length; i++)
-                for (int j = 0; j < channels; j++)
-                    Write(data[i][j]);
+                WriteSample(data[i]);
         }
         /// <summary>
         /// data = UInt32[samples][channels]
@@ -132,8 +131,7 @@ namespace Assistment.Sound
         public void WriteData(UInt32[][] data)
         {
             for (int i = 0; i < data.Length; i++)
-                for (int j = 0; j < channels; j++)
-                    Write(data[i][j]);
+                WriteSample(data[i]);
         }
         public void WriteData(WaveReader data)
         {

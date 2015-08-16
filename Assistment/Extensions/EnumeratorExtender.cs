@@ -50,5 +50,19 @@ namespace Assistment.Extensions
         {
             return new IEnumeratorMap<A, B>(Function, Domain);
         }
+        public static bool Equals<T>(this IEnumerator<T> Enumerator1, IEnumerator<T> Enumerator2)
+        {
+            bool equals = true;
+            while (Enumerator1.MoveNext() && Enumerator2.MoveNext())
+            {
+                if ((Enumerator1.Current != null && !Enumerator1.Current.Equals(Enumerator2.Current))
+                    || (Enumerator1.Current == null && Enumerator2.Current != null))
+                {
+                    equals = false;
+                    break;
+                }
+            }
+            return equals;
+        }
     }
 }

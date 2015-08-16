@@ -18,23 +18,27 @@ namespace Assistment.Sound.Notes
         /// </summary>
         public int Volume = 100;
 
+        private int duration = 1;
+
+        public override int Duration
+        {
+            get
+            {
+                return duration;
+            }
+            set
+            {
+                duration = value;
+            }
+        }
+
         public Note(int Duration, int Height, int Volume)
-            : base(Duration)
         {
             this.Height = Height;
             this.Volume = Volume;
+            this.duration = Duration;
         }
-
-        public Note(int Duration)
-            : base(Duration)
-        {
-
-        }
-        /// <summary>
-        /// Sets Duration to 1.
-        /// </summary>
         public Note()
-            : base(1)
         {
 
         }
@@ -57,7 +61,10 @@ namespace Assistment.Sound.Notes
                 + (Height << 10)
                 + (Duration << 20);
         }
-
+        public override string ToString()
+        {
+            return "(T = " + duration + ", H = " + Height + ", V = " + Volume + ")";
+        }
         public override IEnumerable<Note> Step(int Time)
         {
             List<Note> list = new List<Note>();

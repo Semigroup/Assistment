@@ -32,5 +32,9 @@ namespace Assistment.Extensions
         {
             return new IEnumerableMap<A, B>(Function, Domain);
         }
+        public static bool Equals<T>(this IEnumerable<T> Enumerable1, IEnumerable<T> Enumerable2)
+        {
+            return Enumerable1.GetEnumerator().Equals<T>(Enumerable2.GetEnumerator());
+        }
     }
 }

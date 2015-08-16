@@ -6,27 +6,21 @@ using Assistment.Extensions;
 
 namespace Assistment.Sound.Notes
 {
-    public class AddHeight : Composition
+    public class MultVolume : Composition
     {
-        /// <summary>
-        /// To the heights of the notes of the composition will this value be added.
-        /// </summary>
-        public int AddedHeight;
-        /// <summary>
-        /// To the heights of the notes of this composition will AddedHeight be added.
-        /// </summary>
+        public float VolumeFactor;
         public Composition Composition;
 
-        public AddHeight(Composition Composition, int AddedHeight)
+        public MultVolume(Composition Composition, float VolumeFactor)
         {
             this.Composition = Composition;
-            this.AddedHeight = AddedHeight;
+            this.VolumeFactor = VolumeFactor;
         }
 
         public override IEnumerable<Note> Step(int Time)
         {
             return Composition.Step(Time)
-                .Map(n => new Note(n.Duration, n.Height + AddedHeight, n.Volume));
+                .Map(n => new Note(n.Duration, n.Height, (int)(n.Volume * VolumeFactor)));
         }
 
         public override int Duration

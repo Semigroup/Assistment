@@ -55,8 +55,11 @@
     <Compile Include="Drawing\Schema.cs" />
     <Compile Include="Extensions\EnumerableExtender.cs" />
     <Compile Include="Extensions\EnumeratorExtender.cs" />
+    <Compile Include="Sound\Instruments\Instrument.cs" />
     <Compile Include="Sound\Notes\AddHeight.cs" />
     <Compile Include="Sound\Notes\Composition.cs" />
+    <Compile Include="Sound\Notes\MultDuration.cs" />
+    <Compile Include="Sound\Notes\MultVolume.cs" />
     <Compile Include="Sound\Notes\Note.cs" />
     <Compile Include="Sound\Notes\Product.cs" />
     <Compile Include="Sound\Notes\Sum.cs" />
