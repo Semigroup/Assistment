@@ -41,12 +41,12 @@ namespace Assistment.Sound
         /// erster Index bestimmt das Sampel, der zweite bestimmt den Kanal
         /// <para>dieser Wert ist null, falls bitsProSample != 16</para>
         /// </summary>
-        public UInt16[][] data16;
+        public short[,] data16;
         /// <summary>
         /// erster Index bestimmt das Sampel, der zweite bestimmt den Kanal
         /// <para>dieser Wert ist null, falls bitsProSample != 32</para>
         /// </summary>
-        public UInt32[][] data32;
+        public int[,] data32;
         #endregion
 
         public WaveReader(string pfad)
@@ -83,25 +83,19 @@ namespace Assistment.Sound
             if (bitsProSample == 16)
             {
                 UInt32 sampleLength = (UInt32)(dataLength / (2 * channels));
-                data16 = new UInt16[sampleLength][];
+                data16 = new short[sampleLength, channels];
 
                 for (int i = 0; i < sampleLength; i++)
-                {
-                    data16[i] = new UInt16[channels];
                     for (int j = 0; j < channels; j++)
-                        data16[i][j] = ReadUInt16();
-                }
+                        data16[i, j] = ReadInt16();
             }
             else if (bitsProSample == 32)
             {
                 UInt32 sampleLength = (UInt32)(dataLength / (4 * channels));
-                data32 = new UInt32[sampleLength][];
+                data32 = new int[sampleLength, channels];
                 for (int i = 0; i < sampleLength; i++)
-                {
-                    data32[i] = new UInt32[channels];
                     for (int j = 0; j < channels; j++)
-                        data32[i][j] = ReadUInt32();
-                }
+                        data32[i,j] = ReadInt32();
             }
             else
                 throw new InvalidDataException("Bits Pro Sample: " + bitsProSample + " bei " + pfad + " kann nicht gewertet werden");

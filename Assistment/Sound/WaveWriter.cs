@@ -10,15 +10,24 @@ namespace Assistment.Sound
     {
         #region RIFF-HEADER
         protected static readonly char[] chunkID = new char[] { 'R', 'I', 'F', 'F' };
-        protected UInt32 GroseMinusAcht;
+        protected UInt32 GroseMinusAcht
+        {
+            get
+            {
+                return dataLength + 36;
+            }
+        }
         protected static readonly char[] riffType = new char[] { 'W', 'A', 'V', 'E' };
         #endregion
         #region FORMAT
         protected readonly char[] formatSignatur = new char[] { 'f', 'm', 't', ' ' };
         protected const UInt32 fmtLength = 16;
         protected UInt16 fmtTag = 0x0001;
-        protected UInt16 channels;
-        protected UInt32 sampleRate;
+        public UInt16 channels;
+        /// <summary>
+        /// Frames pro Sekunde
+        /// </summary>
+        public UInt32 sampleRate;
         /// <summary>
         /// Abtastrate * Framgröße
         /// </summary>
@@ -30,14 +39,29 @@ namespace Assistment.Sound
         /// <summary>
         /// Anzahl der Datenbits pro Samplewert je Kanal
         /// </summary>
-        protected UInt16 bitsProSample;
+        public UInt16 bitsProSample { get; private set; }
         #endregion
         #region DATA
         protected readonly char[] dataSignatur = new char[] { 'd', 'a', 't', 'a' };
-        protected UInt32 dataLength;
+        protected UInt32 dataLength
+        {
+            get
+            {
+                int i = simpleDataLength * channels * (bitsProSample + 7) / 8;
+                return (uint)i;
+            }
+        }
         #endregion
+        private int simpleDataLength = 0;
+        public int bytesProSampel
+        {
+            get
+            {
+                return (bitsProSample + 7) / 8;
+            }
+        }
 
-        public WaveWriter(string pfad, UInt16 channels, UInt32 sampleRate, UInt16 bitsProSample, UInt32 dataLength)
+        public WaveWriter(string pfad, UInt16 channels, UInt32 sampleRate, UInt16 bitsProSample)
             : base(File.Create(pfad))
         {
             if ((bitsProSample != 16) && (bitsProSample != 32))
@@ -46,32 +70,18 @@ namespace Assistment.Sound
             this.channels = channels;
             this.sampleRate = sampleRate;
             this.bitsProSample = bitsProSample;
-            this.blockAlign = (UInt16)(channels * bitsProSample / 8);
+            this.blockAlign = (UInt16)(channels * bytesProSampel);
             this.bytesProSec = sampleRate * blockAlign;
-            this.dataLength = dataLength;
-            this.GroseMinusAcht = dataLength + 36;
 
             WritePreamble();
         }
         public WaveWriter(string pfad, WaveReader wr)
-            : this(pfad, wr.channels, wr.sampleRate, wr.bitsProSample, wr.dataLength)
+            : this(pfad, wr.channels, wr.sampleRate, wr.bitsProSample)
         {
 
         }
-        public WaveWriter(string pfad, IEnumerable<WaveReader> wr)
-            : this(pfad, wr.First().channels, wr.First().sampleRate, wr.First().bitsProSample, sum(wr))
-        {
 
-        }
-        private static UInt32 sum(IEnumerable<WaveReader> wr)
-        {
-            UInt32 u = 0;
-            foreach (var item in wr)
-                u += item.dataLength;
-            return u;
-        }
-
-        public void WritePreamble()
+        private void WritePreamble()
         {
             #region RIFF
             Write(chunkID);
@@ -94,44 +104,28 @@ namespace Assistment.Sound
             #endregion
         }
         /// <summary>
-        /// sample = UInt16[channekls]
-        /// <para>nur benutzen, falls bitsProSample == 16</para>
-        /// </summary>
-        /// <param name="sample"></param>
-        public void WriteSample(params UInt16[] sample)
-        {
-            for (int i = 0; i < sample.Length; i++)
-                Write(sample[i]);
-        }
-        /// <summary>
-        /// sample = UInt32[channels]
-        /// <para>nur benutzen, falls bitsProSample == 16</para>
-        /// </summary>
-        /// <param name="sample"></param>
-        public void WriteSample(params UInt32[] sample)
-        {
-            for (int i = 0; i < sample.Length; i++)
-                Write(sample[i]);
-        }
-        /// <summary>
         /// data = UInt16[samples][channels]
         /// <para>nur benutzen, falls bitsProSample == 16</para>
         /// </summary>
         /// <param name="data"></param>
-        public void WriteData(UInt16[][] data)
+        public void WriteData(short[,] data)
         {
             for (int i = 0; i < data.Length; i++)
-                WriteSample(data[i]);
+                for (int j = 0; j < channels; j++)
+                    Write(data[i,j]);
+            simpleDataLength += data.GetLength(0);
         }
         /// <summary>
         /// data = UInt32[samples][channels]
         /// <para>nur benutzen, falls bitsProSample == 16</para>
         /// </summary>
         /// <param name="data"></param>
-        public void WriteData(UInt32[][] data)
+        public void WriteData(int[,] data)
         {
             for (int i = 0; i < data.Length; i++)
-                WriteSample(data[i]);
+                for (int j = 0; j < channels; j++)
+                    Write(data[i,j]);
+            simpleDataLength += data.GetLength(0);
         }
         public void WriteData(WaveReader data)
         {
@@ -154,6 +148,14 @@ namespace Assistment.Sound
             if (bitsProSample == 32)
                 foreach (var item in data)
                     WriteData(item.data32);
+        }
+
+        public override void Close()
+        {
+            this.Flush();
+            this.Seek(36, SeekOrigin.Begin);
+            this.Write(dataLength);
+            base.Close();
         }
     }
 }
