@@ -8,6 +8,9 @@ using System.Runtime.InteropServices;
 using Assistment.Drawing.Graph;
 using System.Drawing.Drawing2D;
 using Assistment.Drawing.LinearAlgebra;
+using Assistment.Drawing.Geometrie;
+using Assistment.Drawing.Style;
+using Assistment.Extensions;
 
 namespace Assistment.Drawing
 {
@@ -453,9 +456,9 @@ namespace Assistment.Drawing
         /// <param name="layers">layers.count = 2 + 4*n !</param>
         /// <param name="burst"></param>
         /// <param name="strings"></param>
-        public static unsafe void knisterBack(Graphics g, RectangleF r, Schema schema)
+        public static unsafe void chaosRect(Graphics g, RectangleF r, Schema schema)
         {
-            knisterBack(g, r, schema.farben, schema.burst, schema.strings);
+            chaosRect(g, r, schema.farben, schema.burst, schema.strings);
         }
         /// <summary>
         /// 
@@ -465,7 +468,7 @@ namespace Assistment.Drawing
         /// <param name="layers">layers.count = 2 + 4*n !</param>
         /// <param name="burst"></param>
         /// <param name="strings"></param>
-        public static unsafe void knisterBack(Graphics g, RectangleF r, Brush[] layers, float burst, int strings)
+        public static unsafe void chaosRect(Graphics g, RectangleF r, Brush[] layers, float burst, int strings)
         {
             float nenner = r.Width / (strings - 1);
             int sam2 = 2 * strings;
@@ -636,6 +639,59 @@ namespace Assistment.Drawing
         public static unsafe void chaosWeg(Graphics g, OrientierbarerWeg y, Schema schema)
         {
             chaosWeg(g, y, schema.farben, schema.burst, schema.strings, schema.hohe, (int)(schema.sampleRate * y.L));
+        }
+
+        public static void ChaosFlache(Graphics g, FlachenSchema schema)
+        {
+            Polygon samples = new Polygon(2 * schema.Samples.X + 1);
+            int n = 2 * schema.Samples.X - 1;
+            float hohe = 1 / (schema.Samples.Y - 1f);
+            for (int i = 0; i < schema.Samples.X; i++)
+            {
+                float t = i / (schema.Samples.X - 1f);
+                samples[i] = new PointF(t, 0);
+                samples[n - i] = new PointF(t, hohe);
+            }
+            samples.Close();
+
+            g.FillPolygon(schema.Pinsel(0.5f, 0), samples.Map(schema.Flache));
+            hohe = 1 - hohe;
+            Polygon neu = samples + new PointF(0, hohe);
+            g.FillPolygon(schema.Pinsel(0.5f, 1), neu.Map(schema.Flache));
+
+            hohe = -1 / (schema.Samples.Y - 1f);
+            for (int i = 0; i < schema.Samples.X; i++)
+                samples[i] = samples[i].add(0, hohe);
+            samples.Close();
+
+            for (int i = 1; i < schema.Samples.Y - 1; i++)
+            {
+                hohe = i / (schema.Samples.Y - 1f);
+                neu = samples + new PointF(0, hohe);
+                g.FillPolygon(schema.Pinsel(0.5f, hohe), neu.Map(schema.Flache));
+            }
+        }
+
+        /// <summary>
+        /// Überdeckt r gleichmäßig mit (x-1)*(y-1) Rechtecken, verzerrt deren Ecken anhand und füllt sie mit farben aus.
+        /// </summary>
+        /// <param name="G"></param>
+        /// <param name="r"></param>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <param name="schema"></param>
+        public static void zitterQuadrate(Graphics g, RectangleF r, int x, int y, Schema schema)
+        {
+            float dx = r.Width / (x - 1) / 2;
+            float dy = r.Height / (x - 1) / 2;
+            PointF[,] p = new PointF[x, y];
+            for (int i = 0; i < x; i++)
+                for (int j = 0; j < y; j++)
+                    p[i, j] = new PointF(i * r.Width / (x - 1) + dx * schema.NextCentered(),
+                                         j * r.Height / (y - 1) + dy * schema.NextCentered());
+            for (int i = 0; i < x - 1; i++)
+                for (int j = 0; j < y - 1; j++)
+                    g.FillPolygon(schema.farben[i + j], new PointF[] { p[i, j], p[i, j + 1], p[i + 1, j + 1], p[i + 1, j], p[i, j] });
         }
 
         public static Rectangle spannAuf(Point A, Point B)
@@ -878,6 +934,15 @@ namespace Assistment.Drawing
         public static float NextFloat(this Random d, float max)
         {
             return (float)d.NextDouble();
+        }
+        /// <summary>
+        /// x \in [-1, 1]
+        /// </summary>
+        /// <param name="d"></param>
+        /// <returns></returns>
+        public static float NextCenterd(this Random d)
+        {
+            return (float)(d.NextDouble() * 2 - 1);
         }
     }
 }

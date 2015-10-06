@@ -6,11 +6,20 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using Assistment.Drawing.LinearAlgebra;
 
-namespace Assistment.Drawing
+namespace Assistment.Drawing.Geometrie
 {
     public delegate PointF Weg(float t);
     public delegate float Hohe(float t);
     public delegate PointF Punkt(float x, float y);
+    /// <summary>
+    /// bildet I^2 auf R^2 ab
+    /// </summary>
+    /// <param name="u"></param>
+    /// <param name="v"></param>
+    /// <returns></returns>
+    public delegate T FlachenFunktion<T>(float u, float v);
+    public delegate T RandFunktion<T>(float t);
+
     public unsafe delegate void AddierPolygone(PointF* p, PointF* q);
     public unsafe delegate void ModPolygon(PointF* p);
     public delegate void Mach();
@@ -148,6 +157,16 @@ namespace Assistment.Drawing
             : this(A.Punkt, A.Vektor, B.Punkt, B.Vektor)
         {
 
+        }
+
+        /// <summary>
+        /// f(u,v) = y(u) + n(u) * h(v)
+        /// </summary>
+        /// <param name="hohe"></param>
+        /// <returns></returns>
+        public FlachenFunktion<PointF> getFlache(Hohe hohe)
+        {
+            return (u, v) => weg(u).add(normale(u).mul(hohe(v)));
         }
 
         /// <summary>

@@ -110,7 +110,9 @@ namespace Assistment.Texts
         public float measureTextIterating(Graphics g, char c, int it)
         {
             string s = new string(c, it);
-            return ((float)TextRenderer.MeasureText(g, s, font).Width) / (it * (chargrose));
+            return ((float)TextRenderer.MeasureText(g, s, font,
+                new Size(int.MaxValue, int.MaxValue),
+                TextFormatFlags.Internal).Width) / (it * (chargrose));
         }
         public Font getFont()
         {

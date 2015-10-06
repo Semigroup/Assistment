@@ -64,5 +64,69 @@ namespace Assistment.Extensions
             }
             return equals;
         }
+
+        public static IEnumerator<T> Enumerate<T>(T[,] Array)
+        {
+            return new Array2Enumerator<T>(Array);
+        }
+
+        private class Array2Enumerator<T> : IEnumerator<T>
+        {
+            int i, j;
+
+            T current;
+
+            T[,] Array;
+
+            public Array2Enumerator(T[,] Array)
+            {
+                this.Array = Array;
+                this.Reset();
+            }
+
+            public T Current
+            {
+                get { return current; }
+            }
+
+            public void Dispose()
+            {
+            }
+
+            object System.Collections.IEnumerator.Current
+            {
+                get { return current; }
+            }
+
+            public bool MoveNext()
+            {
+                if (i < Array.GetLength(0))
+                {
+                    if (j < Array.GetLength(1))
+                    {
+                        current = Array[i, j++];
+                        return true;
+                    }
+                    else
+                    {
+                        j = 0;
+                        i++;
+                        return MoveNext();
+                    }
+                }
+                else
+                {
+                    current = default(T);
+                    return false;
+                }
+            }
+
+            public void Reset()
+            {
+                i = 0;
+                j = 0;
+                current = default(T);
+            }
+        }
     }
 }

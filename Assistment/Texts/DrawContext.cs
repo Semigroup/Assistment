@@ -5,6 +5,7 @@ using System.Text;
 using System.Drawing;
 using System.IO;
 using iTextSharp.text.pdf;
+using System.Drawing.Imaging;
 
 namespace Assistment.Texts
 {
@@ -211,6 +212,8 @@ namespace Assistment.Texts
                 this.fontfarbeGerade = Brushes.Black;
                 this.fontfarbeUngerade = Brushes.Black;
                 this.text = "";
+
+                this.aktiv = false;
             }
 
             /// <summary>
@@ -224,6 +227,8 @@ namespace Assistment.Texts
             public Brush fontfarbeUngerade;
 
             public string text;
+
+            public bool aktiv;
         }
         public static SeitennummerOptionen STANDARD_SN_OPTION = new SeitennummerOptionen(10, 10);
         public SeitennummerOptionen seitennummer = STANDARD_SN_OPTION;
@@ -342,16 +347,14 @@ namespace Assistment.Texts
             iTextSharp.text.Image result;
             if (!bilder.TryGetValue(img, out result))
             {
-                result = iTextSharp.text.Image.GetInstance(img, img.RawFormat);
+                if (img.RawFormat.Equals(ImageFormat.Jpeg))
+                    result = iTextSharp.text.Image.GetInstance(img, img.RawFormat);
+                else
+                    result = iTextSharp.text.Image.GetInstance(img, color: null);
+
                 bilder.Add(img, result);
             }
             return result;
-            //foreach (var item in bilder)
-            //    if (item.img == img)
-            //        return item.pdfImg;
-            //BildBild bb = new BildBild(img);
-            //bilder.Add(bb);
-            //return bb.pdfImg;
         }
         private void adjustPageNumber(float y)
         {
@@ -369,23 +372,26 @@ namespace Assistment.Texts
         }
         private void schreibSeitennummer()
         {
-            string s = pCon.PdfDocument.PageNumber.ToString() + " " + seitennummer.text;
-
-            RectangleF r = new RectangleF();
-            r.Location = seitennummer.ort;
-            r.Y += (pCon.PdfDocument.PageNumber - 1) * pCon.PdfDocument.PageSize.Height / factor;
-            r.Height = seitennummer.font.yMass(s);
-            r.Width = seitennummer.font.xMass(s);
-
-            if (pCon.PdfDocument.PageNumber % 2 == 0)
+            if (seitennummer.aktiv)
             {
-                fillRectangle(seitennummer.backGerade, r);
-                drawString(s, seitennummer.font.getFont(), seitennummer.fontfarbeGerade, r.Location, r.Height);
-            }
-            else
-            {
-                fillRectangle(seitennummer.backUngerade, r);
-                drawString(s, seitennummer.font.getFont(), seitennummer.fontfarbeUngerade, r.Location, r.Height);
+                string s = pCon.PdfDocument.PageNumber.ToString() + " " + seitennummer.text;
+
+                RectangleF r = new RectangleF();
+                r.Location = seitennummer.ort;
+                r.Y += (pCon.PdfDocument.PageNumber - 1) * pCon.PdfDocument.PageSize.Height / factor;
+                r.Height = seitennummer.font.yMass(s);
+                r.Width = seitennummer.font.xMass(s);
+
+                if (pCon.PdfDocument.PageNumber % 2 == 0)
+                {
+                    fillRectangle(seitennummer.backGerade, r);
+                    drawString(s, seitennummer.font.getFont(), seitennummer.fontfarbeGerade, r.Location, r.Height);
+                }
+                else
+                {
+                    fillRectangle(seitennummer.backUngerade, r);
+                    drawString(s, seitennummer.font.getFont(), seitennummer.fontfarbeUngerade, r.Location, r.Height);
+                }
             }
         }
 

@@ -29,6 +29,16 @@ namespace Assistment.Drawing.LinearAlgebra
             return new PointF(a.X + b.X, a.Y + b.Y);
         }
         /// <summary>
+        /// erstellt einen neuen Vektor, der Summe der beiden Summanden ist
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <returns></returns>
+        public static PointF add(this PointF a, float x, float y)
+        {
+            return new PointF(a.X + x, a.Y + y);
+        }
+        /// <summary>
         /// Erstellt einen neuen Vektor, indem von diesem b abgezogen wird
         /// </summary>
         /// <param name="a"></param>
@@ -48,6 +58,42 @@ namespace Assistment.Drawing.LinearAlgebra
         {
             return new PointF(a.X * c, a.Y * c);
         }
+        /// <summary>
+        /// erstellt einen neuen Vektor, der Produkt der beiden Faktoren ist
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <returns></returns>
+        public static PointF mul(this PointF a, PointF c)
+        {
+            return new PointF(a.X * c.X, a.Y * c.Y);
+        }
+
+        /// <summary>
+        /// erstellt einen neuen Vektor, der Produkt der beiden Faktoren ist
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <returns></returns>
+        public static PointF mul(this PointF a, SizeF c)
+        {
+            return new PointF(a.X * c.Width, a.Y * c.Height);
+        }
+        /// <summary>
+        /// rotiert diesen Vektor um w Grad (in Bogenmaß) gegen den Uhrzeigersinn
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="w"></param>
+        /// <returns></returns>
+        public static PointF rot(this PointF a, float w)
+        {
+            float c = (float)Math.Cos(w);
+            float s = (float)Math.Sin(w);
+
+            return new PointF(  c * a.X + s * a.Y,
+                                c * a.Y - s * a.X);
+        }
+
         /// <summary>
         /// gibt das SKP dieses Vektors mit sich selber zurück
         /// </summary>
@@ -129,6 +175,25 @@ namespace Assistment.Drawing.LinearAlgebra
                                 (int)(a.R * (1 - t) + t * b.R),
                                 (int)(a.G * (1 - t) + t * b.G),
                                 (int)(a.B * (1 - t) + t * b.B));
+        }
+
+        public static Color flat(this Color color)
+        {
+            return Color.FromArgb(128, color);
+        }
+    }
+
+    public static class SizeFErweiterer
+    {
+        /// <summary>
+        /// erstellt einen neuen Vektor, der Produkt der beiden Faktoren ist
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <returns></returns>
+        public static SizeF mul(this SizeF a, float c)
+        {
+            return new SizeF(a.Width * c, a.Height * c);
         }
     }
 }

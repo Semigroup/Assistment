@@ -36,5 +36,30 @@ namespace Assistment.Extensions
         {
             return Enumerable1.GetEnumerator().Equals<T>(Enumerable2.GetEnumerator());
         }
+
+        public static IEnumerable<T> Enumerate<T>(T[,] Array)
+        {
+            return new Array2Enumerable<T>(Array);
+        }
+
+        private class Array2Enumerable<T> : IEnumerable<T>
+        {
+            T[,] Array;
+
+            public Array2Enumerable(T[,] Array)
+            {
+                this.Array = Array;
+            }
+
+            public IEnumerator<T> GetEnumerator()
+            {
+                return EnumeratorExtender.Enumerate(Array);
+            }
+
+            System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+            {
+                return GetEnumerator();
+            }
+        }
     }
 }

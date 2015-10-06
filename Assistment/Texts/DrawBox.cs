@@ -137,6 +137,24 @@ namespace Assistment.Texts
             dcd.Dispose();
             writer.Dispose();
         }
+        public void createDinA3PDF(string name)
+        {
+            const float ab = 00;
+            this.setup(new RectangleF(ab, ab, this.getMin(), 0));
+
+            iTextSharp.text.Document doc = new iTextSharp.text.Document();
+            doc.SetPageSize(iTextSharp.text.PageSize.A3);
+            PdfWriter writer = PdfWriter.GetInstance(doc, System.IO.File.Create(name + ".pdf"));
+
+            doc.Open();
+            PdfContentByte pCon = writer.DirectContent;
+            pCon.SetLineWidth(0.3f);
+            DrawContextDocument dcd = new DrawContextDocument(pCon, box.Height + ab);
+            this.draw(dcd);
+            doc.Close();
+            dcd.Dispose();
+            writer.Dispose();
+        }
         public void createPDF(string name, float width, float height)
         {
             const float ab = 00;
