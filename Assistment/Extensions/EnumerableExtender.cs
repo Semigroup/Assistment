@@ -61,5 +61,20 @@ namespace Assistment.Extensions
                 return GetEnumerator();
             }
         }
+
+        public static string Sum(this IEnumerable<string> text)
+        {
+            StringBuilder sb = new StringBuilder();
+            bool neu = true;
+            foreach (var item in text)
+            {
+                if (neu)
+                    neu = false;
+                else
+                    sb.AppendLine();
+                sb.Append(item);
+            }
+            return sb.ToString();
+        }
     }
 }
