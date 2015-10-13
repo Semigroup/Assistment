@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Drawing;
+using Assistment.Mathematik;
 
 namespace Assistment.Drawing.LinearAlgebra
 {
@@ -49,6 +50,16 @@ namespace Assistment.Drawing.LinearAlgebra
             return new PointF(a.X - b.X, a.Y - b.Y);
         }
         /// <summary>
+        /// Erstellt einen neuen Vektor, indem von diesem b abgezogen wird
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <returns></returns>
+        public static PointF sub(this PointF a, float x, float y)
+        {
+            return new PointF(a.X - x, a.Y - y);
+        }
+        /// <summary>
         /// erstellt einen neuen Vektor, der Produkt der beiden Faktoren ist
         /// </summary>
         /// <param name="a"></param>
@@ -79,19 +90,47 @@ namespace Assistment.Drawing.LinearAlgebra
         {
             return new PointF(a.X * c.Width, a.Y * c.Height);
         }
+
+        /// <summary>
+        /// erstellt einen neuen Vektor, der Die Komponenten des ersten Vektors durch die Zahl teilt
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <returns></returns>
+        public static PointF div(this PointF a, float b)
+        {
+            return new PointF(a.X / b, a.Y / b);
+        }
+
+        /// <summary>
+        /// erstellt einen neuen Vektor, der Die Komponenten des ersten Vektors durch die jeweiligen Komponenten des zweiten teilt
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <returns></returns>
+        public static PointF div(this PointF a, PointF b)
+        {
+            return new PointF(a.X / b.X, a.Y / b.Y);
+        }
+
         /// <summary>
         /// rotiert diesen Vektor um w Grad (in Bogenmaß) gegen den Uhrzeigersinn
         /// </summary>
         /// <param name="a"></param>
         /// <param name="w"></param>
         /// <returns></returns>
-        public static PointF rot(this PointF a, float w)
+        public static PointF rot(this PointF a, double w)
         {
             float c = (float)Math.Cos(w);
             float s = (float)Math.Sin(w);
 
-            return new PointF(  c * a.X + s * a.Y,
+            return new PointF(c * a.X + s * a.Y,
                                 c * a.Y - s * a.X);
+        }
+
+        public static SizeF ToSize(this PointF a)
+        {
+            return new SizeF(a.X, a.Y);
         }
 
         /// <summary>
@@ -158,6 +197,85 @@ namespace Assistment.Drawing.LinearAlgebra
         public static PointF normalize(this PointF a)
         {
             return a.mul(1 / a.norm());
+        }
+
+        /// <summary>
+        /// rundet die beiden Komponenten des Punktes ab
+        /// </summary>
+        /// <param name="a"></param>
+        /// <returns></returns>
+        public static PointF Floor(this PointF a)
+        {
+            return new PointF((float)Math.Floor(a.X), (float)Math.Floor(a.Y));
+        }
+
+        /// <summary>
+        /// Lesser or equal than
+        /// <para>
+        /// true iff beide Komponenten dieses Punktes sind kleiner gleich denen von b
+        /// </para>
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <returns></returns>
+        public static bool lqt(this PointF a, PointF b)
+        {
+            return a.X <= b.X && a.Y <= b.Y;
+        }
+        /// <summary>
+        /// gibt zwei Vektoren n1, n2 zurück, sodass
+        /// <para>
+        /// ||n1|| = 1 = ||n2||
+        /// </para>
+        /// <para>
+        /// SKP(this, n1) = a = SKP(this, n2)
+        /// </para>
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="skp"></param>
+        /// <returns></returns>
+        public static PointF[] findLeftRight(this PointF a, float skp)
+        {
+            PointF[] result = new PointF[2];
+            float norm = a.norm();
+            //c = (a, b)
+            PointF c = a.div(norm);
+            float d = skp / norm;
+            //finde: <n,c> = skp
+
+            float disk = 1 - d * d;
+            if (disk >= 0)
+            {
+                if (Math.Abs(c.Y) > Math.Abs(c.X))
+                {
+                    float ad = c.X * d;
+                    float bd = c.Y * FastMath.Sqrt(disk);
+                    result[0].X = ad + bd;
+                    result[1].X = ad - bd;
+                    for (int i = 0; i < result.Length; i++)
+                        result[i].Y = (d - c.X * result[i].X) / c.Y;
+                }
+                else if (!c.X.isZero())
+                {
+                    float bd = c.Y * d;
+                    float ad = c.X * FastMath.Sqrt(disk);
+                    result[0].Y = bd + ad;
+                    result[1].Y = bd - ad;
+                    for (int i = 0; i < result.Length; i++)
+                        result[i].X = (d - c.Y * result[i].Y) / c.X;
+                }
+            }
+            return result;
+        }
+        /// <summary>
+        /// Gibt zurück, ob a und b parallel sind.
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <returns></returns>
+        public static bool Parallel(this PointF a, PointF b)
+        {
+            return (a.X * b.Y - a.Y * b.X).isZero();
         }
     }
     public static class ColorErweiterer

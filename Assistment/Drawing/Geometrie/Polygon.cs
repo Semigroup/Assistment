@@ -5,10 +5,11 @@ using System.Text;
 using System.Drawing;
 using Assistment.Drawing.LinearAlgebra;
 using Assistment.Extensions;
+using Assistment.Mathematik;
 
 namespace Assistment.Drawing.Geometrie
 {
-    public class Polygon : IEnumerable<PointF>
+    public class Polygon : Geometrie, IEnumerable<PointF>
     {
         public PointF[] punkte;
 
@@ -23,6 +24,16 @@ namespace Assistment.Drawing.Geometrie
         public Polygon(PointF[] punkte)
         {
             this.punkte = punkte;
+        }
+        /// <summary>
+        /// kopiert die werte
+        /// </summary>
+        /// <param name="punkte"></param>
+        public Polygon(params float[] werte)
+        {
+            this.punkte = new PointF[werte.Length / 2];
+            for (int i = 0; i < punkte.Length; i++)
+                punkte[i] = new PointF(werte[2 * i], werte[2 * i + 1]);
         }
         /// <summary>
         /// setzt einen Pointer auf das übergebene array
@@ -56,7 +67,7 @@ namespace Assistment.Drawing.Geometrie
             return new Polygon(P);
         }
 
-        public Polygon Clone()
+        public override Geometrie Clone()
         {
             return new Polygon((PointF[])punkte.Clone());
         }
@@ -141,6 +152,60 @@ namespace Assistment.Drawing.Geometrie
         System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
         {
             return GetEnumerator();
+        }
+
+        public override IEnumerable<float> Cut(PointF Aufpunkt, PointF Richtungsvektor)
+        {
+            List<float> ts = new List<float>();
+            /*
+             * A + t * v = P0 + (P1 - P0) * s
+             * m = (P1 - P0 | v)
+             * m^-1 * (A - P0) = (s, -t)
+             */
+            Matrix2 m = new Matrix2(new PointF(), Richtungsvektor);
+            for (int i = 0; i < punkte.Length - 1; i++)
+            {
+                PointF b = Aufpunkt.sub(punkte[i]);
+                m.Spalte1 = punkte[i + 1].sub(punkte[i]);
+                PointF st = b / m;
+                if (st.X.LiesIn(0, 1))
+                    ts.Add(-st.Y);
+            }
+            return ts;
+        }
+
+        public override IEnumerable<PointF> Samples(int Number)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override Geometrie ScaleLocal(PointF ScalingFactor)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override Geometrie TranslateLocal(PointF TranslatingVector)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override Geometrie RotateLocal(double RotatingAngle)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override Geometrie MirroLocal(PointF MirroringAxis)
+        {
+            throw new NotImplementedException();
+        }
+
+        public static implicit operator Polygon(RectangleF Rect)
+        {
+            return new Polygon(Rect.Left, Rect.Top,
+                                Rect.Right, Rect.Top,
+                                Rect.Right, Rect.Bottom,
+                                Rect.Left, Rect.Bottom,
+                                Rect.Left, Rect.Top);
         }
     }
 }

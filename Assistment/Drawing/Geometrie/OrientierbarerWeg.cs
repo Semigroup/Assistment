@@ -24,23 +24,23 @@ namespace Assistment.Drawing.Geometrie
     public unsafe delegate void ModPolygon(PointF* p);
     public delegate void Mach();
 
-    public struct Gerade
-    {
-        public PointF Punkt;
-        public PointF Vektor;
+    //public struct Gerade
+    //{
+    //    public PointF Aufpunkt;
+    //    public PointF Richtungsvektor;
 
-        public Gerade(PointF Punkt, PointF Vektor)
-        {
-            this.Punkt = Punkt;
-            this.Vektor = Vektor;
-        }
+    //    public Gerade(PointF Punkt, PointF Vektor)
+    //    {
+    //        this.Aufpunkt = Punkt;
+    //        this.Richtungsvektor = Vektor;
+    //    }
 
-        public Gerade(float x, float y, float dx, float dy)
-        {
-            this.Punkt = new PointF(x, y);
-            this.Vektor = new PointF(dx, dy);
-        }
-    }
+    //    public Gerade(float x, float y, float dx, float dy)
+    //    {
+    //        this.Aufpunkt = new PointF(x, y);
+    //        this.Richtungsvektor = new PointF(dx, dy);
+    //    }
+    //}
 
     public class OrientierbarerWeg
     {
@@ -154,7 +154,7 @@ namespace Assistment.Drawing.Geometrie
         /// <param name="B"></param>
         /// <param name="dB"></param>
         public OrientierbarerWeg(Gerade A, Gerade B)
-            : this(A.Punkt, A.Vektor, B.Punkt, B.Vektor)
+            : this(A.Aufpunkt, A.Richtungsvektor, B.Aufpunkt, B.Richtungsvektor)
         {
 
         }

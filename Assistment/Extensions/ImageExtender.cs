@@ -19,5 +19,13 @@ namespace Assistment.Extensions
             ImageBox ib = new ImageBox(701, Image);
             ib.createPDF(name);
         }
+        public static void Raise(this Graphics Graphics)
+        {
+            Graphics.CompositingQuality = System.Drawing.Drawing2D.CompositingQuality.HighQuality;
+            Graphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
+            Graphics.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.HighQuality;
+            Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighQuality;
+            Graphics.TextRenderingHint = System.Drawing.Text.TextRenderingHint.ClearTypeGridFit;
+        }
     }
 }

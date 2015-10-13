@@ -765,7 +765,7 @@ namespace Assistment.Drawing
 
                     if ((f < CHANCEA_KREIS) && (it.Value != linesLinks))
                     {
-                        it.Key.objekt = new Kreis(it.Key.ort, radius, null, stift);
+                        it.Key.objekt = new Assistment.Drawing.Graph.Kreis(it.Key.ort, radius, null, stift);
                         offen[it.Value] = false;
                     }
                     else if (f < CHANCEC_RECHTS)
@@ -802,7 +802,7 @@ namespace Assistment.Drawing
             }
             foreach (var item in sortedHohen)
                 if (item.Value != linesLinks)
-                    item.Key.objekt = new Kreis(item.Key.ort, radius, null, stift);
+                    item.Key.objekt = new Assistment.Drawing.Graph.Kreis(item.Key.ort, radius, null, stift);
 
             Transformiere(Strecke, wurzel);
 
