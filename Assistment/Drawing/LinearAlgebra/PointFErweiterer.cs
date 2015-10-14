@@ -10,9 +10,10 @@ namespace Assistment.Drawing.LinearAlgebra
     public static class PointFErweiterer
     {
         /// <summary>
-        /// erstellt einen neuen Vektor, der Summe der beiden Summanden ist
+        /// gibt this + c * b zurück
         /// </summary>
         /// <param name="a"></param>
+        /// <param name="c"></param>
         /// <param name="b"></param>
         /// <returns></returns>
         public static PointF saxpy(this PointF a, float c, PointF b)
@@ -276,6 +277,15 @@ namespace Assistment.Drawing.LinearAlgebra
         public static bool Parallel(this PointF a, PointF b)
         {
             return (a.X * b.Y - a.Y * b.X).isZero();
+        }
+        /// <summary>
+        /// Atan2(Y, X)
+        /// </summary>
+        /// <param name="a"></param>
+        /// <returns></returns>
+        public static double atan(this PointF a)
+        {
+            return Math.Atan2(a.Y, a.X);
         }
     }
     public static class ColorErweiterer

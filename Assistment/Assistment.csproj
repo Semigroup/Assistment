@@ -58,6 +58,7 @@
     <Compile Include="Drawing\Geometrie\Geometrie.cs" />
     <Compile Include="Drawing\Geometrie\Gerade.cs" />
     <Compile Include="Drawing\Geometrie\Kreis.cs" />
+    <Compile Include="Drawing\Geometrie\PointFComparer.cs" />
     <Compile Include="Drawing\Geometrie\Polygon.cs" />
     <Compile Include="Drawing\Graph\Knoten.cs" />
     <Compile Include="Drawing\Geometrie\OrientierbarerWeg.cs" />

@@ -207,5 +207,13 @@ namespace Assistment.Drawing.Geometrie
                                 Rect.Left, Rect.Bottom,
                                 Rect.Left, Rect.Top);
         }
+
+        public override IEnumerable<Gerade> Tangents(PointF Aufpunkt)
+        {
+            List<Gerade> tangs = new List<Gerade>();
+            foreach (var item in punkte)
+                tangs.Add(new Gerade(item, item.sub(Aufpunkt)));
+            return tangs;
+        }
     }
 }

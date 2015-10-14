@@ -76,5 +76,34 @@ namespace Assistment.Extensions
             }
             return sb.ToString();
         }
+        /// <summary>
+        /// gibt das kleinste nichtnegative float zurück.
+        /// <para>falls ein solches nicht existiert, wird float.MaxValue zurückgegeben.</para>
+        /// </summary>
+        /// <param name="floats"></param>
+        /// <returns></returns>
+        public static float MinNonNeg(this IEnumerable<float> floats)
+        {
+            float f = float.MaxValue;
+            foreach (var item in floats)
+                if (item >= 0 && item < f)
+                    f = item;
+            return f;
+        }
+
+        public static string Print<T>(this IEnumerable<T> Liste)
+        {
+            StringBuilder sb = new StringBuilder();
+            bool neu = true;
+            foreach (var item in Liste)
+            {
+                if (neu)
+                    neu = false;
+                else
+                    sb.AppendLine();
+                sb.Append(item.ToString());
+            }
+            return sb.ToString();
+        }
     }
 }

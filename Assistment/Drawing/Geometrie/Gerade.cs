@@ -8,7 +8,7 @@ using Assistment.Mathematik;
 
 namespace Assistment.Drawing.Geometrie
 {
-    public class Gerade : Geometrie
+    public class Gerade : Geometrie, IComparable<Gerade>
     {
         public PointF Aufpunkt;
         public PointF Richtungsvektor;
@@ -23,6 +23,15 @@ namespace Assistment.Drawing.Geometrie
         {
             this.Aufpunkt = new PointF(x, y);
             this.Richtungsvektor = new PointF(dx, dy);
+        }
+        /// <summary>
+        /// gibt Aufpunkt + t * Richtungsvektor zurück
+        /// </summary>
+        /// <param name="t"></param>
+        /// <returns></returns>
+        public PointF Stelle(float t)
+        {
+            return Aufpunkt.saxpy(t,Richtungsvektor);
         }
 
         public override IEnumerable<float> Cut(PointF Aufpunkt, PointF Richtungsvektor)
@@ -98,6 +107,21 @@ namespace Assistment.Drawing.Geometrie
                 return new Gerade[] { (Gerade)Clone() };
             else
                 return new Gerade[0];
+        }
+
+        public int CompareTo(Gerade other)
+        {
+            double d = this.Richtungsvektor.atan() - other.Richtungsvektor.atan();
+            if (d > 0)
+                return 1;
+            else if (d < 0)
+                return -1;
+            else
+                return 0;
+        }
+        public override string ToString()
+        {
+            return Aufpunkt + " + t * " + Richtungsvektor;
         }
     }
 }
