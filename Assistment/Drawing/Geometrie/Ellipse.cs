@@ -112,5 +112,10 @@ namespace Assistment.Drawing.Geometrie
 			}
             return tangs;
         }
+
+        public override string ToString()
+        {
+            return Zentrum + " + e^it * " + Radius;
+        }
     }
 }

@@ -168,7 +168,7 @@ namespace Assistment.Drawing.Geometrie
                 PointF b = Aufpunkt.sub(punkte[i]);
                 m.Spalte1 = punkte[i + 1].sub(punkte[i]);
                 PointF st = b / m;
-                if (st.X.LiesIn(0, 1))
+                if (0 <= st.X && st.X < 1)
                     ts.Add(-st.Y);
             }
             return ts;
@@ -176,22 +176,25 @@ namespace Assistment.Drawing.Geometrie
 
         public override IEnumerable<PointF> Samples(int Number)
         {
-            throw new NotImplementedException();
+            return punkte;
         }
 
         public override Geometrie ScaleLocal(PointF ScalingFactor)
         {
-            throw new NotImplementedException();
+            punkte.SelfMap(p => p.mul(ScalingFactor));
+            return this;
         }
 
         public override Geometrie TranslateLocal(PointF TranslatingVector)
         {
-            throw new NotImplementedException();
+            punkte.SelfMap(p => p.add(TranslatingVector));
+            return this;
         }
 
         public override Geometrie RotateLocal(double RotatingAngle)
         {
-            throw new NotImplementedException();
+            punkte.SelfMap(p => p.rot(RotatingAngle));
+            return this;
         }
 
         public override Geometrie MirroLocal(PointF MirroringAxis)

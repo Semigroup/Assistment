@@ -287,6 +287,16 @@ namespace Assistment.Drawing.LinearAlgebra
         {
             return Math.Atan2(a.Y, a.X);
         }
+        /// <summary>
+        /// gibt den abstand zwischen a und b wieder
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <returns></returns>
+        public static float dist(this PointF a, PointF b)
+        {
+            return a.sub(b).norm();
+        }
     }
     public static class ColorErweiterer
     {

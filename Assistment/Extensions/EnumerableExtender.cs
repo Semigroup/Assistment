@@ -77,16 +77,16 @@ namespace Assistment.Extensions
             return sb.ToString();
         }
         /// <summary>
-        /// gibt das kleinste nichtnegative float zurück.
+        /// gibt das kleinste float zurück, das größer gleich minimum ist.
         /// <para>falls ein solches nicht existiert, wird float.MaxValue zurückgegeben.</para>
         /// </summary>
         /// <param name="floats"></param>
         /// <returns></returns>
-        public static float MinNonNeg(this IEnumerable<float> floats)
+        public static float Min(this IEnumerable<float> floats, float minimum)
         {
             float f = float.MaxValue;
             foreach (var item in floats)
-                if (item >= 0 && item < f)
+                if (item >= minimum && item < f)
                     f = item;
             return f;
         }
@@ -104,6 +104,22 @@ namespace Assistment.Extensions
                 sb.Append(item.ToString());
             }
             return sb.ToString();
+        }
+
+        public static void SelfMap<T>(this T[] array, EnumeratorExtender.Function<T,T> function)
+        {
+            for (int i = 0; i < array.Length; i++)
+                array[i] = function(array[i]);
+        }
+        public static void CountMap<T>(this T[] array, EnumeratorExtender.Function<int, T> function)
+        {
+            for (int i = 0; i < array.Length; i++)
+                array[i] = function(i);
+        }
+
+        public static bool Empty<T>(this IEnumerable<T> Enumerable)
+        {
+            return !Enumerable.GetEnumerator().MoveNext();
         }
     }
 }
