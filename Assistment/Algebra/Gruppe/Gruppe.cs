@@ -5,6 +5,9 @@ using System.Text;
 
 namespace Assistment.Algebra.Gruppe
 {
+    /// <summary>
+    /// Gruppenwirkung<X> nicht besser?
+    /// </summary>
     public abstract class Gruppe
     {
         /// <summary>
@@ -57,9 +60,7 @@ namespace Assistment.Algebra.Gruppe
         public static Gruppe operator ^(Gruppe A, int n)
         {
             if (n == 0)
-            {
                 return A.Neutral();
-            }
             else
             {
                 Gruppe G;
@@ -69,21 +70,21 @@ namespace Assistment.Algebra.Gruppe
                     G = A.Invert();
                 }
                 else
-                {
                     G = A.Clone();
-                }
-                n--;
-                while (n > 0)
-                {
+                Gruppe Acc = A.Neutral();
+                while (n > 1)
                     if (n % 2 == 0)
                     {
-
+                        n /= 2;
+                        G = G.Mult(G);
+                        //MultLocal könnte zu Exceptions zu führen bein Listeniterationen.
                     }
                     else
                     {
-
+                        n--;
+                        Acc.MultLocal(G);
                     }
-                }
+                return G.MultLocal(Acc);
             }
         }
     }

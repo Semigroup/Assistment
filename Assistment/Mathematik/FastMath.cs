@@ -9,6 +9,16 @@ namespace Assistment.Mathematik
     public static class FastMath
     {
         /// <summary>
+        /// Macht Bogenmaß zu Grad.
+        /// </summary>
+        /// <param name="Bogenmass"></param>
+        /// <returns></returns>
+        public static float Grad(double Bogenmass)
+        {
+            return (float)(Bogenmass * 180 / Math.PI);
+        }
+
+        /// <summary>
         /// (Cos(t), Sin(t)) = e^it
         /// </summary>
         /// <param name="t"></param>

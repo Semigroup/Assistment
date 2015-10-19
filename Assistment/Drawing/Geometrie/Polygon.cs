@@ -168,7 +168,7 @@ namespace Assistment.Drawing.Geometrie
                 PointF b = Aufpunkt.sub(punkte[i]);
                 m.Spalte1 = punkte[i + 1].sub(punkte[i]);
                 PointF st = b / m;
-                if (st.X.LiesIn(0, 1))
+                if (0 <= st.X && st.X < 1)
                     ts.Add(-st.Y);
             }
             return ts;
@@ -181,17 +181,20 @@ namespace Assistment.Drawing.Geometrie
 
         public override Geometrie ScaleLocal(PointF ScalingFactor)
         {
-            throw new NotImplementedException();
+            punkte.SelfMap(p => p.mul(ScalingFactor));
+            return this;
         }
 
         public override Geometrie TranslateLocal(PointF TranslatingVector)
         {
-            throw new NotImplementedException();
+            punkte.SelfMap(p => p.add(TranslatingVector));
+            return this;
         }
 
         public override Geometrie RotateLocal(double RotatingAngle)
         {
-            throw new NotImplementedException();
+            punkte.SelfMap(p => p.rot(RotatingAngle));
+            return this;
         }
 
         public override Geometrie MirroLocal(PointF MirroringAxis)
@@ -210,12 +213,10 @@ namespace Assistment.Drawing.Geometrie
 
         public override IEnumerable<Gerade> Tangents(PointF Aufpunkt)
         {
-            throw new NotImplementedException();
-        }
-
-        public override Geometrie MirroLocal(PointF Aufpunkt, PointF RichtungsVektor)
-        {
-            throw new NotImplementedException();
+            List<Gerade> tangs = new List<Gerade>();
+            foreach (var item in punkte)
+                tangs.Add(new Gerade(item, item.sub(Aufpunkt)));
+            return tangs;
         }
     }
 }
