@@ -176,7 +176,7 @@ namespace Assistment.Drawing.Geometrie
 
         public override IEnumerable<PointF> Samples(int Number)
         {
-            throw new NotImplementedException();
+            return punkte;
         }
 
         public override Geometrie ScaleLocal(PointF ScalingFactor)
@@ -206,6 +206,16 @@ namespace Assistment.Drawing.Geometrie
                                 Rect.Right, Rect.Bottom,
                                 Rect.Left, Rect.Bottom,
                                 Rect.Left, Rect.Top);
+        }
+
+        public override IEnumerable<Gerade> Tangents(PointF Aufpunkt)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override Geometrie MirroLocal(PointF Aufpunkt, PointF RichtungsVektor)
+        {
+            throw new NotImplementedException();
         }
     }
 }

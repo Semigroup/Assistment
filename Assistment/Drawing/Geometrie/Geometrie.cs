@@ -88,7 +88,15 @@ namespace Assistment.Drawing.Geometrie
         /// Spiegelt an der gegebenen Achse
         /// </summary>
         /// <param name="MirroringAxis"></param>
-        public abstract Geometrie MirroLocal(PointF MirroringAxis);
+        public abstract Geometrie MirroLocal(PointF Aufpunkt, PointF RichtungsVektor);
+        /// <summary>
+        /// Spiegelt an der gegebenen Achse
+        /// </summary>
+        /// <param name="MirroringAxis"></param>
+        public Geometrie MirroLocal(Gerade MirroringAxis)
+        {
+            return this.MirroLocal(MirroringAxis.Aufpunkt, MirroringAxis.Richtungsvektor);
+        }
 
         public static Geometrie operator +(Geometrie Geometrie, PointF TranslatingVector)
         {

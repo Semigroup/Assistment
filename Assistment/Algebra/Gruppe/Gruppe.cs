@@ -104,7 +104,7 @@ namespace Assistment.Algebra.Gruppe
     /// Die Gruppe, die in X frei erzeugt wird.
     /// </summary>
     /// <typeparam name="X"></typeparam>
-    public class FreieGruppe<X> : ICollection<GruppenSymbol<X>>, Gruppe
+    public class FreieGruppe<X> : Gruppe, ICollection<GruppenSymbol<X>>
     {
         private List<GruppenSymbol<X>> list = new List<GruppenSymbol<X>>();
 
@@ -156,6 +156,26 @@ namespace Assistment.Algebra.Gruppe
         System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
         {
             return GetEnumerator();
+        }
+
+        public override Gruppe MultLocal(Gruppe Faktor)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override Gruppe InvertLocal()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override Gruppe Clone()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override Gruppe NeutralLocal()
+        {
+            throw new NotImplementedException();
         }
     }
 }

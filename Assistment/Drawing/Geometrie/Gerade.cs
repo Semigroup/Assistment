@@ -73,11 +73,6 @@ namespace Assistment.Drawing.Geometrie
             return this;
         }
 
-        public override Geometrie MirroLocal(PointF MirroringAxis)
-        {
-            throw new NotImplementedException();
-        }
-
         public bool Parallel(Gerade Gerade)
         {
             return Gerade.Richtungsvektor.Parallel(Richtungsvektor);
@@ -98,6 +93,14 @@ namespace Assistment.Drawing.Geometrie
                 return new Gerade[] { (Gerade)Clone() };
             else
                 return new Gerade[0];
+        }
+
+        public override Geometrie MirroLocal(PointF Aufpunkt, PointF RichtungsVektor)
+        {
+            Richtungsvektor = Richtungsvektor.normalize();
+            this.Aufpunkt = Aufpunkt.add(Richtungsvektor.mul(Richtungsvektor.SKP(this.Aufpunkt.sub(Aufpunkt))));
+            this.Richtungsvektor = Richtungsvektor.mul(Richtungsvektor.SKP(this.Richtungsvektor));
+            return this;
         }
     }
 }
