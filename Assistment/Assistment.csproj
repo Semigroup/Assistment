@@ -64,6 +64,7 @@
     <Compile Include="Drawing\Geometrie\OrientierbarerWeg.cs" />
     <Compile Include="Drawing\LinearAlgebra\Matrix2.cs" />
     <Compile Include="Drawing\LinearAlgebra\PointFErweiterer.cs" />
+    <Compile Include="Drawing\Spatials\Spatial.cs" />
     <Compile Include="Drawing\Style\FlachenSchema.cs" />
     <Compile Include="Drawing\Style\Schema.cs" />
     <Compile Include="Extensions\EnumerableExtender.cs" />
