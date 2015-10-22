@@ -5,7 +5,7 @@ using System.Text;
 using System.Drawing;
 using Assistment.Drawing.LinearAlgebra;
 
-namespace Assistment.Drawing.Geometrie
+namespace Assistment.Drawing.Geometries
 {
     public class PointFComparer : IComparer<PointF>
     {

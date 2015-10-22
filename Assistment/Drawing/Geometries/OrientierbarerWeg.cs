@@ -6,7 +6,7 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using Assistment.Drawing.LinearAlgebra;
 
-namespace Assistment.Drawing.Geometrie
+namespace Assistment.Drawing.Geometries
 {
     public delegate PointF Weg(float t);
     public delegate float Hohe(float t);

@@ -6,7 +6,7 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using Assistment.Drawing.LinearAlgebra;
 
-namespace Assistment.Drawing.Geometrie
+namespace Assistment.Drawing.Geometries
 {
     public abstract class Geometrie
     {

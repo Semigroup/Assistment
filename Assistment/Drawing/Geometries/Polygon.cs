@@ -7,7 +7,7 @@ using Assistment.Drawing.LinearAlgebra;
 using Assistment.Extensions;
 using Assistment.Mathematik;
 
-namespace Assistment.Drawing.Geometrie
+namespace Assistment.Drawing.Geometries
 {
     public class Polygon : Geometrie, IEnumerable<PointF>
     {
@@ -197,11 +197,6 @@ namespace Assistment.Drawing.Geometrie
             return this;
         }
 
-        public override Geometrie MirroLocal(PointF MirroringAxis)
-        {
-            throw new NotImplementedException();
-        }
-
         public static implicit operator Polygon(RectangleF Rect)
         {
             return new Polygon(Rect.Left, Rect.Top,
@@ -217,6 +212,11 @@ namespace Assistment.Drawing.Geometrie
             foreach (var item in punkte)
                 tangs.Add(new Gerade(item, item.sub(Aufpunkt)));
             return tangs;
+        }
+
+        public override Geometrie MirroLocal(PointF Aufpunkt, PointF RichtungsVektor)
+        {
+            throw new NotImplementedException();
         }
     }
 }

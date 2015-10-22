@@ -6,7 +6,7 @@ using System.Drawing;
 using Assistment.Drawing.LinearAlgebra;
 using Assistment.Mathematik;
 
-namespace Assistment.Drawing.Geometrie
+namespace Assistment.Drawing.Geometries
 {
     /// <summary>
     /// Rand einer Ellipse
@@ -90,10 +90,6 @@ namespace Assistment.Drawing.Geometrie
             return this;
         }
 
-        public override Geometrie MirroLocal(PointF MirroringAxis)
-        {
-            throw new NotImplementedException();
-        }
         /// <summary>
         /// Muss für Radius.X != Radius.Y richtig implementiert werden.
         /// </summary>
@@ -116,6 +112,11 @@ namespace Assistment.Drawing.Geometrie
         public override string ToString()
         {
             return Zentrum + " + e^it * " + Radius;
+        }
+
+        public override Geometrie MirroLocal(PointF Aufpunkt, PointF RichtungsVektor)
+        {
+            throw new NotImplementedException();
         }
     }
 }

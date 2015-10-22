@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Drawing.Drawing2D;
 using System.Drawing;
-using Assistment.Drawing.Geometrie;
+using Assistment.Drawing.Geometries;
 using Assistment.Extensions;
 using Assistment.Drawing.LinearAlgebra;
 

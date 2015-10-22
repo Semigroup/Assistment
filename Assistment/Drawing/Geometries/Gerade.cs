@@ -7,7 +7,7 @@ using Assistment.Drawing.LinearAlgebra;
 using Assistment.Mathematik;
 using Assistment.Extensions;
 
-namespace Assistment.Drawing.Geometrie
+namespace Assistment.Drawing.Geometries
 {
     public class Gerade : Geometrie, IComparable<Gerade>
     {
