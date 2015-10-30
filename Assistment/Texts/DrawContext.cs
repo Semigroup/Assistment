@@ -246,29 +246,8 @@ namespace Assistment.Texts
             }
         }
 
-        public DrawContextDocument(iTextSharp.text.pdf.PdfContentByte pCon)
+        public DrawContextDocument(iTextSharp.text.pdf.PdfContentByte pCon) : this(pCon, float.MaxValue)
         {
-            this.pCon = pCon;
-            this.yOff = pCon.PdfDocument.PageSize.Height;
-            this.bilder = new SortedDictionary<Image, iTextSharp.text.Image>(new sortierer());
-            this.farben = new SortedDictionary<Color, iTextSharp.text.BaseColor>(new sortierer());
-            this.backcolor = Brushes.White;
-            this.Bildhohe = float.MaxValue;
-
-            if (!madeBaseFonts)
-            {
-                madeBaseFonts = true;
-                fonts = new BaseFont[8];
-                fonts[0] = BaseFont.CreateFont(FontPath + "calibri.ttf", BaseFont.CP1252, BaseFont.EMBEDDED);
-                fonts[1] = BaseFont.CreateFont(FontPath + "calibrib.ttf", BaseFont.CP1252, BaseFont.EMBEDDED);
-                fonts[2] = BaseFont.CreateFont(FontPath + "calibrii.ttf", BaseFont.CP1252, BaseFont.EMBEDDED);
-                fonts[3] = BaseFont.CreateFont(FontPath + "calibriz.ttf", BaseFont.CP1252, BaseFont.EMBEDDED);
-
-                fonts[4] = BaseFont.CreateFont(FontPath + "Exocet2.ttf", BaseFont.CP1252, BaseFont.EMBEDDED);
-                fonts[5] = BaseFont.CreateFont(FontPath + "Exocet1.ttf", BaseFont.CP1252, BaseFont.EMBEDDED);
-                fonts[6] = BaseFont.CreateFont(FontPath + "Exocet2.ttf", BaseFont.CP1252, BaseFont.EMBEDDED);
-                fonts[7] = BaseFont.CreateFont(FontPath + "Exocet1.ttf", BaseFont.CP1252, BaseFont.EMBEDDED);
-            }
         }
         public DrawContextDocument(iTextSharp.text.pdf.PdfContentByte pCon, float Bildhohe)
         {
@@ -282,7 +261,7 @@ namespace Assistment.Texts
             if (!madeBaseFonts)
             {
                 madeBaseFonts = true;
-                fonts = new BaseFont[8];
+                fonts = new BaseFont[9];
                 fonts[0] = BaseFont.CreateFont(FontPath + "calibri.ttf", BaseFont.CP1252, BaseFont.EMBEDDED);
                 fonts[1] = BaseFont.CreateFont(FontPath + "calibrib.ttf", BaseFont.CP1252, BaseFont.EMBEDDED);
                 fonts[2] = BaseFont.CreateFont(FontPath + "calibrii.ttf", BaseFont.CP1252, BaseFont.EMBEDDED);
@@ -292,6 +271,8 @@ namespace Assistment.Texts
                 fonts[5] = BaseFont.CreateFont(FontPath + "Exocet1.ttf", BaseFont.CP1252, BaseFont.EMBEDDED);
                 fonts[6] = BaseFont.CreateFont(FontPath + "Exocet2.ttf", BaseFont.CP1252, BaseFont.EMBEDDED);
                 fonts[7] = BaseFont.CreateFont(FontPath + "Exocet1.ttf", BaseFont.CP1252, BaseFont.EMBEDDED);
+
+                fonts[8] = BaseFont.CreateFont(FontPath + "Plain Germanica.ttf", BaseFont.CP1252, BaseFont.EMBEDDED);
             }
         }
 
@@ -308,6 +289,10 @@ namespace Assistment.Texts
                 case 'E':
                 case 'e':
                     i = 4;
+                    break;
+                case 'p':
+                case 'P':
+                    i = 8;
                     break;
             }
             if ((f.Style & FontStyle.Bold) != 0)

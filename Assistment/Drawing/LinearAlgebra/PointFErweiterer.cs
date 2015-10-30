@@ -209,6 +209,15 @@ namespace Assistment.Drawing.LinearAlgebra
         {
             return new PointF((float)Math.Floor(a.X), (float)Math.Floor(a.Y));
         }
+        /// <summary>
+        /// rundet die beiden Komponenten des Punktes auf
+        /// </summary>
+        /// <param name="a"></param>
+        /// <returns></returns>
+        public static PointF Ceil(this PointF a)
+        {
+            return new PointF((float)Math.Ceiling(a.X), (float)Math.Ceiling(a.Y));
+        }
 
         /// <summary>
         /// Lesser or equal than

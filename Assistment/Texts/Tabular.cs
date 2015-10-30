@@ -148,6 +148,11 @@ namespace Assistment.Texts
             rows.RemoveAt(rowNumber);
         }
 
+        public void setRowPen(int rowNumber,Pen pen)
+        {
+            rows[rowNumber].pen = pen;
+        }
+
         /// <summary>
         /// 
         /// </summary>
@@ -183,6 +188,7 @@ namespace Assistment.Texts
                 cell[i].Width = mins[i] + (maxs[i] - mins[i]) * t;
                 width += cell[i].Width;
             }
+            this.box.Width = width;
 
             foreach (row item in rows)
             {

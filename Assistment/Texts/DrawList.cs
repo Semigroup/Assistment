@@ -19,6 +19,17 @@ namespace Assistment.Texts
         {
             this.preferedFont = preferedFont;
         }
+        public DrawList(xFont preferedFont, IEnumerable<string> Zeilen)
+        {
+            this.preferedFont = preferedFont;
+
+            foreach (var item in Zeilen)
+                this.addWort(item);
+        }
+        public DrawList(xFont preferedFont, params string[] Zeilen)
+            : this(preferedFont, (IEnumerable<string>)Zeilen)
+        {
+        }
 
         public override IEnumerator<DrawBox> GetEnumerator()
         {

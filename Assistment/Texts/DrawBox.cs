@@ -120,26 +120,27 @@ namespace Assistment.Texts
             dcg.Dispose();
             b.Dispose();
         }
-        public void createPDF(string name)
-        {
-            const float ab = 00;
-            this.setup(new RectangleF(ab, ab, this.getMin(), 0));
+        //public void createPDF(string name)
+        //{
+        //    const float ab = 00;
+        //    this.setup(new RectangleF(ab, ab, this.getMin(), 0));
 
-            iTextSharp.text.Document doc = new iTextSharp.text.Document();
-            PdfWriter writer = PdfWriter.GetInstance(doc, System.IO.File.Create(name + ".pdf"));
+        //    iTextSharp.text.Document doc = new iTextSharp.text.Document();
+        //    PdfWriter writer = PdfWriter.GetInstance(doc, System.IO.File.Create(name + ".pdf"));
 
-            doc.Open();
-            PdfContentByte pCon = writer.DirectContent;
-            pCon.SetLineWidth(0.3f);
-            DrawContextDocument dcd = new DrawContextDocument(pCon, box.Height + ab);
-            this.draw(dcd);
-            doc.Close();
-            dcd.Dispose();
-            writer.Dispose();
-        }
+        //    doc.Open();
+        //    PdfContentByte pCon = writer.DirectContent;
+        //    pCon.SetLineWidth(0.3f);
+        //    DrawContextDocument dcd = new DrawContextDocument(pCon, box.Height + ab);
+        //    this.draw(dcd);
+        //    doc.Close();
+        //    dcd.Dispose();
+        //    writer.Dispose();
+        //}
         public void createDinA3PDF(string name)
         {
             const float ab = 00;
+            this.update();
             this.setup(new RectangleF(ab, ab, this.getMin(), 0));
 
             iTextSharp.text.Document doc = new iTextSharp.text.Document();
@@ -155,9 +156,14 @@ namespace Assistment.Texts
             dcd.Dispose();
             writer.Dispose();
         }
+        public void createPDF(string name)
+        {
+            this.createPDF(name, 1000, float.MaxValue);
+        }
         public void createPDF(string name, float width, float height)
         {
             const float ab = 00;
+            this.update();
             this.setup(new RectangleF(ab, ab, width, 0));
 
             iTextSharp.text.Document doc = new iTextSharp.text.Document();
@@ -175,6 +181,7 @@ namespace Assistment.Texts
         public void createLog(string name, float width)
         {
             const float ab = 00;
+            this.update();
             this.setup(new RectangleF(ab, ab, width, 0));
 
             StringBuilder sb = new StringBuilder();
@@ -183,6 +190,20 @@ namespace Assistment.Texts
             f.Write(sb.ToString());
             f.Close();
             f.Dispose();
+        }
+
+        public static CString operator +(DrawBox box1, DrawBox box2)
+        {
+            CString t = new CString();
+            t.add(box1);
+            t.add(box2);
+            return t;
+        }
+        public static DrawContainer operator +(DrawContainer box1, DrawBox box2)
+        {
+            DrawContainer t = (DrawContainer)box1.clone();
+            t.add(box2);
+            return t;
         }
     }
     public abstract class DrawContainer : DrawBox, IEnumerable<DrawBox>
