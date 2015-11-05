@@ -79,6 +79,7 @@
     </Compile>
     <Compile Include="Mathematik\FastMath.cs" />
     <Compile Include="Service\Distributor.cs" />
+    <Compile Include="Sound\Fourier\DFFT.cs" />
     <Compile Include="Sound\Instruments\Instrument.cs" />
     <Compile Include="Sound\Notes\AddHeight.cs" />
     <Compile Include="Sound\Notes\Composition.cs" />
