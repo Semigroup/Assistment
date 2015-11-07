@@ -121,5 +121,27 @@ namespace Assistment.Extensions
         {
             return !Enumerable.GetEnumerator().MoveNext();
         }
+        /// <summary>
+        /// Maximiert die gegebene OptimiertFunktion.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="Enumerable"></param>
+        /// <param name="OptimierFunktion"></param>
+        /// <returns></returns>
+        public static T Optim<T>(this IEnumerable<T> Enumerable, Func<T, float> OptimierFunktion)
+        {
+            T m = default(T);
+            float f = float.MinValue;
+            foreach (var item in Enumerable)
+            {
+                float o = OptimierFunktion(item);
+                if (o > f)
+                {
+                    f = o;
+                    m = item;
+                }
+            }
+            return m;
+        }
     }
 }

@@ -218,5 +218,19 @@ namespace Assistment.Drawing.Geometries
         {
             throw new NotImplementedException();
         }
+
+        public override PointF Lot(PointF Punkt)
+        {
+            PointF[] lots = new PointF[punkte.Length -1];
+            for (int i = 0; i < punkte.Length - 1; i++)
+            {
+                PointF v = punkte[i+1].sub(punkte[i]);
+                PointF d = punkte[i].sub(Punkt);
+                float t = v.SKP(d) / v.normSquared();
+                t = t.Saturate();
+                lots[i] = punkte[i].saxpy(t, d);
+            }
+            return lots.Optim(p => -p.dist(Punkt));
+        }
     }
 }

@@ -80,7 +80,6 @@ namespace Assistment.Drawing.LinearAlgebra
         {
             return new PointF(a.X * c.X, a.Y * c.Y);
         }
-
         /// <summary>
         /// erstellt einen neuen Vektor, der Produkt der beiden Faktoren ist
         /// </summary>
@@ -91,7 +90,6 @@ namespace Assistment.Drawing.LinearAlgebra
         {
             return new PointF(a.X * c.Width, a.Y * c.Height);
         }
-
         /// <summary>
         /// erstellt einen neuen Vektor, der Die Komponenten des ersten Vektors durch die Zahl teilt
         /// </summary>
@@ -102,7 +100,6 @@ namespace Assistment.Drawing.LinearAlgebra
         {
             return new PointF(a.X / b, a.Y / b);
         }
-
         /// <summary>
         /// erstellt einen neuen Vektor, der Die Komponenten des ersten Vektors durch die jeweiligen Komponenten des zweiten teilt
         /// </summary>
@@ -113,7 +110,6 @@ namespace Assistment.Drawing.LinearAlgebra
         {
             return new PointF(a.X / b.X, a.Y / b.Y);
         }
-
         /// <summary>
         /// rotiert diesen Vektor um w Grad (in Bogenmaß) gegen den Uhrzeigersinn
         /// </summary>
@@ -128,12 +124,10 @@ namespace Assistment.Drawing.LinearAlgebra
             return new PointF(c * a.X + s * a.Y,
                                 c * a.Y - s * a.X);
         }
-
         public static SizeF ToSize(this PointF a)
         {
             return new SizeF(a.X, a.Y);
         }
-
         /// <summary>
         /// gibt das SKP dieses Vektors mit sich selber zurück
         /// </summary>
@@ -199,7 +193,6 @@ namespace Assistment.Drawing.LinearAlgebra
         {
             return a.mul(1 / a.norm());
         }
-
         /// <summary>
         /// rundet die beiden Komponenten des Punktes ab
         /// </summary>
@@ -218,7 +211,6 @@ namespace Assistment.Drawing.LinearAlgebra
         {
             return new PointF((float)Math.Ceiling(a.X), (float)Math.Ceiling(a.Y));
         }
-
         /// <summary>
         /// Lesser or equal than
         /// <para>
@@ -329,7 +321,6 @@ namespace Assistment.Drawing.LinearAlgebra
             return Color.FromArgb(128, color);
         }
     }
-
     public static class SizeFErweiterer
     {
         /// <summary>
@@ -341,6 +332,47 @@ namespace Assistment.Drawing.LinearAlgebra
         public static SizeF mul(this SizeF a, float c)
         {
             return new SizeF(a.Width * c, a.Height * c);
+        }
+    }
+    public static class PointErweiterer
+    {
+        /// <summary>
+        /// Erstellt einen neuen Vektor, indem von diesem b abgezogen wird
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <returns></returns>
+        public static Point sub(this Point a, Point b)
+        {
+            return new Point(a.X - b.X, a.Y - b.Y);
+        }
+        /// <summary>
+        /// gibt das SKP dieses Vektors mit sich selber zurück
+        /// </summary>
+        /// <param name="a"></param>
+        /// <returns></returns>
+        public static int normSquared(this Point a)
+        {
+            return a.X * a.X + a.Y * a.Y;
+        }
+        /// <summary>
+        /// gibt die Norm dieses Vektors zurück
+        /// </summary>
+        /// <param name="a"></param>
+        /// <returns></returns>
+        public static float norm(this Point a)
+        {
+            return (float)Math.Sqrt(a.normSquared());
+        }
+        /// <summary>
+        /// gibt den abstand zwischen a und b wieder
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <returns></returns>
+        public static float dist(this Point a, Point b)
+        {
+            return a.sub(b).norm();
         }
     }
 }

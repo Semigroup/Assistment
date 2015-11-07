@@ -48,6 +48,12 @@ namespace Assistment.Drawing.Geometries
         /// <param name="Aufpunkt"></param>
         /// <returns></returns>
         public abstract IEnumerable<Gerade> Tangents(PointF Aufpunkt);
+        /// <summary>
+        /// Gibt einen Punkt auf dem Rand dieser Geometrie zurück, die den Abstand zum gegebenem Punkt minimiert.
+        /// </summary>
+        /// <param name="Punkt"></param>
+        /// <returns></returns>
+        public abstract PointF Lot(PointF Punkt);
 
         /// <summary>
         /// Gibt den Durchschnitt der ersten beiden Punkte von Samples(2) zurück.
@@ -122,11 +128,44 @@ namespace Assistment.Drawing.Geometries
     }
     public static class GeometrieErweiterer
     {
+        public static float Distanz(this Geometrie Geometrie, PointF P)
+        {
+            return Geometrie.Lot(P).dist(P);
+        }
+
+        public static bool HasCutMatching(this Geometrie Geometrie, Gerade Gerade, Predicate<float> match)
+        {
+            IEnumerable<float> ts = Geometrie.Cut(Gerade);
+            foreach (var item in ts)
+                if (match(item))
+                    return true;
+            return false;
+        }
+        public static bool HasNotNegativeCut(this Geometrie Geometrie, Gerade Gerade)
+        {
+            IEnumerable<float> ts = Geometrie.Cut(Gerade);
+            foreach (var item in ts)
+                if (item >= 0)
+                    return true;
+            return false;
+        }
+
+        public static PointF NotNegativeCut(this Geometrie Geometrie, Gerade Gerade)
+        {
+            List<float> ts = new List<float>();
+            foreach (var item in Geometrie.Cut(Gerade))
+                if (item > 0)
+                    ts.Add(item);
+            if (ts.Count == 0)
+                return new PointF();
+            else
+                return Gerade.Stelle(ts.Min());
+        }
+
         public static void DrawGeometry(this Graphics g, Pen Pen, Geometrie Geometrie, int Samples)
         {
             g.DrawPolygon(Pen, Geometrie.Samples(Samples).ToArray());
         }
-
         public static void FillGeometry(this Graphics g, Brush Brush, Geometrie Geometrie, int Samples, FillMode FillMode)
         {
             g.FillPolygon(Brush, Geometrie.Samples(Samples).ToArray(), FillMode);

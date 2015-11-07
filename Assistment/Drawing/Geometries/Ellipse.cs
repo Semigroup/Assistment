@@ -102,10 +102,10 @@ namespace Assistment.Drawing.Geometries
 
             Gerade[] tangs = new Gerade[Ss.Length];
             for (int i = 0; i < Ss.Length; i++)
-			{
+            {
                 PointF K = Zentrum.add(Ss[i].mul(Radius));
                 tangs[i] = new Gerade(K, K.sub(Aufpunkt));
-			}
+            }
             return tangs;
         }
 
@@ -117,6 +117,16 @@ namespace Assistment.Drawing.Geometries
         public override Geometrie MirroLocal(PointF Aufpunkt, PointF RichtungsVektor)
         {
             throw new NotImplementedException();
+        }
+        /// <summary>
+        /// Muss für echte Ellipsen richtig implementiert werden
+        /// </summary>
+        /// <param name="Punkt"></param>
+        /// <returns></returns>
+        public override PointF Lot(PointF Punkt)
+        {
+            PointF d = Punkt.sub(Zentrum).normalize();
+            return Zentrum.saxpy(Radius.X, d);
         }
     }
 }

@@ -79,6 +79,8 @@ namespace Assistment.Drawing.Geometries
 
         public override Geometrie RotateLocal(double RotatingAngle)
         {
+            throw new NotImplementedException();
+            ///Fehlerhaft implementiert
             Aufpunkt = Aufpunkt.rot(RotatingAngle);
             Richtungsvektor = Richtungsvektor.rot(RotatingAngle);
             return this;
@@ -112,7 +114,7 @@ namespace Assistment.Drawing.Geometries
             this.Aufpunkt = Aufpunkt.add(Richtungsvektor.mul(Richtungsvektor.SKP(this.Aufpunkt.sub(Aufpunkt))));
             this.Richtungsvektor = Richtungsvektor.mul(Richtungsvektor.SKP(this.Richtungsvektor));
             return this;
-	}
+        }
 
         public int CompareTo(Gerade other)
         {
@@ -127,6 +129,12 @@ namespace Assistment.Drawing.Geometries
         public override string ToString()
         {
             return Aufpunkt + " + t * " + Richtungsvektor;
+        }
+
+        public override PointF Lot(PointF Punkt)
+        {
+            float t = Richtungsvektor.SKP(Punkt.sub(Aufpunkt)) / Richtungsvektor.normSquared();
+            return Stelle(t);
         }
     }
     public static class GeradenErweiterer
@@ -210,6 +218,6 @@ namespace Assistment.Drawing.Geometries
         public static void FillDrawCone(this Graphics g, Brush Brush, Pen Pen, Gerade A, Gerade B, float Radius)
         {
             FillDrawCone(g, Brush, Pen, A, B, new PointF(Radius, Radius));
-	}
+        }
     }
 }
