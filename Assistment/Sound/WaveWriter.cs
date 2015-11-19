@@ -47,8 +47,7 @@ namespace Assistment.Sound
         {
             get
             {
-                int i = simpleDataLength * channels * (bitsProSample + 7) / 8;
-                return (uint)i;
+                return (uint)(simpleDataLength * channels * bytesProSampel);
             }
         }
         #endregion
@@ -110,9 +109,9 @@ namespace Assistment.Sound
         /// <param name="data"></param>
         public void WriteData(short[,] data)
         {
-            for (int i = 0; i < data.Length; i++)
+            for (int i = 0; i < data.GetLength(0); i++)
                 for (int j = 0; j < channels; j++)
-                    Write(data[i,j]);
+                    Write(data[i, j]);
             simpleDataLength += data.GetLength(0);
         }
         /// <summary>
@@ -124,7 +123,7 @@ namespace Assistment.Sound
         {
             for (int i = 0; i < data.Length; i++)
                 for (int j = 0; j < channels; j++)
-                    Write(data[i,j]);
+                    Write(data[i, j]);
             simpleDataLength += data.GetLength(0);
         }
         public void WriteData(WaveReader data)
@@ -153,8 +152,13 @@ namespace Assistment.Sound
         public override void Close()
         {
             this.Flush();
-            this.Seek(36, SeekOrigin.Begin);
+            this.Seek(4, SeekOrigin.Begin);
+            this.Write(GroseMinusAcht);
+
+            this.Flush();
+            this.Seek(40, SeekOrigin.Begin);
             this.Write(dataLength);
+
             base.Close();
         }
     }

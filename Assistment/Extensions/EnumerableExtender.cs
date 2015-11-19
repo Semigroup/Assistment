@@ -76,6 +76,21 @@ namespace Assistment.Extensions
             }
             return sb.ToString();
         }
+
+        public static string Sum(this IEnumerable<string> text, string Separator)
+        {
+            StringBuilder sb = new StringBuilder();
+            bool neu = true;
+            foreach (var item in text)
+            {
+                if (neu)
+                    neu = false;
+                else
+                    sb.Append(Separator);
+                sb.Append(item);
+            }
+            return sb.ToString();
+        }
         /// <summary>
         /// gibt das kleinste float zurück, das größer gleich minimum ist.
         /// <para>falls ein solches nicht existiert, wird float.MaxValue zurückgegeben.</para>

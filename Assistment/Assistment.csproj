@@ -74,12 +74,19 @@
     <Compile Include="Extensions\EnumeratorExtender.cs" />
     <Compile Include="Extensions\ImageExtender.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
+    <Compile Include="Form\ControlForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form\ControlList.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Form\ScrollBox.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Mathematik\FastMath.cs" />
     <Compile Include="Service\Distributor.cs" />
     <Compile Include="Sound\Fourier\DFFT.cs" />
+    <Compile Include="Sound\Fourier\SoundFilter.cs" />
     <Compile Include="Sound\Instruments\Instrument.cs" />
     <Compile Include="Sound\Notes\AddHeight.cs" />
     <Compile Include="Sound\Notes\Composition.cs" />

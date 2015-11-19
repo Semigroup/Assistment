@@ -14,7 +14,7 @@ namespace Assistment.form
     {
         public static readonly Size barSize = new Size(20, 20);
 
-        private Control control;
+        public Control control { get; private set; }
         private bool vActive;
         private VScrollBar vScrollBar;
         private bool hActive;

@@ -49,6 +49,14 @@ namespace Assistment.Sound
         public int[,] data32;
         #endregion
 
+        public int NumberOfSamples
+        {
+            get
+            {
+                return bitsProSample == 16 ? data16.GetLength(0) : data32.GetLength(0);
+            }
+        }
+
         public WaveReader(string pfad)
             : base(File.OpenRead(pfad))
         {
@@ -95,7 +103,7 @@ namespace Assistment.Sound
                 data32 = new int[sampleLength, channels];
                 for (int i = 0; i < sampleLength; i++)
                     for (int j = 0; j < channels; j++)
-                        data32[i,j] = ReadInt32();
+                        data32[i, j] = ReadInt32();
             }
             else
                 throw new InvalidDataException("Bits Pro Sample: " + bitsProSample + " bei " + pfad + " kann nicht gewertet werden");

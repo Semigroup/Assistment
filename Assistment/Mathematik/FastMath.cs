@@ -61,5 +61,26 @@ namespace Assistment.Mathematik
             else
                 return f;
         }
+
+        public static int Ceil(double d)
+        {
+            return (int)Math.Ceiling(d);
+        }
+        public static int Floor(double d)
+        {
+            return (int)Math.Floor(d);
+        }
+
+        /// <summary>
+        /// gibt die nächstgrößte zahl m wieder, die eine potenz der gegebenen basis ist; d.h.
+        /// <para> return basis ^ Ceil(log_basis(n)) </para>
+        /// </summary>
+        /// <param name="n"></param>
+        /// <param name="basis"></param>
+        /// <returns></returns>
+        public static int NextPower(int n, int basis)
+        {
+            return (int)Math.Pow(basis, Math.Ceiling(Math.Log(n, basis)));
+        }
     }
 }
