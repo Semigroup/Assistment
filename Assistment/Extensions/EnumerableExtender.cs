@@ -7,6 +7,26 @@ namespace Assistment.Extensions
 {
     public static class EnumerableExtender
     {
+        public class DependingEnumerable<T> : IEnumerable<T>
+        {
+            private IEnumerator<T> Enumerator;
+
+            public DependingEnumerable(IEnumerator<T> Enumerator)
+            {
+                this.Enumerator = Enumerator;
+            }
+
+            public IEnumerator<T> GetEnumerator()
+            {
+                return Enumerator;
+            }
+
+            System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+            {
+                return Enumerator;
+            }
+        }
+
         public class IEnumerableMap<A, B> : IEnumerable<B>
         {
             public EnumeratorExtender.Function<A, B> Function;
@@ -157,6 +177,14 @@ namespace Assistment.Extensions
                 }
             }
             return m;
+        }
+
+        public static IEnumerable<T> Drop<T>(this IEnumerable<T> Enumerable, int number)
+        {
+            IEnumerator<T> t = Enumerable.GetEnumerator();
+            for (int i = 0; i < number; i++)
+                t.MoveNext();
+            return new DependingEnumerable<T>(t);
         }
     }
 }

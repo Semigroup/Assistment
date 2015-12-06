@@ -14,16 +14,16 @@ namespace Assistment.form
     {
         public static readonly Size barSize = new Size(20, 20);
 
-        public Control control { get; private set; }
+        public Control Control { get; private set; }
         private bool vActive;
         private VScrollBar vScrollBar;
         private bool hActive;
         private HScrollBar hScrollBar;
+        private EventHandler ControlChangesSize;
 
-        public ScrollBox(Control control)
+        public ScrollBox(Control Control)
         {
-            this.control = control;
-            //control.SizeChanged += new EventHandler((o, e) => OnSizeChanged(e));
+            this.ControlChangesSize = new EventHandler((o, e) => OnSizeChanged(e));
 
             vScrollBar = new VScrollBar();
             vScrollBar.ValueChanged += new EventHandler(AdjustControlLocation);
@@ -33,13 +33,25 @@ namespace Assistment.form
             hScrollBar.ValueChanged += new EventHandler(AdjustControlLocation);
             hActive = false;
 
-            this.Controls.Add(control);
+            this.Control = Control;
+            this.Control.SizeChanged += ControlChangesSize;
+            this.Controls.Add(Control);
+        }
+
+        public void SetControl(Control Control)
+        {
+            this.Control.SizeChanged -= ControlChangesSize;
+            this.Controls.Remove(Control);
+
+            this.Control = Control;
+            Control.SizeChanged += ControlChangesSize;
+            this.Controls.Add(Control);
         }
 
         public void AdjustControlLocation(object sender, EventArgs e)
         {
-            control.Location = new Point(-hScrollBar.Value, -vScrollBar.Value);
-            control.Refresh();
+            Control.Location = new Point(-hScrollBar.Value, -vScrollBar.Value);
+            Control.Refresh();
         }
 
         protected override void OnSizeChanged(EventArgs e)
@@ -60,7 +72,7 @@ namespace Assistment.form
 
         public override void Refresh()
         {
-            bool vNotwendig = control.Height > Height;
+            bool vNotwendig = Control.Height > Height;
             if (vNotwendig && !vActive)
             {
                 vScrollBar.Value = 0;
@@ -74,9 +86,9 @@ namespace Assistment.form
                 vActive = false;
             }
             if (vActive)
-                vScrollBar.Maximum = control.Height;
+                vScrollBar.Maximum = Control.Height;
 
-            bool hNotwendig = control.Width > Width;
+            bool hNotwendig = Control.Width > Width;
             if (hNotwendig && !hActive)
             {
                 hScrollBar.Value = 0;
@@ -90,8 +102,7 @@ namespace Assistment.form
                 hActive = false;
             }
             if (hActive)
-                hScrollBar.Maximum = control.Width;
-            //MessageBox.Show(vNotwendig + " : " + vActive + "; " + hNotwendig + " : " + hActive + ": " + Size + "\r\n" + control.Size);
+                hScrollBar.Maximum = Control.Width;
             base.Refresh();
         }
     }
