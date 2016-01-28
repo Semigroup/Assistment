@@ -129,6 +129,7 @@ namespace Assistment.Drawing.Geometries
 
         /// <summary>
         /// Erzeugt ein regelmäßiges n-Eck
+        /// mit Radius 1
         /// </summary>
         /// <param name="n"></param>
         /// <returns></returns>
@@ -221,16 +222,40 @@ namespace Assistment.Drawing.Geometries
 
         public override PointF Lot(PointF Punkt)
         {
-            PointF[] lots = new PointF[punkte.Length -1];
+            PointF[] lots = new PointF[punkte.Length - 1];
             for (int i = 0; i < punkte.Length - 1; i++)
             {
-                PointF v = punkte[i+1].sub(punkte[i]);
+                PointF v = punkte[i + 1].sub(punkte[i]);
                 PointF d = punkte[i].sub(Punkt);
                 float t = v.SKP(d) / v.normSquared();
                 t = t.Saturate();
                 lots[i] = punkte[i].saxpy(t, d);
             }
             return lots.Optim(p => -p.dist(Punkt));
+        }
+
+        public static Polygon Rechteck(RectangleF rf, PointF SampleRate)
+        {
+            int NX = (int)(rf.Width * SampleRate.X);
+            int NY = (int)(rf.Height * SampleRate.Y);
+            NX = Math.Max(NX, 1);
+            NY = Math.Max(NY, 1);
+
+            Polygon poly = new Polygon(2 * (NX + NY) + 1);
+
+            int i = 0;
+            for (; i < NX; i++)
+                poly[i] = new PointF(rf.Left + rf.Width * i / NX, rf.Top);
+            for (int j = 0; j < NY; j++)
+                poly[i++] = new PointF(rf.Right, rf.Top + rf.Height * j / NY);
+            for (int j = 0; j < NX; j++)
+                poly[i++] = new PointF(rf.Right - rf.Width * j / NX, rf.Bottom);
+            for (int j = 0; j < NY; j++)
+                poly[i++] = new PointF(rf.Left, rf.Bottom - rf.Width * j / NY);
+
+            poly.Close();
+
+            return poly;
         }
     }
 }

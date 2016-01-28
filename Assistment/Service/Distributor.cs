@@ -22,7 +22,7 @@ namespace Assistment.Service
 
         public void handle(string[] args)
         {
-            if (args.Length < 1)
+            if (args == null || args.Length < 1)
                 for (int i = 0; i < n; i++)
                     Process.Start(process, i + "");
             else

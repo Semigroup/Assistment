@@ -603,5 +603,17 @@ namespace Assistment.Drawing.Geometries
             };
             return new OrientierbarerWeg(y, n, Math.Abs(delta * Tau * radius));
         }
+
+        public static FlachenFunktion<PointF> Fortsetzen(OrientierbarerWeg Basis, OrientierbarerWeg Fortsetzung)
+        {
+            PointF d = Fortsetzung.normale(0);
+            double Alpha = d.atan();
+
+            return (u, v) =>
+                {
+                    PointF normB = Basis.normale(u);
+                    return Basis.weg(u).add(Fortsetzung.weg(v).rot(normB.atan() - Alpha + Math.PI / 2));
+                };
+        }
     }
 }

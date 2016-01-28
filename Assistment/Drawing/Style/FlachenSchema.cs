@@ -20,8 +20,18 @@ namespace Assistment.Drawing.Style
         /// (u,v) - Samples
         /// </summary>
         public Point Samples;
+        public Point Boxes;
+        public Point Thumb;
 
-        public Color BackColor;
+        public Color? BackColor;
+        /// <summary>
+        /// Soll der Stift parallel zur U-Achse angewendet werden?
+        /// </summary>
+        public bool ULinien;
+        /// <summary>
+        /// Soll der Stift parallel zur V-Achse angewendet werden?
+        /// </summary>
+        public bool VLinien;
 
         public void VertikalLineareFarben(params Color[] Farben)
         {
@@ -55,7 +65,6 @@ namespace Assistment.Drawing.Style
                     return p;
                 };
         }
-
         public Polygon Rand()
         {
             int n = 2 * (Samples.X + Samples.Y - 2);
@@ -65,13 +74,30 @@ namespace Assistment.Drawing.Style
             po.Close();
             return po;
         }
-
+        public static FlachenSchema ChaosRect(RectangleF Rectangle, float xburst, float yburst)
+        {
+            return ChaosRect(Rectangle.X, Rectangle.Y, Rectangle.Width, Rectangle.Height, xburst, yburst);
+        }
         public static FlachenSchema ChaosRect(float x, float y, float Width, float Height, float xburst, float yburst)
         {
             Random d = new Random();
             FlachenSchema fs = new FlachenSchema();
 
             fs.Flache = (u, v) => new PointF(x + Width * u +d.NextCenterd() * xburst, y + Height * v + d.NextCenterd() * yburst);
+
+            return fs;
+        }
+
+        public static FlachenSchema BloodSheds(RectangleF Rectangle)
+        {
+            FlachenSchema fs = FlachenSchema.ChaosRect(Rectangle, 0, 400);
+            fs.Thumb = new Point(1, 1);
+            fs.Boxes = new Point(1, (int)(Rectangle.Height / 100));
+            fs.Samples = new Point(35, 1);
+            fs.Pinsel = (u, v) => Color.Red.flat(80).ToBrush();
+            fs.BackColor = Color.Black;
+            Pen p = new Pen(Color.Black, 1.0f / 5);
+            fs.Stift = (u, v) =>  p;
 
             return fs;
         }

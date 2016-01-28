@@ -671,6 +671,48 @@ namespace Assistment.Drawing
                 g.FillPolygon(schema.Pinsel(0.5f, hohe), neu.Map(schema.Flache));
             }
         }
+        public static void Chaos2Flache(Graphics g, FlachenSchema schema)
+        {
+            RectangleF thumb;
+            Polygon poly;
+            Polygon toDraw;
+            PointF z;
+
+            if (schema.BackColor.HasValue)
+            {
+                thumb = new RectangleF(0, 0, 1, 1);
+                poly = Polygon.Rechteck(thumb, schema.Samples);
+                toDraw = poly.Map(schema.Flache);
+                g.FillPolygon(new SolidBrush(schema.BackColor.Value), toDraw);
+            }
+
+            for (int y = -schema.Thumb.Y + 1; y < schema.Boxes.Y; y++)
+                for (int x = -schema.Thumb.X + 1; x < schema.Boxes.X; x++)
+                {
+                    thumb = new RectangleF(Math.Max(0, x * 1f / schema.Boxes.X),
+                        Math.Max(0, y * 1f / schema.Boxes.Y),
+                        schema.Thumb.X * 1f / schema.Boxes.X,
+                        schema.Thumb.Y * 1f / schema.Boxes.Y);
+
+                    thumb.Width -= Math.Max(0, thumb.Right - 1);
+                    thumb.Height -= Math.Max(0, thumb.Bottom - 1);
+
+                    poly = Polygon.Rechteck(thumb, schema.Samples);
+                    z = thumb.Center();
+                    toDraw = poly.Map(schema.Flache);
+
+                    if (schema.Pinsel != null)
+                        g.FillPolygon(schema.Pinsel(z.X, z.Y), toDraw);
+
+                    int NX = (int)(schema.Samples.X * thumb.Width);
+                    int NY = (int)(schema.Samples.Y * thumb.Height);
+                    Pen stift = schema.Stift(z.X, z.Y);
+                    if (schema.ULinien)
+                        g.DrawLines(stift, toDraw.punkte.FromTo(NX + NY, 2 * NX + NY + 1));
+                    if (schema.VLinien)
+                        g.DrawLines(stift, toDraw.punkte.FromTo(2 * NX + NY, 2 * (NX + NY) + 1));
+                }
+        }
 
         /// <summary>
         /// Überdeckt r gleichmäßig mit (x-1)*(y-1) Rechtecken, verzerrt deren Ecken anhand und füllt sie mit farben aus.
@@ -943,6 +985,46 @@ namespace Assistment.Drawing
         public static float NextCenterd(this Random d)
         {
             return (float)(d.NextDouble() * 2 - 1);
+        }
+        /// <summary>
+        /// gibt einen zufälligen 2-dim Vektor zurück, mit Koordinaten zwischen -1 und 1
+        /// </summary>
+        /// <param name="d"></param>
+        /// <returns></returns>
+        public static PointF NextPoint(this Random d)
+        {
+            return new PointF(NextCenterd(d), NextCenterd(d));
+        }
+
+        /// <summary>
+        /// gibt einen zufälligen 2-dim Vektor mit Norm = 1 zurück
+        /// </summary>
+        /// <param name="d"></param>
+        /// <returns></returns>
+        public static PointF NextSpherical(this Random d)
+        {
+            return NextPoint(d).normalize();
+        }
+        /// <summary>
+        /// gibt einen zufälligen 2-dim Vektor mit Norm = Radius zurück
+        /// </summary>
+        /// <param name="d"></param>
+        /// <returns></returns>
+        public static PointF NextSpherical(this Random d, float Radius)
+        {
+            PointF p = NextPoint(d);
+            return p.mul(Radius / p.norm());
+        }
+
+        public static Color NextColor(this Random d, int Alpha)
+        {
+            return Color.FromArgb(Alpha, d.Next(256), d.Next(256), d.Next(256));
+        }
+        public static Color NextColor(this Random d, int Alpha, int teile)
+        {
+            int n = 255 / teile;
+            teile++;
+            return Color.FromArgb(Alpha, d.Next(teile) * n, d.Next(teile) * n, d.Next(teile) * n);
         }
     }
 }

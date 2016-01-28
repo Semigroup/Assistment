@@ -22,6 +22,8 @@ namespace Assistment.Texts
         float xMass(string s);
         float yMass(char c);
         float yMass(string s);
+        SizeF Size(char c);
+        SizeF Size(string s);
         float getZeilenabstand();
         float getCharToleranz();
         float getWhitespace();
@@ -214,6 +216,17 @@ namespace Assistment.Texts
         public override string ToString()
         {
             return font.Name + ", " + font.Size + "pt";
+        }
+
+
+        public SizeF Size(char c)
+        {
+            return new SizeF(xMass(c), yMass(c));
+        }
+
+        public SizeF Size(string s)
+        {
+            return new SizeF(xMass(s), yMass(s));
         }
     }
 }

@@ -67,6 +67,7 @@
     <Compile Include="Drawing\Spatials\Plane.cs" />
     <Compile Include="Drawing\Spatials\Spatial.cs" />
     <Compile Include="Drawing\Spatials\Vektor.cs" />
+    <Compile Include="Drawing\Style\FarbSchema.cs" />
     <Compile Include="Drawing\Style\FlachenSchema.cs" />
     <Compile Include="Drawing\Style\Schema.cs" />
     <Compile Include="Extensions\CollectionExtender.cs" />

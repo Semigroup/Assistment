@@ -186,5 +186,18 @@ namespace Assistment.Extensions
                 t.MoveNext();
             return new DependingEnumerable<T>(t);
         }
+
+        /// <summary>
+        /// Nimmt { Enumerable[from], ..., Enumerable[to - 1] }
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="Array"></param>
+        /// <param name="from"></param>
+        /// <param name="to"></param>
+        /// <returns></returns>
+        public static IEnumerable<T> FromTo<T>(this IEnumerable<T> Enumerable, int from, int to)
+        {
+            return Enumerable.Skip(from).Take(to - from);
+        }
     }
 }

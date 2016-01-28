@@ -225,6 +225,19 @@ namespace Assistment.Drawing.LinearAlgebra
             return a.X <= b.X && a.Y <= b.Y;
         }
         /// <summary>
+        /// Greater or equal than
+        /// <para>
+        /// true iff beide Komponenten dieses Punktes sind größer gleich denen von b
+        /// </para>
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <returns></returns>
+        public static bool gqt(this PointF a, PointF b)
+        {
+            return a.X >= b.X && a.Y >= b.Y;
+        }
+        /// <summary>
         /// gibt zwei Vektoren n1, n2 zurück, sodass
         /// <para>
         /// ||n1|| = 1 = ||n2||
@@ -320,6 +333,15 @@ namespace Assistment.Drawing.LinearAlgebra
         {
             return Color.FromArgb(128, color);
         }
+        public static Color flat(this Color color, int Alpha)
+        {
+            return Color.FromArgb(Alpha, color);
+        }
+
+        public static SolidBrush ToBrush(this Color Color)
+        {
+            return new SolidBrush(Color);
+        }
     }
     public static class SizeFErweiterer
     {
@@ -373,6 +395,14 @@ namespace Assistment.Drawing.LinearAlgebra
         public static float dist(this Point a, Point b)
         {
             return a.sub(b).norm();
+        }
+    }
+
+    public static class RectangleFErweiterer
+    {
+        public static PointF Center(this RectangleF Rectangle)
+        {
+            return new PointF(Rectangle.Left + Rectangle.Right, Rectangle.Top + Rectangle.Bottom).div(2);
         }
     }
 }
