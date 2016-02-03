@@ -746,16 +746,15 @@ namespace Assistment.Texts
         }
         #endregion
 
-        //public override void click(MouseEventArgs args)
-        //{
-        //    foreach (DrawBox item in this)
-        //        if (item.check(args.Location))
-        //        {
-        //            //item.click(args);
-        //            return;
-        //        }
-        //}
-
+        /// <summary>
+        /// true iff this container doesnt contain any DrawBoxes
+        /// </summary>
+        /// <returns></returns>
+        public virtual bool empty()
+        {
+            return this.GetEnumerator().MoveNext();
+        }
+        
         /// <summary>
         /// fügt word in Stelle index ein
         /// </summary>

@@ -13,7 +13,6 @@ namespace   Assistment.form
         public List<Control> Liste { get; private set; }
         public float Align { get; set; }
 
-
         public ControlList()
         {
             Liste = new List<Control>();
