@@ -1,4 +1,6 @@
-﻿using System;
+﻿//#define CONTROLDEBUG
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -16,6 +18,14 @@ namespace Assistment.form
         public ControlList()
         {
             Liste = new List<Control>();
+        }
+
+        protected override void OnPaint(PaintEventArgs e)
+        {
+            base.OnPaint(e);
+#if CONTROLDEBUG
+            e.Graphics.FillRectangle(Brushes.Blue, 0, 0, this.Width, this.Height);
+#endif
         }
 
         public void Setup()

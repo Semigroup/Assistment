@@ -1,4 +1,6 @@
-﻿using System;
+﻿//#define CONTROLDEBUG
+
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
@@ -20,6 +22,14 @@ namespace Assistment.form
         private bool hActive;
         private HScrollBar hScrollBar;
         private EventHandler ControlChangesSize;
+
+        protected override void OnPaint(PaintEventArgs e)
+        {
+            base.OnPaint(e);
+#if CONTROLDEBUG
+            e.Graphics.FillRectangle(Brushes.Red, 0, 0, this.Width, this.Height);
+#endif
+        }
 
         public ScrollBox(Control Control)
         {
