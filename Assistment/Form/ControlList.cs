@@ -6,7 +6,7 @@ using System.Windows.Forms;
 using System.Drawing;
 using Assistment.Extensions;
 
-namespace   Assistment.form
+namespace Assistment.form
 {
     public class ControlList : Control, ICollection<Control>
     {
@@ -22,18 +22,18 @@ namespace   Assistment.form
         {
             Width = 0;
             foreach (var item in Liste)
-            {
-                Width = Math.Max(item.Width, Width);
-            }
+                if (item.Visible)
+                    Width = Math.Max(item.Width, Width);
 
             int h = 0;
             int d = 10;
 
             foreach (var item in Liste)
-            {
-                item.Location = new Point((int)((this.Width - item.Width) * Align), d + h);
-                h = item.Bottom;
-            }
+                if (item.Visible)
+                {
+                    item.Location = new Point((int)((this.Width - item.Width) * Align), d + h);
+                    h = item.Bottom;
+                }
             Height = h + d;
         }
 

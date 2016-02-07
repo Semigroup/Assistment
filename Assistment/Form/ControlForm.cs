@@ -9,10 +9,18 @@ namespace Assistment.form
     public class ControlForm : Form
     {
         public Control Control { get; set; }
+        public Logger Logger = new Logger("ControlForm");
+        public bool logging;
 
         public ControlForm()
+            : this(false)
+        {
+
+        }
+        public ControlForm(bool logging)
         {
             this.Size = new System.Drawing.Size(500, 500);
+            this.logging = logging;
         }
 
         public void SetControl(Control Control)
@@ -24,6 +32,13 @@ namespace Assistment.form
                 this.Controls.Add(Control);
             this.Text = Control != null ? Control.Name : "Null";
             this.OnResize(new EventArgs());
+        }
+
+        protected override void OnLoad(EventArgs e)
+        {
+            base.OnLoad(e);
+            if (logging)
+                Logger.Show();
         }
 
         public override void Refresh()
@@ -43,7 +58,7 @@ namespace Assistment.form
 
         public static void Show(Control Control)
         {
-            ControlForm cf = new ControlForm();
+            ControlForm cf = new ControlForm(false);
             cf.SetControl(Control);
             cf.ShowDialog();
         }
