@@ -26,7 +26,15 @@ namespace Assistment.Texts
         private byte style;
         private xFont font;
         private Pen pen;
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="text"></param>
+        /// <param name="brush"></param>
+        /// <param name="font"></param>
+        /// <param name="style">von höherwertig (rechts) nach niederwertig (links)
+        /// <para>[6:linksgestrichen][5:rechtsgestrichen][4:(overline)quer][3:durchgestrichen][2:unterstrichen][1:kursiv][0:fett]</para></param>
+        /// <param name="pen"></param>
         public Word(string text, Brush brush, xFont font, byte style, Pen pen)
         {
             this.text = text;
@@ -123,7 +131,7 @@ namespace Assistment.Texts
 
         public override void setup(RectangleF box)
         {
-            //this.box.Location = con.box.Location;
+            this.box.Location = box.Location;
         }
         public override void draw(DrawContext con)
         {

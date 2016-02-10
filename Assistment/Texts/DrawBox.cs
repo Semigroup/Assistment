@@ -47,6 +47,16 @@ namespace Assistment.Texts
         /// <returns></returns>
         public abstract DrawBox clone();
         public abstract void InStringBuilder(StringBuilder sb, string tabs);
+
+        public GeometryBox Geometry(float Left, float Top, float Right, float Bottom)
+        {
+            return new GeometryBox(this, Top, Bottom, Right, Left);
+        }
+        public GeometryBox Geometry(float Abstand)
+        {
+            return Geometry(Abstand, Abstand, Abstand, Abstand);
+        }
+
         public virtual bool check(PointF punkt)
         {
             return box.Contains(punkt);
@@ -56,33 +66,9 @@ namespace Assistment.Texts
             return check(new PointF(x, y));
         }
 
-        protected static void show(params object[] objekte)
-        {
-            StringBuilder sb = new StringBuilder();
-            foreach (var item in objekte)
-                sb.AppendLine(item.ToString());
-            System.Windows.Forms.MessageBox.Show(sb.ToString());
-        }
-        protected static Color HexToColor(string hex)
-        {
-            int c = 0;
-            int j;
-            for (int i = 7; i >= 0; i--)
-            {
-                c = c << 4;
-                j = (hex[7 - i] - '0');
-                if (j > 9)
-                    j -= 7;
-                if (j > 16)
-                    j -= 32;
-                c += j;
-            }
-            return Color.FromArgb(c);
-        }
-
         public void createImage(string name)
         {
-            const float ab = 10;
+            const float ab = 0;
             this.setup(new RectangleF(ab, ab, this.getMin(), 0));
             Bitmap b = new Bitmap((int)(box.Width + 2 * ab), (int)(box.Height + 2 * ab));
             Graphics g = Graphics.FromImage(b);
@@ -102,7 +88,7 @@ namespace Assistment.Texts
         }
         public void createImage(string name, float width, float height)
         {
-            const float ab = 10;
+            const float ab = 0;
             this.setup(new RectangleF(ab, ab, width, 0));
             Bitmap b = new Bitmap((int)(box.Width + 2 * ab), (int)(box.Height + 2 * ab));
             Graphics g = Graphics.FromImage(b);
@@ -120,37 +106,29 @@ namespace Assistment.Texts
             dcg.Dispose();
             b.Dispose();
         }
-        //public void createPDF(string name)
-        //{
-        //    const float ab = 00;
-        //    this.setup(new RectangleF(ab, ab, this.getMin(), 0));
-
-        //    iTextSharp.text.Document doc = new iTextSharp.text.Document();
-        //    PdfWriter writer = PdfWriter.GetInstance(doc, System.IO.File.Create(name + ".pdf"));
-
-        //    doc.Open();
-        //    PdfContentByte pCon = writer.DirectContent;
-        //    pCon.SetLineWidth(0.3f);
-        //    DrawContextDocument dcd = new DrawContextDocument(pCon, box.Height + ab);
-        //    this.draw(dcd);
-        //    doc.Close();
-        //    dcd.Dispose();
-        //    writer.Dispose();
-        //}
+        
         public void createDinA3PDF(string name)
+        {
+            this.createPDF(name, 1400, float.MaxValue, iTextSharp.text.PageSize.A3);
+        }
+        public void createDinA5PDF(string name)
+        {
+            this.createPDF(name, 700, float.MaxValue, iTextSharp.text.PageSize.A5);
+        }
+        public void createPDF(string name, float width, float height, iTextSharp.text.Rectangle PageSize)
         {
             const float ab = 00;
             this.update();
-            this.setup(new RectangleF(ab, ab, this.getMin(), 0));
+            this.setup(new RectangleF(ab, ab, width, 0));
 
             iTextSharp.text.Document doc = new iTextSharp.text.Document();
-            doc.SetPageSize(iTextSharp.text.PageSize.A3);
+            doc.SetPageSize(PageSize);
             PdfWriter writer = PdfWriter.GetInstance(doc, System.IO.File.Create(name + ".pdf"));
 
             doc.Open();
             PdfContentByte pCon = writer.DirectContent;
             pCon.SetLineWidth(0.3f);
-            DrawContextDocument dcd = new DrawContextDocument(pCon, box.Height + ab);
+            DrawContextDocument dcd = new DrawContextDocument(pCon, height + ab);
             this.draw(dcd);
             doc.Close();
             dcd.Dispose();
@@ -162,21 +140,7 @@ namespace Assistment.Texts
         }
         public void createPDF(string name, float width, float height)
         {
-            const float ab = 00;
-            this.update();
-            this.setup(new RectangleF(ab, ab, width, 0));
-
-            iTextSharp.text.Document doc = new iTextSharp.text.Document();
-            PdfWriter writer = PdfWriter.GetInstance(doc, System.IO.File.Create(name + ".pdf"));
-
-            doc.Open();
-            PdfContentByte pCon = writer.DirectContent;
-            pCon.SetLineWidth(0.3f);
-            DrawContextDocument dcd = new DrawContextDocument(pCon, height + ab);
-            this.draw(dcd);
-            doc.Close();
-            dcd.Dispose();
-            writer.Dispose();
+            this.createPDF(name, width, height, iTextSharp.text.PageSize.A4);
         }
         public void createLog(string name, float width)
         {
@@ -210,6 +174,23 @@ namespace Assistment.Texts
     {
         public float alignment = 0;
         public xFont preferedFont;
+
+        private static Color HexToColor(string hex)
+        {
+            int c = 0;
+            int j;
+            for (int i = 7; i >= 0; i--)
+            {
+                c = c << 4;
+                j = (hex[7 - i] - '0');
+                if (j > 9)
+                    j -= 7;
+                if (j > 16)
+                    j -= 32;
+                c += j;
+            }
+            return Color.FromArgb(c);
+        }
 
         public abstract void add(DrawBox word);
         public abstract void addRange(DrawContainer container);

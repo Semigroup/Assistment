@@ -121,6 +121,7 @@
     <Compile Include="FormsAlt\FormContext.cs" />
     <Compile Include="FormsAlt\Klappbox.cs" />
     <Compile Include="FormsAlt\Mosaik.cs" />
+    <Compile Include="Texts\GeometryBox.cs" />
     <Compile Include="Texts\Mosaik.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Drawing\Shadex.cs" />
