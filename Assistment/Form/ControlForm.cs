@@ -19,7 +19,7 @@ namespace Assistment.form
         }
         public ControlForm(bool logging)
         {
-            this.Size = new System.Drawing.Size(500, 500);
+            this.Size = new System.Drawing.Size(800, 600);
             this.logging = logging;
         }
 
