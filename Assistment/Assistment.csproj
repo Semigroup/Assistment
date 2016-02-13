@@ -107,6 +107,7 @@
     <Compile Include="Texts\DrawBox.cs" />
     <Compile Include="Texts\DrawContext.cs" />
     <Compile Include="Texts\DrawList.cs" />
+    <Compile Include="Texts\DynamicImageBox.cs" />
     <Compile Include="Texts\FontMeasurer.cs" />
     <Compile Include="FormsAlt\AlignedDrawForm.cs" />
     <Compile Include="FormsAlt\DoubleBufferedForm.cs">

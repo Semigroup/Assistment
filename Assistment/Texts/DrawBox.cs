@@ -765,5 +765,13 @@ namespace Assistment.Texts
         {
             return this.GetEnumerator();
         }
+
+        public override string ToString()
+        {
+            StringBuilder sb = new StringBuilder();
+            foreach (var item in this)
+                sb.Append(item.ToString());
+            return sb.ToString();
+        }
     }
 }

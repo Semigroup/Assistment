@@ -29,6 +29,93 @@ namespace Assistment.Texts
         float getWhitespace();
         float getGeviertgrose();
     }
+    public class DummyFont : xFont
+    {
+        public static readonly Font STANDARD_FONT = new Font("Calibri", 11);
+        public static readonly xFont DUMMY_FONT = new DummyFont();
+
+
+        public Font getFont()
+        {
+            return STANDARD_FONT;
+        }
+        public Font getFontBold()
+        {
+            return STANDARD_FONT;
+        }
+        public Font getFontItalic()
+        {
+            return STANDARD_FONT;
+        }
+        public Font getFontBoldAndItalic()
+        {
+            return STANDARD_FONT;
+        }
+        public Font getFont(float scale)
+        {
+            return STANDARD_FONT;
+        }
+        public Font getFontBold(float scale)
+        {
+            return STANDARD_FONT;
+        }
+        public Font getFontItalic(float scale)
+        {
+            return STANDARD_FONT;
+        }
+        public Font getFontBoldAndItalic(float scale)
+        {
+            return STANDARD_FONT;
+        }
+        public float xMass(char c)
+        {
+            return 0;
+        }
+
+        public float xMass(string s)
+        {
+            return 0;
+        }
+
+        public float yMass(char c)
+        {
+            return 0;
+        }
+
+        public float yMass(string s)
+        {
+            return 0;
+        }
+
+        public SizeF Size(char c)
+        {
+            return SizeF.Empty;
+        }
+
+        public SizeF Size(string s)
+        {
+            return SizeF.Empty;
+        }
+
+        public float getZeilenabstand()
+        {
+            return 0;
+        }
+
+        public float getCharToleranz()
+        {
+            return 0;
+        }
+
+        public float getWhitespace()
+        {
+            return 0;
+        }
+        public float getGeviertgrose()
+        {
+            return 0;
+        }
+    }
     public class FontMeasurer : xFont
     {
         private Font font;

@@ -107,6 +107,11 @@ namespace Assistment.Texts
             sb.AppendLine(tabs + "\tpen: " + pen);
             sb.AppendLine(tabs + ".");
         }
+
+        public override string ToString()
+        {
+            return text;
+        }
     }
     public class Whitespace : DrawBox
     {
@@ -148,6 +153,10 @@ namespace Assistment.Texts
             sb.AppendLine(tabs + "Whitespace:");
             sb.AppendLine(tabs + "\tbox: " + box);
             sb.AppendLine(tabs + ".");
+        }
+        public override string ToString()
+        {
+            return (box.Width > 0 ? " " : "") + (endsLine ? "\r\n" : "");
         }
     }
     public class ImageBox : DrawBox
