@@ -135,12 +135,14 @@ namespace Assistment.Texts
         }
         public override void draw(DrawContext con)
         {
+            //System.Windows.Forms.MessageBox.Show(box + "");
             foreach (DrawBox item in list)
             {
                 if (item.box.Y < con.Bildhohe)
                     item.draw(con);
                 else break;
             }
+            //con.drawRectangle(Pens.Red, box);
         }
         /// <summary>
         /// ab einschl. en.current

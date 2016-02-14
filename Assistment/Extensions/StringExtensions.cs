@@ -4,11 +4,14 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using System.Drawing;
+using System.Text.RegularExpressions;
 
 namespace Assistment.Extensions
 {
     public static class StringExtensions
     {
+        public static readonly Regex FILENAME_CLEANER = new Regex(@"\W+");
+
         /// <summary>
         /// Speichert den String unter name.txt
         /// </summary>
@@ -37,6 +40,48 @@ namespace Assistment.Extensions
 
             g.FillRectangle(new SolidBrush(Color.FromArgb(alpha, Color.White)), rf);
             g.DrawString(s, font, brush, layoutRectangle, format);
+        }
+
+        /// <summary>
+        /// Gibt die letzte Dateiendung mit Punkt
+        /// </summary>
+        /// <param name="fileName"></param>
+        /// <returns></returns>
+        public static string Endung(this string fileName)
+        {
+            int i = fileName.LastIndexOf(".");
+            if (i < 0)
+                return "";
+            else
+                return fileName.Substring(i, fileName.Length - i);
+        }
+        /// <summary>
+        /// Gibt alles vor dem letzten \ wieder (inklusive dem \)
+        /// </summary>
+        /// <param name="fileName"></param>
+        /// <returns></returns>
+        public static string Verzeichnis(this string path)
+        {
+            int i = path.LastIndexOf("\\");
+            if (i < 0)
+                return "";
+            else
+                return path.Substring(0, i + 1);
+        }
+        /// <summary>
+        /// Tauscht den Dateinamen aus, behält Verzeichnis und Endung
+        /// </summary>
+        /// <param name="fileName"></param>
+        /// <param name="newFileName"></param>
+        /// <returns></returns>
+        public static string ExchangeFileName(this string path, string newName)
+        {
+            return path.Verzeichnis() + newName + path.Endung();
+        }
+
+        public static string ToFileName(this string text)
+        {
+            return FILENAME_CLEANER.Replace(text, " ");
         }
 
         private static PointF align(SizeF size, RectangleF layout, StringFormat format)
