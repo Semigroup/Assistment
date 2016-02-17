@@ -90,6 +90,7 @@
     <Compile Include="form\ScrollBox.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="Latex\LatexWriter.cs" />
     <Compile Include="Mathematik\FastMath.cs" />
     <Compile Include="Service\Distributor.cs" />
     <Compile Include="Sound\Fourier\DFFT.cs" />
