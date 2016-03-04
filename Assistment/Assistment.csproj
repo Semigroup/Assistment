@@ -92,6 +92,9 @@
     </Compile>
     <Compile Include="Latex\LatexWriter.cs" />
     <Compile Include="Mathematik\FastMath.cs" />
+    <Compile Include="Mathematik\LinearSolver.cs" />
+    <Compile Include="Mathematik\matrix.cs" />
+    <Compile Include="PDF\PDFHelper.cs" />
     <Compile Include="Service\Distributor.cs" />
     <Compile Include="Sound\Fourier\DFFT.cs" />
     <Compile Include="Sound\Fourier\SoundFilter.cs" />

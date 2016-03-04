@@ -140,6 +140,43 @@ namespace Assistment.Extensions
             }
             return sb.ToString();
         }
+        public static string Print<T>(this T[] Array)
+        {
+            StringBuilder sb = new StringBuilder();
+            bool neu = true;
+            foreach (var item in Array)
+            {
+                if (neu)
+                    neu = false;
+                else
+                    sb.AppendLine();
+                sb.Append(item.ToString());
+            }
+            return sb.ToString();
+        }
+        public static string Print<T>(this T[,] Array)
+        {
+            StringBuilder sb = new StringBuilder();
+            bool neueZeile = false;
+            bool neueSpalte = false;
+            for (int i = 0; i < Array.GetLength(0); i++)
+            {
+                if (neueZeile)
+                    sb.AppendLine();
+                else
+                    neueZeile = true;
+                for (int j = 0; j < Array.GetLength(1); j++)
+                {
+                    if (neueSpalte)
+                        sb.Append("\t    ");
+                    else
+                        neueSpalte = true;
+                    sb.Append(Array[i, j].ToString());
+                }
+                neueSpalte = false;
+            }
+            return sb.ToString();
+        }
 
         public static void SelfMap<T>(this T[] array, EnumeratorExtender.Function<T,T> function)
         {

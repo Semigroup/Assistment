@@ -56,13 +56,13 @@ namespace Assistment.Extensions
                 return fileName.Substring(i, fileName.Length - i);
         }
         /// <summary>
-        /// Gibt alles vor dem letzten \ wieder (inklusive dem \)
+        /// Gibt alles vor dem letzten \ oder / wieder (inklusive dem \ bzw. /)
         /// </summary>
         /// <param name="fileName"></param>
         /// <returns></returns>
         public static string Verzeichnis(this string path)
         {
-            int i = path.LastIndexOf("\\");
+            int i = Math.Max(path.LastIndexOf("\\"),path.LastIndexOf("/"));
             if (i < 0)
                 return "";
             else
