@@ -115,14 +115,20 @@ namespace Assistment.Texts
         {
             this.createPDF(name, 700, float.MaxValue, iTextSharp.text.PageSize.A5);
         }
+        public void createDinA4PDFLandscape(string name)
+        {
+            this.createPDF(name, 1400, float.MaxValue, iTextSharp.text.PageSize.A4_LANDSCAPE);
+        }
         public void createPDF(string name, float width, float height, iTextSharp.text.Rectangle PageSize)
         {
+
             const float ab = 00;
             this.update();
             this.setup(new RectangleF(ab, ab, width, 0));
 
             iTextSharp.text.Document doc = new iTextSharp.text.Document();
             doc.SetPageSize(PageSize);
+            doc.NewPage();
             PdfWriter writer = PdfWriter.GetInstance(doc, System.IO.File.Create(name + ".pdf"));
 
             doc.Open();

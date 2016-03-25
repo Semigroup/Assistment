@@ -93,6 +93,33 @@ namespace Assistment.PDF
                     if (up)
                         document.NewPage();
                 }
+                document.Close();
+                File.WriteAllBytes(output + ".pdf", ms.ToArray());
+            }
+        }
+        /// <summary>
+        /// Vergrößert alle A4 Seiten auf A3 Seiten
+        /// <para>kein .pdf an input oder output anhängen, macht er automatisch</para>
+        /// </summary>
+        /// <param name="output"></param>
+        /// <param name="input"></param>
+        public static void A4ToA3(string output, string input)
+        {
+            using (var ms = new MemoryStream())
+            {
+                PdfReader reader = new PdfReader(input + ".pdf");
+                Document document = new Document(PageSize.A3);
+                PdfCopy writer = new PdfCopy(document, ms);
+                document.Open();
+
+                for (int i = 1; i <= reader.NumberOfPages; i++)
+                {
+                    Rectangle r = reader.GetPageSize(i);
+                    double w = Math.Sqrt(2);
+                    iTextSharp.awt.geom.AffineTransform aff = iTextSharp.awt.geom.AffineTransform.GetScaleInstance(w, w);
+                    writer.DirectContent.AddTemplate(writer.GetImportedPage(reader, i), aff);
+                    document.NewPage();
+                }
 
                 document.Close();
                 File.WriteAllBytes(output + ".pdf", ms.ToArray());

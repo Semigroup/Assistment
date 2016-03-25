@@ -144,19 +144,15 @@ namespace Assistment.Drawing.Geometries
             g.DrawLine(Pen, Gerade.Stelle(t1), Gerade.Stelle(t2));
         }
 
-        public static void DrawGerade(this Graphics g, Pen Pen, Gerade Gerade, Polygon Grenze)
+        public static void DrawGerade(this Graphics g, Pen Pen, Gerade Gerade, Geometrie Grenze)
         {
             IEnumerable<float> ts = Grenze.Cut(Gerade);
-            IEnumerator<float> en = ts.GetEnumerator();
-            if (en.MoveNext())
+            if (!ts.Empty())
             {
-                float alt = en.Current;
-                while (en.MoveNext())
-                {
-                    float neu = en.Current;
-                    g.DrawGerade(Pen, Gerade, alt, neu);
-                    alt = neu;
-                }
+                float minT = ts.Min();
+                float maxT = ts.Max();
+                if (minT < maxT)
+                    g.DrawGerade(Pen, Gerade, minT, maxT);
             }
         }
         public static void DrawStrahl(this Graphics g, Pen Pen, Gerade Gerade, Polygon Grenze)

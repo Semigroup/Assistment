@@ -62,11 +62,19 @@ namespace Assistment.Mathematik
                 return f;
         }
 
-        public static int Ceil(double d)
+        public static int Ceil(this float d)
         {
             return (int)Math.Ceiling(d);
         }
-        public static int Floor(double d)
+        public static int Floor(this float d)
+        {
+            return (int)Math.Floor(d);
+        }
+        public static int Ceil(this double d)
+        {
+            return (int)Math.Ceiling(d);
+        }
+        public static int Floor(this double d)
         {
             return (int)Math.Floor(d);
         }

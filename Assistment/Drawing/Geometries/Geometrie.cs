@@ -60,7 +60,7 @@ namespace Assistment.Drawing.Geometries
         /// </summary>
         /// <param name="Geometrie"></param>
         /// <returns></returns>
-        public PointF Zentrum()
+        public virtual PointF Zentrum()
         {
             IEnumerator<PointF> en = Samples(2).GetEnumerator();
             en.MoveNext();
