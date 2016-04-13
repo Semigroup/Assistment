@@ -163,29 +163,6 @@ namespace Assistment.Texts
         private float yOff;
         private SortedDictionary<Image, iTextSharp.text.Image> bilder;
         private SortedDictionary<Color, iTextSharp.text.BaseColor> farben;
-        //private List<BildBild> bilder;
-        //private struct BildBild
-        //{
-        //    public Image img;
-        //    public iTextSharp.text.Image pdfImg;
-
-        //    public BildBild(Image img)
-        //    {
-        //        this.img = img;
-        //        this.pdfImg = iTextSharp.text.Image.GetInstance(img, img.RawFormat);
-        //    }
-        //}
-        //private List<FarbFarb> farben;
-        //private struct FarbFarb
-        //{
-        //    public Color farbe;
-        //    public iTextSharp.text.BaseColor pdfFarbe;
-        //    public FarbFarb(Color farbe)
-        //    {
-        //        this.farbe = farbe;
-        //        this.pdfFarbe = new iTextSharp.text.BaseColor(farbe);
-        //    }
-        //}
         public readonly iTextSharp.text.BaseColor STANDARD = iTextSharp.text.BaseColor.BLACK;
         private static string FontPath = Directory.GetCurrentDirectory() + @"\Fonts\";
         private static bool madeBaseFonts = false;
@@ -246,7 +223,8 @@ namespace Assistment.Texts
             }
         }
 
-        public DrawContextDocument(iTextSharp.text.pdf.PdfContentByte pCon) : this(pCon, float.MaxValue)
+        public DrawContextDocument(iTextSharp.text.pdf.PdfContentByte pCon)
+            : this(pCon, float.MaxValue)
         {
         }
         public DrawContextDocument(iTextSharp.text.pdf.PdfContentByte pCon, float Bildhohe)
@@ -310,12 +288,6 @@ namespace Assistment.Texts
                 farben.Add(c, result);
             }
             return result;
-            //foreach (var item in farben)
-            //    if (item.farbe == c)
-            //        return item.pdfFarbe;
-            //FarbFarb bb = new FarbFarb(c);
-            //farben.Add(bb);
-            //return bb.pdfFarbe;
         }
         private iTextSharp.text.BaseColor getColor(Brush b)
         {

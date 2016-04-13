@@ -5,6 +5,8 @@ using System.Text;
 using iTextSharp.text.pdf;
 using iTextSharp.text;
 using System.IO;
+using Assistment.Extensions;
+using Assistment.Texts;
 
 namespace Assistment.PDF
 {
@@ -59,6 +61,73 @@ namespace Assistment.PDF
                     writer.FreeReader(reader);
                 }
                 document.Close();
+                File.WriteAllBytes(output + ".pdf", ms.ToArray());
+            }
+        }
+        /// <summary>
+        /// </summary>
+        /// <param name="output"></param>
+        /// <param name="pdfFiles"></param>
+        public static void ConcatImages(string output, string directory)
+        {
+            IEnumerable<string> d = Directory.GetFiles(directory, "*.img");
+            d = d.Concat(Directory.GetFiles(directory, "*.png"));
+            d = d.Concat(Directory.GetFiles(directory, "*.jpg"));
+            ConcatImages(output, d.ToArray());
+        }
+        /// <summary>
+        /// imageFiles mit Dateiendung!
+        /// </summary>
+        /// <param name="output"></param>
+        /// <param name="pdfFiles"></param>
+        public static void ConcatImages(string output, params string[] imageFiles)
+        {
+            using (var ms = new MemoryStream())
+            {
+                var document = new Document();
+                PdfWriter writer = PdfWriter.GetInstance(document, ms);
+                document.Open();
+                PdfContentByte pCon = writer.DirectContent;
+                foreach (var item in imageFiles)
+                {
+                    System.Drawing.Image img = System.Drawing.Image.FromFile(item);
+                    Image result = iTextSharp.text.Image.GetInstance(System.Drawing.Image.FromFile(item), img.RawFormat);
+                    result.SetAbsolutePosition(10, 10);
+                    result.SetDpi(720, 720);
+
+                    float perfectWidth = 570;
+                    float perfectHeight = (float)(perfectWidth * Math.Sqrt(2));
+
+                    if (img.Width > img.Height)
+                    {
+                        //float temp = perfectHeight;
+                        //perfectHeight = perfectWidth;
+                        //perfectWidth = temp;
+                        result.RotationDegrees = 90;
+                    }
+                    result.ScaleToFit(perfectWidth, perfectHeight);
+
+                    //float factor = 60f;
+                    //result.ScalePercent(factor);
+
+                    //result.ScaleAbsoluteWidth(perfectWidth);
+
+                    //if (w > document.PageSize.Width || h > document.PageSize.Height)
+                    //    if (w * Math.Sqrt(2) > h)
+                    //        result.ScaleAbsolute(perfectWidth, h * perfectWidth / w);
+                    //    else
+                    //        result.ScaleAbsolute(w * perfectHeight / h, perfectHeight);
+
+                    //System.Windows.Forms.MessageBox.Show(result.AbsoluteX + "");
+                    document.Add(result);
+                    //float factor = 0.6f;
+                    //pCon.AddImage(result, img.Width * factor, 0, 0, factor * img.Height, factor * 10, 10 * factor);
+                    //pCon.AddImage(result);
+                    //pCon.Fill();
+                    document.NewPage();
+                }
+                document.Close();
+                writer.Close();
                 File.WriteAllBytes(output + ".pdf", ms.ToArray());
             }
         }
