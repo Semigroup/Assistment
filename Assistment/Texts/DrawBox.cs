@@ -175,6 +175,10 @@ namespace Assistment.Texts
             t.add(box2);
             return t;
         }
+        public static implicit operator DrawBox(string text)
+        {
+            return (Text)text;
+        }
     }
     public abstract class DrawContainer : DrawBox, IEnumerable<DrawBox>
     {
@@ -778,6 +782,11 @@ namespace Assistment.Texts
             foreach (var item in this)
                 sb.Append(item.ToString());
             return sb.ToString();
+        }
+
+        public static implicit operator DrawContainer(string text)
+        {
+            return (Text)text;
         }
     }
 }

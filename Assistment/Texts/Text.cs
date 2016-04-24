@@ -26,6 +26,11 @@ namespace Assistment.Texts
             min = max = space = 0;
             RightToLeft = false;
         }
+        public Text(string Regex, xFont Font) : this()
+        {
+            this.preferedFont = Font;
+            this.addRegex(Regex);
+        }
 
         public override void add(DrawBox word)
         {
@@ -192,6 +197,14 @@ namespace Assistment.Texts
         {
             words.Clear();
             min = max = space = 0;
+        }
+
+        public static implicit operator Text(string text)
+        {
+            Text t = new Text();
+            t.preferedFont = new FontMeasurer("Calibri", 11);
+            t.addRegex(text);
+            return t;
         }
     }
 }

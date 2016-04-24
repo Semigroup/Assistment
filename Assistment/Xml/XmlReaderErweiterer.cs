@@ -22,7 +22,7 @@ namespace Assistment.Xml
         public static string getString(this XmlReader reader, string name)
         {
             string s = reader.GetAttribute(name);
-            if (s == null || s == "")
+            if (s == null)
                 return "";
             else
                 return s;
