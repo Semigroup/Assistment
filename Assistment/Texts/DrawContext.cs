@@ -239,7 +239,7 @@ namespace Assistment.Texts
             if (!madeBaseFonts)
             {
                 madeBaseFonts = true;
-                fonts = new BaseFont[9];
+                fonts = new BaseFont[12];
                 fonts[0] = BaseFont.CreateFont(FontPath + "calibri.ttf", BaseFont.CP1252, BaseFont.EMBEDDED);
                 fonts[1] = BaseFont.CreateFont(FontPath + "calibrib.ttf", BaseFont.CP1252, BaseFont.EMBEDDED);
                 fonts[2] = BaseFont.CreateFont(FontPath + "calibrii.ttf", BaseFont.CP1252, BaseFont.EMBEDDED);
@@ -251,6 +251,9 @@ namespace Assistment.Texts
                 fonts[7] = BaseFont.CreateFont(FontPath + "Exocet1.ttf", BaseFont.CP1252, BaseFont.EMBEDDED);
 
                 fonts[8] = BaseFont.CreateFont(FontPath + "Plain Germanica.ttf", BaseFont.CP1252, BaseFont.EMBEDDED);
+                fonts[9] = BaseFont.CreateFont(FontPath + "Plain Germanica.ttf", BaseFont.CP1252, BaseFont.EMBEDDED);
+                fonts[10] = BaseFont.CreateFont(FontPath + "Plain Germanica.ttf", BaseFont.CP1252, BaseFont.EMBEDDED);
+                fonts[11] = BaseFont.CreateFont(FontPath + "Plain Germanica.ttf", BaseFont.CP1252, BaseFont.EMBEDDED);
             }
         }
 

@@ -233,7 +233,6 @@ namespace Assistment.Drawing.Geometries
             }
             return lots.Optim(p => -p.dist(Punkt));
         }
-
         public static Polygon Rechteck(RectangleF rf, PointF SampleRate)
         {
             int NX = (int)(rf.Width * SampleRate.X);

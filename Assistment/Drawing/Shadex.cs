@@ -940,7 +940,6 @@ namespace Assistment.Drawing
                 g.DrawPolygon(stift, poly);
         }
 
-
         public static void list(PointF[] poly)
         {
             StringBuilder sb = new StringBuilder(poly.Length * 10);

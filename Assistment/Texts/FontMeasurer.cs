@@ -252,7 +252,11 @@ namespace Assistment.Texts
         }
         public float xMass(char c)
         {
-            return charTabelle[(int)c] * chargrose;
+            int i = (int)c;
+            if (i >= 256)
+                return charTabelle[(int)' '] * chargrose;
+            else
+                return charTabelle[i] * chargrose;
         }
         public float xMass(string s)
         {

@@ -72,8 +72,14 @@ namespace Assistment.Drawing.Graph
         {
             float X = start.X - ort.X;
             float Y = start.Y - ort.Y;
-            float norm = (float)(radius / Math.Sqrt(X * X + Y * Y));
-            return new PointF(ort.X + X * norm, ort.Y + Y * norm);
+            float norm = (float)Math.Sqrt(X * X + Y * Y);
+            if (norm >= radius)
+            {
+                norm = radius / norm;
+                return new PointF(ort.X + X * norm, ort.Y + Y * norm);
+            }
+            else
+                return ort;
         }
         public override void draw(Bild b)
         {

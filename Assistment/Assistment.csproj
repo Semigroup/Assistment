@@ -62,6 +62,7 @@
     <Compile Include="Drawing\Geometries\Polygon.cs" />
     <Compile Include="Drawing\Graph\Knoten.cs" />
     <Compile Include="Drawing\Geometries\OrientierbarerWeg.cs" />
+    <Compile Include="Drawing\Huge\Slave.cs" />
     <Compile Include="Drawing\LinearAlgebra\Matrix2.cs" />
     <Compile Include="Drawing\LinearAlgebra\PointFErweiterer.cs" />
     <Compile Include="Drawing\Spatials\Plane.cs" />

@@ -342,6 +342,14 @@ namespace Assistment.Drawing.LinearAlgebra
         {
             return new SolidBrush(Color);
         }
+
+        public static Color[] Flat(this Color[] Colors, int Alpha)
+        {
+            Color[] c = new Color[Colors.Length];
+            for (int i = 0; i < Colors.Length; i++)
+                c[i] = Color.FromArgb(Alpha, Colors[i]);
+            return c;
+        }
     }
     public static class SizeFErweiterer
     {
@@ -354,6 +362,16 @@ namespace Assistment.Drawing.LinearAlgebra
         public static SizeF mul(this SizeF a, float c)
         {
             return new SizeF(a.Width * c, a.Height * c);
+        }
+        /// <summary>
+        /// erstellt einen neuen Vektor, der Produkt der beiden Faktoren ist
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <returns></returns>
+        public static SizeF mul(this SizeF a, float c, float d)
+        {
+            return new SizeF(a.Width * c, a.Height * d);
         }
     }
     public static class PointErweiterer

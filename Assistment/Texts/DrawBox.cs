@@ -205,6 +205,70 @@ namespace Assistment.Texts
         public abstract void add(DrawBox word);
         public abstract void addRange(DrawContainer container);
         #region addWort Überladungen
+        public void addWort(object text)
+        {
+            this.addWort(text.ToString(), Brushes.Black, preferedFont, 0, Pens.Black);
+        }
+        public void addWort(object text, Pen pen)
+        {
+            this.addWort(text.ToString(), Brushes.Black, preferedFont, 0, pen);
+        }
+        public void addWort(object text, byte style)
+        {
+            this.addWort(text.ToString(), Brushes.Black, preferedFont, style, Pens.Black);
+        }
+        public void addWort(object text, byte style, Pen pen)
+        {
+            this.addWort(text.ToString(), Brushes.Black, preferedFont, style, pen);
+        }
+        public void addWort(object text, xFont font)
+        {
+            this.addWort(text.ToString(), Brushes.Black, font, 0, Pens.Black);
+        }
+        public void addWort(object text, xFont font, Pen pen)
+        {
+            this.addWort(text.ToString(), Brushes.Black, font, 0, pen);
+        }
+        public void addWort(object text, xFont font, byte style)
+        {
+            this.addWort(text.ToString(), Brushes.Black, font, style, Pens.Black);
+        }
+        public void addWort(object text, xFont font, byte style, Pen pen)
+        {
+            this.addWort(text.ToString(), Brushes.Black, font, style, pen);
+        }
+        public void addWort(object text, Brush brush)
+        {
+            this.addWort(text.ToString(), brush, preferedFont, 0, Pens.Black);
+        }
+        public void addWort(object text, Brush brush, Pen pen)
+        {
+            this.addWort(text.ToString(), brush, preferedFont, 0, pen);
+        }
+        public void addWort(object text, Brush brush, byte style)
+        {
+            this.addWort(text.ToString(), brush, preferedFont, style, Pens.Black);
+        }
+        public void addWort(object text, Brush brush, byte style, Pen pen)
+        {
+            this.addWort(text.ToString(), brush, preferedFont, style, pen);
+        }
+        public void addWort(object text, Brush brush, xFont font)
+        {
+            this.addWort(text.ToString(), brush, font, 0, Pens.Black);
+        }
+        public void addWort(object text, Brush brush, xFont font, Pen pen)
+        {
+            this.addWort(text.ToString(), brush, font, 0, pen);
+        }
+        public void addWort(object text, Brush brush, xFont font, byte style)
+        {
+            this.addWort(text.ToString(), brush, font, style, Pens.Black);
+        }
+        public void addWort(object text, Brush brush, xFont font, byte style, Pen pen)
+        {
+            this.add(new Word(text.ToString(), brush, font, style, pen));
+        }
         public void addWort(string text)
         {
             this.addWort(text, Brushes.Black, preferedFont, 0, Pens.Black);
