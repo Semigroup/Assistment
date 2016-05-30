@@ -203,7 +203,11 @@ namespace Assistment.Texts
         }
 
         public abstract void add(DrawBox word);
-        public abstract void addRange(DrawContainer container);
+        public virtual void addRange(DrawContainer container)
+        {
+            foreach (var word in container)
+                add(word);
+        }
         #region addWort Überladungen
         public void addWort(object text)
         {

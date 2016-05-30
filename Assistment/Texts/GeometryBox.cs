@@ -72,7 +72,7 @@ namespace Assistment.Texts
 
         public override DrawBox clone()
         {
-            return new GeometryBox(InnerDrawBox, Top, Bottom, Right, Left);
+            return new GeometryBox(InnerDrawBox.clone(), Top, Bottom, Right, Left);
         }
 
         public override void InStringBuilder(StringBuilder sb, string tabs)

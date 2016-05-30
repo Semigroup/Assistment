@@ -7,6 +7,8 @@ using System.IO;
 using System.Windows.Forms;
 using System.Drawing;
 
+using Assistment.Texts;
+
 namespace Assistment.Xml
 {
     public static class XmlReaderErweiterer
@@ -43,6 +45,10 @@ namespace Assistment.Xml
             else
                 return float.Parse(s);
         }
+        public static SizeF getSizeF(this XmlReader reader, string name)
+        {
+            return new SizeF(getFloat(reader, name + "_X"), getFloat(reader, name + "_Y"));
+        }
         public static bool getBoolean(this XmlReader reader, string name)
         {
             string s = reader.GetAttribute(name);
@@ -58,6 +64,11 @@ namespace Assistment.Xml
                 return DateTime.Now;
             else
                 return DateTime.Parse(s);
+        }
+
+        public static FontMeasurer getFont(this XmlReader reader, string name)
+        {
+            return new FontMeasurer(reader.getString(name), reader.getFloat(name + "_Size"));
         }
 
         public static Color getColorHexARGB(this XmlReader reader, string name)
@@ -130,6 +141,17 @@ namespace Assistment.Xml
             {
                 Collection.Add(item);
             }
+        }
+
+        /// <summary>
+        /// Liest bis zum nächsten Element oder EOF
+        /// </summary>
+        /// <param name="Reader"></param>
+        public static void Next(this XmlReader Reader)
+        {
+            Reader.Read();
+            while (Reader.NodeType != XmlNodeType.Element && !Reader.EOF)
+                        Reader.Read();
         }
     }
 }

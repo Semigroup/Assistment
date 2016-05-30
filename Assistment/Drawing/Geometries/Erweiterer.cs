@@ -29,6 +29,28 @@ namespace Assistment.Drawing.Geometries
                 old = en.Current;
             }
         }
+
+        public static void DrawRectangle(this Graphics g, Pen Pen, RectangleF RectangleF)
+        {
+            g.DrawRectangle(Pen, RectangleF.X, RectangleF.Y, RectangleF.Width, RectangleF.Height);
+        }
+
+        public static void FillDrawWegAufOrientierbarerWeg(this Graphics g, Brush Brush, Pen Pen, Weg y, OrientierbarerWeg oy, int samples)
+        {
+            PointF[] Samples = new PointF[samples];
+            for (int i = 0; i < samples - 1; i++)
+            {
+                float t = i / (samples - 1f);
+                PointF v = y(t);
+                PointF n = oy.normale(t);
+                Samples[i] = oy.weg(t).add(-v.X * n.Y + v.Y * n.X, v.X * n.X + v.Y * n.Y);
+            }
+            Samples[samples - 1] = Samples[0];
+            if (Brush != null)
+                g.FillPolygon(Brush, Samples);
+            if (Pen != null)
+                g.DrawPolygon(Pen, Samples);
+        }
     }
 
     public static class WegErweiterer

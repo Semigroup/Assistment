@@ -56,17 +56,44 @@ namespace Assistment.Extensions
                 return fileName.Substring(i, fileName.Length - i);
         }
         /// <summary>
+        /// Gibt den Dateinamen ohne .Endung an
+        /// </summary>
+        /// <param name="fileName"></param>
+        /// <returns></returns>
+        public static string FileName(this string fileName)
+        {
+            int i = fileName.LastIndexOf(".");
+            if (i < 0)
+                return "";
+            int j = Math.Max(fileName.LastIndexOf("\\", i - 1), fileName.LastIndexOf("/", i - 1));
+            return fileName.Substring(j + 1, i - j -1);
+        }
+        /// <summary>
         /// Gibt alles vor dem letzten \ oder / wieder (inklusive dem \ bzw. /)
         /// </summary>
         /// <param name="fileName"></param>
         /// <returns></returns>
         public static string Verzeichnis(this string path)
         {
-            int i = Math.Max(path.LastIndexOf("\\"),path.LastIndexOf("/"));
+            int i = Math.Max(path.LastIndexOf("\\"), path.LastIndexOf("/"));
             if (i < 0)
                 return "";
             else
                 return path.Substring(0, i + 1);
+        }
+        /// <summary>
+        /// Gibt alles vor dem letzten \ oder / wieder und nach dem vorletzten \ oder / wieder (ohne irgendwelche \- bzw. /-Zeichen)
+        /// </summary>
+        /// <param name="fileName"></param>
+        /// <returns></returns>
+        public static string Ordner(this string path)
+        {
+            int b = Math.Max(path.LastIndexOf("\\"), path.LastIndexOf("/"));
+            if (b < 0)
+                return "";
+            int a = Math.Max(path.LastIndexOf("\\", b - 1), path.LastIndexOf("/", b - 1));
+
+            return path.Substring(a + 1, b - a - 1);
         }
         /// <summary>
         /// Tauscht den Dateinamen aus, behält Verzeichnis und Endung

@@ -565,6 +565,19 @@ namespace Assistment.Drawing.Geometries
 
             return ((ecke1 * rand1) * (ecke2 * rand2)) * ((ecke3 * rand3) * (ecke4 * rand4));
         }
+        //public static OrientierbarerWeg InnenRundesRechteck(RectangleF r, float radius)
+        //{
+        //    r.X += radius;
+        //    r.Y += radius;
+        //    float ab = 2 * radius;
+        //    r.Width -= ab;
+        //    r.Height -= ab;
+        //    return RundesRechteck(r, radius);
+        ////}
+        public static OrientierbarerWeg RundesRechteck(RectangleF r)
+        {
+            return RundesRechteck(r, Math.Min(r.Width, r.Height) / 2);
+        }
         public static OrientierbarerWeg Ellipse(RectangleF r)
         {
             PointF M = new PointF((r.Right + r.Left) / 2, (r.Bottom + r.Top) / 2);

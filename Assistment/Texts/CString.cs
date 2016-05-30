@@ -11,14 +11,8 @@ namespace Assistment.Texts
     /// <summary>
     /// Now here's the real deal.
     /// </summary>
-    public class CString : DrawContainer
+    public class CString : PreText
     {
-        private List<DrawBox> list;
-
-        private float space;
-        private float min;
-        private float max;
-
         private class chunk : IComparable<chunk>
         {
             public DrawBox box;
@@ -65,52 +59,19 @@ namespace Assistment.Texts
             }
         }
 
-        public CString()
+        public CString() : base()
         {
-            this.list = new List<DrawBox>();
-            this.space = 0;
-            this.min = this.max = 0;
         }
+        public CString(PreText PreText) : base(PreText)
+        {
 
-        public override void add(DrawBox word)
-        {
-            list.Add(word);
-            this.min = Math.Max(word.getMin(), this.min);
-            this.max += word.getMax();
-            this.space += word.getSpace();
-        }
-        public override void addRange(DrawContainer container)
-        {
-            list.AddRange(container);
-            this.min = Math.Max(min, container.getMin());
-            this.max += container.getMax();
-            this.space += container.getSpace();
-        }
-
-        public override void insert(int index, DrawBox word)
-        {
-            list.Insert(index, word);
-            this.min = Math.Max(word.getMin(), this.min);
-            this.max += word.getMax();
-            this.space += word.getSpace();
-        }
-        public override void remove(int index)
-        {
-            list.RemoveAt(index);
-            this.update();
-        }
-        public override bool remove(DrawBox word)
-        {
-            bool result = list.Remove(word);
-            this.update();
-            return result;
         }
 
         public override void setup(RectangleF box)
         {
             this.box = box;
             RectangleF subBox = box;
-            IEnumerator<DrawBox> en = list.GetEnumerator();
+            IEnumerator<DrawBox> en = words.GetEnumerator();
             chunk[] chunks;
             float height;
             float width;
@@ -132,17 +93,6 @@ namespace Assistment.Texts
             }
             this.box = box;
             this.box.Height = subBox.Y - box.Y;
-        }
-        public override void draw(DrawContext con)
-        {
-            //System.Windows.Forms.MessageBox.Show(box + "");
-            foreach (DrawBox item in list)
-            {
-                if (item.box.Y < con.Bildhohe)
-                    item.draw(con);
-                else break;
-            }
-            //con.drawRectangle(Pens.Red, box);
         }
         /// <summary>
         /// ab einschl. en.current
@@ -237,60 +187,18 @@ namespace Assistment.Texts
             return width;
         }
 
-        public override float getSpace()
-        {
-            return this.space;
-        }
-        public override float getMin()
-        {
-            return this.min;
-        }
-        public override float getMax()
-        {
-            return this.max;
-        }
-
-        public override void update()
-        {
-            this.min = this.max = this.space = 0;
-            foreach (DrawBox box in list)
-            {
-                box.update();
-                this.min = Math.Max(this.min, box.getMin());
-                this.max += box.getMax();
-                this.space += box.getSpace();
-            }
-        }
         public override DrawBox clone()
         {
-            CString cs = new CString();
-            cs.alignment = this.alignment;
-            cs.preferedFont = this.preferedFont;
-            foreach (var item in list)
-                cs.list.Add(item.clone());
-            cs.min = this.min;
-            cs.max = this.max;
-            cs.space = this.space;
-            return cs;
+            return new CString(this);
         }
         public override void InStringBuilder(StringBuilder sb, string tabs)
         {
             string ttabs = "\t" + tabs;
             sb.AppendLine(tabs + "CString:");
             sb.AppendLine(tabs + "\tbox: " + box);
-            foreach (DrawBox item in list)
+            foreach (DrawBox item in words)
                 item.InStringBuilder(sb, ttabs);
             sb.AppendLine(tabs + ".");
-        }
-        public override IEnumerator<DrawBox> GetEnumerator()
-        {
-            return this.list.GetEnumerator();
-        }
-
-        public override void clear()
-        {
-            list.Clear();
-            min = max = space = 0;
         }
     }
 }

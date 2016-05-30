@@ -9,90 +9,21 @@ namespace Assistment.Texts
     /// <summary>
     /// A Text uses a simple algorithm to order wordblocks in a line, so it assumes that every word it contains has a fixed width and a fixed space.
     /// </summary>
-    public class Text : DrawContainer
+    public class Text : PreText
     {
-        private List<DrawBox> words;
-        private float min, max, space;
-        /// <summary>
-        /// Von Rechts nach Links
-        /// <para></para>
-        /// <para>Von Links nach Rechts, falls false (default Wert)</para>
-        /// </summary>
-        public bool RightToLeft;
-
-        public Text()
+        public Text() : base()
         {
-            words = new List<DrawBox>();
-            min = max = space = 0;
-            RightToLeft = false;
         }
         public Text(string Regex, xFont Font) : this()
         {
             this.preferedFont = Font;
             this.addRegex(Regex);
         }
+        public Text(PreText PreText) : base(PreText)
+        {
 
-        public override void add(DrawBox word)
-        {
-#if CSTRINGDEBUG
-            if (word.getMin() != word.getMax())
-                throw new NotImplementedException();
-#endif
-            words.Add(word);
-            min = Math.Max(min, word.getMin());
-            max += word.getMax();
-            space += word.getSpace();
         }
-        public override void addRange(DrawContainer container)
-        {
-            words.AddRange(container);
-            this.min = Math.Max(min, container.getMin());
-            this.max += container.getMax();
-            this.space += container.getSpace();
-        }
-
-        public override void insert(int index, DrawBox word)
-        {
-            words.Insert(index, word);
-            this.min = Math.Max(word.getMin(), this.min);
-            this.max += word.getMax();
-            this.space += word.getSpace();
-        }
-        public override void remove(int index)
-        {
-            words.RemoveAt(index);
-            this.update();
-        }
-        public override bool remove(DrawBox word)
-        {
-            bool result = words.Remove(word);
-            this.update();
-            return result;
-        }
-
-        public override float getSpace()
-        {
-            return space;
-        }
-        public override float getMin()
-        {
-            return min;
-        }
-        public override float getMax()
-        {
-            return max;
-        }
-
-        public override void update()
-        {
-            min = max = space = 0;
-            foreach (DrawBox word in words)
-            {
-                min = Math.Max(min, word.getMin());
-                max += word.getMax();
-                space += word.getSpace();
-            }
-        }
+      
         public override void setup(RectangleF box)
         {
             this.box = box;
@@ -151,32 +82,9 @@ namespace Assistment.Texts
             }
             this.box.Height = subBox.Y - box.Y;
         }
-        public override void draw(DrawContext con)
-        {
-            foreach (DrawBox item in words)
-            {
-                if (item.box.Y < con.Bildhohe)
-                    item.draw(con);
-                else break;
-            }
-        }
-
-        /// <summary>
-        /// creates just a flat copy
-        /// </summary>
-        /// <returns></returns>
         public override DrawBox clone()
         {
-            Text te = new Text();
-            te.alignment = this.alignment;
-            te.preferedFont = preferedFont;
-            foreach (var item in words)
-                te.words.Add(item.clone());
-            te.min = min;
-            te.max = max;
-            te.space = space;
-            te.RightToLeft = RightToLeft;
-            return te;
+            return new Text(this);
         }
         public override void InStringBuilder(StringBuilder sb, string tabs)
         {
@@ -187,18 +95,6 @@ namespace Assistment.Texts
                 item.InStringBuilder(sb, ttabs);
             sb.AppendLine(tabs + ".");
         }
-
-        public override IEnumerator<DrawBox> GetEnumerator()
-        {
-            return words.GetEnumerator();
-        }
-
-        public override void clear()
-        {
-            words.Clear();
-            min = max = space = 0;
-        }
-
         public static implicit operator Text(string text)
         {
             Text t = new Text();
