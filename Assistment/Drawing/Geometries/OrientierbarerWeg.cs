@@ -24,24 +24,6 @@ namespace Assistment.Drawing.Geometries
     public unsafe delegate void ModPolygon(PointF* p);
     public delegate void Mach();
 
-    //public struct Gerade
-    //{
-    //    public PointF Aufpunkt;
-    //    public PointF Richtungsvektor;
-
-    //    public Gerade(PointF Punkt, PointF Vektor)
-    //    {
-    //        this.Aufpunkt = Punkt;
-    //        this.Richtungsvektor = Vektor;
-    //    }
-
-    //    public Gerade(float x, float y, float dx, float dy)
-    //    {
-    //        this.Aufpunkt = new PointF(x, y);
-    //        this.Richtungsvektor = new PointF(dx, dy);
-    //    }
-    //}
-
     public class OrientierbarerWeg
     {
         /// <summary>
@@ -157,6 +139,10 @@ namespace Assistment.Drawing.Geometries
             : this(A.Aufpunkt, A.Richtungsvektor, B.Aufpunkt, B.Richtungsvektor)
         {
 
+        }
+        public OrientierbarerWeg(OrientierbarerWeg OrientierbarerWeg)
+            : this(OrientierbarerWeg.weg, OrientierbarerWeg.normale, OrientierbarerWeg.L)
+        {
         }
 
         /// <summary>
@@ -362,6 +348,24 @@ namespace Assistment.Drawing.Geometries
                     return gamma2.normale((t - m) / m2);
             }, L);
         }
+        public static OrientierbarerWeg operator ^(OrientierbarerWeg gamma, int n)
+        {
+            if (n == 0)
+                return new OrientierbarerWeg(t => gamma.weg(0), t => gamma.normale(0), 0);
+            else if (n > 0)
+            {
+                OrientierbarerWeg y = new OrientierbarerWeg(gamma);
+                for (int i = 1; i < n; i++)
+                    y *= (gamma + y.weg(1));
+                //Hier könnte man einen intelligenteren Multiplikationsalgorithmus mit zweier Potenzen benutzen...
+                return y;
+            }
+            else
+            {
+                OrientierbarerWeg y = new OrientierbarerWeg(t => gamma.weg(1 - t), t => gamma.normale(1 - t), gamma.L);
+                return y ^ (-n);
+            }
+        }
         public static OrientierbarerWeg operator +(OrientierbarerWeg gamma, PointF point)
         {
             return new OrientierbarerWeg(add(gamma.weg, point), gamma.normale, gamma.L);
@@ -414,6 +418,18 @@ namespace Assistment.Drawing.Geometries
             return normSqared(d) < 1;
         }
 
+        /// <summary>
+        /// Gibt im Wesentlichen new OW(punkte[0], punkte[1]) * new OW(punkte[1], punkte[2]) * ... zurück 
+        /// </summary>
+        /// <param name="punkte">mindestens zwei Punkte!</param>
+        /// <returns></returns>
+        public static OrientierbarerWeg HartPolygon(params PointF[] punkte)
+        {
+            OrientierbarerWeg ow = new OrientierbarerWeg(punkte[0], punkte[1]);
+            for (int i = 2; i < punkte.Length; i++)
+                ow *= new OrientierbarerWeg(punkte[i - 1], punkte[i]);
+            return ow;
+        }
         /// <summary>
         /// approximiert polynomiell ein Polygon
         /// <para>normale zeigt links der ersten Kante</para>
