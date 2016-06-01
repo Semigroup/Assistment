@@ -38,12 +38,18 @@ namespace Assistment.Drawing.Geometries
         public static void FillDrawWegAufOrientierbarerWeg(this Graphics g, Brush Brush, Pen Pen, Weg y, OrientierbarerWeg oy, int samples)
         {
             PointF[] Samples = new PointF[samples];
+            float L = y(1).X - y(0).X;
+
+            if (L <= float.Epsilon)
+                throw new NotImplementedException();
+
             for (int i = 0; i < samples - 1; i++)
             {
                 float t = i / (samples - 1f);
                 PointF v = y(t);
-                PointF n = oy.normale(t);
-                Samples[i] = oy.weg(t).add(-v.X * n.Y + v.Y * n.X, v.X * n.X + v.Y * n.Y);
+                float x = v.X / L;
+                Samples[i] = oy.weg(x).saxpy(v.Y, oy.normale(x));
+                //Samples[i] = oy.weg(t).add(-v.X * n.Y + v.Y * n.X, v.X * n.X + v.Y * n.Y); n = oy.normale(t)
             }
             Samples[samples - 1] = Samples[0];
             if (Brush != null)
@@ -61,7 +67,7 @@ namespace Assistment.Drawing.Geometries
         /// <param name="weg"></param>
         /// <param name="w"></param>
         /// <returns></returns>
-        public static Weg rot(this Weg weg, float w)
+        public static Weg rot(this Weg weg, double w)
         {
             return t => weg(t).rot(w);
         }
@@ -69,6 +75,12 @@ namespace Assistment.Drawing.Geometries
         public static Weg scale(this Weg weg, float c)
         {
             return t => weg(t).mul(c);
+        }
+
+        public static Weg Concat(this Weg Weg1, Weg Weg2)
+        {
+            PointF d = Weg1(1).sub(Weg2(0));
+            return t => (t <= 0.5f) ? Weg1(2 * t) : Weg2(2 * t - 1).add(d);
         }
     }
 

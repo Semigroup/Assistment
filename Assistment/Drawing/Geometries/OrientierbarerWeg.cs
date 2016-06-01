@@ -5,6 +5,7 @@ using System.Text;
 using System.Drawing;
 using System.Drawing.Imaging;
 using Assistment.Drawing.LinearAlgebra;
+using Assistment.Extensions;
 
 namespace Assistment.Drawing.Geometries
 {
@@ -41,6 +42,11 @@ namespace Assistment.Drawing.Geometries
         /// <para>und Länge des Weges</para>
         /// </summary>
         public float L;
+        /// <summary>
+        /// tangente = normale.y , -normale.x
+        /// </summary>
+        public Weg tangente { get { return t => normale(t).linksOrtho().mul(-1); } }
+
         /// <summary>
         /// 
         /// </summary>
@@ -293,6 +299,28 @@ namespace Assistment.Drawing.Geometries
             }
             b.Save("test.png");
         }
+        /// <summary>
+        /// gibt y|[a,b] = y(a + (b-a) * t) zurück
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <returns></returns>
+        public OrientierbarerWeg Trim(float a, float b)
+        {
+            float d = b - a;
+            return new OrientierbarerWeg(t => weg(a + d * t),
+                t => normale(a + d * t),
+                L * Math.Abs(d));
+        }
+        /// <summary>
+        /// return t => this(t => (t+a)%1)
+        /// </summary>
+        /// <param name="a"></param>
+        /// <returns></returns>
+        public OrientierbarerWeg Shift(float a)
+        {
+            return new OrientierbarerWeg(t => weg((t + a) % 1), t => normale((t + a) % 1), L);
+        }
 
         private static float normSqared(PointF p)
         {
@@ -372,6 +400,17 @@ namespace Assistment.Drawing.Geometries
         }
 
         /// <summary>
+        /// Dreht den Weg gegen den Uhrzeigersinn, Winkel in Bogenmaß
+        /// </summary>
+        /// <param name="gamma"></param>
+        /// <param name="Winkel"></param>
+        /// <returns></returns>
+        public static OrientierbarerWeg operator ^(OrientierbarerWeg gamma, double Winkel)
+        {
+            return new OrientierbarerWeg(gamma.weg.rot(Winkel), gamma.normale.rot(Winkel), gamma.L);
+        }
+
+        /// <summary>
         /// 0,5 mal Pi
         /// </summary>
         protected const float Rho = (float)(0.5 * Math.PI);
@@ -393,7 +432,7 @@ namespace Assistment.Drawing.Geometries
         /// </summary>
         /// <param name="t"></param>
         /// <returns></returns>
-        private static float cos(float t)
+        private static float cos(double t)
         {
             return (float)Math.Cos(t * Tau);
         }
@@ -402,7 +441,7 @@ namespace Assistment.Drawing.Geometries
         /// </summary>
         /// <param name="t"></param>
         /// <returns></returns>
-        private static float sin(float t)
+        private static float sin(double t)
         {
             return (float)Math.Sin(t * Tau);
         }
@@ -416,6 +455,33 @@ namespace Assistment.Drawing.Geometries
         {
             PointF d = sub(polygon.Last(), polygon.First());
             return normSqared(d) < 1;
+        }
+
+        /// <summary>
+        /// gibt A * Brücke * B zurück
+        /// </summary>
+        /// <param name="A"></param>
+        /// <param name="B"></param>
+        /// <returns></returns>
+        public OrientierbarerWeg ConcatGlatt(OrientierbarerWeg B)
+        {
+            PointF a = this.weg(1);
+            PointF b = B.weg(0);
+            float d = a.dist(b);
+            OrientierbarerWeg ow = new OrientierbarerWeg(a, this.tangente(1).mul(d), b, B.tangente(0).mul(d));
+            return this * ow * B;
+        }
+        /// <summary>
+        /// Macht praktisch ConcatGlatt(this)
+        /// </summary>
+        /// <returns></returns>
+        public OrientierbarerWeg Abschluss()
+        {
+            PointF a = this.weg(1);
+            PointF b = this.weg(0);
+            float d = a.dist(b);
+            OrientierbarerWeg ow = new OrientierbarerWeg(a, this.tangente(1).mul(d), b, this.tangente(0).mul(d));
+            return this * ow;
         }
 
         /// <summary>
@@ -617,20 +683,94 @@ namespace Assistment.Drawing.Geometries
         /// <param name="alpha"></param>
         /// <param name="beta"></param>
         /// <returns></returns>
-        public static OrientierbarerWeg kreisbogen(float radius, float alpha, float beta)
+        public static OrientierbarerWeg kreisbogen(float radius, double alpha, double beta)
         {
-            float delta = beta - alpha;
+            double delta = beta - alpha;
             Weg y = t =>
             {
-                float omega = alpha + t * delta;
+                double omega = alpha + t * delta;
                 return new PointF(radius * cos(omega), radius * sin(omega));
             };
             Weg n = t =>
             {
-                float omega = alpha + t * delta;
+                double omega = alpha + t * delta;
                 return new PointF(cos(omega), sin(omega));
             };
-            return new OrientierbarerWeg(y, n, Math.Abs(delta * Tau * radius));
+            return new OrientierbarerWeg(y, n, (float)Math.Abs(delta * Tau * radius));
+        }
+
+        /// <summary>
+        /// Nicht nach Bogenlänge parametrisiert. Normale und Länge werden billig approximiert.
+        /// </summary>
+        /// <param name="Radius"></param>
+        /// <param name="Windungen"></param>
+        /// <returns></returns>
+        public static OrientierbarerWeg Spirale(float Radius, int Windungen)
+        {
+            Weg y = t => new PointF(sin(Windungen * t), cos(Windungen * t)).mul(Radius * (1 - t));
+            Weg n = t => new PointF(sin(Windungen * t), cos(Windungen * t));//Ganz billige Approximation
+            float L = (float)(Math.PI * Radius * (Windungen + 1)); //Ganz billige Approximation
+
+            return new OrientierbarerWeg(y, n, L);
+        }
+
+        public static OrientierbarerWeg Triskele(float Radius, int Windungen, float Dicke)
+        {
+            OrientierbarerWeg Spirale = OrientierbarerWeg.Spirale(Radius, Windungen);
+            OrientierbarerWeg KleineSpirale = OrientierbarerWeg.Spirale(Radius - Dicke, Windungen).Trim(1, 0);
+            Spirale.invertier();
+
+            float a = Radius * 2;
+            PointF Unten = new PointF(0, (float)(a / Math.Sqrt(3)));
+            PointF Links = new PointF(-a / 2, -(float)(a / Math.Sqrt(12)));
+            PointF Rechts = new PointF(a / 2, -(float)(a / Math.Sqrt(12)));
+
+            OrientierbarerWeg Spirale1 = (Spirale ^ (Math.PI * 7 / 6)) + Unten;
+            OrientierbarerWeg KleineSpirale1 = (KleineSpirale ^ (Math.PI * 7 / 6)) + Unten;
+            OrientierbarerWeg Spirale2 = (Spirale ^ (Math.PI * 1 / 2)) + Links;
+            OrientierbarerWeg KleineSpirale2 = (KleineSpirale ^ (Math.PI * 1 / 2)) + Links;
+            OrientierbarerWeg Spirale3 = (Spirale ^ (Math.PI * 11 / 6)) + Rechts;
+            OrientierbarerWeg KleineSpirale3 = (KleineSpirale ^ (Math.PI * 11 / 6)) + Rechts;
+
+            PointF Normale1 = new PointF(0, -Radius);
+            PointF Normale2 = Normale1.rot(2 * Math.PI * 2 / 3);
+            PointF Normale3 = Normale2.rot(2 * Math.PI * 2 / 3);
+
+
+            //OrientierbarerWeg Brucke12 = new OrientierbarerWeg(Unten.add(Links).mul(0.5f), Normale2, Rechts.add(Links).mul(0.5f).add(-Dicke, 0), Normale1.mul(-1));
+            //PointF rechteKante = Rechts.sub(Unten).normalize();
+            //OrientierbarerWeg Brucke23 = new OrientierbarerWeg(Rechts.add(Links).mul(0.5f), Normale1, Rechts.add(Unten).mul(0.5f).saxpy(Dicke, rechteKante), Normale3.mul(-1));
+            //PointF linkeKante = Links.sub(Unten).normalize();
+            //OrientierbarerWeg Brucke31 = new OrientierbarerWeg(Rechts.add(Unten).mul(0.5f), Normale3, Links.add(Unten).mul(0.5f).saxpy(-Dicke, linkeKante), Normale2.mul(-1));
+
+            //OrientierbarerWeg end = Spirale1 * KleineSpirale1 * Brucke12 * Spirale2 * KleineSpirale2 * Brucke23 * Spirale3 * KleineSpirale3 * Brucke31;
+
+            OrientierbarerWeg end = (Spirale1 * KleineSpirale1).ConcatGlatt(Spirale3 * KleineSpirale3).ConcatGlatt(Spirale2 * KleineSpirale2);
+            end = end.Abschluss().Shift(1f / (Windungen * 15));
+
+            return end;
+        }
+        public static OrientierbarerWeg Pike(float Hohe)
+        {
+            //Hohe = 1000;
+            float a = Hohe / 3;
+            float d = a * 2;
+            OrientierbarerWeg ow = OrientierbarerWeg.HartPolygon(new PointF(Hohe / 2, 0), new PointF(a, 0), new PointF(Hohe / 2, a));
+            ow *= new OrientierbarerWeg(new PointF(Hohe / 2, a), new PointF(-d, -d), new PointF(0, Hohe / 2), new PointF(0, d));
+            ow *= new OrientierbarerWeg(new PointF(0, Hohe / 2), new PointF(0, d), new PointF(Hohe / 2, Hohe), new PointF(0, d));
+
+            ow *= new OrientierbarerWeg(new PointF(Hohe / 2, Hohe), new PointF(0, -d), new PointF(Hohe, Hohe / 2), new PointF(0, -d));
+            ow *= new OrientierbarerWeg(new PointF(Hohe, Hohe / 2), new PointF(0, -d), new PointF(Hohe / 2, a), new PointF(-d, d));
+            ow *= OrientierbarerWeg.HartPolygon(new PointF(Hohe / 2, a), new PointF(2 * a, 0), new PointF(Hohe / 2, 0));
+
+
+            //ow *= new OrientierbarerWeg(new PointF(Hohe / 2, a), new PointF(-d, -d), new PointF(Hohe / 2, Hohe), new PointF(0, d));
+            //ow *= new OrientierbarerWeg(new PointF(Hohe / 2, Hohe), new PointF(0, -Hohe), new PointF(Hohe / 2, a), new PointF(a / 2, a));
+            ow.invertier();
+            //ow.print(1000, 1000, 100);
+            //System.Windows.Forms.MessageBox.Show("Test");
+
+            return ow;
         }
 
         public static FlachenFunktion<PointF> Fortsetzen(OrientierbarerWeg Basis, OrientierbarerWeg Fortsetzung)
