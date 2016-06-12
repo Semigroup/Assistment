@@ -376,6 +376,10 @@ namespace Assistment.Drawing.Geometries
                     return gamma2.normale((t - m) / m2);
             }, L);
         }
+        public static OrientierbarerWeg operator *(OrientierbarerWeg Gamma, float Scaling)
+        {
+            return new OrientierbarerWeg(t => Gamma.weg(t).mul(Scaling), Gamma.normale, Gamma.L * Scaling);
+        }
         public static OrientierbarerWeg operator ^(OrientierbarerWeg gamma, int n)
         {
             if (n == 0)
@@ -709,9 +713,12 @@ namespace Assistment.Drawing.Geometries
         {
             Weg y = t => new PointF(sin(Windungen * t), cos(Windungen * t)).mul(Radius * (1 - t));
             Weg n = t => new PointF(sin(Windungen * t), cos(Windungen * t));//Ganz billige Approximation
-            float L = (float)(Math.PI * Radius * (Windungen + 1)); //Ganz billige Approximation
+            double w = Windungen * 2 * Math.PI;
+            double d = Math.Sqrt(w * w + 1);
+            double L = (d + Math.Log(d + w) / w); //exakte Berechnung
+            L *= Radius;
 
-            return new OrientierbarerWeg(y, n, L);
+            return new OrientierbarerWeg(y, n, (float)L);
         }
 
         public static OrientierbarerWeg Triskele(float Radius, int Windungen, float Dicke)

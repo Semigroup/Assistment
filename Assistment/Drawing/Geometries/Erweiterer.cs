@@ -40,7 +40,7 @@ namespace Assistment.Drawing.Geometries
             PointF[] Samples = new PointF[samples];
             float L = y(1).X - y(0).X;
 
-            if (L <= float.Epsilon)
+            if (Math.Abs(L) <= float.Epsilon)
                 throw new NotImplementedException();
 
             for (int i = 0; i < samples - 1; i++)

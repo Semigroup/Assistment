@@ -82,7 +82,7 @@ namespace Assistment.Extensions
             }
         }
 
-        public static string Sum(this IEnumerable<string> text)
+        public static string SumText(this IEnumerable<object> text)
         {
             StringBuilder sb = new StringBuilder();
             bool neu = true;
@@ -97,7 +97,7 @@ namespace Assistment.Extensions
             return sb.ToString();
         }
 
-        public static string Sum(this IEnumerable<string> text, string Separator)
+        public static string SumText(this IEnumerable<object> text, string Separator)
         {
             StringBuilder sb = new StringBuilder();
             bool neu = true;
