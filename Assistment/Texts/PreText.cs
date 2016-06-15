@@ -93,6 +93,7 @@ namespace Assistment.Texts
             min = max = currentMax = space = 0;
             foreach (DrawBox word in words)
             {
+                word.update();
                 min = Math.Max(min, word.getMin());
                 currentMax += word.getMax();
                 space += word.getSpace();
