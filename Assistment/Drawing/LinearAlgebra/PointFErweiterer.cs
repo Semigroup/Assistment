@@ -86,6 +86,16 @@ namespace Assistment.Drawing.LinearAlgebra
         /// <param name="a"></param>
         /// <param name="b"></param>
         /// <returns></returns>
+        public static PointF mul(this PointF a, float x, float y)
+        {
+            return new PointF(a.X * x, a.Y * y);
+        }
+        /// <summary>
+        /// erstellt einen neuen Vektor, der Produkt der beiden Faktoren ist
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <returns></returns>
         public static PointF mul(this PointF a, SizeF c)
         {
             return new PointF(a.X * c.Width, a.Y * c.Height);

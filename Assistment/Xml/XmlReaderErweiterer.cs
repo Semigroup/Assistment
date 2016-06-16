@@ -147,11 +147,12 @@ namespace Assistment.Xml
         /// Liest bis zum nächsten Element oder EOF
         /// </summary>
         /// <param name="Reader"></param>
-        public static void Next(this XmlReader Reader)
+        public static bool Next(this XmlReader Reader)
         {
             Reader.Read();
             while (Reader.NodeType != XmlNodeType.Element && !Reader.EOF)
                         Reader.Read();
+            return !Reader.EOF;
         }
     }
 }
