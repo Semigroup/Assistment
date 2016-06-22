@@ -424,6 +424,15 @@ namespace Assistment.Drawing.LinearAlgebra
         {
             return a.sub(b).norm();
         }
+        
+        public static Point mul(this Point a, float x, float y)
+        {
+            return new Point((int)(a.X * x), (int)(a.Y * y));
+        }
+        public static Point mul(this Point a, float c)
+        {
+            return a.mul(c, c);
+        }
     }
 
     public static class RectangleFErweiterer

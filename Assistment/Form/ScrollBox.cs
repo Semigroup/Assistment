@@ -66,14 +66,17 @@ namespace Assistment.form
 
         protected override void OnSizeChanged(EventArgs e)
         {
-            vScrollBar.Location = new Point(Width - barSize.Width, 0);
-            vScrollBar.Size = new Size(barSize.Width, Height - barSize.Height);
-            vScrollBar.LargeChange = Height - barSize.Height;
+            int x = Math.Max(Width - barSize.Width, 0);
+            int y = Math.Max(Height - barSize.Height, 0);
+
+            vScrollBar.Location = new Point(x, 0);
+            vScrollBar.Size = new Size(barSize.Width, y);
+            vScrollBar.LargeChange = y;
             vScrollBar.BringToFront();
 
-            hScrollBar.Location = new Point(0, Height - barSize.Height);
-            hScrollBar.Size = new Size(Width - barSize.Width, barSize.Height);
-            hScrollBar.LargeChange = Width - barSize.Width;
+            hScrollBar.Location = new Point(0, y);
+            hScrollBar.Size = new Size(x, barSize.Height);
+            hScrollBar.LargeChange = x;
             hScrollBar.BringToFront();
 
             base.OnSizeChanged(e);
