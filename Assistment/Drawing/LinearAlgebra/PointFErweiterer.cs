@@ -373,6 +373,11 @@ namespace Assistment.Drawing.LinearAlgebra
         {
             return new SizeF(a.Width * c, a.Height * c);
         }
+
+        public static SizeF sub(this SizeF a, SizeF c)
+        {
+            return new SizeF(a.Width - c.Width, a.Height - c.Height);
+        }
         /// <summary>
         /// erstellt einen neuen Vektor, der Produkt der beiden Faktoren ist
         /// </summary>
@@ -382,6 +387,16 @@ namespace Assistment.Drawing.LinearAlgebra
         public static SizeF mul(this SizeF a, float c, float d)
         {
             return new SizeF(a.Width * c, a.Height * d);
+        }
+        /// <summary>
+        /// erstellt einen neuen Vektor, der Produkt der beiden Faktoren ist
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <returns></returns>
+        public static SizeF mul(this SizeF a, SizeF d)
+        {
+            return new SizeF(a.Width * d.Width, a.Height * d.Height);
         }
     }
     public static class PointErweiterer

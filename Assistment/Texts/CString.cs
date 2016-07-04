@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Drawing;
+using Assistment.Mathematik;
 
 namespace Assistment.Texts
 {
@@ -59,10 +60,12 @@ namespace Assistment.Texts
             }
         }
 
-        public CString() : base()
+        public CString()
+            : base()
         {
         }
-        public CString(PreText PreText) : base(PreText)
+        public CString(PreText PreText)
+            : base(PreText)
         {
 
         }
@@ -87,7 +90,7 @@ namespace Assistment.Texts
                     subBox.X += subBox.Width;
                     subBox.Width = item.assignedWidth;
                     item.box.setup(subBox);
-                    height = Math.Max(height, item.box.box.Height);
+                    height = height.Max(item.box.box.Height);
                 }
                 subBox.Y += height;
             }

@@ -11,6 +11,8 @@ namespace Assistment.Texts
 {
     public abstract class DrawBox
     {
+        public static readonly xFont StandardFont = new FontMeasurer("Calibri", 11);
+
         public RectangleF box;
         public bool endsLine;
 
@@ -51,6 +53,14 @@ namespace Assistment.Texts
         public GeometryBox Geometry(float Left, float Top, float Right, float Bottom)
         {
             return new GeometryBox(this, Top, Bottom, Right, Left);
+        }
+        public GeometryBox Geometry(SizeF Abstand)
+        {
+            return Geometry(Abstand.Width, Abstand.Height);
+        }
+        public GeometryBox Geometry(float XAbstand, float YAbstand)
+        {
+            return Geometry(XAbstand/2, YAbstand/2, XAbstand/2, YAbstand/2);
         }
         public GeometryBox Geometry(float Abstand)
         {
@@ -106,7 +116,7 @@ namespace Assistment.Texts
             dcg.Dispose();
             b.Dispose();
         }
-        
+
         public void createDinA3PDF(string name)
         {
             this.createPDF(name, 1400, float.MaxValue, iTextSharp.text.PageSize.A3);
@@ -183,7 +193,7 @@ namespace Assistment.Texts
     public abstract class DrawContainer : DrawBox, IEnumerable<DrawBox>
     {
         public float alignment = 0;
-        public xFont preferedFont;
+        public xFont preferedFont = StandardFont;
 
         private static Color HexToColor(string hex)
         {
@@ -203,7 +213,7 @@ namespace Assistment.Texts
         }
 
         public abstract void add(DrawBox word);
-        public virtual void addRange(DrawContainer container)
+        public virtual void addRange(IEnumerable<DrawBox> container)
         {
             foreach (var word in container)
                 add(word);
@@ -811,9 +821,9 @@ namespace Assistment.Texts
         /// <returns></returns>
         public virtual bool empty()
         {
-            return this.GetEnumerator().MoveNext();
+            return !this.GetEnumerator().MoveNext();
         }
-        
+
         /// <summary>
         /// fügt word in Stelle index ein
         /// </summary>

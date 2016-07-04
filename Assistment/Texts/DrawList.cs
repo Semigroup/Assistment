@@ -42,13 +42,13 @@ namespace Assistment.Texts
             this.max = Math.Max(this.max, word.getMax());
             this.space += word.getSpace();
         }
-        public override void addRange(DrawContainer container)
-        {
-            list.AddRange(container);
-            this.min = Math.Max(this.min, container.getMin());
-            this.max = Math.Min(this.max, container.getMax());
-            this.space += container.getSpace();
-        }
+        //public override void addRange(DrawContainer container)
+        //{
+        //    list.AddRange(container);
+        //    this.min = Math.Max(this.min, container.getMin());
+        //    this.max = Math.Min(this.max, container.getMax());
+        //    this.space += container.getSpace();
+        //}
         public override void insert(int index, DrawBox word)
         {
             list.Insert(index, word);

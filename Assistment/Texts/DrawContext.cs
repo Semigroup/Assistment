@@ -61,6 +61,8 @@ namespace Assistment.Texts
         public abstract void drawClippedImage(Image img, float x, float y, RectangleF source);
         public abstract void drawClippedImage(Image img, RectangleF destination, RectangleF source);
 
+        public abstract void newPage();
+
         public abstract void Dispose();
     }
     public class DrawContextGraphics : DrawContext
@@ -150,6 +152,10 @@ namespace Assistment.Texts
         public override void Dispose()
         {
             g.Dispose();
+        }
+
+        public override void newPage()
+        {
         }
     }
     public class DrawContextDocument : DrawContext
@@ -330,6 +336,12 @@ namespace Assistment.Texts
                 }
             }
         }
+        public override void newPage()
+        {
+            float y = pCon.PdfDocument.PageNumber * pCon.PdfDocument.PageSize.Height / factor;
+            adjustPageNumber(y + 2);
+        }
+
         private void schreibSeitennummer()
         {
             if (seitennummer.aktiv)
@@ -355,11 +367,17 @@ namespace Assistment.Texts
             }
         }
 
+        private void SetPen(Pen Pen)
+        {
+            pCon.SetColorStroke(getColor(Pen));
+            pCon.SetLineWidth(Pen.Width * factor);
+        }
+
         public override void drawRectangle(Pen pen, float x, float y, float width, float height)
         {
             adjustPageNumber(y + height);
             pCon.Rectangle(factor * x, yOff - factor * y, factor * width, -factor * height - 1);
-            pCon.SetColorStroke(getColor(pen));
+            SetPen(pen);
             pCon.Stroke();
         }
         public override void fillRectangle(Brush brush, float x, float y, float width, float height)
@@ -374,7 +392,7 @@ namespace Assistment.Texts
             adjustPageNumber(Math.Max(y1, y2));
             pCon.MoveTo(factor * x1, (yOff - factor * y1));
             pCon.LineTo(factor * x2, (yOff - factor * y2));
-            pCon.SetColorStroke(getColor(pen));
+            SetPen(pen);
             pCon.Stroke();
         }
         public override void drawString(string text, Font font, Brush brush, float x, float y, float height)
@@ -392,7 +410,7 @@ namespace Assistment.Texts
         {
             adjustPageNumber(y + height);
             pCon.Ellipse(factor * x, yOff - factor * y, factor * width, -factor * height - 1);
-            pCon.SetColorStroke(getColor(pen));
+            SetPen(pen);
             pCon.Stroke();
         }
         public override void fillEllipse(Brush brush, float x, float y, float width, float height)
@@ -408,7 +426,7 @@ namespace Assistment.Texts
             pCon.MoveTo(factor * polygon[0].X, (yOff - factor * polygon[0].Y));
             for (int i = 1; i < polygon.Length; i++)
                 pCon.LineTo(factor * polygon[i].X, (yOff - factor * polygon[i].Y));
-            pCon.SetColorStroke(getColor(pen));
+            SetPen(pen);
             pCon.Stroke();
         }
         public override void drawImage(Image img, float x, float y)

@@ -90,5 +90,14 @@ namespace Assistment.Mathematik
         {
             return (int)Math.Pow(basis, Math.Ceiling(Math.Log(n, basis)));
         }
+
+        public static float Max(this float a, float b)
+        {
+            return Math.Max(a, b);
+        }
+        public static float Min(this float a, float b)
+        {
+            return Math.Min(a, b);
+        }
     }
 }

@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Assistment.Mathematik;
 
 namespace Assistment.Texts
 {
@@ -23,7 +24,7 @@ namespace Assistment.Texts
         {
 
         }
-      
+
         public override void setup(RectangleF box)
         {
             this.box = box;
@@ -51,7 +52,7 @@ namespace Assistment.Texts
                             subBox.X += subBox.Width;
                         subBox.Width = item.getMin();
                         item.setup(subBox);
-                        height = Math.Max(height, item.box.Height);
+                        height = height.Max(item.box.Height);
                     }
                     subBox.Y += height;
                     line.Clear();
@@ -98,7 +99,7 @@ namespace Assistment.Texts
         public static implicit operator Text(string text)
         {
             Text t = new Text();
-            t.preferedFont = new FontMeasurer("Calibri", 11);
+            t.preferedFont = StandardFont;
             t.addRegex(text);
             return t;
         }

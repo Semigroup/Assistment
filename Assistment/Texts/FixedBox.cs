@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Drawing;
+using Assistment.Drawing.LinearAlgebra;
 
 namespace Assistment.Texts
 {
     public class FixedBox : DrawBox
     {
         public DrawBox Inhalt { get; set; }
+        public SizeF Alignment { get; set; }
 
         public FixedBox(SizeF Size, DrawBox Inhalt)
         {
@@ -40,6 +42,10 @@ namespace Assistment.Texts
         {
             this.box.Location = box.Location;
             Inhalt.setup(this.box);
+            SizeF Rest = this.box.Size.sub(Inhalt.box.Size);
+            Rest.Width = this.box.Width - Inhalt.getMax();
+            RectangleF InnerBox = new RectangleF(box.Location.add(Rest.mul(Alignment).ToPointF()), Inhalt.box.Size);
+            Inhalt.setup(InnerBox);
         }
 
         public override void draw(DrawContext con)
@@ -54,7 +60,11 @@ namespace Assistment.Texts
 
         public override void InStringBuilder(StringBuilder sb, string tabs)
         {
-            throw new NotImplementedException();
+            string ttabs = "\t" + tabs;
+            sb.AppendLine(tabs + "FixedBox:");
+            sb.AppendLine(tabs + "\tbox: " + box);
+            Inhalt.InStringBuilder(sb, ttabs);
+            sb.AppendLine(tabs + ".");
         }
     }
 }

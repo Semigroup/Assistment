@@ -77,7 +77,15 @@ namespace Assistment.Texts
 
         public override void InStringBuilder(StringBuilder sb, string tabs)
         {
-            InnerDrawBox.InStringBuilder(sb, tabs);
+            string ttabs = "\t" + tabs;
+            sb.AppendLine(tabs + "GeometryBox:");
+            sb.AppendLine(ttabs + "box: " + box);
+            sb.AppendLine(ttabs + "Left: " + Left);
+            sb.AppendLine(ttabs + "Right: " + Right);
+            sb.AppendLine(ttabs + "Top: " + Top);
+            sb.AppendLine(ttabs + "Bottom: " + Bottom);
+            InnerDrawBox.InStringBuilder(sb, ttabs);
+            sb.AppendLine(tabs + ".");
         }
     }
 }

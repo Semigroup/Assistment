@@ -260,5 +260,10 @@ namespace Assistment.Forms
             form.Close();
             form.Dispose();
         }
+
+        public override void newPage()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

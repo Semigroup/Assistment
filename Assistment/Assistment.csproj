@@ -131,6 +131,7 @@
     <Compile Include="FormsAlt\Mosaik.cs" />
     <Compile Include="Texts\GeometryBox.cs" />
     <Compile Include="Texts\LayerBox.cs" />
+    <Compile Include="Texts\Paper\CardSheet.cs" />
     <Compile Include="Texts\PreText.cs" />
     <Compile Include="Texts\Mosaik.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

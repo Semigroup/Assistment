@@ -45,6 +45,7 @@ namespace Assistment.form
                     h = item.Bottom;
                 }
             Height = h + d;
+            //this.OnResize(new EventArgs());
         }
 
         public void Add(Control item)

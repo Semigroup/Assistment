@@ -43,7 +43,7 @@ namespace Assistment.Texts
         private float space = 0;
         private float min = 0;
         private float max = 0;
-        private float[] mins, maxs;
+        protected float[] mins, maxs;
 
         public Tabular(int Columns)
         {
@@ -101,12 +101,9 @@ namespace Assistment.Texts
                 item.height = height;
                 absHeight += height;
             }
-            this.min = this.max = 0;
-            for (int i = 0; i < Columns; i++)
-            {
-                this.min += this.mins[i];
-                this.max += this.maxs[i];
-            }
+            this.min = this.mins.Sum();
+            this.max = this.maxs.Sum();
+
             this.space = this.min * absHeight;
         }
 
@@ -148,7 +145,7 @@ namespace Assistment.Texts
             rows.RemoveAt(rowNumber);
         }
 
-        public void setRowPen(int rowNumber,Pen pen)
+        public void setRowPen(int rowNumber, Pen pen)
         {
             rows[rowNumber].pen = pen;
         }
@@ -162,7 +159,18 @@ namespace Assistment.Texts
         public DrawBox this[int row, int column]
         {
             get { return rows[row].drawBoxes[column]; }
-            set { rows[row].drawBoxes[column] = value; }
+            set
+            {
+                rows[row].drawBoxes[column] = value;
+
+                float minAdd = Math.Max(this.mins[column], value.getMin()) - this.mins[column];
+                this.mins[column] += minAdd;
+                this.min += minAdd;
+
+                float maxAdd = Math.Max(this.maxs[column], value.getMax()) - this.maxs[column];
+                this.maxs[column] += maxAdd;
+                this.max += maxAdd;
+            }
         }
 
         public override void setup(RectangleF box)
