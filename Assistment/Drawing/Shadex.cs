@@ -499,6 +499,7 @@ namespace Assistment.Drawing
                         (p31 - i)->X = r.X + (float)(i + 1 - 2 * dice.NextDouble()) * nenner;
                     }
                     g.FillPolygon(layers[4 * N + 1], P13);
+                    //g.DrawPolygon(Pens.Yellow, P13);
 
                     h += hNenner;
                     for (int i = 0; i < strings; i++)
@@ -507,6 +508,7 @@ namespace Assistment.Drawing
                         (p02 + i)->X = r.X + (float)(i + 1 - 2 * dice.NextDouble()) * nenner;
                     }
                     g.FillPolygon(layers[4 * N + 2], P02);
+                    //g.DrawPolygon(Pens.Red, P02);
 
                     h += hNenner;
                     for (int i = 0; i < strings; i++)
@@ -515,6 +517,7 @@ namespace Assistment.Drawing
                         (p13 + i)->X = r.X + (float)(i + 1 - 2 * dice.NextDouble()) * nenner;
                     }
                     g.FillPolygon(layers[4 * N + 3], P13);
+                    //g.DrawPolygon(Pens.Green, P13);
 
                     h += hNenner;
                     for (int i = 0; i < strings; i++)
@@ -523,6 +526,7 @@ namespace Assistment.Drawing
                         (p20 - i)->X = r.X + (float)(i + 1 - 2 * dice.NextDouble()) * nenner;
                     }
                     g.FillPolygon(layers[4 * N + 4], P02);
+                    //g.DrawPolygon(Pens.Magenta, P02);
                 }
             }
             #endregion
@@ -641,42 +645,43 @@ namespace Assistment.Drawing
             chaosWeg(g, y, schema.farben, schema.burst, schema.strings, schema.hohe, (int)(schema.sampleRate * y.L));
         }
 
+        //public static void ChaosFlache(Graphics g, FlachenSchema schema)
+        //{
+        //    Polygon samples = new Polygon(2 * schema.Samples.X + 1);
+        //    int n = 2 * schema.Samples.X - 1;
+        //    float hohe = 1 / (schema.Samples.Y - 1f);
+        //    for (int i = 0; i < schema.Samples.X; i++)
+        //    {
+        //        float t = i / (schema.Samples.X - 1f);
+        //        samples[i] = new PointF(t, 0);
+        //        samples[n - i] = new PointF(t, hohe);
+        //    }
+        //    samples.Close();
+
+        //    g.FillPolygon(schema.Pinsel(0.5f, 0), samples.Map(schema.Flache));
+        //    hohe = 1 - hohe;
+        //    Polygon neu = samples + new PointF(0, hohe);
+        //    g.FillPolygon(schema.Pinsel(0.5f, 1), neu.Map(schema.Flache));
+
+        //    hohe = -1 / (schema.Samples.Y - 1f);
+        //    for (int i = 0; i < schema.Samples.X; i++)
+        //        samples[i] = samples[i].add(0, hohe);
+        //    samples.Close();
+
+        //    for (int i = 1; i < schema.Samples.Y - 1; i++)
+        //    {
+        //        hohe = i / (schema.Samples.Y - 1f);
+        //        neu = samples + new PointF(0, hohe);
+        //        g.FillPolygon(schema.Pinsel(0.5f, hohe), neu.Map(schema.Flache));
+        //    }
+        //}
         public static void ChaosFlache(Graphics g, FlachenSchema schema)
-        {
-            Polygon samples = new Polygon(2 * schema.Samples.X + 1);
-            int n = 2 * schema.Samples.X - 1;
-            float hohe = 1 / (schema.Samples.Y - 1f);
-            for (int i = 0; i < schema.Samples.X; i++)
-            {
-                float t = i / (schema.Samples.X - 1f);
-                samples[i] = new PointF(t, 0);
-                samples[n - i] = new PointF(t, hohe);
-            }
-            samples.Close();
-
-            g.FillPolygon(schema.Pinsel(0.5f, 0), samples.Map(schema.Flache));
-            hohe = 1 - hohe;
-            Polygon neu = samples + new PointF(0, hohe);
-            g.FillPolygon(schema.Pinsel(0.5f, 1), neu.Map(schema.Flache));
-
-            hohe = -1 / (schema.Samples.Y - 1f);
-            for (int i = 0; i < schema.Samples.X; i++)
-                samples[i] = samples[i].add(0, hohe);
-            samples.Close();
-
-            for (int i = 1; i < schema.Samples.Y - 1; i++)
-            {
-                hohe = i / (schema.Samples.Y - 1f);
-                neu = samples + new PointF(0, hohe);
-                g.FillPolygon(schema.Pinsel(0.5f, hohe), neu.Map(schema.Flache));
-            }
-        }
-        public static void Chaos2Flache(Graphics g, FlachenSchema schema)
         {
             RectangleF thumb;
             Polygon poly;
             Polygon toDraw;
             PointF z;
+            RectangleF canvas = new RectangleF(0, 0, 1, 1);
 
             if (schema.BackColor.HasValue)
             {
@@ -689,13 +694,12 @@ namespace Assistment.Drawing
             for (int y = -schema.Thumb.Y + 1; y < schema.Boxes.Y; y++)
                 for (int x = -schema.Thumb.X + 1; x < schema.Boxes.X; x++)
                 {
-                    thumb = new RectangleF(Math.Max(0, x * 1f / schema.Boxes.X),
-                        Math.Max(0, y * 1f / schema.Boxes.Y),
+                    thumb = new RectangleF(x * 1f / schema.Boxes.X,
+                         y * 1f / schema.Boxes.Y,
                         schema.Thumb.X * 1f / schema.Boxes.X,
                         schema.Thumb.Y * 1f / schema.Boxes.Y);
 
-                    thumb.Width -= Math.Max(0, thumb.Right - 1);
-                    thumb.Height -= Math.Max(0, thumb.Bottom - 1);
+                    thumb.Intersect(canvas);
 
                     poly = Polygon.Rechteck(thumb, schema.Samples);
                     z = thumb.Center();
@@ -704,13 +708,16 @@ namespace Assistment.Drawing
                     if (schema.Pinsel != null)
                         g.FillPolygon(schema.Pinsel(z.X, z.Y), toDraw);
 
-                    int NX = (int)(schema.Samples.X * thumb.Width);
-                    int NY = (int)(schema.Samples.Y * thumb.Height);
-                    Pen stift = schema.Stift(z.X, z.Y);
-                    if (schema.ULinien)
-                        g.DrawLines(stift, toDraw.punkte.FromTo(NX + NY, 2 * NX + NY + 1));
-                    if (schema.VLinien)
-                        g.DrawLines(stift, toDraw.punkte.FromTo(2 * NX + NY, 2 * (NX + NY) + 1));
+                    if (schema.Stift != null)
+                    {
+                        int NX = (int)(schema.Samples.X * thumb.Width);
+                        int NY = (int)(schema.Samples.Y * thumb.Height);
+                        Pen stift = schema.Stift(z.X, z.Y);
+                        if (schema.ULinien)
+                            g.DrawLines(stift, toDraw.punkte.FromTo(NX + NY, 2 * NX + NY + 1));
+                        if (schema.VLinien)
+                            g.DrawLines(stift, toDraw.punkte.FromTo(2 * NX + NY, 2 * (NX + NY) + 1));
+                    }
                 }
         }
 
