@@ -321,6 +321,17 @@ namespace Assistment.Drawing.LinearAlgebra
         {
             return a.sub(b).norm();
         }
+
+        /// <summary>
+        /// klemmt beide Koordinaten zwischen 0 und 1 ein
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <returns></returns>
+        public static PointF sat(this PointF a)
+        {
+            return new PointF(a.X.Saturate(), a.Y.Saturate());
+        }
     }
     public static class ColorErweiterer
     {
@@ -412,6 +423,26 @@ namespace Assistment.Drawing.LinearAlgebra
             return new Point(a.X - b.X, a.Y - b.Y);
         }
         /// <summary>
+        /// Erstellt einen neuen Vektor, indem zu diesem b addiert wird
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <returns></returns>
+        public static Point add(this Point a, Point b)
+        {
+            return new Point(a.X + b.X, a.Y + b.Y);
+        }
+        /// <summary>
+        /// Erstellt einen neuen Vektor, indem zu diesem c*b addiert wird
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <returns></returns>
+        public static Point saxpy(this Point a, int c, Point b)
+        {
+            return new Point(a.X + c*b.X, a.Y + c*b.Y);
+        }
+        /// <summary>
         /// gibt das SKP dieses Vektors mit sich selber zurück
         /// </summary>
         /// <param name="a"></param>
@@ -439,7 +470,10 @@ namespace Assistment.Drawing.LinearAlgebra
         {
             return a.sub(b).norm();
         }
-        
+        public static Point mul(this Point a, Point b)
+        {
+            return new Point(a.X * b.X, a.Y * b.Y);
+        }
         public static Point mul(this Point a, float x, float y)
         {
             return new Point((int)(a.X * x), (int)(a.Y * y));
@@ -447,6 +481,14 @@ namespace Assistment.Drawing.LinearAlgebra
         public static Point mul(this Point a, float c)
         {
             return a.mul(c, c);
+        }
+        public static Point divCeil(this Point a, Point b)
+        {
+            return new Point((a.X * 1f / b.X).Ceil(), (a.Y * 1f / b.Y).Ceil());
+        }
+        public static Point divFloor(this Point a, Point b)
+        {
+            return new Point((a.X * 1f / b.X).Floor(), (a.Y * 1f / b.Y).Floor());
         }
     }
 

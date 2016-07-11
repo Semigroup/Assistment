@@ -243,8 +243,8 @@ namespace Assistment.Drawing.Geometries
             Polygon poly = new Polygon(2 * (NX + NY) + 1);
 
             int i = 0;
-            for (; i < NX; i++)
-                poly[i] = new PointF(rf.Left + rf.Width * i / NX, rf.Top);
+            for (int j = 0; j < NX; j++)
+                poly[i++] = new PointF(rf.Left + rf.Width * j / NX, rf.Top);
             for (int j = 0; j < NY; j++)
                 poly[i++] = new PointF(rf.Right, rf.Top + rf.Height * j / NY);
             for (int j = 0; j < NX; j++)

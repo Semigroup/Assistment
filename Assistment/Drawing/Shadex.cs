@@ -685,8 +685,7 @@ namespace Assistment.Drawing
 
             if (schema.BackColor.HasValue)
             {
-                thumb = new RectangleF(0, 0, 1, 1);
-                poly = Polygon.Rechteck(thumb, schema.Samples);
+                poly = Polygon.Rechteck(canvas, schema.Samples);
                 toDraw = poly.Map(schema.Flache);
                 g.FillPolygon(new SolidBrush(schema.BackColor.Value), toDraw);
             }
@@ -719,6 +718,26 @@ namespace Assistment.Drawing
                             g.DrawLines(stift, toDraw.punkte.FromTo(2 * NX + NY, 2 * (NX + NY) + 1));
                     }
                 }
+        }
+        public static void ChaosFlacheBundig(Graphics g, FlachenSchema schema)
+        {
+            Polygon poly;
+            Polygon toDraw;
+            RectangleF canvas = new RectangleF(0, 0, 1, 1);
+
+            if (schema.BackColor.HasValue)
+            {
+                poly = Polygon.Rechteck(canvas, schema.Samples);
+                toDraw = poly.Map(schema.Flache);
+                g.FillPolygon(new SolidBrush(schema.BackColor.Value), toDraw);
+            }
+            foreach (var item in schema.Thumb.Enumerate())
+            {
+                Netz n = new Netz(schema, item);
+                n.Map(schema.Flache);
+                n.Bound();
+                n.Paint(g);
+            }
         }
 
         /// <summary>
@@ -1022,6 +1041,10 @@ namespace Assistment.Drawing
             return p.mul(Radius / p.norm());
         }
 
+        public static SolidBrush NextBrush(this Random d, int Alpha)
+        {
+            return new SolidBrush(d.NextColor(Alpha));
+        }
         public static Color NextColor(this Random d, int Alpha)
         {
             return Color.FromArgb(Alpha, d.Next(256), d.Next(256), d.Next(256));

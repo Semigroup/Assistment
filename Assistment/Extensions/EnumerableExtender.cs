@@ -2,11 +2,71 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Drawing;
 
 namespace Assistment.Extensions
 {
     public static class EnumerableExtender
     {
+        public class LambdaEnumerator<T> : IEnumerator<T>
+        {
+            private Func<T> next;
+            private Func<bool> valid;
+            private Action reset;
+            private T current = default(T);
+
+            /// <summary>
+            /// while(valid())
+            /// <para> return next()</para>
+            /// </summary>
+            /// <param name="next">gibt bei jedem aufruf das nächste element der sequenz an</param>
+            /// <param name="valid">gibt bei jedem aufruf an, ob die sequenz noch valid ist</param>
+            public LambdaEnumerator(Func<T> next, Func<bool> valid)
+            {
+                this.next = next;
+                this.valid = valid;
+                this.reset = null;
+            }
+            /// <summary>
+            /// while(valid())
+            /// <para> return next()</para>
+            /// </summary>
+            /// <param name="next">gibt bei jedem aufruf das nächste element der sequenz an</param>
+            /// <param name="valid">gibt bei jedem aufruf an, ob die sequenz noch valid ist</param>
+            public LambdaEnumerator(Func<T> next, Func<bool> valid, Action reset)
+            {
+                this.next = next;
+                this.valid = valid;
+                this.reset = reset;
+            }
+
+            public T Current
+            {
+                get { return current; }
+            }
+            public void Dispose()
+            {
+            }
+            object System.Collections.IEnumerator.Current
+            {
+                get { return Current; }
+            }
+            public bool MoveNext()
+            {
+                if (valid())
+                {
+                    current = next();
+                    return true;
+                }
+                else
+                    return false;
+            }
+            public void Reset()
+            {
+                reset();
+            }
+        }
+
         public class DependingEnumerable<T> : IEnumerable<T>
         {
             private IEnumerator<T> Enumerator;
@@ -40,7 +100,7 @@ namespace Assistment.Extensions
 
             public IEnumerator<B> GetEnumerator()
             {
-                return Domain.GetEnumerator().Map<A,B>(Function);
+                return Domain.GetEnumerator().Map<A, B>(Function);
             }
 
             System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
@@ -178,7 +238,7 @@ namespace Assistment.Extensions
             return sb.ToString();
         }
 
-        public static void SelfMap<T>(this T[] array, EnumeratorExtender.Function<T,T> function)
+        public static void SelfMap<T>(this T[] array, EnumeratorExtender.Function<T, T> function)
         {
             for (int i = 0; i < array.Length; i++)
                 array[i] = function(array[i]);
@@ -235,6 +295,90 @@ namespace Assistment.Extensions
         public static IEnumerable<T> FromTo<T>(this IEnumerable<T> Enumerable, int from, int to)
         {
             return Enumerable.Skip(from).Take(to - from);
+        }
+
+        /// <summary>
+        /// Nimmt { Enumerable[from], ..., Enumerable[to - 1] }
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="Array"></param>
+        /// <param name="from"></param>
+        /// <param name="to"></param>
+        /// <returns></returns>
+        public static IEnumerable<T> FromTo<T>(this T[] Array, int from, int to)
+        {
+            if (from < to)
+                return Array.SubSequence(from, to - 1, 1);
+            else
+                return Array.SubSequence(from, to - 1, -1);
+        }
+        /// <summary>
+        /// gibt Array[start], Array[start + 1 * speed], Array[start + 2 * speed], ... wieder
+        /// <para>
+        /// bis start + i * speed > min(end, Array.Length), falls speed positiv
+        /// </para>
+        /// <para>
+        /// oder bis start + i * speed echt kleiner max(end, 0), falls speed negativ
+        /// </para>
+        /// </summary>
+        /// <param name="Array"></param>
+        /// <param name="start"></param>
+        /// <param name="end"></param>
+        /// <param name="speed"></param>
+        /// <returns></returns>
+        public static IEnumerable<T> SubSequence<T>(this T[] Array, int start, int end, int speed)
+        {
+            if (speed > 0)
+                end = Math.Min(end, Array.Length - 1);
+            else if (speed < 0)
+                end = Math.Max(end, 0);
+
+            int i = start;
+
+            Func<bool> While;
+            if (speed > 0)
+                While = () => i <= end;
+            else if (speed < 0)
+                While = () => i >= end;
+            else
+            {
+                bool b = 0 <= start && start < Array.Length;
+                While = () => b;
+            }
+
+            return new DependingEnumerable<T>(new LambdaEnumerator<T>(
+                () =>
+                {
+                    T t = Array[i];
+                    i += speed;
+                    return t;
+                },
+                While,
+                () => { i = start; }
+                ));
+        }
+        /// <summary>
+        /// Point = (x,y)
+        /// zählt auf: (0,0), ... (x-1,0), (0,1), ... (x-1,1), ... (0, y-1), ... (x-1, y-1)
+        /// </summary>
+        /// <param name="Point"></param>
+        /// <returns></returns>
+        public static IEnumerable<Point> Enumerate(this Point Point)
+        {
+            Point p = new Point();
+            return
+                new DependingEnumerable<Point>(
+                new LambdaEnumerator<Point>(() =>
+            {
+                Point q = p;
+                p.X++;
+                if (p.X == Point.X)
+                {
+                    p.X = 0;
+                    p.Y++;
+                }
+                return q;
+            }, () => p.Y < Point.Y, () => p = new Point()));
         }
     }
 }

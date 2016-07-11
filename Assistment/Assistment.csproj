@@ -69,6 +69,7 @@
     <Compile Include="Drawing\LinearAlgebra\Matrix2.cs" />
     <Compile Include="Drawing\LinearAlgebra\PointFErweiterer.cs" />
     <Compile Include="Drawing\LinearAlgebra\RectangleFExtensions.cs" />
+    <Compile Include="Drawing\Netz.cs" />
     <Compile Include="Drawing\Spatials\Plane.cs" />
     <Compile Include="Drawing\Spatials\Spatial.cs" />
     <Compile Include="Drawing\Spatials\Vektor.cs" />
