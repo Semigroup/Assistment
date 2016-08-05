@@ -26,27 +26,27 @@ namespace Assistment.Drawing
                 Punkte.CountMap(i => new PointF(i / (Netz.Samples.X - 1f), hohe));
             }
 
-            public void BoundEnds()
+            public void BoundEnds(RectangleF Rectangle)
             {
-                this.Punkte[0].X = 0;
-                this.Punkte[this.Punkte.Length - 1].X = 1;
+                this.Punkte[0].X = Rectangle.Left;
+                this.Punkte[this.Punkte.Length - 1].X = Rectangle.Right;
             }
-            public void BoundTop()
+            public void BoundTop(RectangleF Rectangle)
             {
                 for (int i = 0; i < Punkte.Length; i++)
-                    Punkte[i].Y = 0;
+                    Punkte[i].Y = Rectangle.Top;
             }
-            public void BoundBottom()
+            public void BoundBottom(RectangleF Rectangle)
             {
                 for (int i = 0; i < Punkte.Length; i++)
-                    Punkte[i].Y = 1;
+                    Punkte[i].Y = Rectangle.Bottom;
             }
 
             public IEnumerable<PointF> GetThumb(int x)
             {
                 float left = Netz.Offset.X + x * Netz.Thumb.X;
-                left /= Netz.Boxes.X;
                 float right = left + Netz.Thumb.X;
+                left /= Netz.Boxes.X;
                 right /= Netz.Boxes.X;
 
                 left = Math.Max(left, 0);
@@ -60,8 +60,8 @@ namespace Assistment.Drawing
             public IEnumerable<PointF> GetReversedThumb(int x)
             {
                 float left = Netz.Offset.X + x * Netz.Thumb.X;
-                left /= Netz.Boxes.X;
                 float right = left + Netz.Thumb.X;
+                left /= Netz.Boxes.X;
                 right /= Netz.Boxes.X;
 
                 left = Math.Max(left, 0);
@@ -90,27 +90,27 @@ namespace Assistment.Drawing
                 float breite = BoxNumber * 1f / Netz.Schema.Boxes.X;
                 Punkte.CountMap(i => new PointF(breite, i / (Netz.Samples.Y - 1f)));
             }
-            public void BoundEnds()
+            public void BoundEnds(RectangleF Rectangle)
             {
-                this.Punkte[0].Y = 0;
-                this.Punkte[this.Punkte.Length - 1].Y = 1;
+                this.Punkte[0].Y = Rectangle.Top;
+                this.Punkte[this.Punkte.Length - 1].Y = Rectangle.Bottom;
             }
-            public void BoundLeft()
+            public void BoundLeft(RectangleF Rectangle)
             {
                 for (int i = 0; i < Punkte.Length; i++)
-                    Punkte[i].X = 0;
+                    Punkte[i].X = Rectangle.Left;
             }
-            public void BoundRight()
+            public void BoundRight(RectangleF Rectangle)
             {
                 for (int i = 0; i < Punkte.Length; i++)
-                    Punkte[i].X = 1;
+                    Punkte[i].X = Rectangle.Right;
             }
 
             public IEnumerable<PointF> GetThumb(int y)
             {
                 float top = Netz.Offset.Y + y * Netz.Thumb.Y;
-                top /= Netz.Boxes.Y;
                 float bottom = top + Netz.Thumb.Y;
+                top /= Netz.Boxes.Y;
                 bottom /= Netz.Boxes.Y;
 
                 top = Math.Max(top, 0);
@@ -124,8 +124,8 @@ namespace Assistment.Drawing
             public IEnumerable<PointF> GetReversedThumb(int y)
             {
                 float top = Netz.Offset.Y + y * Netz.Thumb.Y;
-                top /= Netz.Boxes.Y;
                 float bottom = top + Netz.Thumb.Y;
+                top /= Netz.Boxes.Y;
                 bottom /= Netz.Boxes.Y;
 
                 top = Math.Max(top, 0);
@@ -188,17 +188,17 @@ namespace Assistment.Drawing
                 Vertikalen[i++] = new Vertikale(this, x);
         }
 
-        public void Bound()
+        public void Bound(RectangleF Rectangle)
         {
             foreach (var item in Horizontalen)
-                item.BoundEnds();
+                item.BoundEnds(Rectangle);
             foreach (var item in Vertikalen)
-                item.BoundEnds();
+                item.BoundEnds(Rectangle);
 
-            Horizontalen.First().BoundTop();
-            Horizontalen.Last().BoundBottom();
-            Vertikalen.First().BoundLeft();
-            Vertikalen.Last().BoundRight();
+            Horizontalen.First().BoundTop(Rectangle);
+            Horizontalen.Last().BoundBottom(Rectangle);
+            Vertikalen.First().BoundLeft(Rectangle);
+            Vertikalen.Last().BoundRight(Rectangle);
         }
 
         public void Map(FlachenFunktion<PointF> f)
@@ -262,6 +262,30 @@ namespace Assistment.Drawing
         System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
         {
             return GetEnumerator();
+        }
+
+        public string PrintThumbs()
+        {
+            StringBuilder sb = new StringBuilder();
+
+            foreach (var whichThumb in Thumbs.Enumerate())
+            {
+                sb.Append(whichThumb+", ");
+                Point p = Offset.add(Thumb.mul(whichThumb));
+                sb.Append(p + ", ");
+                int x = whichThumb.X;
+                int y = whichThumb.Y;
+                IEnumerable<PointF> res = Horizontalen[y].GetThumb(x);
+                sb.Append("[" + res.First() + " : " + res.Last() + "], ");
+                res = (Vertikalen[x + 1].GetThumb(y));
+                sb.Append("[" + res.First() + " : " + res.Last() + "], ");
+                res = (Horizontalen[y + 1].GetReversedThumb(x));
+                sb.Append("[" + res.First() + " : " + res.Last() + "], ");
+                res = (Vertikalen[x].GetReversedThumb(y));
+                sb.Append("[" + res.First() + " : " + res.Last() + "], ");
+                sb.AppendLine();
+            }
+            return sb.ToString();
         }
     }
 }

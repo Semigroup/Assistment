@@ -94,14 +94,14 @@ namespace Assistment.Drawing.Geometries
         /// Spiegelt an der gegebenen Achse
         /// </summary>
         /// <param name="MirroringAxis"></param>
-        public abstract Geometrie MirroLocal(PointF Aufpunkt, PointF RichtungsVektor);
+        public abstract Geometrie MirrorLocal(PointF Aufpunkt, PointF RichtungsVektor);
         /// <summary>
         /// Spiegelt an der gegebenen Achse
         /// </summary>
         /// <param name="MirroringAxis"></param>
-        public Geometrie MirroLocal(Gerade MirroringAxis)
+        public Geometrie MirrorLocal(Gerade MirroringAxis)
         {
-            return this.MirroLocal(MirroringAxis.Aufpunkt, MirroringAxis.Richtungsvektor);
+            return this.MirrorLocal(MirroringAxis.Aufpunkt, MirroringAxis.Richtungsvektor);
         }
 
         public static Geometrie operator +(Geometrie Geometrie, PointF TranslatingVector)
@@ -175,6 +175,24 @@ namespace Assistment.Drawing.Geometries
             PointF[] Array = Geometrie.Samples(Samples).ToArray();
             g.FillPolygon(Brush, Array, FillMode);
             g.DrawPolygon(Pen, Array);
+        }
+
+        /// <summary>
+        /// Bestimmt ob die Geometrie den Point enthält
+        /// <para>indem die Anzahl der Schnitte mit einer Random Gerade (Point + t * (1, 0)) geprüft</para>
+        /// <para>geht von der Annahme aus, dass es sich um eine offene Umgebung handelt</para>
+        /// </summary>
+        /// <param name="Geometrie"></param>
+        /// <param name="Point"></param>
+        /// <returns></returns>
+        public static bool ContainsPoint(this Geometrie Geometrie, PointF Point)
+        {
+            Gerade g = new Gerade(Point, new PointF(1, 0));
+            bool drin = false;
+            foreach (float cut in Geometrie.Cut(g))
+                if (cut < 0)
+                    drin = !drin;
+            return drin;
         }
     }
 }

@@ -114,7 +114,7 @@ namespace Assistment.Drawing.Geometries
             return Zentrum + " + e^it * " + Radius;
         }
 
-        public override Geometrie MirroLocal(PointF Aufpunkt, PointF RichtungsVektor)
+        public override Geometrie MirrorLocal(PointF Aufpunkt, PointF RichtungsVektor)
         {
             throw new NotImplementedException();
         }

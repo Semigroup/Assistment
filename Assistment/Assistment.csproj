@@ -105,6 +105,12 @@
     <Compile Include="form\FloatBox.Designer.cs">
       <DependentUpon>FloatBox.cs</DependentUpon>
     </Compile>
+    <Compile Include="form\ImageSelectBox.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="form\ImageSelectBox.Designer.cs">
+      <DependentUpon>ImageSelectBox.cs</DependentUpon>
+    </Compile>
     <Compile Include="form\IntBox.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -117,15 +123,34 @@
     <Compile Include="form\Logger.Designer.cs">
       <DependentUpon>Logger.cs</DependentUpon>
     </Compile>
+    <Compile Include="form\PDFDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="form\PDFDialog.Designer.cs">
+      <DependentUpon>PDFDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="form\PenBox.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="form\PenBox.Designer.cs">
+      <DependentUpon>PenBox.cs</DependentUpon>
+    </Compile>
     <Compile Include="form\PointBox.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="form\PointBox.Designer.cs">
       <DependentUpon>PointBox.cs</DependentUpon>
     </Compile>
+    <Compile Include="form\PointFBox.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="form\PointFBox.Designer.cs">
+      <DependentUpon>PointFBox.cs</DependentUpon>
+    </Compile>
     <Compile Include="form\ScrollBox.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="Hexagon.cs" />
     <Compile Include="Latex\LatexWriter.cs" />
     <Compile Include="Mathematik\FastMath.cs" />
     <Compile Include="Mathematik\LinearSolver.cs" />
@@ -197,14 +222,26 @@
     <EmbeddedResource Include="form\FloatBox.resx">
       <DependentUpon>FloatBox.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="form\ImageSelectBox.resx">
+      <DependentUpon>ImageSelectBox.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="form\IntBox.resx">
       <DependentUpon>IntBox.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="form\Logger.resx">
       <DependentUpon>Logger.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="form\PDFDialog.resx">
+      <DependentUpon>PDFDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="form\PenBox.resx">
+      <DependentUpon>PenBox.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="form\PointBox.resx">
       <DependentUpon>PointBox.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="form\PointFBox.resx">
+      <DependentUpon>PointFBox.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Testing\TestForm.resx">
       <DependentUpon>TestForm.cs</DependentUpon>

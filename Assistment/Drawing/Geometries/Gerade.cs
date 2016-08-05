@@ -108,7 +108,7 @@ namespace Assistment.Drawing.Geometries
                 return new Gerade[0];
         }
 
-        public override Geometrie MirroLocal(PointF Aufpunkt, PointF RichtungsVektor)
+        public override Geometrie MirrorLocal(PointF Aufpunkt, PointF RichtungsVektor)
         {
             Richtungsvektor = Richtungsvektor.normalize();
             this.Aufpunkt = Aufpunkt.add(Richtungsvektor.mul(Richtungsvektor.SKP(this.Aufpunkt.sub(Aufpunkt))));

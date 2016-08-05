@@ -683,12 +683,8 @@ namespace Assistment.Drawing
             PointF z;
             RectangleF canvas = new RectangleF(0, 0, 1, 1);
 
-            if (schema.BackColor.HasValue)
-            {
-                poly = Polygon.Rechteck(canvas, schema.Samples);
-                toDraw = poly.Map(schema.Flache);
-                g.FillPolygon(new SolidBrush(schema.BackColor.Value), toDraw);
-            }
+            if (schema.BackColor.HasValue && schema.DrawingRegion.HasValue)
+                g.FillRectangle(new SolidBrush(schema.BackColor.Value), schema.DrawingRegion.Value);
 
             for (int y = -schema.Thumb.Y + 1; y < schema.Boxes.Y; y++)
                 for (int x = -schema.Thumb.X + 1; x < schema.Boxes.X; x++)
@@ -721,21 +717,16 @@ namespace Assistment.Drawing
         }
         public static void ChaosFlacheBundig(Graphics g, FlachenSchema schema)
         {
-            Polygon poly;
-            Polygon toDraw;
-            RectangleF canvas = new RectangleF(0, 0, 1, 1);
-
-            if (schema.BackColor.HasValue)
-            {
-                poly = Polygon.Rechteck(canvas, schema.Samples);
-                toDraw = poly.Map(schema.Flache);
-                g.FillPolygon(new SolidBrush(schema.BackColor.Value), toDraw);
-            }
+            if (schema.BackColor.HasValue && schema.DrawingRegion.HasValue)
+                g.FillRectangle(new SolidBrush(schema.BackColor.Value), schema.DrawingRegion.Value);
             foreach (var item in schema.Thumb.Enumerate())
             {
                 Netz n = new Netz(schema, item);
+                //n.PrintThumbs().Save("test");
+                //System.Windows.Forms.MessageBox.Show(n.Print());
                 n.Map(schema.Flache);
-                n.Bound();
+                if (schema.DrawingRegion.HasValue)
+                    n.Bound(schema.DrawingRegion.Value);
                 n.Paint(g);
             }
         }

@@ -409,6 +409,23 @@ namespace Assistment.Drawing.LinearAlgebra
         {
             return new SizeF(a.Width * d.Width, a.Height * d.Height);
         }
+        public static SizeF div(this SizeF a, SizeF d)
+        {
+            return new SizeF(a.Width / d.Width, a.Height / d.Height);
+        }
+        /// <summary>
+        /// DinA Größe in Millimeter
+        /// </summary>
+        /// <param name="DinANumber"></param>
+        /// <returns></returns>
+        public static Size DinA(this int DinANumber, bool Hoch)
+        {
+            int[] ls = { 1189, 841, 594, 420, 297, 210, 148, 105, 74, 52, 37, 26 };
+            if (Hoch)
+                return new Size(ls[DinANumber + 1], ls[DinANumber]);
+            else
+                return new Size(ls[DinANumber], ls[DinANumber + 1]);
+        }
     }
     public static class PointErweiterer
     {
@@ -481,6 +498,10 @@ namespace Assistment.Drawing.LinearAlgebra
         public static Point mul(this Point a, float c)
         {
             return a.mul(c, c);
+        }
+        public static Point mulCeil(this Point a, SizeF b)
+        {
+            return new Point((a.X * b.Width).Ceil(), (a.Y * b.Height).Ceil());
         }
         public static Point divCeil(this Point a, Point b)
         {

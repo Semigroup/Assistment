@@ -24,6 +24,7 @@ namespace Assistment.Drawing.Style
         public Point Boxes;
         public Point Thumb;
 
+        public RectangleF? DrawingRegion;
         public Color? BackColor;
         /// <summary>
         /// Soll der Stift parallel zur U-Achse angewendet werden?
@@ -33,6 +34,7 @@ namespace Assistment.Drawing.Style
         /// Soll der Stift parallel zur V-Achse angewendet werden?
         /// </summary>
         public bool VLinien;
+
 
         public void VertikalLineareFarben(params Color[] Farben)
         {

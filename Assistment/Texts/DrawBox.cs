@@ -129,6 +129,27 @@ namespace Assistment.Texts
         {
             this.createPDF(name, 1400, float.MaxValue, iTextSharp.text.PageSize.A4_LANDSCAPE);
         }
+        public void createPDF(string name,  iTextSharp.text.Rectangle PageSize)
+        {
+
+            const float ab = 00;
+            this.update();
+            this.setup(new RectangleF(ab, ab, PageSize.Width / DrawContextDocument.factor, 0));
+
+            iTextSharp.text.Document doc = new iTextSharp.text.Document();
+            doc.SetPageSize(PageSize);
+            doc.NewPage();
+            PdfWriter writer = PdfWriter.GetInstance(doc, System.IO.File.Create(name + ".pdf"));
+
+            doc.Open();
+            PdfContentByte pCon = writer.DirectContent;
+            pCon.SetLineWidth(0.3f);
+            DrawContextDocument dcd = new DrawContextDocument(pCon, float.MaxValue);
+            this.draw(dcd);
+            doc.Close();
+            dcd.Dispose();
+            writer.Dispose();
+        }
         public void createPDF(string name, float width, float height, iTextSharp.text.Rectangle PageSize)
         {
 

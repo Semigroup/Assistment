@@ -215,7 +215,7 @@ namespace Assistment.Drawing.Geometries
             return tangs;
         }
 
-        public override Geometrie MirroLocal(PointF Aufpunkt, PointF RichtungsVektor)
+        public override Geometrie MirrorLocal(PointF Aufpunkt, PointF RichtungsVektor)
         {
             throw new NotImplementedException();
         }
@@ -233,6 +233,12 @@ namespace Assistment.Drawing.Geometries
             }
             return lots.Optim(p => -p.dist(Punkt));
         }
+
+        public Gerade GetKante(int i)
+        {
+            return new Gerade(punkte[i], punkte[i + 1].sub(punkte[i]));
+        }
+
         public static Polygon Rechteck(RectangleF rf, PointF SampleRate)
         {
             int NX = (int)(rf.Width * SampleRate.X);

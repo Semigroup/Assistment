@@ -13,6 +13,17 @@ namespace Assistment.Xml
 {
     public static class XmlReaderErweiterer
     {
+        public static void writeEnum<T>(this XmlWriter writer, string name, T value)
+        {
+            writer.writeAttribute(name, Enum.GetName(typeof(T), value));
+        }
+        public static T getEnum<T>(this XmlReader reader, string name) where T:struct
+        {
+            T result = default(T);
+            Enum.TryParse<T>(reader.getString(name), out result);
+            return result;
+        }
+
         public static Image getImage(this XmlReader reader, string name)
         {
             string s = reader.GetAttribute(name);
@@ -49,6 +60,14 @@ namespace Assistment.Xml
         {
             return new SizeF(getFloat(reader, name + "_X"), getFloat(reader, name + "_Y"));
         }
+        public static PointF getPointF(this XmlReader reader, string name)
+        {
+            return new PointF(getFloat(reader, name + "_X"), getFloat(reader, name + "_Y"));
+        }
+        public static Point getPoint(this XmlReader reader, string name)
+        {
+            return new Point(getInt(reader, name + "_X"), getInt(reader, name + "_Y"));
+        }
         public static bool getBoolean(this XmlReader reader, string name)
         {
             string s = reader.GetAttribute(name);
@@ -66,7 +85,7 @@ namespace Assistment.Xml
                 return DateTime.Parse(s);
         }
 
-        public static FontMeasurer getFont(this XmlReader reader, string name)
+        public static FontMeasurer getFontX(this XmlReader reader, string name)
         {
             return new FontMeasurer(reader.getString(name), reader.getFloat(name + "_Size"));
         }
@@ -130,6 +149,65 @@ namespace Assistment.Xml
             if (value)
                 writer.WriteAttributeString(name, value.ToString());
         }
+        /// <summary>
+        /// schreibt nur, falls value != 0
+        /// </summary>
+        /// <param name="writer"></param>
+        /// <param name="name"></param>
+        /// <param name="value"></param>
+        public static void writeInt(this XmlWriter writer, string name, int value)
+        {
+            if (value != 0)
+                writer.WriteAttributeString(name, value.ToString());
+        }
+        public static void writeFloat(this XmlWriter writer, string name, float value)
+        {
+            if (value != 0)
+                writer.WriteAttributeString(name, value.ToString());
+        }
+        public static void writeSize(this XmlWriter writer, string name, SizeF Size)
+        {
+            writeFloat(writer, name + "_X", Size.Width);
+            writeFloat(writer, name + "_Y", Size.Height);
+        }
+        public static void writePoint(this XmlWriter writer, string name, PointF Point)
+        {
+            writeFloat(writer, name + "_X", Point.X);
+            writeFloat(writer, name + "_Y", Point.Y);
+        }
+        public static void writeColorHexARGB(this XmlWriter writer, string name, Color Color)
+        {
+            writer.WriteAttributeString(name, Color.ToArgb().ToString("x8"));
+        }
+
+        public static Pen getPen(this XmlReader reader, string name)
+        {
+            return new Pen(reader.getColorHexARGB(name + "_color"), reader.getFloat(name + "_width"));
+        }
+        public static void writePen(this XmlWriter writer, string name, Pen Pen)
+        {
+            if (Pen != null)
+            {
+                writer.writeColorHexARGB(name + "_color", Pen.Color);
+                writer.writeFloat(name + "_width", Pen.Width);
+            }
+        }
+        public static Font getFont(this XmlReader reader, string name)
+        {
+            string s = reader.getString(name + "_name");
+            if (s.Length == 0)
+                return null;
+            return new Font(s, reader.getFloat(name + "_size"),reader.getEnum<FontStyle>(name + "_style"));
+        }
+        public static void writeFont(this XmlWriter writer, string name, Font Font)
+        {
+            if (Font != null)
+            {
+                writer.writeAttribute(name + "_name", Font.Name);
+                writer.writeEnum(name + "_style", Font.Style);
+                writer.writeAttribute(name + "_size", Font.Size.ToString());
+            }
+        }
 
         public static void Add(this Control.ControlCollection ControlCollection, params Control[] Controls)
         {
@@ -151,7 +229,7 @@ namespace Assistment.Xml
         {
             Reader.Read();
             while (Reader.NodeType != XmlNodeType.Element && !Reader.EOF)
-                        Reader.Read();
+                Reader.Read();
             return !Reader.EOF;
         }
     }
