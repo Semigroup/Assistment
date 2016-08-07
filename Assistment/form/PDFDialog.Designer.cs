@@ -33,6 +33,8 @@
             this.label1 = new System.Windows.Forms.Label();
             this.checkBox2 = new System.Windows.Forms.CheckBox();
             this.floatBox1 = new Assistment.form.FloatBox();
+            this.label2 = new System.Windows.Forms.Label();
+            this.floatBox2 = new Assistment.form.FloatBox();
             this.SuspendLayout();
             // 
             // button1
@@ -84,14 +86,36 @@
             this.floatBox1.TabIndex = 4;
             this.floatBox1.UserValue = 10F;
             this.floatBox1.UserValueMaximum = 100000F;
-            this.floatBox1.UserValueMinimum = 1F;
-            this.floatBox1.UserValueChanged += new System.EventHandler(this.Change);
+            this.floatBox1.UserValueMinimum = 1E-08F;
+            this.floatBox1.UserValueChanged += new System.EventHandler(this.floatBox1_UserValueChanged);
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(291, 48);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(30, 17);
+            this.label2.TabIndex = 9;
+            this.label2.Text = "DPI";
+            // 
+            // floatBox2
+            // 
+            this.floatBox2.Location = new System.Drawing.Point(422, 43);
+            this.floatBox2.Name = "floatBox2";
+            this.floatBox2.Size = new System.Drawing.Size(51, 22);
+            this.floatBox2.TabIndex = 8;
+            this.floatBox2.UserValue = 254F;
+            this.floatBox2.UserValueMaximum = 100000F;
+            this.floatBox2.UserValueMinimum = 1E-08F;
+            this.floatBox2.UserValueChanged += new System.EventHandler(this.floatBox2_UserValueChanged);
             // 
             // PDFDialog
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(494, 458);
+            this.Controls.Add(this.label2);
+            this.Controls.Add(this.floatBox2);
             this.Controls.Add(this.checkBox2);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.floatBox1);
@@ -111,5 +135,7 @@
         private FloatBox floatBox1;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.CheckBox checkBox2;
+        private System.Windows.Forms.Label label2;
+        private FloatBox floatBox2;
     }
 }

@@ -10,6 +10,7 @@ using System.Drawing.Imaging;
 using Assistment.Extensions;
 using Assistment.Texts;
 using System.IO;
+using System.Diagnostics;
 
 namespace Assistment.form
 {
@@ -45,6 +46,11 @@ namespace Assistment.form
 
         public IDrawer Drawer;
         public string Speicherort;
+
+        public static string Subprozess = "\\Subprozesse\\MakePDF.exe";
+        public bool UseSubprozess = true;
+
+        private bool changing = false;
 
         public PDFDialog(IDrawer Drawer, string Speicherort)
         {
@@ -83,9 +89,10 @@ namespace Assistment.form
         private void button1_Click(object sender, EventArgs e)
         {
             int a = Drawer.GetDInA();
+            string imageFile = Speicherort + "." + Format;
             using (Image img = Drawer.Draw(Hoch, ppm))
             {
-                using (FileStream fs = new FileStream(Speicherort + "." + Format, FileMode.Create))
+                using (FileStream fs = new FileStream(imageFile, FileMode.Create))
                 {
                     img.Save(fs, Format);
                     fs.Close();
@@ -94,7 +101,7 @@ namespace Assistment.form
             }
             GC.Collect();
 
-            if (PDF)
+            if (PDF && !UseSubprozess)
             {
                 iTextSharp.text.Rectangle r = DinAs[a];
                 if (!Hoch)
@@ -102,13 +109,46 @@ namespace Assistment.form
                 float width = r.Width / DrawContextDocument.factor;
                 float height = r.Height / DrawContextDocument.factor;
 
-                using (Image img2 = Image.FromFile(Speicherort + "." + Format))
+                using (Image img2 = Image.FromFile(imageFile))
                 {
                     ImageBox ib = new ImageBox(width, height, img2);
                     ib.createPDF(Speicherort, r);
                     img2.Dispose();
                 }
             }
+            else if (PDF && UseSubprozess)
+                Process.Start(Directory.GetCurrentDirectory() + Subprozess, "\"" + imageFile + "\" " + a);
+        }
+
+        /// <summary>
+        /// PPI
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void floatBox1_UserValueChanged(object sender, EventArgs e)
+        {
+            if (changing)
+                return;
+
+            changing = true;
+            this.floatBox2.UserValue = 25.4f * floatBox1.UserValue;
+            changing = false;
+            Change(sender, e);
+        }
+        /// <summary>
+        /// DPI
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void floatBox2_UserValueChanged(object sender, EventArgs e)
+        {
+            if (changing)
+                return;
+
+            changing = true;
+            this.floatBox1.UserValue = floatBox2.UserValue / 25.4f;
+            changing = false;
+            Change(sender, e);
         }
     }
 }
