@@ -9,7 +9,7 @@ using System.Windows.Forms;
 
 namespace Assistment.form
 {
-    public partial class PointFBox : UserControl
+    public partial class PointFBox : UserControl, IWertBox<SizeF>, IWertBox<PointF>
     {
        public event EventHandler PointChanged = delegate { };
 
@@ -60,6 +60,27 @@ namespace Assistment.form
         void PointBox_PointChanged(object sender, EventArgs e)
         {
             PointChanged(sender, e);
+        }
+
+        public SizeF GetValue()
+        {
+            return UserSize;
+        }
+        public void SetValue(SizeF Value)
+        {
+            UserSize = Value;
+        }
+        public EventHandler GetUserValueChangedEvent()
+        {
+            return PointChanged;
+        }
+        PointF IWertBox<PointF>.GetValue()
+        {
+            return UserPoint;
+        }
+        public void SetValue(PointF Value)
+        {
+            UserPoint = Value;
         }
     }
 }

@@ -9,7 +9,7 @@ using System.Windows.Forms;
 
 namespace Assistment.form
 {
-    public partial class PenBox : UserControl
+    public partial class PenBox : UserControl, IWertBox<Pen>
     {
         public event EventHandler PenChanged = delegate { };
         private Pen pen;
@@ -42,6 +42,19 @@ namespace Assistment.form
             this.pen.Width = this.floatBox1.UserValue;
 
             PenChanged(sender, e);
+        }
+
+        public Pen GetValue()
+        {
+            return Pen;
+        }
+        public void SetValue(Pen Value)
+        {
+            this.Pen = Value;
+        }
+        public EventHandler GetUserValueChangedEvent()
+        {
+            return PenChanged;
         }
     }
 }

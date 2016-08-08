@@ -9,9 +9,23 @@ using System.Windows.Forms;
 
 namespace Assistment.form
 {
-    public partial class EnumBox : UserControl
+    public partial class EnumBox : UserControl, IWertBox<object>
     {
-        public Type EnumType { get; private set; }
+        private Type enumType;
+        public Type EnumType
+        {
+            get { return enumType; }
+            set
+            {
+                if (this.enumType != value)
+                {
+                    this.enumType = value;
+                    this.comboBox1.Items.Clear();
+                    foreach (var item in Enum.GetNames(enumType))
+                        this.comboBox1.Items.Add(item);
+                }
+            }
+        }
         private object userValue;
         public object UserValue
         {
@@ -49,12 +63,17 @@ namespace Assistment.form
             }
         }
 
-        public void SetType(Type value)
+        public object GetValue()
         {
-            this.EnumType = value;
-            this.comboBox1.Items.Clear();
-            foreach (var item in Enum.GetNames(EnumType))
-                this.comboBox1.Items.Add(item);
+            return UserValue;
+        }
+        public void SetValue(object Value)
+        {
+            this.UserValue = Value;
+        }
+        public EventHandler GetUserValueChangedEvent()
+        {
+            return UserValueChanged;
         }
     }
 }

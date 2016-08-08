@@ -10,7 +10,7 @@ using Assistment.Mathematik;
 
 namespace Assistment.form
 {
-    public partial class PointBox : UserControl
+    public partial class PointBox : UserControl, IWertBox<Size>, IWertBox<Point>
     {
         public event EventHandler PointChanged = delegate { };
 
@@ -61,6 +61,27 @@ namespace Assistment.form
         void PointBox_PointChanged(object sender, EventArgs e)
         {
             PointChanged(sender, e);
+        }
+
+        public Size GetValue()
+        {
+            return UserSize;
+        }
+        public void SetValue(Size Value)
+        {
+            UserSize = Value;
+        }
+        public EventHandler GetUserValueChangedEvent()
+        {
+            return PointChanged;
+        }
+        Point IWertBox<Point>.GetValue()
+        {
+            return UserPoint;
+        }
+        public void SetValue(Point Value)
+        {
+            UserPoint = Value;
         }
     }
 }

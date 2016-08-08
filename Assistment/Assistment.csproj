@@ -117,6 +117,7 @@
     <Compile Include="form\IntBox.Designer.cs">
       <DependentUpon>IntBox.cs</DependentUpon>
     </Compile>
+    <Compile Include="form\IWertBox.cs" />
     <Compile Include="form\Logger.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -148,6 +149,9 @@
       <DependentUpon>PointFBox.cs</DependentUpon>
     </Compile>
     <Compile Include="form\ScrollBox.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="form\WertPaar.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Latex\LatexWriter.cs" />

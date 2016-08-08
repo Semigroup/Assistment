@@ -10,7 +10,7 @@ using System.IO;
 
 namespace Assistment.form
 {
-    public partial class ImageSelectBox : UserControl
+    public partial class ImageSelectBox : UserControl, IWertBox<string>
     {
         private string path;
         public string ImagePath
@@ -68,6 +68,19 @@ namespace Assistment.form
         private void button2_Click(object sender, EventArgs e)
         {
             SetPath(null);
+        }
+
+        public string GetValue()
+        {
+            return ImagePath;
+        }
+        public void SetValue(string Value)
+        {
+            ImagePath = Value;
+        }
+        public EventHandler GetUserValueChangedEvent()
+        {
+            return ImageChanged;
         }
     }
 }

@@ -9,7 +9,7 @@ using System.Windows.Forms;
 
 namespace Assistment.form
 {
-    public partial class FloatBox : UserControl
+    public partial class FloatBox : UserControl, IWertBox<float>
     {
         private float userValue;
         public float UserValue
@@ -46,6 +46,19 @@ namespace Assistment.form
                 this.textBox1.ForeColor = Color.Red;
                 InvalidChange(sender, e);
             }
+        }
+
+        public float GetValue()
+        {
+            return UserValue;
+        }
+        public void SetValue(float Value)
+        {
+            UserValue = Value;
+        }
+        public EventHandler GetUserValueChangedEvent()
+        {
+            return UserValueChanged;
         }
     }
 }

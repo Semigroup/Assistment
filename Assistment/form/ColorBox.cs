@@ -9,7 +9,7 @@ using System.Windows.Forms;
 
 namespace Assistment.form
 {
-    public partial class ColorBox : UserControl
+    public partial class ColorBox : UserControl,IWertBox<Color>
     {
         public event EventHandler ColorChanged = delegate { };
         public Color Color
@@ -40,6 +40,22 @@ namespace Assistment.form
         void ColorBox_ColorChanged(object sender, EventArgs e)
         {
             ColorChanged(sender, e);
+        }
+
+        public Color GetValue()
+        {
+            return Color;
+        }
+
+        public void SetValue(Color Value)
+        {
+            this.Color = Color;
+        }
+
+
+        public EventHandler GetUserValueChangedEvent()
+        {
+            return ColorChanged;
         }
     }
 }
