@@ -402,7 +402,10 @@ namespace Assistment.Drawing.Geometries
         {
             return new OrientierbarerWeg(add(gamma.weg, point), gamma.normale, gamma.L);
         }
-
+        public static OrientierbarerWeg operator -(OrientierbarerWeg gamma, PointF point)
+        {
+            return gamma + point.mul(-1);
+        }
         /// <summary>
         /// Dreht den Weg gegen den Uhrzeigersinn, Winkel in Bogenmaß
         /// </summary>
@@ -486,6 +489,23 @@ namespace Assistment.Drawing.Geometries
             float d = a.dist(b);
             OrientierbarerWeg ow = new OrientierbarerWeg(a, this.tangente(1).mul(d), b, this.tangente(0).mul(d));
             return this * ow;
+        }
+
+        public OrientierbarerWeg Spiegel(Gerade Gerade)
+        {
+            PointF V = Gerade.Richtungsvektor.normalize();
+
+            return new OrientierbarerWeg(t =>
+            {
+                PointF X = weg(t);
+                PointF Lot = Gerade.Lot(X);
+                return Lot.mul(2).sub(X);
+            }, t =>
+            {
+                PointF N = normale(t);
+                float a = N.SKP(V);
+                return N.add(V.mul(-2));
+            }, L);
         }
 
         /// <summary>

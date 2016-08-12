@@ -78,9 +78,9 @@ namespace Assistment.form
         {
             ImagePath = Value;
         }
-        public EventHandler GetUserValueChangedEvent()
+        public void AddListener(EventHandler Handler)
         {
-            return ImageChanged;
+            ImageChanged += Handler;
         }
     }
 }

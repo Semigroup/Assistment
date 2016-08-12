@@ -52,9 +52,9 @@ namespace Assistment.form
         {
             this.Pen = Value;
         }
-        public EventHandler GetUserValueChangedEvent()
+        public void AddListener(EventHandler Handler)
         {
-            return PenChanged;
+            PenChanged += Handler;
         }
     }
 }

@@ -309,15 +309,21 @@ namespace Assistment.Texts
             return font.Name + ", " + font.Size + "pt";
         }
 
-
         public SizeF Size(char c)
         {
             return new SizeF(xMass(c), yMass(c));
         }
-
         public SizeF Size(string s)
         {
             return new SizeF(xMass(s), yMass(s));
+        }
+    }
+
+    public static class FontErweiterer
+    {
+        public static FontMeasurer GetMeasurer(this Font Font)
+        {
+            return new FontMeasurer(Font.Name, Font.Size);
         }
     }
 }

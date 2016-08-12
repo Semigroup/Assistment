@@ -35,7 +35,16 @@ namespace Assistment.form
             }
             set
             {
-                this.comboBox1.Text = value.ToString();
+                if (value != null)
+                {
+                    this.EnumType = value.GetType();
+                    this.comboBox1.Text = value.ToString();
+                }
+                else
+                {
+                    EnumType = null;
+                    comboBox1.Text = "";
+                }
             }
         }
 
@@ -71,9 +80,9 @@ namespace Assistment.form
         {
             this.UserValue = Value;
         }
-        public EventHandler GetUserValueChangedEvent()
+        public void AddListener(EventHandler Handler)
         {
-            return UserValueChanged;
+            UserValueChanged += Handler;
         }
     }
 }

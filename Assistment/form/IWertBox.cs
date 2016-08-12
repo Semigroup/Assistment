@@ -9,6 +9,6 @@ namespace Assistment.form
     {
         T GetValue();
         void SetValue(T Value);
-        EventHandler GetUserValueChangedEvent();
+        void AddListener(EventHandler Handler);
     }
 }

@@ -56,9 +56,9 @@ namespace Assistment.form
         {
             UserValue = Value;
         }
-        public EventHandler GetUserValueChangedEvent()
+        public void AddListener(EventHandler Handler)
         {
-            return UserValueChanged;
+            UserValueChanged += Handler;
         }
     }
 }

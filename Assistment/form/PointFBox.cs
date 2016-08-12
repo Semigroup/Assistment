@@ -70,9 +70,9 @@ namespace Assistment.form
         {
             UserSize = Value;
         }
-        public EventHandler GetUserValueChangedEvent()
+        public void AddListener(EventHandler Handler)
         {
-            return PointChanged;
+            PointChanged += Handler;
         }
         PointF IWertBox<PointF>.GetValue()
         {

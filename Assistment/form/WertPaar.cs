@@ -9,15 +9,39 @@ using System.Windows.Forms;
 
 namespace Assistment.form
 {
-    public class WertPaar<T> : UserControl
+    public class WertPaar<T> : UserControl, IWertBox<T>
     {
-        public string Name { get; private set; }
+        public string Key { get; private set; }
         public IWertBox<T> WertBox { get; private set; }
 
-        public WertPaar(string Name, IWertBox<T> WertBox)
+        public WertPaar(string Key, IWertBox<T> WertBox)
         {
-            this.Name = Name;
+            this.Key = Name;
             this.WertBox = WertBox;
+
+            Label label = new Label();
+            label.Text = Name;
+            label.AutoSize = true;
+            Controls.Add(label);
+            Control Wert = WertBox as Control;
+            Wert.Location = new Point(label.Width, 0);
+            Controls.Add(Wert);
+
+            this.Size = new Size(label.Width + Wert.Width, Math.Max(label.Height, Wert.Height));
+        }
+
+        public T GetValue()
+        {
+            return WertBox.GetValue();
+        }
+        public void SetValue(T Value)
+        {
+            WertBox.SetValue(Value);
+        }
+
+        public void AddListener(EventHandler Handler)
+        {
+            WertBox.AddListener(Handler);
         }
     }
 }

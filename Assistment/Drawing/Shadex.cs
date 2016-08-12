@@ -156,7 +156,7 @@ namespace Assistment.Drawing
             }
             return T =>
                 {
-                    int i = (int)Math.Floor(T / f);
+                    int i = (int)Math.Floor(T / f) % c.Length;
                     return c[i] * (t[i] - T) * (t[i] - T);
                 };
         }

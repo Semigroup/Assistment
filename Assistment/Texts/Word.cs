@@ -161,31 +161,28 @@ namespace Assistment.Texts
     }
     public class ImageBox : DrawBox
     {
-        private Image img;
+        private Image image;
+        public Image Image { get { return image; } set { image = value; } }
 
-        public ImageBox(Image img)
+        public ImageBox(Image Image)
         {
-            this.img = img;
-            this.box = new RectangleF(0, 0, img.Width, img.Height);
+            this.box.Size = Image.Size;
+            this.Image = Image;
         }
-        public ImageBox(float width, Image img)
-        {
-            this.box.Width = width;
-            this.box.Height = width * img.Height / img.Width;
-            this.img = img;
-        }
-        public ImageBox(float width, float height, Image img)
+        public ImageBox(float width, Image Image)
         {
             this.box.Width = width;
-            this.box.Height = height;
-            this.img = img;
+            this.box.Height = width * Image.Height / Image.Width;
+            this.Image = Image;
         }
-        public ImageBox(SizeF size, Image img)
+        public ImageBox(SizeF size, Image Image)
         {
             this.box.Size = size;
-            this.img = img;
+            this.Image = Image;
         }
-
+        public ImageBox(float width, float height, Image Image) : this(new SizeF(width, height), Image)
+        {
+        }
         public override float getSpace()
         {
             return box.Width * box.Height;
@@ -208,12 +205,12 @@ namespace Assistment.Texts
         }
         public override void draw(DrawContext con)
         {
-            con.drawImage(img, box);
+            con.drawImage(Image, box);
         }
 
         public override DrawBox clone()
         {
-            return new ImageBox(box.Size, img);
+            return new ImageBox(box.Size, Image);
         }
         public override void InStringBuilder(StringBuilder sb, string tabs)
         {

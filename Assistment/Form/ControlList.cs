@@ -10,7 +10,7 @@ using Assistment.Extensions;
 
 namespace Assistment.form
 {
-    public class ControlList : Control, ICollection<Control>
+    public class ControlList : UserControl, ICollection<Control>
     {
         public List<Control> Liste { get; private set; }
         public float Align { get; set; }
@@ -84,6 +84,17 @@ namespace Assistment.form
         System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
         {
             return GetEnumerator();
+        }
+
+        private void InitializeComponent()
+        {
+            this.SuspendLayout();
+            // 
+            // ControlList
+            // 
+            this.Size = new System.Drawing.Size(100, 100);
+            this.ResumeLayout(false);
+
         }
     }
 }

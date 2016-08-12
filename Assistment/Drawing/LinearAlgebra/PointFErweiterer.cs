@@ -399,6 +399,10 @@ namespace Assistment.Drawing.LinearAlgebra
         {
             return new SizeF(a.Width * c, a.Height * d);
         }
+        public static float Inhalt(this SizeF a)
+        {
+            return a.Width * a.Height;
+        }
         /// <summary>
         /// erstellt einen neuen Vektor, der Produkt der beiden Faktoren ist
         /// </summary>
@@ -518,6 +522,15 @@ namespace Assistment.Drawing.LinearAlgebra
         public static PointF Center(this RectangleF Rectangle)
         {
             return new PointF(Rectangle.Left + Rectangle.Right, Rectangle.Top + Rectangle.Bottom).div(2);
+        }
+
+        public static RectangleF mul(this RectangleF Rectangle, float c)
+        {
+            return new RectangleF(Rectangle.Location.mul(c), Rectangle.Size.mul(c));
+        }
+        public static RectangleF move(this RectangleF Rectangle, PointF MoveBy)
+        {
+            return new RectangleF(Rectangle.Location.add(MoveBy), Rectangle.Size);
         }
     }
 }

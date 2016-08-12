@@ -51,11 +51,9 @@ namespace Assistment.form
         {
             this.Color = Color;
         }
-
-
-        public EventHandler GetUserValueChangedEvent()
+        public void AddListener(EventHandler Handler)
         {
-            return ColorChanged;
+            ColorChanged += Handler;
         }
     }
 }

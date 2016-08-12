@@ -16,6 +16,11 @@ namespace Assistment.Texts
         public RectangleF box;
         public bool endsLine;
 
+        public float Top { get { return box.Top; } set { box.Y = value; } }
+        public float Bottom { get { return box.Bottom; } set { box.Y = value - box.Height; } }
+        public float Left { get { return box.Left; } set { box.X = value; } }
+        public float Right { get { return box.Right; } set { box.X = value - box.Width; } }
+
         /// <summary>
         /// gibt einen Wert zurück, der ungefähr breite*höhe entsprechen soll
         /// </summary>
@@ -60,7 +65,7 @@ namespace Assistment.Texts
         }
         public GeometryBox Geometry(float XAbstand, float YAbstand)
         {
-            return Geometry(XAbstand/2, YAbstand/2, XAbstand/2, YAbstand/2);
+            return Geometry(XAbstand / 2, YAbstand / 2, XAbstand / 2, YAbstand / 2);
         }
         public GeometryBox Geometry(float Abstand)
         {
@@ -129,7 +134,7 @@ namespace Assistment.Texts
         {
             this.createPDF(name, 1400, float.MaxValue, iTextSharp.text.PageSize.A4_LANDSCAPE);
         }
-        public void createPDF(string name,  iTextSharp.text.Rectangle PageSize)
+        public void createPDF(string name, iTextSharp.text.Rectangle PageSize)
         {
 
             const float ab = 00;

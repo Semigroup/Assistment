@@ -144,7 +144,11 @@ namespace Assistment.Texts
         {
             rows.RemoveAt(rowNumber);
         }
-
+        /// <summary>
+        /// Linie wird unter Row mit gegebener rowNumber gezeichnet
+        /// </summary>
+        /// <param name="rowNumber"></param>
+        /// <param name="pen"></param>
         public void setRowPen(int rowNumber, Pen pen)
         {
             rows[rowNumber].pen = pen;
