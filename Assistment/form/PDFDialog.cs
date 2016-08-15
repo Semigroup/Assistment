@@ -52,6 +52,10 @@ namespace Assistment.form
 
         private bool changing = false;
 
+        public PDFDialog(IDrawer Drawer)
+            : this(Drawer, "*")
+        {
+        }
         public PDFDialog(IDrawer Drawer, string Speicherort)
         {
             InitializeComponent();
@@ -69,8 +73,20 @@ namespace Assistment.form
             RadioButtons[0].Checked = true;
 
             this.Speicherort = Speicherort;
+            this.saveFileDialog1.FileName = Speicherort + ".png";
             this.Drawer = Drawer;
-            this.button1.Text = Speicherort + ".* erschaffen";
+        }
+
+        /// <summary>
+        /// ohne Punkt
+        /// </summary>
+        /// <returns></returns>
+        public string GetExtension()
+        {
+            if (PDF)
+                return "pdf";
+            else
+                return Format.ToString();
         }
 
         private void Change(object sender, EventArgs e)
@@ -85,9 +101,19 @@ namespace Assistment.form
             this.Hoch = checkBox2.Checked;
             ppm = floatBox1.UserValue;
         }
-
         private void button1_Click(object sender, EventArgs e)
         {
+            saveFileDialog1.DefaultExt = GetExtension();
+            if (saveFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                this.Speicherort = saveFileDialog1.FileName.Verzeichnis() + saveFileDialog1.FileName.FileName();
+                Make();
+            }
+        }
+        private void Make()
+        {
+            backgroundWorker1.RunWorkerAsync();
+
             int a = Drawer.GetDInA();
             string imageFile = Speicherort + "." + Format;
             using (Image img = Drawer.Draw(Hoch, ppm))
@@ -119,7 +145,6 @@ namespace Assistment.form
             else if (PDF && UseSubprozess)
                 Process.Start(Directory.GetCurrentDirectory() + Subprozess, "\"" + imageFile + "\" " + a);
         }
-
         /// <summary>
         /// PPI
         /// </summary>
@@ -149,6 +174,35 @@ namespace Assistment.form
             this.floatBox1.UserValue = floatBox2.UserValue / 25.4f;
             changing = false;
             Change(sender, e);
+        }
+
+        private void backgroundWorker1_DoWork(object sender, DoWorkEventArgs e)
+        {
+            if (progressBar1.InvokeRequired)
+            {
+                progressBar1.Invoke((MethodInvoker)delegate { progressBar1.Value = (progressBar1.Value + 73) % 100;
+                progressBar1.Refresh();
+                });
+            }
+            else
+            {
+                progressBar1.Value = (progressBar1.Value + 73) % 100;
+            }
+        }
+
+        private void backgroundWorker1_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            if (progressBar1.InvokeRequired)
+            {
+                progressBar1.Invoke((MethodInvoker)delegate { progressBar1.Value = 0;
+                progressBar1.Refresh();
+                });
+            }
+            else
+            {
+                progressBar1.Value = 0;
+                progressBar1.Refresh();
+            }
         }
     }
 }

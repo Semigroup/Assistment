@@ -32,18 +32,21 @@
             this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.label1 = new System.Windows.Forms.Label();
             this.checkBox2 = new System.Windows.Forms.CheckBox();
-            this.floatBox1 = new Assistment.form.FloatBox();
             this.label2 = new System.Windows.Forms.Label();
+            this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
             this.floatBox2 = new Assistment.form.FloatBox();
+            this.floatBox1 = new Assistment.form.FloatBox();
+            this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
+            this.progressBar1 = new System.Windows.Forms.ProgressBar();
             this.SuspendLayout();
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(290, 153);
+            this.button1.Location = new System.Drawing.Point(294, 153);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(183, 55);
+            this.button1.Size = new System.Drawing.Size(105, 41);
             this.button1.TabIndex = 0;
-            this.button1.Text = "Datei Erschaffen";
+            this.button1.Text = "Speichern";
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
@@ -78,17 +81,6 @@
             this.checkBox2.UseVisualStyleBackColor = true;
             this.checkBox2.CheckedChanged += new System.EventHandler(this.Change);
             // 
-            // floatBox1
-            // 
-            this.floatBox1.Location = new System.Drawing.Point(422, 70);
-            this.floatBox1.Name = "floatBox1";
-            this.floatBox1.Size = new System.Drawing.Size(51, 22);
-            this.floatBox1.TabIndex = 4;
-            this.floatBox1.UserValue = 10F;
-            this.floatBox1.UserValueMaximum = 100000F;
-            this.floatBox1.UserValueMinimum = 1E-08F;
-            this.floatBox1.UserValueChanged += new System.EventHandler(this.floatBox1_UserValueChanged);
-            // 
             // label2
             // 
             this.label2.AutoSize = true;
@@ -109,11 +101,35 @@
             this.floatBox2.UserValueMinimum = 1E-08F;
             this.floatBox2.UserValueChanged += new System.EventHandler(this.floatBox2_UserValueChanged);
             // 
+            // floatBox1
+            // 
+            this.floatBox1.Location = new System.Drawing.Point(422, 70);
+            this.floatBox1.Name = "floatBox1";
+            this.floatBox1.Size = new System.Drawing.Size(51, 22);
+            this.floatBox1.TabIndex = 4;
+            this.floatBox1.UserValue = 10F;
+            this.floatBox1.UserValueMaximum = 100000F;
+            this.floatBox1.UserValueMinimum = 1E-08F;
+            this.floatBox1.UserValueChanged += new System.EventHandler(this.floatBox1_UserValueChanged);
+            // 
+            // backgroundWorker1
+            // 
+            this.backgroundWorker1.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorker1_DoWork);
+            this.backgroundWorker1.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backgroundWorker1_RunWorkerCompleted);
+            // 
+            // progressBar1
+            // 
+            this.progressBar1.Location = new System.Drawing.Point(12, 423);
+            this.progressBar1.Name = "progressBar1";
+            this.progressBar1.Size = new System.Drawing.Size(470, 23);
+            this.progressBar1.TabIndex = 10;
+            // 
             // PDFDialog
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(494, 458);
+            this.Controls.Add(this.progressBar1);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.floatBox2);
             this.Controls.Add(this.checkBox2);
@@ -137,5 +153,8 @@
         private System.Windows.Forms.CheckBox checkBox2;
         private System.Windows.Forms.Label label2;
         private FloatBox floatBox2;
+        private System.Windows.Forms.SaveFileDialog saveFileDialog1;
+        private System.ComponentModel.BackgroundWorker backgroundWorker1;
+        private System.Windows.Forms.ProgressBar progressBar1;
     }
 }
