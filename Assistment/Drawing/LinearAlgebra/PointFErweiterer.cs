@@ -363,6 +363,10 @@ namespace Assistment.Drawing.LinearAlgebra
         {
             return new SolidBrush(Color);
         }
+        public static Pen ToPen(this Color Color ,float width)
+        {
+            return new Pen(Color, width);
+        }
 
         public static Color[] Flat(this Color[] Colors, int Alpha)
         {

@@ -69,6 +69,11 @@ namespace Assistment.Texts
         {
 
         }
+        public CString(params DrawBox[] DrawBoxes)
+            :base()
+        {
+            this.addRange(DrawBoxes);
+        }
 
         public override void setup(RectangleF box)
         {

@@ -7,6 +7,8 @@ using iTextSharp.text.pdf;
 using System.Windows.Forms;
 using System.IO;
 
+using Assistment.Drawing.LinearAlgebra;
+
 namespace Assistment.Texts
 {
     public abstract class DrawBox
@@ -16,10 +18,10 @@ namespace Assistment.Texts
         public RectangleF box;
         public bool endsLine;
 
-        public float Top { get { return box.Top; } set { box.Y = value; } }
-        public float Bottom { get { return box.Bottom; } set { box.Y = value - box.Height; } }
-        public float Left { get { return box.Left; } set { box.X = value; } }
-        public float Right { get { return box.Right; } set { box.X = value - box.Width; } }
+        public float Top { get { return box.Top; } set { Move(0, value - box.Top); } }
+        public float Bottom { get { return box.Bottom; } set { Move(0, value - box.Bottom); } }
+        public float Left { get { return box.Left; } set { Move(value - box.Left, 0); } }
+        public float Right { get { return box.Right; } set { Move(value - box.Right, 0); } }
 
         /// <summary>
         /// gibt einen Wert zurück, der ungefähr breite*höhe entsprechen soll
@@ -54,6 +56,14 @@ namespace Assistment.Texts
         /// <returns></returns>
         public abstract DrawBox clone();
         public abstract void InStringBuilder(StringBuilder sb, string tabs);
+        public virtual void Move(PointF ToMove)
+        {
+            this.box = new RectangleF(box.Location.add(ToMove), box.Size);
+        }
+        public void Move(float x, float y)
+        {
+            this.Move(new PointF(x, y));
+        }
 
         public GeometryBox Geometry(float Left, float Top, float Right, float Bottom)
         {
@@ -236,6 +246,13 @@ namespace Assistment.Texts
                 c += j;
             }
             return Color.FromArgb(c);
+        }
+
+        public override void Move(PointF ToMove)
+        {
+            base.Move(ToMove);
+            foreach (var item in this)
+                item.Move(ToMove);
         }
 
         public abstract void add(DrawBox word);
