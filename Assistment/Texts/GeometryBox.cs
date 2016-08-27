@@ -41,22 +41,24 @@ namespace Assistment.Texts
 
             return (TopSpace + a + BottomSpace) * (RightSpace + a + LeftSpace);
         }
-
         public override float getMin()
         {
             return InnerDrawBox.getMin() + LeftSpace + RightSpace;
         }
-
         public override float getMax()
         {
             return InnerDrawBox.getMax() + LeftSpace + RightSpace;
         }
 
+        public override void Move(PointF ToMove)
+        {
+            base.Move(ToMove);
+            InnerDrawBox.Move(ToMove);
+        }
         public override void update()
         {
             InnerDrawBox.update();
         }
-
         public override void setup(RectangleF box)
         {
             this.box = box;
@@ -64,7 +66,6 @@ namespace Assistment.Texts
             InnerDrawBox.setup(innerBox);
             this.box.Height = TopSpace + BottomSpace + InnerDrawBox.box.Height;
         }
-
         public override void draw(DrawContext con)
         {
             InnerDrawBox.draw(con);
@@ -74,7 +75,6 @@ namespace Assistment.Texts
         {
             return new GeometryBox(InnerDrawBox.clone(), TopSpace, BottomSpace, RightSpace, LeftSpace);
         }
-
         public override void InStringBuilder(StringBuilder sb, string tabs)
         {
             string ttabs = "\t" + tabs;

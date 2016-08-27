@@ -479,6 +479,19 @@ namespace Assistment.Drawing.Geometries
             return this * ow * B;
         }
         /// <summary>
+        /// gibt A * Brücke * B zurück
+        /// </summary>
+        /// <param name="A"></param>
+        /// <param name="B"></param>
+        /// <returns></returns>
+        public OrientierbarerWeg ConcatLinear(OrientierbarerWeg B)
+        {
+            PointF a = this.weg(1);
+            PointF b = B.weg(0);
+            OrientierbarerWeg ow = new OrientierbarerWeg(a, b);
+            return this * ow * B;
+        }
+        /// <summary>
         /// Macht praktisch ConcatGlatt(this)
         /// </summary>
         /// <returns></returns>
@@ -488,6 +501,17 @@ namespace Assistment.Drawing.Geometries
             PointF b = this.weg(0);
             float d = a.dist(b);
             OrientierbarerWeg ow = new OrientierbarerWeg(a, this.tangente(1).mul(d), b, this.tangente(0).mul(d));
+            return this * ow;
+        }
+        /// <summary>
+        /// Macht praktisch ConcatLinear(this)
+        /// </summary>
+        /// <returns></returns>
+        public OrientierbarerWeg AbschlussLinear()
+        {
+            PointF a = this.weg(1);
+            PointF b = this.weg(0);
+            OrientierbarerWeg ow = new OrientierbarerWeg(a, b);
             return this * ow;
         }
 

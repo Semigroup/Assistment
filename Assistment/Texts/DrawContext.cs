@@ -6,6 +6,8 @@ using System.Drawing;
 using System.IO;
 using iTextSharp.text.pdf;
 using System.Drawing.Imaging;
+using Assistment.Drawing.LinearAlgebra;
+using Assistment.Extensions;
 
 namespace Assistment.Texts
 {
@@ -60,6 +62,16 @@ namespace Assistment.Texts
         public abstract void drawImage(Image img, float x, float y, float width, float height);
         public abstract void drawClippedImage(Image img, float x, float y, RectangleF source);
         public abstract void drawClippedImage(Image img, RectangleF destination, RectangleF source);
+        public void drawClippedImage(RectangleF DrawingRegion, Image img, RectangleF Destination)
+        {
+            SizeF Faktor = ((SizeF)img.Size).div(Destination.Size);
+            RectangleF source = DrawingRegion;
+            source = source.move(Destination.Location.mul(-1));
+            source = source.mul(Faktor);
+            source.Intersect(new RectangleF(new PointF(), img.Size));
+            Destination.Intersect(DrawingRegion);
+            drawClippedImage(img, Destination, source);
+        }
 
         public abstract void newPage();
 
@@ -435,7 +447,11 @@ namespace Assistment.Texts
         }
         public override void drawImage(Image img, float x, float y, float width, float height)
         {
-            adjustPageNumber(y + height);
+            adjustPageNumber(y);
+            //iTextSharp.text.Image i = getImage(img);
+            //i.SetAbsolutePosition(factor * x, yOff - factor * (y + height));
+            //i.ScaleAbsolute(factor * width, factor * height);
+            //pCon.AddImage(i);
             pCon.AddImage(getImage(img), factor * width, 0, 0, factor * height, factor * x, yOff - factor * (y + height));
         }
 
@@ -449,11 +465,24 @@ namespace Assistment.Texts
 
         public override void drawClippedImage(Image img, float x, float y, RectangleF source)
         {
-            throw new NotImplementedException();
+            drawClippedImage(img, new RectangleF(new PointF(x, y), source.Size), source);
         }
         public override void drawClippedImage(Image img, RectangleF destination, RectangleF source)
         {
-            throw new NotImplementedException();
+            pCon.SaveState();
+            pCon.Rectangle(factor * destination.X,
+                yOff - factor * destination.Y - factor * destination.Height,
+                factor * destination.Width,
+                factor * destination.Height);
+            pCon.Clip();
+            pCon.NewPath();
+
+            RectangleF T = source.GetTransformation(destination);
+            RectangleF Pic = new RectangleF(new PointF(), img.Size);
+
+            drawImage(img, Pic.Transform(T));
+
+            pCon.RestoreState();
         }
     }
 }

@@ -269,15 +269,14 @@ namespace Assistment.Drawing
             Hohe h = bezierStachelrand(t => hohe(t) / layer, stachel);
             PointF[] P = new PointF[samples];
             PointF[] N = new PointF[samples];
-            #region Berechen P und N
+            #region Berechne P und N
             {
-                float d = 1f / (samples - 1);
-                float f;
+                float d = 1f / (samples);
                 for (int i = 0; i < samples; i++)
                 {
-                    f = i * d;
-                    N[i] = mul(h(f), y.normale(f));
-                    P[i] = saxpy(y.weg(f), layer, N[i]);
+                    float t = i * d;
+                    N[i] = y.normale(t).mul(h(t));
+                    P[i] = saxpy(y.weg(t), layer, N[i]);
                 }
             }
             #endregion
@@ -286,10 +285,7 @@ namespace Assistment.Drawing
                 g.FillPolygon(brushes[layer - 1 - i], P);
                 if (i != layer - 1)
                     for (int j = 0; j < samples; j++)
-                    {
-                        P[j].X -= N[j].X;
-                        P[j].Y -= N[j].Y;
-                    }
+                        P[j] = P[j].sub(N[j]);
             }
         }
 

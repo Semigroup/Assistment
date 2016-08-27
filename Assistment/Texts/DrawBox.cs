@@ -7,6 +7,8 @@ using iTextSharp.text.pdf;
 using System.Windows.Forms;
 using System.IO;
 
+using Assistment.Drawing;
+using Assistment.Extensions;
 using Assistment.Drawing.LinearAlgebra;
 
 namespace Assistment.Texts
@@ -22,6 +24,8 @@ namespace Assistment.Texts
         public float Bottom { get { return box.Bottom; } set { Move(0, value - box.Bottom); } }
         public float Left { get { return box.Left; } set { Move(value - box.Left, 0); } }
         public float Right { get { return box.Right; } set { Move(value - box.Right, 0); } }
+        public PointF Location { get { return box.Location; } set { box.Location = value; } }
+        public SizeF Size { get { return box.Size; } set { box.Size = value; } }
 
         /// <summary>
         /// gibt einen Wert zurück, der ungefähr breite*höhe entsprechen soll
@@ -44,6 +48,10 @@ namespace Assistment.Texts
         /// </summary>
         /// <param name="box"></param>
         public abstract void setup(RectangleF box);
+        public void setup(float Width)
+        {
+            this.setup(new RectangleF(box.Location, new SizeF(Width, float.MaxValue)));
+        }
         /// <summary>
         /// draws the components of this item
         /// <para>use this after setup()</para>
@@ -91,45 +99,33 @@ namespace Assistment.Texts
             return check(new PointF(x, y));
         }
 
+        public void createImage(string name, float Scaling, Color BackColor)
+        {
+            createImage(name, getMin(), float.MaxValue, Scaling, BackColor);
+        }
         public void createImage(string name)
         {
-            const float ab = 0;
-            this.setup(new RectangleF(ab, ab, this.getMin(), 0));
-            Bitmap b = new Bitmap((int)(box.Width + 2 * ab), (int)(box.Height + 2 * ab));
-            Graphics g = Graphics.FromImage(b);
-            g.CompositingQuality = System.Drawing.Drawing2D.CompositingQuality.HighQuality;
-            g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
-            g.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.HighQuality;
-            g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighQuality;
-            g.TextRenderingHint = System.Drawing.Text.TextRenderingHint.ClearTypeGridFit;
-            g.CompositingMode = System.Drawing.Drawing2D.CompositingMode.SourceOver;
-
-            g.Clear(Color.White);
-            DrawContextGraphics dcg = new DrawContextGraphics(g, Brushes.White, box.Height + ab);
-            this.draw(dcg);
-            b.Save(name + ".png");
-            dcg.Dispose();
-            b.Dispose();
+            createImage(name, getMin(), float.MaxValue, 1, Color.White);
         }
         public void createImage(string name, float width, float height)
         {
-            const float ab = 0;
-            this.setup(new RectangleF(ab, ab, width, 0));
-            Bitmap b = new Bitmap((int)(box.Width + 2 * ab), (int)(box.Height + 2 * ab));
-            Graphics g = Graphics.FromImage(b);
-            g.CompositingQuality = System.Drawing.Drawing2D.CompositingQuality.HighQuality;
-            g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
-            g.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.HighQuality;
-            g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighQuality;
-            g.TextRenderingHint = System.Drawing.Text.TextRenderingHint.ClearTypeGridFit;
-            g.CompositingMode = System.Drawing.Drawing2D.CompositingMode.SourceOver;
-
-            g.Clear(Color.White);
-            DrawContextGraphics dcg = new DrawContextGraphics(g, Brushes.White, height + ab);
-            this.draw(dcg);
-            b.Save(name + ".png");
-            dcg.Dispose();
-            b.Dispose();
+            createImage(name, width, height, 1, Color.White);
+        }
+        public void createImage(string name, float width, float height, float Scaling, Color BackColor)
+        {
+            this.setup(new RectangleF(0, 0, width, 0));
+            Size s = box.Size.mul(Scaling).ToSize();
+            using (Bitmap b = new Bitmap(s.Width, s.Height))
+            {
+                using (Graphics g = b.GetHighGraphics())
+                {
+                    g.ScaleTransform(Scaling, Scaling);
+                    g.Clear(BackColor);
+                    using (DrawContextGraphics dcg = new DrawContextGraphics(g, BackColor.ToBrush(), height))
+                        this.draw(dcg);
+                }
+                b.Save(name + ".png");
+            }
         }
 
         public void createDinA3PDF(string name)
@@ -142,35 +138,16 @@ namespace Assistment.Texts
         }
         public void createDinA4PDFLandscape(string name)
         {
-            this.createPDF(name, 1400, float.MaxValue, iTextSharp.text.PageSize.A4_LANDSCAPE);
+            this.createPDF(name, iTextSharp.text.PageSize.A4_LANDSCAPE);
         }
         public void createPDF(string name, iTextSharp.text.Rectangle PageSize)
         {
-
-            const float ab = 00;
-            this.update();
-            this.setup(new RectangleF(ab, ab, PageSize.Width / DrawContextDocument.factor, 0));
-
-            iTextSharp.text.Document doc = new iTextSharp.text.Document();
-            doc.SetPageSize(PageSize);
-            doc.NewPage();
-            PdfWriter writer = PdfWriter.GetInstance(doc, System.IO.File.Create(name + ".pdf"));
-
-            doc.Open();
-            PdfContentByte pCon = writer.DirectContent;
-            pCon.SetLineWidth(0.3f);
-            DrawContextDocument dcd = new DrawContextDocument(pCon, float.MaxValue);
-            this.draw(dcd);
-            doc.Close();
-            dcd.Dispose();
-            writer.Dispose();
+            createPDF(name, PageSize.Width / DrawContextDocument.factor, float.MaxValue, PageSize);
         }
         public void createPDF(string name, float width, float height, iTextSharp.text.Rectangle PageSize)
         {
-
-            const float ab = 00;
             this.update();
-            this.setup(new RectangleF(ab, ab, width, 0));
+            this.setup(new RectangleF(0, 0, width, 0));
 
             iTextSharp.text.Document doc = new iTextSharp.text.Document();
             doc.SetPageSize(PageSize);
@@ -180,7 +157,7 @@ namespace Assistment.Texts
             doc.Open();
             PdfContentByte pCon = writer.DirectContent;
             pCon.SetLineWidth(0.3f);
-            DrawContextDocument dcd = new DrawContextDocument(pCon, height + ab);
+            DrawContextDocument dcd = new DrawContextDocument(pCon, height);
             this.draw(dcd);
             doc.Close();
             dcd.Dispose();
@@ -196,9 +173,8 @@ namespace Assistment.Texts
         }
         public void createLog(string name, float width)
         {
-            const float ab = 00;
             this.update();
-            this.setup(new RectangleF(ab, ab, width, 0));
+            this.setup(new RectangleF(0, 0, width, 0));
 
             StringBuilder sb = new StringBuilder();
             this.InStringBuilder(sb, "");

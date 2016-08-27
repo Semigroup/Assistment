@@ -35,6 +35,13 @@ namespace Assistment.Extensions
             g.Raise();
             return g;
         }
+        public static Graphics GetHighGraphics(this Image Image, float Scaling)
+        {
+            Graphics g = Graphics.FromImage(Image);
+            g.Raise();
+            g.ScaleTransform(Scaling, Scaling);
+            return g;
+        }
         public static Graphics GetHighGraphics(this Image Image, Color BackgroundColor)
         {
             Graphics g = Image.GetHighGraphics();

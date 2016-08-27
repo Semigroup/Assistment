@@ -17,7 +17,7 @@ namespace Assistment.Xml
         {
             writer.writeAttribute(name, Enum.GetName(typeof(T), value));
         }
-        public static T getEnum<T>(this XmlReader reader, string name) where T:struct
+        public static T getEnum<T>(this XmlReader reader, string name) where T : struct
         {
             T result = default(T);
             Enum.TryParse<T>(reader.getString(name), out result);
@@ -197,7 +197,7 @@ namespace Assistment.Xml
             string s = reader.getString(name + "_name");
             if (s.Length == 0)
                 return null;
-            return new Font(s, reader.getFloat(name + "_size"),reader.getEnum<FontStyle>(name + "_style"));
+            return new Font(s, reader.getFloat(name + "_size"), reader.getEnum<FontStyle>(name + "_style"));
         }
         public static void writeFont(this XmlWriter writer, string name, Font Font)
         {
@@ -231,6 +231,22 @@ namespace Assistment.Xml
             while (Reader.NodeType != XmlNodeType.Element && !Reader.EOF)
                 Reader.Read();
             return !Reader.EOF;
+        }
+
+        public static string DumpInfo(this XmlReader Reader)
+        {
+            string s = Reader.Name + " in " + Reader.BaseURI + "\r\n";
+            IXmlLineInfo impl = Reader as IXmlLineInfo;
+            s += "Z: " + impl.LineNumber + ", S: " + impl.LinePosition;
+            s += "\r\n";
+            s += Reader.AttributeCount + " Attribute: \r\n";
+            for (int i = 0; i < Reader.AttributeCount; i++)
+                s += Reader.GetAttribute(i) + ", ";
+            return s;
+        }
+        public static void Dump(this XmlReader Reader)
+        {
+            MessageBox.Show(Reader.DumpInfo());
         }
     }
 }

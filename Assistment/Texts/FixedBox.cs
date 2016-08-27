@@ -22,12 +22,10 @@ namespace Assistment.Texts
         {
             return box.Width * box.Height;
         }
-
         public override float getMin()
         {
             return box.Width;
         }
-
         public override float getMax()
         {
             return box.Height;
@@ -43,9 +41,8 @@ namespace Assistment.Texts
             this.box.Location = box.Location;
             Inhalt.setup(this.box);
             SizeF Rest = this.box.Size.sub(Inhalt.box.Size);
-            Rest.Width = this.box.Width - Inhalt.getMax();
-            RectangleF InnerBox = new RectangleF(box.Location.add(Rest.mul(Alignment).ToPointF()), Inhalt.box.Size);
-            Inhalt.setup(InnerBox);
+            //Rest.Width = this.box.Width - Inhalt.getMax();
+            Inhalt.Move(Rest.mul(Alignment).ToPointF());
         }
 
         public override void draw(DrawContext con)

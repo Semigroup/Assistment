@@ -121,6 +121,16 @@ namespace Assistment.Drawing.LinearAlgebra
             return new PointF(a.X / b.X, a.Y / b.Y);
         }
         /// <summary>
+        /// erstellt einen neuen Vektor, der Die Komponenten des ersten Vektors durch die jeweiligen Komponenten des zweiten teilt
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <returns></returns>
+        public static PointF div(this PointF a, float x, float y)
+        {
+            return new PointF(a.X / x, a.Y / y);
+        }
+        /// <summary>
         /// rotiert diesen Vektor um w Grad (in Bogenmaß) gegen den Uhrzeigersinn
         /// </summary>
         /// <param name="a"></param>
@@ -363,7 +373,7 @@ namespace Assistment.Drawing.LinearAlgebra
         {
             return new SolidBrush(Color);
         }
-        public static Pen ToPen(this Color Color ,float width)
+        public static Pen ToPen(this Color Color, float width)
         {
             return new Pen(Color, width);
         }
@@ -378,6 +388,15 @@ namespace Assistment.Drawing.LinearAlgebra
     }
     public static class SizeFErweiterer
     {
+        public static SizeF add(this SizeF a, SizeF c)
+        {
+            return new SizeF(a.Width + c.Width, a.Height + c.Height);
+        }
+        public static SizeF add(this SizeF a, float x, float y)
+        {
+            return new SizeF(a.Width + x, a.Height + y);
+        }
+
         /// <summary>
         /// erstellt einen neuen Vektor, der Produkt der beiden Faktoren ist
         /// </summary>
@@ -388,11 +407,30 @@ namespace Assistment.Drawing.LinearAlgebra
         {
             return new SizeF(a.Width * c, a.Height * c);
         }
+        /// <summary>
+        /// Size.Width / Size.Height
+        /// </summary>
+        /// <param name="Size"></param>
+        /// <returns></returns>
+        public static float ratio(this SizeF Size)
+        {
+            return Size.Width / Size.Height;
+        }
 
         public static SizeF sub(this SizeF a, SizeF c)
         {
             return new SizeF(a.Width - c.Width, a.Height - c.Height);
         }
+        public static SizeF sub(this SizeF a, float x, float y)
+        {
+            return new SizeF(a.Width - x, a.Height - y);
+        }
+
+        public static float norm(this SizeF a)
+        {
+            return a.Width * a.Width + a.Height * a.Height;
+        }
+
         /// <summary>
         /// erstellt einen neuen Vektor, der Produkt der beiden Faktoren ist
         /// </summary>
@@ -403,9 +441,23 @@ namespace Assistment.Drawing.LinearAlgebra
         {
             return new SizeF(a.Width * c, a.Height * d);
         }
+        /// <summary>
+        /// Width * Height
+        /// </summary>
+        /// <param name="a"></param>
+        /// <returns></returns>
         public static float Inhalt(this SizeF a)
         {
             return a.Width * a.Height;
+        }
+        /// <summary>
+        /// min(Width, Height)
+        /// </summary>
+        /// <param name="a"></param>
+        /// <returns></returns>
+        public static float Min(this SizeF a)
+        {
+            return Math.Min(a.Width, a.Height);
         }
         /// <summary>
         /// erstellt einen neuen Vektor, der Produkt der beiden Faktoren ist
@@ -420,6 +472,14 @@ namespace Assistment.Drawing.LinearAlgebra
         public static SizeF div(this SizeF a, SizeF d)
         {
             return new SizeF(a.Width / d.Width, a.Height / d.Height);
+        }
+        public static SizeF div(this SizeF a, float d)
+        {
+            return new SizeF(a.Width / d, a.Height / d);
+        }
+        public static SizeF div(this SizeF a, float x, float y)
+        {
+            return new SizeF(a.Width / x, a.Height / y);
         }
         /// <summary>
         /// DinA Größe in Millimeter
@@ -465,7 +525,7 @@ namespace Assistment.Drawing.LinearAlgebra
         /// <returns></returns>
         public static Point saxpy(this Point a, int c, Point b)
         {
-            return new Point(a.X + c*b.X, a.Y + c*b.Y);
+            return new Point(a.X + c * b.X, a.Y + c * b.Y);
         }
         /// <summary>
         /// gibt das SKP dieses Vektors mit sich selber zurück
@@ -532,9 +592,118 @@ namespace Assistment.Drawing.LinearAlgebra
         {
             return new RectangleF(Rectangle.Location.mul(c), Rectangle.Size.mul(c));
         }
+        public static RectangleF mul(this RectangleF Rectangle, float x, float y)
+        {
+            return new RectangleF(Rectangle.Location.mul(x, y), Rectangle.Size.mul(x, y));
+        }
+        public static RectangleF mul(this RectangleF Rectangle, SizeF Size)
+        {
+            return Rectangle.mul(Size.Width, Size.Height);
+        }
+        public static RectangleF mul(this RectangleF Rectangle, PointF Point)
+        {
+            return Rectangle.mul(Point.X, Point.Y);
+        }
+        public static RectangleF div(this RectangleF Rectangle, float c)
+        {
+            return new RectangleF(Rectangle.Location.div(c), Rectangle.Size.div(c));
+        }
+        public static RectangleF div(this RectangleF Rectangle, float x, float y)
+        {
+            return new RectangleF(Rectangle.Location.div(x, y), Rectangle.Size.div(x, y));
+        }
+        public static RectangleF div(this RectangleF Rectangle, SizeF Size)
+        {
+            return Rectangle.div(Size.Width, Size.Height);
+        }
+        public static RectangleF div(this RectangleF Rectangle, PointF Point)
+        {
+            return Rectangle.div(Point.X, Point.Y);
+        }
         public static RectangleF move(this RectangleF Rectangle, PointF MoveBy)
         {
             return new RectangleF(Rectangle.Location.add(MoveBy), Rectangle.Size);
+        }
+        public static RectangleF move(this RectangleF Rectangle, float x, float y)
+        {
+            return new RectangleF(Rectangle.Location.add(x, y), Rectangle.Size);
+        }
+        /// <summary>
+        /// this.Location += (x,y)
+        /// <para>this.Size -= 2 * (x,y)</para>
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <returns></returns>
+        public static RectangleF Inner(this RectangleF Rectangle, float x, float y)
+        {
+            return new RectangleF(Rectangle.Location.add(x, y), Rectangle.Size.sub(2 * x, 2 * y));
+        }
+        /// <summary>
+        /// this.Location += (x,y)
+        /// <para>this.Size -= 2 * (x,y)</para>
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <returns></returns>
+        public static RectangleF Inner(this RectangleF Rectangle, PointF Point)
+        {
+            return Rectangle.Inner(Point.X, Point.Y);
+        }
+        /// <summary>
+        /// this.Location += (x,y)
+        /// <para>this.Size -= 2 * (x,y)</para>
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <returns></returns>
+        public static RectangleF Inner(this RectangleF Rectangle, SizeF Size)
+        {
+            return Rectangle.Inner(Size.Width, Size.Height);
+        }
+
+
+        /// <summary>
+        /// Destination.Loc = Source.Loc * T.Size + T.Loc
+        /// <para>Destination.Size = Source.Size * T.Size</para>
+        /// </summary>
+        /// <param name="Source"></param>
+        /// <param name="Transformation"></param>
+        /// <returns></returns>
+        public static RectangleF Transform(this RectangleF Source, RectangleF Transformation)
+        {
+            Source = Source.mul(Transformation.Size);
+            Source = Source.move(Transformation.Location);
+            return Source;
+        }
+        /// <summary>
+        /// Source.Size = Destination.Size / T.Size
+        /// <para> Source.Loc = (Destination.Loc - T.Loc) / T.Size</para>
+        /// Destination.Loc = Source.Loc * T.Size + T.Loc
+        /// <para>Destination.Size = Source.Size * T.Size</para>
+        /// </summary>
+        /// <param name="Source"></param>
+        /// <param name="Transformation"></param>
+        /// <returns></returns>
+        public static RectangleF InvertTransform(this RectangleF Destination, RectangleF Transformation)
+        {
+            Destination = Destination.move(Transformation.Location.mul(-1));
+            Destination = Destination.div(Transformation.Size);
+            return Destination;
+        }
+        /// <summary>
+        /// T.Size = D.Size / S.Size
+        /// <para> T.Loc = D.Loc - S.Loc * T.Size </para>
+        /// </summary>
+        /// <param name="Source"></param>
+        /// <param name="Destination"></param>
+        /// <returns></returns>
+        public static RectangleF GetTransformation(this RectangleF Source, RectangleF Destination)
+        {
+            RectangleF T = new RectangleF();
+            T.Size = Destination.Size.div(Source.Size);
+            T.Location = Destination.Location.sub(Source.Location.mul(T.Size));
+            return T;
         }
     }
 }
