@@ -30,20 +30,10 @@ namespace Assistment.Texts
         {
 
         }
-       
-        protected override void setupLines(RectangleF box, List<PreText.Line> Lines)
-        {
-            PointF Location = box.Location;
 
-            Lines.First().Setup(Location, alignment, RightToLeft);
-            Location.Y += Lines.First().Box.Height;
-            this.box = Lines.First().Box;
-            foreach (var line in Lines.Skip(1))
-            {
-                line.Setup(Location, alignment, RightToLeft);
-                Location.Y += line.Box.Height;
-                this.box = this.box.Extend(line.Box);
-            }
+        protected override void Assigne(PreText.Line Line)
+        {
+            Line.SimpleAssignment();
         }
         public override DrawBox clone()
         {
