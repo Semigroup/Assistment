@@ -48,9 +48,17 @@ namespace Assistment.Texts
         /// </summary>
         /// <param name="box"></param>
         public abstract void setup(RectangleF box);
+        public void setup(PointF Location, float Width)
+        {
+            this.setup(new RectangleF(Location, new SizeF(Width, float.MaxValue)));
+        }
+        public void setup(PointF Location)
+        {
+            this.setup(new RectangleF(Location, new SizeF(this.getMin(), float.MaxValue)));
+        }
         public void setup(float Width)
         {
-            this.setup(new RectangleF(box.Location, new SizeF(Width, float.MaxValue)));
+            this.setup(box.Location, Width);
         }
         /// <summary>
         /// draws the components of this item
@@ -63,7 +71,10 @@ namespace Assistment.Texts
         /// </summary>
         /// <returns></returns>
         public abstract DrawBox clone();
-        public abstract void InStringBuilder(StringBuilder sb, string tabs);
+        public virtual void InStringBuilder(StringBuilder sb, string tabs)
+        {
+            throw new NotImplementedException();
+        }
         public virtual void Move(PointF ToMove)
         {
             this.box = new RectangleF(box.Location.add(ToMove), box.Size);
@@ -88,6 +99,19 @@ namespace Assistment.Texts
         public GeometryBox Geometry(float Abstand)
         {
             return Geometry(Abstand, Abstand, Abstand, Abstand);
+        }
+
+        public BackColorBox Colorize(Pen RandFarbe, Brush BackColor)
+        {
+            return new BackColorBox(BackColor, RandFarbe, this);
+        }
+        public BackColorBox Colorize(Brush BackColor)
+        {
+            return this.Colorize(null, BackColor);
+        }
+        public BackColorBox Colorize(Color BackColor)
+        {
+            return this.Colorize(BackColor.ToBrush());
         }
 
         public virtual bool check(PointF punkt)

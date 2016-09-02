@@ -12,6 +12,10 @@ namespace Assistment.form
     public partial class ColorBox : UserControl,IWertBox<Color>
     {
         public event EventHandler ColorChanged = delegate { };
+        public event EventHandler InvalidChange = delegate { };
+
+        private bool working = false;
+
         public Color Color
         {
             get
@@ -20,10 +24,12 @@ namespace Assistment.form
             }
             set
             {
+                working = true;
                 this.AlphaBox.UserValue = value.A;
                 this.RedBox.UserValue = value.R;
                 this.GreenBox.UserValue = value.G;
                 this.BlueBox.UserValue = value.B;
+                working = false;
             }
         }
 
@@ -35,10 +41,17 @@ namespace Assistment.form
             this.RedBox.UserValueChanged += ColorBox_ColorChanged;
             this.GreenBox.UserValueChanged += ColorBox_ColorChanged;
             this.BlueBox.UserValueChanged += ColorBox_ColorChanged;
+
+            AlphaBox.AddInvalidListener(InvalidChange);
+            RedBox.AddInvalidListener(InvalidChange);
+            GreenBox.AddInvalidListener(InvalidChange);
+            BlueBox.AddInvalidListener(InvalidChange);
         }
 
         void ColorBox_ColorChanged(object sender, EventArgs e)
         {
+            if (working)
+                return;
             ColorChanged(sender, e);
         }
 
@@ -46,14 +59,21 @@ namespace Assistment.form
         {
             return Color;
         }
-
         public void SetValue(Color Value)
         {
-            this.Color = Color;
+            this.Color = Value;
         }
         public void AddListener(EventHandler Handler)
         {
             ColorChanged += Handler;
+        }
+        public bool Valid()
+        {
+            return AlphaBox.Valid() && RedBox.Valid() && GreenBox.Valid() && BlueBox.Valid();
+        }
+        public void AddInvalidListener(EventHandler Handler)
+        {
+            InvalidChange += Handler;
         }
     }
 }

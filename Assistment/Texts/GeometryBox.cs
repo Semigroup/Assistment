@@ -7,9 +7,8 @@ using Assistment.Mathematik;
 
 namespace Assistment.Texts
 {
-    public class GeometryBox : DrawBox
+    public class GeometryBox : WrappingBox
     {
-        public DrawBox InnerDrawBox { get; set; }
         public float TopSpace { get; set; }
         public float BottomSpace { get; set; }
         public float RightSpace { get; set; }
@@ -27,7 +26,7 @@ namespace Assistment.Texts
         }
         public GeometryBox(DrawBox InnerDrawBox, float top, float bottom, float right, float left)
         {
-            this.InnerDrawBox = InnerDrawBox;
+            this.DrawBox = InnerDrawBox;
             this.LeftSpace = left;
             this.BottomSpace = bottom;
             this.RightSpace = right;
@@ -36,44 +35,41 @@ namespace Assistment.Texts
 
         public override float getSpace()
         {
-            float A = InnerDrawBox.getSpace();
+            float A = DrawBox.getSpace();
             float a = FastMath.Sqrt(A);
 
             return (TopSpace + a + BottomSpace) * (RightSpace + a + LeftSpace);
         }
         public override float getMin()
         {
-            return InnerDrawBox.getMin() + LeftSpace + RightSpace;
+            return DrawBox.getMin() + LeftSpace + RightSpace;
         }
         public override float getMax()
         {
-            return InnerDrawBox.getMax() + LeftSpace + RightSpace;
+            return DrawBox.getMax() + LeftSpace + RightSpace;
         }
 
-        public override void Move(PointF ToMove)
-        {
-            base.Move(ToMove);
-            InnerDrawBox.Move(ToMove);
-        }
         public override void update()
         {
-            InnerDrawBox.update();
+            DrawBox.update();
         }
         public override void setup(RectangleF box)
         {
-            this.box = box;
             RectangleF innerBox = new RectangleF(box.X + LeftSpace, box.Y + TopSpace, box.Width - LeftSpace - RightSpace, box.Height - TopSpace - BottomSpace);
-            InnerDrawBox.setup(innerBox);
-            this.box.Height = TopSpace + BottomSpace + InnerDrawBox.box.Height;
+            DrawBox.setup(innerBox);
+            this.box = new RectangleF(DrawBox.box.Left - LeftSpace,
+                DrawBox.box.Top - TopSpace,
+                DrawBox.box.Width + RightSpace + LeftSpace,
+                DrawBox.box.Height + TopSpace + BottomSpace);
         }
         public override void draw(DrawContext con)
         {
-            InnerDrawBox.draw(con);
+            DrawBox.draw(con);
         }
 
         public override DrawBox clone()
         {
-            return new GeometryBox(InnerDrawBox.clone(), TopSpace, BottomSpace, RightSpace, LeftSpace);
+            return new GeometryBox(DrawBox.clone(), TopSpace, BottomSpace, RightSpace, LeftSpace);
         }
         public override void InStringBuilder(StringBuilder sb, string tabs)
         {
@@ -84,7 +80,7 @@ namespace Assistment.Texts
             sb.AppendLine(ttabs + "Right: " + RightSpace);
             sb.AppendLine(ttabs + "Top: " + TopSpace);
             sb.AppendLine(ttabs + "Bottom: " + BottomSpace);
-            InnerDrawBox.InStringBuilder(sb, ttabs);
+            DrawBox.InStringBuilder(sb, ttabs);
             sb.AppendLine(tabs + ".");
         }
     }

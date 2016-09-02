@@ -11,7 +11,11 @@ namespace Assistment.form
 {
     public partial class PointFBox : UserControl, IWertBox<SizeF>, IWertBox<PointF>
     {
-       public event EventHandler PointChanged = delegate { };
+        public FloatBox FloatXBox { get { return floatBox1; } }
+        public FloatBox FloatYBox { get { return floatBox2; } }
+
+        public event EventHandler PointChanged = delegate { };
+        public event EventHandler InvalidChange = delegate { };
 
         public float UserX
         {
@@ -55,6 +59,9 @@ namespace Assistment.form
 
             this.floatBox1.UserValueChanged += PointBox_PointChanged;
             this.floatBox2.UserValueChanged += PointBox_PointChanged;
+
+            this.floatBox1.AddInvalidListener(InvalidChange);
+            this.floatBox2.AddInvalidListener(InvalidChange);
         }
 
         void PointBox_PointChanged(object sender, EventArgs e)
@@ -81,6 +88,14 @@ namespace Assistment.form
         public void SetValue(PointF Value)
         {
             UserPoint = Value;
+        }
+        public bool Valid()
+        {
+            return floatBox1.Valid() && floatBox2.Valid();
+        }
+        public void AddInvalidListener(EventHandler Handler)
+        {
+            InvalidChange += Handler;
         }
     }
 }

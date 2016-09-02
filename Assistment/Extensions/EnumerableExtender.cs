@@ -260,6 +260,21 @@ namespace Assistment.Extensions
         /// <param name="Enumerable"></param>
         /// <param name="OptimierFunktion"></param>
         /// <returns></returns>
+        public static int IndexOfMaxim<T>(this T[] Array, Func<T, float> OptimierFunktion)
+        {
+            float o = float.MaxValue;
+            int Index = -1;
+            for (int i = 0; i < Array.Length; i++)
+            {
+                float value = OptimierFunktion(Array[i]);
+                if (value < o)
+                {
+                    o = value;
+                    Index = i;
+                }
+            }
+            return Index;
+        }
         public static T Optim<T>(this IEnumerable<T> Enumerable, Func<T, float> OptimierFunktion)
         {
             T m = default(T);

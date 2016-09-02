@@ -31,7 +31,7 @@ namespace Assistment.form
         }
 
         public event EventHandler UserValueChanged = delegate { };
-        public event EventHandler InvalidChange = delegate { };
+        //public event EventHandler InvalidChange = delegate { };
 
         public FontBox()
         {
@@ -43,20 +43,24 @@ namespace Assistment.form
             if (fontDialog1.ShowDialog() == DialogResult.OK)
                 UserValue = fontDialog1.Font;
         }
-
         public Font GetValue()
         {
             return UserValue;
         }
-
         public void SetValue(Font Value)
         {
             UserValue = Value;
         }
-
         public void AddListener(EventHandler Handler)
         {
             UserValueChanged += Handler;
+        }
+        public bool Valid()
+        {
+            return true;
+        }
+        public void AddInvalidListener(EventHandler Handler)
+        {
         }
     }
 }

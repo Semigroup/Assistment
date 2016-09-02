@@ -25,7 +25,26 @@ namespace Assistment.form
             }
         }
         public event EventHandler ImageChanged = delegate { };
+        public event EventHandler InvalidChange = delegate { };
         private Graphics g;
+        private bool valid = true;
+
+        private bool showImage = true;
+        public bool ShowImage
+        {
+            get { return showImage; }
+            set
+            {
+                showImage = value;
+                label1.Visible = value;
+                int y = value ? 147 : 0;
+                button1.Location = new Point(button1.Left, y);
+                button2.Location = new Point(button2.Left, y);
+                this.Height = button1.Bottom;
+            }
+        }
+
+        public Image Image { get; private set; }
 
         public ImageSelectBox()
         {
@@ -42,20 +61,25 @@ namespace Assistment.form
                 this.button2.Enabled = false;
                 g.Clear(Color.Gray);
                 label1.Refresh();
+                this.Image = null;
                 ImageChanged(this, new EventArgs());
                 return;
             }
             try
             {
-                Image img = Image.FromFile(path);
+                Image = Image.FromFile(path);
                 this.path = path;
-                g.DrawImage(img, new Rectangle(new Point(), label1.Size));
+                g.Clear(Color.Gray);
+                g.DrawImage(Image, new Rectangle(new Point(), label1.Size));
                 this.button2.Enabled = true;
                 label1.Refresh();
                 ImageChanged(this, new EventArgs());
+                valid = true;
             }
             catch (Exception)
             {
+                valid = false;
+                InvalidChange(this, EventArgs.Empty);
             }
         }
         private void button1_Click(object sender, EventArgs e)
@@ -64,12 +88,10 @@ namespace Assistment.form
             if (d == DialogResult.OK)
                 SetPath(openFileDialog1.FileName);
         }
-
         private void button2_Click(object sender, EventArgs e)
         {
             SetPath(null);
         }
-
         public string GetValue()
         {
             return ImagePath;
@@ -81,6 +103,14 @@ namespace Assistment.form
         public void AddListener(EventHandler Handler)
         {
             ImageChanged += Handler;
+        }
+        public bool Valid()
+        {
+            return valid;
+        }
+        public void AddInvalidListener(EventHandler Handler)
+        {
+            InvalidChange += Handler;
         }
     }
 }

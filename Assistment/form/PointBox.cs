@@ -13,6 +13,7 @@ namespace Assistment.form
     public partial class PointBox : UserControl, IWertBox<Size>, IWertBox<Point>
     {
         public event EventHandler PointChanged = delegate { };
+        public event EventHandler InvalidChange = delegate { };
 
         public int UserX
         {
@@ -56,6 +57,9 @@ namespace Assistment.form
 
             this.intBox1.UserValueChanged += PointBox_PointChanged;
             this.intBox2.UserValueChanged += PointBox_PointChanged;
+
+            intBox1.AddInvalidListener(InvalidChange);
+            intBox2.AddInvalidListener(InvalidChange);
         }
 
         void PointBox_PointChanged(object sender, EventArgs e)
@@ -82,6 +86,14 @@ namespace Assistment.form
         public void SetValue(Point Value)
         {
             UserPoint = Value;
+        }
+        public bool Valid()
+        {
+            return intBox1.Valid() && intBox2.Valid();
+        }
+        public void AddInvalidListener(EventHandler Handler)
+        {
+            InvalidChange += Handler;
         }
     }
 }

@@ -15,12 +15,14 @@ namespace Assistment.form
         T GetValue<T>(string Name);
         void SetValue<T>(string Name, T Value);
         void AddListener(EventHandler EventHandler);
+        void AddInvalidListener(EventHandler EventHandler);
     }
 
     public class WerteListe : ScrollBox, IWerteListe
     {
         private SortedDictionary<string, object> dictionary = new SortedDictionary<string, object>();
         public event EventHandler UserValueChanged = delegate { };
+        public event EventHandler InvalidChange = delegate { };
         private ControlList List;
 
         public WerteListe()
@@ -36,7 +38,8 @@ namespace Assistment.form
         public void AddWerteBox<T>(IWertBox<T> WerteBox, string Name)
         {
             dictionary.Add(Name, WerteBox);
-            WerteBox.AddListener((sender, e) => OnUserValueChanged());
+            WerteBox.AddListener(OnUserValueChanged);
+            WerteBox.AddInvalidListener(OnInvalidChange);
             List.Add(WerteBox as Control);
         }
         public T GetValue<T>(string Name)
@@ -60,15 +63,22 @@ namespace Assistment.form
         public void Setup()
         {
             List.Setup();
-            this.OnSizeChanged(EventArgs.Empty);
         }
-        public void OnUserValueChanged()
+        public void OnUserValueChanged(object sender, EventArgs e)
         {
-            UserValueChanged(this, EventArgs.Empty);
+            UserValueChanged(sender, e);
+        }
+        public void OnInvalidChange(object sender, EventArgs e)
+        {
+            InvalidChange(sender, e);
         }
         public void AddListener(EventHandler EventHandler)
         {
             UserValueChanged += EventHandler;
+        }
+        public void AddInvalidListener(EventHandler EventHandler)
+        {
+            InvalidChange += EventHandler;
         }
     }
 
@@ -88,6 +98,28 @@ namespace Assistment.form
             BoolBox bb = new BoolBox(Name);
             bb.SetValue(value);
             WerteListe.AddWerteBox(bb, Name);
+        }
+        public static void AddStringBox(this IWerteListe WerteListe, string value, string Name)
+        {
+            AddWertePaar(WerteListe, new StringBox(), value, Name);
+        }
+        public static void AddChainedSizeFBox(this IWerteListe WerteListe, SizeF value, string Name)
+        {
+            AddChainedSizeFBox(WerteListe, value, Name, true);
+        }
+        public static void AddChainedSizeFBox(this IWerteListe WerteListe, SizeF value, string Name, bool Chained)
+        {
+            ChainedSizeFBox csb = new ChainedSizeFBox();
+            csb.Chained = Chained;
+            AddWertePaar(WerteListe, csb, value, Name);
+        }
+        public static void AddBigStringBox(this IWerteListe WerteListe, string value, string Name)
+        {
+            StringBox sb = new StringBox();
+            sb.Multiline = true;
+            sb.Size = new Size(300, 200);
+            sb.ScrollBars = ScrollBars.Vertical;
+            AddWertePaar(WerteListe, sb, value, Name);
         }
         public static void AddFloatBox(this IWerteListe WerteListe, float value, string Name)
         {
@@ -124,6 +156,19 @@ namespace Assistment.form
         public static void AddImageBox(this IWerteListe WerteListe, string value, string Name)
         {
             AddWertePaar(WerteListe, new ImageSelectBox(), value, Name);
+        }
+        public static void AddImageBox(this IWerteListe WerteListe, string value, string Name, bool ShowImage)
+        {
+            ImageSelectBox isb = new ImageSelectBox();
+            isb.ShowImage = ShowImage;
+            AddWertePaar(WerteListe, isb, value, Name);
+        }
+        public static void AddImageBox(this IWerteListe WerteListe, string value, string Name, bool ShowImage, EventHandler ImageChanged)
+        {
+            ImageSelectBox isb = new ImageSelectBox();
+            isb.ShowImage = ShowImage;
+            isb.AddListener(ImageChanged);
+            AddWertePaar(WerteListe, isb, value, Name);
         }
         public static void AddFontBox(this IWerteListe WerteListe, Font value, string Name)
         {

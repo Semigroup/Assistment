@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Drawing;
 using Assistment.Mathematik;
+using Assistment.Drawing.LinearAlgebra;
 
 namespace Assistment.Texts
 {
@@ -195,6 +196,21 @@ namespace Assistment.Texts
             return width;
         }
 
+
+        protected override void setupLines(RectangleF box, List<Line> Lines)
+        {
+            PointF Location = box.Location;
+
+            Lines.First().Setup(Location, alignment, RightToLeft);
+            Location.Y += Lines.First().Box.Height;
+            this.box = Lines.First().Box;
+            foreach (var line in Lines.Skip(1))
+            {
+                line.Setup(Location, alignment, RightToLeft);
+                Location.Y += line.Box.Height;
+                this.box = this.box.Extend(line.Box);
+            }
+        }
         public override DrawBox clone()
         {
             return new CString(this);

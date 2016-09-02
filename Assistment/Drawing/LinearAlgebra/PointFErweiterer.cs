@@ -460,6 +460,42 @@ namespace Assistment.Drawing.LinearAlgebra
             return Math.Min(a.Width, a.Height);
         }
         /// <summary>
+        /// (min(a.X, b.X), min(a.Y, b.Y))
+        /// </summary>
+        /// <param name="a"></param>
+        /// <returns></returns>
+        public static SizeF Min(this SizeF a, SizeF b)
+        {
+            return new SizeF(Math.Min(a.Width, b.Width), Math.Min(a.Height, b.Height));
+        }
+        /// <summary>
+        /// (min(a.X, b.X), min(a.Y, b.Y))
+        /// </summary>
+        /// <param name="a"></param>
+        /// <returns></returns>
+        public static SizeF Min(this SizeF a, float x, float y)
+        {
+            return a.Min(new SizeF(x, y));
+        }
+        /// <summary>
+        /// (max(a.X, b.X), max(a.Y, b.Y))
+        /// </summary>
+        /// <param name="a"></param>
+        /// <returns></returns>
+        public static SizeF Max(this SizeF a, SizeF b)
+        {
+            return new SizeF(Math.Max(a.Width, b.Width), Math.Max(a.Height, b.Height));
+        }
+        /// <summary>
+        /// (Max(a.X, b.X), Max(a.Y, b.Y))
+        /// </summary>
+        /// <param name="a"></param>
+        /// <returns></returns>
+        public static SizeF Max(this SizeF a, float x, float y)
+        {
+            return a.Max(new SizeF(x, y));
+        }
+        /// <summary>
         /// erstellt einen neuen Vektor, der Produkt der beiden Faktoren ist
         /// </summary>
         /// <param name="a"></param>
@@ -481,6 +517,12 @@ namespace Assistment.Drawing.LinearAlgebra
         {
             return new SizeF(a.Width / x, a.Height / y);
         }
+
+        public static bool Equal(this SizeF a, SizeF b)
+        {
+            return a.ToPointF().Equal(b.ToPointF());
+        }
+
         /// <summary>
         /// DinA Größe in Millimeter
         /// </summary>
@@ -579,6 +621,11 @@ namespace Assistment.Drawing.LinearAlgebra
         {
             return new Point((a.X * 1f / b.X).Floor(), (a.Y * 1f / b.Y).Floor());
         }
+
+        public static bool Equal(this PointF a, PointF b)
+        {
+            return Math.Abs(a.X - b.X) + Math.Abs(a.Y - b.Y) < 0.00001f;
+        }
     }
 
     public static class RectangleFErweiterer
@@ -662,6 +709,10 @@ namespace Assistment.Drawing.LinearAlgebra
             return Rectangle.Inner(Size.Width, Size.Height);
         }
 
+        public static bool Equal(this RectangleF Rectangle1, RectangleF Rectangle2)
+        {
+            return Rectangle1.Location.Equal(Rectangle2.Location) && Rectangle1.Size.Equal(Rectangle2.Size);
+        }
 
         /// <summary>
         /// Destination.Loc = Source.Loc * T.Size + T.Loc

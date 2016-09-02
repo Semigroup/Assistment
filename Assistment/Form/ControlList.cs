@@ -85,16 +85,5 @@ namespace Assistment.form
         {
             return GetEnumerator();
         }
-
-        private void InitializeComponent()
-        {
-            this.SuspendLayout();
-            // 
-            // ControlList
-            // 
-            this.Size = new System.Drawing.Size(100, 100);
-            this.ResumeLayout(false);
-
-        }
     }
 }

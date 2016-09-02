@@ -10,5 +10,7 @@ namespace Assistment.form
         T GetValue();
         void SetValue(T Value);
         void AddListener(EventHandler Handler);
+        bool Valid();
+        void AddInvalidListener(EventHandler Handler);
     }
 }

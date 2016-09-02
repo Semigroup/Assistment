@@ -48,6 +48,8 @@ namespace Assistment.form
             }
         }
 
+        private bool valid = true;
+
         public event EventHandler UserValueChanged = delegate { };
         public event EventHandler InvalidChange = delegate { };
 
@@ -63,11 +65,13 @@ namespace Assistment.form
             {
                 userValue = Enum.Parse(EnumType, comboBox1.Text);
                 comboBox1.ForeColor = Color.Black;
+                valid = true;
                 UserValueChanged(sender, e);
             }
             catch (Exception)
             {
                 comboBox1.ForeColor = Color.Red;
+                valid = false;
                 InvalidChange(sender, e);
             }
         }
@@ -83,6 +87,17 @@ namespace Assistment.form
         public void AddListener(EventHandler Handler)
         {
             UserValueChanged += Handler;
+        }
+
+
+        public bool Valid()
+        {
+            return valid;
+        }
+
+        public void AddInvalidListener(EventHandler Handler)
+        {
+            InvalidChange += Handler;
         }
     }
 }

@@ -12,6 +12,7 @@ namespace Assistment.form
     public partial class PenBox : UserControl, IWertBox<Pen>
     {
         public event EventHandler PenChanged = delegate { };
+        public event EventHandler InvalidChange = delegate { };
         private Pen pen;
         public Pen Pen
         {
@@ -34,6 +35,9 @@ namespace Assistment.form
 
             this.colorBox1.ColorChanged += PenBox_PenChanged;
             this.floatBox1.UserValueChanged += PenBox_PenChanged;
+
+            this.colorBox1.AddInvalidListener(InvalidChange);
+            this.floatBox1.AddInvalidListener(InvalidChange);
         }
 
         private void PenBox_PenChanged(object sender, EventArgs e)
@@ -55,6 +59,14 @@ namespace Assistment.form
         public void AddListener(EventHandler Handler)
         {
             PenChanged += Handler;
+        }
+        public bool Valid()
+        {
+            return colorBox1.Valid() && floatBox1.Valid();
+        }
+        public void AddInvalidListener(EventHandler Handler)
+        {
+            InvalidChange += Handler;
         }
     }
 }

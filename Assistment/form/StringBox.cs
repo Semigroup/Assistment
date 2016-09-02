@@ -9,31 +9,29 @@ using System.Windows.Forms;
 
 namespace Assistment.form
 {
-    public class BoolBox : CheckBox, IWertBox<bool>
+    public class StringBox : TextBox, IWertBox<string>
     {
-        public BoolBox(string Name)
+        public StringBox()
         {
-            this.Text = Name;
-        }
-        public bool GetValue()
-        {
-            return Checked;
+            this.Size = new Size(200, this.Height);
         }
 
-        public void SetValue(bool Value)
+        public string GetValue()
         {
-            this.Checked = Value;
+            return Text;
         }
-
+        public void SetValue(string Value)
+        {
+            Text = Value;
+        }
         public void AddListener(EventHandler Handler)
         {
-            this.CheckedChanged += Handler;
+            this.TextChanged += Handler;
         }
         public bool Valid()
         {
             return true;
         }
-
         public void AddInvalidListener(EventHandler Handler)
         {
         }

@@ -394,10 +394,21 @@ namespace Assistment.Texts
         }
         public override void fillRectangle(Brush brush, float x, float y, float width, float height)
         {
+            pCon.SaveState();
+
+            iTextSharp.text.BaseColor Color = getColor(brush);
+
+            PdfGState PdfGState = new PdfGState();
+            PdfGState.FillOpacity = Color.A / 255f;
+            PdfGState.StrokeOpacity = 0;
+            pCon.SetGState(PdfGState);
+
             adjustPageNumber(y + height);
             pCon.Rectangle(factor * x, yOff - factor * y, factor * width, -factor * height - 1);
-            pCon.SetColorFill(getColor(brush));
+            pCon.SetColorFill(Color);
             pCon.FillStroke();
+
+            pCon.RestoreState();
         }
         public override void drawLine(Pen pen, float x1, float y1, float x2, float y2)
         {

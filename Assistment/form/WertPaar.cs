@@ -16,16 +16,17 @@ namespace Assistment.form
 
         public WertPaar(string Key, IWertBox<T> WertBox)
         {
-            this.Key = Name;
+            this.Key = Key;
             this.WertBox = WertBox;
 
             Label label = new Label();
-            label.Text = Name;
             label.AutoSize = true;
+            label.Text = Key;
             Controls.Add(label);
             Control Wert = WertBox as Control;
-            Wert.Location = new Point(label.Width, 0);
             Controls.Add(Wert);
+            Wert.Location = new Point(label.Width, 0);
+            this.AutoSize = true;
 
             this.Size = new Size(label.Width + Wert.Width, Math.Max(label.Height, Wert.Height));
         }
@@ -38,10 +39,17 @@ namespace Assistment.form
         {
             WertBox.SetValue(Value);
         }
-
         public void AddListener(EventHandler Handler)
         {
             WertBox.AddListener(Handler);
+        }
+        public bool Valid()
+        {
+            return WertBox.Valid();
+        }
+        public void AddInvalidListener(EventHandler Handler)
+        {
+            WertBox.AddInvalidListener(Handler);
         }
     }
 }

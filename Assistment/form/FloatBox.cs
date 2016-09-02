@@ -33,10 +33,9 @@ namespace Assistment.form
             this.UserValueMaximum = float.MaxValue;
             this.UserValueMinimum = float.MinValue;
         }
-
         private void textBox1_TextChanged(object sender, EventArgs e)
         {
-            if (float.TryParse(textBox1.Text, out userValue) && userValue <= UserValueMaximum && userValue >= UserValueMinimum)
+            if (Valid())
             {
                 this.textBox1.ForeColor = Color.Black;
                 UserValueChanged(sender, e);
@@ -59,6 +58,14 @@ namespace Assistment.form
         public void AddListener(EventHandler Handler)
         {
             UserValueChanged += Handler;
+        }
+        public bool Valid()
+        {
+            return float.TryParse(textBox1.Text, out userValue) && userValue <= UserValueMaximum && userValue >= UserValueMinimum;
+        }
+        public void AddInvalidListener(EventHandler Handler)
+        {
+            InvalidChange += Handler;
         }
     }
 }

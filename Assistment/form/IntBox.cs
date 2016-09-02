@@ -61,5 +61,14 @@ namespace Assistment.form
         {
             UserValueChanged += Handler;
         }
+        public bool Valid()
+        {
+            int loc;
+            return int.TryParse(textBox1.Text, out loc) && loc <= UserValueMaximum && loc >= UserValueMinimum;
+        }
+        public void AddInvalidListener(EventHandler Handler)
+        {
+            InvalidChange += Handler;
+        }
     }
 }

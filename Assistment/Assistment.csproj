@@ -80,9 +80,25 @@
     <Compile Include="Extensions\EnumerableExtender.cs" />
     <Compile Include="Extensions\EnumeratorExtender.cs" />
     <Compile Include="Extensions\ImageExtender.cs" />
+    <Compile Include="Extensions\PrimitiveExtender.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
+    <Compile Include="form\BallPointFBox.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="form\BallPointFBox.Designer.cs">
+      <DependentUpon>BallPointFBox.cs</DependentUpon>
+    </Compile>
     <Compile Include="form\BoolBox.cs">
       <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="form\ButtonReihe.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="form\ChainedSizeFBox.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="form\ChainedSizeFBox.Designer.cs">
+      <DependentUpon>ChainedSizeFBox.cs</DependentUpon>
     </Compile>
     <Compile Include="form\ColorBox.cs">
       <SubType>UserControl</SubType>
@@ -164,6 +180,12 @@
     <Compile Include="form\ScrollBox.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="form\ScrollList.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="form\StringBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="form\WertPaar.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -184,6 +206,7 @@
     <Compile Include="Sound\Notes\Product.cs" />
     <Compile Include="Sound\Notes\Sum.cs" />
     <Compile Include="Sound\WaveWriter.cs" />
+    <Compile Include="Texts\BackColorBox.cs" />
     <Compile Include="Texts\CString.cs" />
     <Compile Include="Texts\DrawBox.cs" />
     <Compile Include="Texts\DrawContext.cs" />
@@ -224,11 +247,18 @@
     <Compile Include="Texts\Text.cs" />
     <Compile Include="Texts\Titel.cs" />
     <Compile Include="Texts\Word.cs" />
+    <Compile Include="Texts\WrappingBox.cs" />
     <Compile Include="Xml\XmlReaderErweiterer.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="FormsAlt\DoubleBufferedForm.resx">
       <DependentUpon>DoubleBufferedForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="form\BallPointFBox.resx">
+      <DependentUpon>BallPointFBox.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="form\ChainedSizeFBox.resx">
+      <DependentUpon>ChainedSizeFBox.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="form\ColorBox.resx">
       <DependentUpon>ColorBox.cs</DependentUpon>

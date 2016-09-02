@@ -40,6 +40,8 @@ namespace Assistment.Texts
         public DrawBox Inhalt { get; private set; }
         public float Scaling { get; set; }
 
+        private Image Image;
+
         public Titel(DrawBox Inhalt, float RandHohe, Pen RandFarbe, Brush HintergrundFarbe)
             : this(Inhalt, RandHohe, RandFarbe, HintergrundFarbe, 1)
         {
@@ -76,11 +78,9 @@ namespace Assistment.Texts
         }
         public override void setup(RectangleF box)
         {
-            float ab = RandHohe * 2;
-            this.box = box;
             box = box.Inner(RandHohe, RandHohe);
-            this.Inhalt.setup(box);
-            this.box.Size = Inhalt.box.Size.add(ab, ab);
+            Inhalt.setup(box);
+            this.box = Inhalt.box.Inner(-RandHohe, -RandHohe);
         }
 
         public abstract Weg GetVerlauf(float units);
@@ -88,19 +88,21 @@ namespace Assistment.Texts
 
         public override void draw(DrawContext con)
         {
-            Size s = box.Size.mul(Scaling).ToSize();
-            Bitmap b = new Bitmap(s.Width, s.Height);
-            Graphics g = b.GetHighGraphics(Scaling);
-            RectangleF pseudoBox = new RectangleF(RandHohe, RandHohe, Inhalt.box.Width, Inhalt.box.Height);
-            OrientierbarerWeg ow = OrientierbarerWeg.RundesRechteck(pseudoBox);
-            int samples = 10000;
-            Weg y = GetVerlauf(ow.L / RandHohe);
-            Weg z = t => y(t);
-            Pen RandFarbe = (Pen)this.RandFarbe.Clone();
-            g.FillDrawWegAufOrientierbarerWeg(HintergrundFarbe, RandFarbe, z, ow, samples);
-            con.drawImage(b, box);
+            Size s = box.Size.mul(Scaling).Max(1, 1).ToSize();
+            Image = new Bitmap(s.Width, s.Height + 1);
+            using (Graphics g = Image.GetHighGraphics(Scaling))
+            {
+                RectangleF pseudoBox = new RectangleF(RandHohe, RandHohe, Inhalt.box.Width, Inhalt.box.Height);
+                OrientierbarerWeg ow = OrientierbarerWeg.RundesRechteck(pseudoBox);
+                int samples = 10000;
+                Weg y = GetVerlauf(ow.L / RandHohe);
+                Weg z = t => y(t);
+                Pen RandFarbe = (Pen)this.RandFarbe.Clone();
+                g.FillDrawWegAufOrientierbarerWeg(HintergrundFarbe, RandFarbe, z, ow, samples);
+            }
+
+            con.drawImage(Image, box);
             Inhalt.draw(con);
-            g.Dispose();
         }
         public override void InStringBuilder(StringBuilder sb, string tabs)
         {
