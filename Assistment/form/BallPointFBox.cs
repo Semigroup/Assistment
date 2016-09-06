@@ -90,7 +90,7 @@ namespace Assistment.form
         {
             float radius = 10;
 
-            g.Clear(Color.Black);
+            g.Clear(Color.White);
             if (image != null)
                 g.DrawImage(image, new RectangleF(offPoint, imgSize.ToSize()));
             PointF Target = offPoint.add(pointFBox1.UserPoint.mul(imgSize));

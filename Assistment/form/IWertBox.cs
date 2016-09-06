@@ -5,12 +5,16 @@ using System.Text;
 
 namespace Assistment.form
 {
-    public interface IWertBox<T>
+    public interface IWertBox
     {
-        T GetValue();
-        void SetValue(T Value);
         void AddListener(EventHandler Handler);
         bool Valid();
         void AddInvalidListener(EventHandler Handler);
+    }
+
+    public interface IWertBox<T> : IWertBox
+    {
+        T GetValue();
+        void SetValue(T Value);
     }
 }

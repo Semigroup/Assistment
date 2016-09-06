@@ -55,8 +55,12 @@ namespace Assistment.Texts
             {
                 SimpleAssignment();
                 int n = DrawBoxs.Length;
+                if (n == 0)
+                    return;
 
                 int I = DrawBoxs.IndexOfMaxim(x => x.getMax() > 1 ? x.getSpace() / x.getMax() : 0);
+                if (I < 0)
+                    return;
                 float h = DrawBoxs[I].getSpace() / DrawBoxs[I].getMax(); // Mindesthöhe = min{ A_i / max_i | i }
                 h = Math.Min(1, h);
 

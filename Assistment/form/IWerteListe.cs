@@ -9,13 +9,11 @@ using System.Windows.Forms;
 
 namespace Assistment.form
 {
-    public interface IWerteListe
+    public interface IWerteListe : IWertBox
     {
         void AddWerteBox<T>(IWertBox<T> WerteBox, string Name);
         T GetValue<T>(string Name);
         void SetValue<T>(string Name, T Value);
-        void AddListener(EventHandler EventHandler);
-        void AddInvalidListener(EventHandler EventHandler);
     }
 
     public class WerteListe : ScrollBox, IWerteListe
@@ -79,6 +77,13 @@ namespace Assistment.form
         public void AddInvalidListener(EventHandler EventHandler)
         {
             InvalidChange += EventHandler;
+        }
+        public bool Valid()
+        {
+            foreach (IWertBox item in List)
+                if (!item.Valid())
+                    return false;
+            return true;
         }
     }
 

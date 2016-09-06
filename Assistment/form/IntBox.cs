@@ -11,6 +11,7 @@ namespace Assistment.form
 {
     public partial class IntBox : UserControl, IWertBox<int>
     {
+        private bool valid = false;
         private int userValue;
         public int UserValue
         {
@@ -40,12 +41,14 @@ namespace Assistment.form
             {
                 this.userValue = loc;
                 this.textBox1.ForeColor = Color.Black;
-                UserValueChanged(sender, e);
+                this.valid = true;
+                UserValueChanged(this, e);
             }
             else
             {
                 this.textBox1.ForeColor = Color.Red;
-                InvalidChange(sender, e);
+                this.valid = false;
+                InvalidChange(this, e);
             }
         }
 
@@ -63,8 +66,7 @@ namespace Assistment.form
         }
         public bool Valid()
         {
-            int loc;
-            return int.TryParse(textBox1.Text, out loc) && loc <= UserValueMaximum && loc >= UserValueMinimum;
+            return valid;
         }
         public void AddInvalidListener(EventHandler Handler)
         {

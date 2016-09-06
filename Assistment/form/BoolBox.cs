@@ -14,6 +14,7 @@ namespace Assistment.form
         public BoolBox(string Name)
         {
             this.Text = Name;
+            this.AutoSize = true;
         }
         public bool GetValue()
         {

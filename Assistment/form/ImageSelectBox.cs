@@ -62,6 +62,7 @@ namespace Assistment.form
                 g.Clear(Color.Gray);
                 label1.Refresh();
                 this.Image = null;
+                this.valid = true;
                 ImageChanged(this, new EventArgs());
                 return;
             }

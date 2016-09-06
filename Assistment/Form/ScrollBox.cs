@@ -62,6 +62,7 @@ namespace Assistment.form
         {
             Control.Location = new Point(-hScrollBar.Value, -vScrollBar.Value);
             Control.Refresh();
+            OnScroll(new ScrollEventArgs(ScrollEventType.First, 0));//Sinnvolle Werte hier...
         }
 
         protected override void OnSizeChanged(EventArgs e)
