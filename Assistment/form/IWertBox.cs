@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Assistment.form
 {
-    public interface IWertBox
+    public interface IWertBox : IDisposable
     {
         void AddListener(EventHandler Handler);
         bool Valid();

@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Drawing;
+using System.Drawing.Imaging;
 using Assistment.Texts;
 using Assistment.Drawing.LinearAlgebra;
+using System.IO;
 
 namespace Assistment.Extensions
 {
@@ -78,6 +80,46 @@ namespace Assistment.Extensions
                 g.DrawString(t.ToString("F1") + " " + einheit, Font, Brush, p);
             }
             return b;
+        }
+
+        public static void ForcedSave(this Image Image, FileStream FileStream, ImageFormat ImageFormat)
+        {
+            using (Bitmap b = new Bitmap(Image))
+            {
+                b.MakeTransparent();
+                b.Save(FileStream, ImageFormat.Jpeg);
+            }
+        }
+        public static void ForcedSave(this Image Image, string File)
+        {
+            ForcedSave(Image, File, GetFormat(File));
+        }
+        public static void ForcedSave(this Image Image, string File, ImageFormat ImageFormat)
+        {
+            using (FileStream fs = new FileStream(File, FileMode.Create))
+            {
+                ForcedSave(Image, fs, ImageFormat);
+                fs.Close();
+                fs.Dispose();
+            }
+        }
+
+        public static ImageFormat GetFormat(this string FileName)
+        {
+            ImageFormat[] formats = new ImageFormat[] {
+             ImageFormat.Jpeg, ImageFormat.Png,ImageFormat.Gif, ImageFormat.Bmp,
+            ImageFormat.Tiff, ImageFormat.Emf, ImageFormat.Icon,   ImageFormat.Wmf,
+            ImageFormat.Exif,ImageFormat.MemoryBmp
+            };
+
+            string ext = Path.GetExtension(FileName).ToLower().Substring(1);
+            if (ext == "jpg")
+                return ImageFormat.Jpeg;
+
+            foreach (var item in formats)
+                if (item.ToString().ToLower().Equals(ext))
+                    return item;
+            throw new NotImplementedException();
         }
     }
 }

@@ -15,7 +15,8 @@ namespace Assistment.form
     {
         public event EventHandler ButtonClick = delegate { };
         public string Message { get; private set; }
-        private Button[] buttons;
+        protected Button[] buttons;
+        private ToolTip ToolTip = new ToolTip();
 
         public ButtonReihe(bool horizontal, params string[] Buttons)
         {
@@ -54,12 +55,16 @@ namespace Assistment.form
             Message = (sender as Button).Text;
             ButtonClick(this, e);
         }
-
         public void Enable(bool Enabled, params string[] Buttons)
         {
             foreach (var item in buttons)
                 if (Buttons.Contains(item.Text))
                     item.Enabled = Enabled;
+        }
+        public void SetToolTip(params string[] ToolTips)
+        {
+            for (int i = 0; i < buttons.Length; i++)
+                ToolTip.SetToolTip(buttons[i], ToolTips[i]);
         }
     }
 }

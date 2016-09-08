@@ -183,6 +183,9 @@
     <Compile Include="form\ScrollList.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="form\SteuerBox.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="form\StringBox.cs">
       <SubType>Component</SubType>
     </Compile>

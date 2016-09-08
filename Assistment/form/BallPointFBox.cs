@@ -55,6 +55,13 @@ namespace Assistment.form
             DrawLabel(this, EventArgs.Empty);
         }
 
+        public void SetImage(string Pfad)
+        {
+            if (Pfad == null || Pfad.Length == 0)
+                Image = null;
+            else
+                Image = Image.FromFile(Pfad);
+        }
         public PointF GetValue()
         {
             return pointFBox1.UserPoint;
@@ -109,6 +116,14 @@ namespace Assistment.form
         protected void OnInvalidChanged(object sender, EventArgs e)
         {
             InvalidChange(sender, e);
+        }
+
+        public void Dispose()
+        {
+            if (g != null)
+                g.Dispose();
+            if (image != null)
+                image.Dispose();
         }
     }
 }

@@ -18,21 +18,21 @@ namespace Assistment.form
 
     public class WerteListe : ScrollBox, IWerteListe
     {
-        private SortedDictionary<string, object> dictionary = new SortedDictionary<string, object>();
+        private SortedDictionary<string, IWertBox> dictionary = new SortedDictionary<string, IWertBox>();
         public event EventHandler UserValueChanged = delegate { };
         public event EventHandler InvalidChange = delegate { };
         private ControlList List;
 
         public WerteListe()
-            : base(CreateList())
+            : base(new ControlList())
         {
             List = base.Control as ControlList;
         }
-        private static ControlList CreateList()
-        {
-            return new ControlList();
-        }
 
+        public IWertBox<T> GetWerteBox<T>(string Name)
+        {
+            return dictionary[Name] as IWertBox<T>;
+        }
         public void AddWerteBox<T>(IWertBox<T> WerteBox, string Name)
         {
             dictionary.Add(Name, WerteBox);
@@ -42,7 +42,7 @@ namespace Assistment.form
         }
         public T GetValue<T>(string Name)
         {
-            object ob;
+            IWertBox ob;
             if (!dictionary.TryGetValue(Name, out ob))
                 throw new NotImplementedException();
 
@@ -51,7 +51,7 @@ namespace Assistment.form
         }
         public void SetValue<T>(string Name, T Value)
         {
-            object ob;
+            IWertBox ob;
             if (!dictionary.TryGetValue(Name, out ob))
                 throw new NotImplementedException();
 
@@ -84,6 +84,12 @@ namespace Assistment.form
                 if (!item.Valid())
                     return false;
             return true;
+        }
+        public void Dispose()
+        {
+            List.Dispose();
+            foreach (IWertBox item in dictionary.Values)
+                item.Dispose();
         }
     }
 

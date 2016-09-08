@@ -64,6 +64,10 @@ namespace Assistment.Xml
         {
             return new PointF(getFloat(reader, name + "_X"), getFloat(reader, name + "_Y"));
         }
+        public static Size getSize(this XmlReader reader, string name)
+        {
+            return new Size(getInt(reader, name + "_X"), getInt(reader, name + "_Y"));
+        }
         public static Point getPoint(this XmlReader reader, string name)
         {
             return new Point(getInt(reader, name + "_X"), getInt(reader, name + "_Y"));

@@ -44,8 +44,6 @@ namespace Assistment.form
             }
         }
 
-        public Image Image { get; private set; }
-
         public ImageSelectBox()
         {
             InitializeComponent();
@@ -61,17 +59,18 @@ namespace Assistment.form
                 this.button2.Enabled = false;
                 g.Clear(Color.Gray);
                 label1.Refresh();
-                this.Image = null;
                 this.valid = true;
                 ImageChanged(this, new EventArgs());
                 return;
             }
             try
             {
-                Image = Image.FromFile(path);
-                this.path = path;
-                g.Clear(Color.Gray);
-                g.DrawImage(Image, new Rectangle(new Point(), label1.Size));
+                using (Image Image = Image.FromFile(path))
+                {
+                    this.path = path;
+                    g.Clear(Color.Gray);
+                    g.DrawImage(Image, new Rectangle(new Point(), label1.Size));
+                }
                 this.button2.Enabled = true;
                 label1.Refresh();
                 ImageChanged(this, new EventArgs());
@@ -100,6 +99,7 @@ namespace Assistment.form
         public void SetValue(string Value)
         {
             ImagePath = Value;
+            openFileDialog1.FileName = Value;
         }
         public void AddListener(EventHandler Handler)
         {
@@ -112,6 +112,11 @@ namespace Assistment.form
         public void AddInvalidListener(EventHandler Handler)
         {
             InvalidChange += Handler;
+        }
+        public void Dispose()
+        {
+            if (g != null)
+                g.Dispose();
         }
     }
 }
