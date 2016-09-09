@@ -71,6 +71,8 @@ namespace Assistment.form
                     g.Clear(Color.Gray);
                     g.DrawImage(Image, new Rectangle(new Point(), label1.Size));
                 }
+                openFileDialog1.InitialDirectory = Path.GetDirectoryName(path);
+                openFileDialog1.FileName = Path.GetFileName(path);
                 this.button2.Enabled = true;
                 label1.Refresh();
                 ImageChanged(this, new EventArgs());
@@ -99,7 +101,6 @@ namespace Assistment.form
         public void SetValue(string Value)
         {
             ImagePath = Value;
-            openFileDialog1.FileName = Value;
         }
         public void AddListener(EventHandler Handler)
         {
@@ -113,8 +114,9 @@ namespace Assistment.form
         {
             InvalidChange += Handler;
         }
-        public void Dispose()
+        public void DDispose()
         {
+            this.Dispose();
             if (g != null)
                 g.Dispose();
         }

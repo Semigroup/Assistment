@@ -35,5 +35,9 @@ namespace Assistment.form
         public void AddInvalidListener(EventHandler Handler)
         {
         }
+        public void DDispose()
+        {
+            this.Dispose();
+        }
     }
 }

@@ -51,5 +51,10 @@ namespace Assistment.form
         {
             WertBox.AddInvalidListener(Handler);
         }
+        public void DDispose()
+        {
+            WertBox.DDispose();
+            this.Dispose();
+        }
     }
 }

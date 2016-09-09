@@ -95,5 +95,9 @@ namespace Assistment.form
         {
             InvalidChange += Handler;
         }
+        public void DDispose()
+        {
+            this.Dispose();
+        }
     }
 }

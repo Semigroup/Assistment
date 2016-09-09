@@ -85,11 +85,12 @@ namespace Assistment.form
                     return false;
             return true;
         }
-        public void Dispose()
+        public void DDispose()
         {
             List.Dispose();
             foreach (IWertBox item in dictionary.Values)
-                item.Dispose();
+                item.DDispose();
+            this.Dispose();
         }
     }
 

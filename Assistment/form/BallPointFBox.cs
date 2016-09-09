@@ -118,8 +118,9 @@ namespace Assistment.form
             InvalidChange(sender, e);
         }
 
-        public void Dispose()
+        public void DDispose()
         {
+            Dispose();
             if (g != null)
                 g.Dispose();
             if (image != null)
