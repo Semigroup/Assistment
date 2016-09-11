@@ -9,11 +9,24 @@ using System.Windows.Forms;
 
 namespace Assistment.form
 {
+    public class WertEventArgs : EventArgs
+    {
+        public string Name { get; set; }
+        public object Value { get; set; }
+        public WertEventArgs(string Name, object Value)
+        {
+            this.Name = Name;
+            this.Value = Value;
+        }
+    }
+    public delegate void WertEventHandler(object sender, WertEventArgs e);
+
     public interface IWerteListe : IWertBox
     {
         void AddWerteBox<T>(IWertBox<T> WerteBox, string Name);
         T GetValue<T>(string Name);
         void SetValue<T>(string Name, T Value);
+        event WertEventHandler WertChanged;
     }
 
     public class WerteListe : ScrollBox, IWerteListe
@@ -21,6 +34,7 @@ namespace Assistment.form
         private SortedDictionary<string, IWertBox> dictionary = new SortedDictionary<string, IWertBox>();
         public event EventHandler UserValueChanged = delegate { };
         public event EventHandler InvalidChange = delegate { };
+        public event WertEventHandler WertChanged = delegate { };
         private ControlList List;
 
         public WerteListe()
@@ -37,6 +51,7 @@ namespace Assistment.form
         {
             dictionary.Add(Name, WerteBox);
             WerteBox.AddListener(OnUserValueChanged);
+            WerteBox.AddListener((sender, e) => WertChanged(sender, new WertEventArgs(Name, WerteBox.GetValue())));
             WerteBox.AddInvalidListener(OnInvalidChange);
             List.Add(WerteBox as Control);
         }
@@ -92,6 +107,8 @@ namespace Assistment.form
                 item.DDispose();
             this.Dispose();
         }
+
+
     }
 
     public static class WerteListeErweiterer

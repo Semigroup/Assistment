@@ -82,6 +82,11 @@ namespace Assistment.Texts
             Inhalt.setup(box);
             this.box = Inhalt.box.Inner(-RandHohe, -RandHohe);
         }
+        public override void Move(PointF ToMove)
+        {
+            base.Move(ToMove);
+            Inhalt.Move(ToMove);
+        }
 
         public abstract Weg GetVerlauf(float units);
         public abstract Art GetArt();

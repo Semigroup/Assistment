@@ -143,6 +143,12 @@
     <Compile Include="form\IntBox.Designer.cs">
       <DependentUpon>IntBox.cs</DependentUpon>
     </Compile>
+    <Compile Include="form\IntPlusMinusBox.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="form\IntPlusMinusBox.Designer.cs">
+      <DependentUpon>IntPlusMinusBox.cs</DependentUpon>
+    </Compile>
     <Compile Include="form\IWertBox.cs" />
     <Compile Include="form\IWerteListe.cs">
       <SubType>UserControl</SubType>
@@ -286,6 +292,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="form\IntBox.resx">
       <DependentUpon>IntBox.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="form\IntPlusMinusBox.resx">
+      <DependentUpon>IntPlusMinusBox.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="form\Logger.resx">
       <DependentUpon>Logger.cs</DependentUpon>

@@ -28,7 +28,7 @@ namespace Assistment.form
             set
             {
                 speichernNotwendig = value;
-                Enable(value, Speichern);
+                Enable(speicherort != null && value, Speichern);
             }
         }
         private string speicherort;
@@ -89,19 +89,24 @@ namespace Assistment.form
                 SpeichernNotwendig = false;
                 SpeichernClicked(this, e);
             }
-            else if (Message == SpeichernUnter && SaveFileDialog.ShowDialog() == DialogResult.OK)
+            else if (Message == SpeichernUnter)
             {
-                this.speicherort = SaveFileDialog.FileName;
-                SpeichernNotwendig = false;
-                SpeichernClicked(this, e);
+                if (speicherort != null)
+                    SaveFileDialog.InitialDirectory = Path.GetDirectoryName(speicherort);
+                if (SaveFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    this.speicherort = SaveFileDialog.FileName;
+                    SpeichernNotwendig = false;
+                    SpeichernClicked(this, e);
+                }
             }
         }
 
         public bool CanExit()
         {
             if (SpeichernNotwendig)
-                return MessageBox.Show("Wollen Sie wirklich das Programm beenden ohne vorher abzuspeichern?", "Achtung, Daten können verloren gehen!", MessageBoxButtons.YesNo, MessageBoxIcon.Warning)
-                    == DialogResult.OK;
+                return MessageBox.Show("Wollen Sie wirklich fortfahren ohne vorher abzuspeichern?", "Achtung, Daten können verloren gehen!", MessageBoxButtons.YesNo, MessageBoxIcon.Warning)
+                    == DialogResult.Yes;
             else
                 return true;
         }

@@ -395,5 +395,44 @@ namespace Assistment.Extensions
                 return q;
             }, () => p.Y < Point.Y, () => p = new Point()));
         }
+
+        public static SortedDictionary<B, int> Stauch<A, B>(this IEnumerable<A> IEnumerable, Func<A, B> Eigenschaft)
+            where B : IComparable<B>
+        {
+            IEnumerable<B> bs = IEnumerable.Map<A, B>(x => Eigenschaft(x)).OrderBy(x => x);
+            SortedDictionary<B, int> dic = new SortedDictionary<B, int>();
+            int number = 0;
+            B lastB = default(B);
+            foreach (var item in bs)
+                if (number == 0)
+                {
+                    number = 1;
+                    lastB = item;
+                }
+                else if (lastB.Equals(item))
+                    number++;
+                else
+                {
+                    dic.Add(lastB, number);
+                    lastB = item;
+                    number = 1;
+                }
+            if (number > 0)
+                dic.Add(lastB, number);
+            return dic;
+        }
+        public static SortedDictionary<B, int> SumLeft<A, B>(this SortedDictionary<A, int> SortedDictionary, Func<A, B> Eigenschaft)
+        {
+            SortedDictionary<B, int> dic = new SortedDictionary<B, int>();
+            foreach (var item in SortedDictionary)
+            {
+                B Key = Eigenschaft(item.Key);
+                if (dic.ContainsKey(Key))
+                    dic[Key]+= item.Value;
+                else
+                    dic.Add(Key, item.Value);
+            }
+            return dic;
+        }
     }
 }

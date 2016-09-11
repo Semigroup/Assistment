@@ -66,8 +66,7 @@
             // 
             this.openFileDialog1.DefaultExt = "*";
             this.openFileDialog1.FileName = "openFileDialog1";
-            this.openFileDialog1.Filter = "Alle Dateien (*.*)|*.*|PNG (*.png)|*.png|JPG (*.jpeg)|*.jpeg| GiF (*.gif)|*.gif| " +
-    "BMP (*.bmp)| *.bmp";
+            this.openFileDialog1.Filter = "Bilder|*.jpg; *.jpg; *.png; *.bmp; *.gif; *.tiff; *.tif; *.wmf";
             // 
             // ImageSelectBox
             // 
