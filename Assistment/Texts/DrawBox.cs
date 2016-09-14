@@ -168,24 +168,38 @@ namespace Assistment.Texts
         {
             createPDF(name, PageSize.Width / DrawContextDocument.factor, float.MaxValue, PageSize);
         }
+        public void createPDF(string name, Color backColor)
+        {
+            iTextSharp.text.Rectangle PageSize = iTextSharp.text.PageSize.A4;
+            createPDF(name, PageSize.Width / DrawContextDocument.factor, float.MaxValue, PageSize, backColor);
+        }
         public void createPDF(string name, float width, float height, iTextSharp.text.Rectangle PageSize)
+        {
+            createPDF(name, width, height, PageSize, Color.White);
+        }
+        public void createPDF(string name, float width, float height, iTextSharp.text.Rectangle PageSize, Color backColor)
         {
             this.update();
             this.setup(new RectangleF(0, 0, width, 0));
 
-            iTextSharp.text.Document doc = new iTextSharp.text.Document();
-            doc.SetPageSize(PageSize);
-            doc.NewPage();
-            PdfWriter writer = PdfWriter.GetInstance(doc, System.IO.File.Create(name + ".pdf"));
+            iTextSharp.text.Rectangle pageSize = new iTextSharp.text.Rectangle(PageSize);
+            pageSize.BackgroundColor = new iTextSharp.text.BaseColor(backColor);
 
-            doc.Open();
-            PdfContentByte pCon = writer.DirectContent;
-            pCon.SetLineWidth(0.3f);
-            DrawContextDocument dcd = new DrawContextDocument(pCon, height);
-            this.draw(dcd);
-            doc.Close();
-            dcd.Dispose();
-            writer.Dispose();
+            using (iTextSharp.text.Document doc = new iTextSharp.text.Document())
+            //using ()
+            {
+                PdfWriter writer = PdfWriter.GetInstance(doc, System.IO.File.Create(name + ".pdf"));
+                doc.SetPageSize(pageSize);
+                doc.NewPage();
+                doc.Open();
+                PdfContentByte pCon = writer.DirectContent;
+                pCon.SetLineWidth(0.3f);
+                using (DrawContextDocument dcd = new DrawContextDocument(pCon, height))
+                {
+                    this.draw(dcd);
+                    //doc.Close();
+                }
+            }
         }
         public void createPDF(string name)
         {

@@ -388,12 +388,13 @@ namespace Assistment.Texts
         public override void drawRectangle(Pen pen, float x, float y, float width, float height)
         {
             adjustPageNumber(y + height);
-            pCon.Rectangle(factor * x, yOff - factor * y, factor * width, -factor * height - 1);
+            pCon.Rectangle(factor * x, yOff - factor * y, factor * width, -factor * height);
             SetPen(pen);
             pCon.Stroke();
         }
         public override void fillRectangle(Brush brush, float x, float y, float width, float height)
         {
+            adjustPageNumber(y + height);
             pCon.SaveState();
 
             iTextSharp.text.BaseColor Color = getColor(brush);
@@ -403,8 +404,7 @@ namespace Assistment.Texts
             PdfGState.StrokeOpacity = 0;
             pCon.SetGState(PdfGState);
 
-            adjustPageNumber(y + height);
-            pCon.Rectangle(factor * x, yOff - factor * y, factor * width, -factor * height - 1);
+            pCon.Rectangle(factor * x, yOff - factor * y, factor * width, -factor * height);
             pCon.SetColorFill(Color);
             pCon.FillStroke();
 
@@ -432,14 +432,14 @@ namespace Assistment.Texts
         public override void drawEllipse(Pen pen, float x, float y, float width, float height)
         {
             adjustPageNumber(y + height);
-            pCon.Ellipse(factor * x, yOff - factor * y, factor * width, -factor * height - 1);
+            pCon.Ellipse(factor * x, yOff - factor * y, factor * width, -factor * height );
             SetPen(pen);
             pCon.Stroke();
         }
         public override void fillEllipse(Brush brush, float x, float y, float width, float height)
         {
             adjustPageNumber(y + height);
-            pCon.Ellipse(factor * x, yOff - factor * y, factor * width, -factor * height - 1);
+            pCon.Ellipse(factor * x, yOff - factor * y, factor * width, -factor * height );
             pCon.SetColorFill(getColor(brush));
             pCon.FillStroke();
         }

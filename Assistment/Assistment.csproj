@@ -32,6 +32,23 @@
     <WarningLevel>4</WarningLevel>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <PlatformTarget>x64</PlatformTarget>
+    <OutputPath>bin\x64\Debug\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <PlatformTarget>x64</PlatformTarget>
+    <OutputPath>bin\x64\Release\</OutputPath>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <PlatformTarget>x86</PlatformTarget>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <PlatformTarget>x86</PlatformTarget>
+    <OutputPath>bin\x86\Release\</OutputPath>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="itextsharp">
       <HintPath>..\..\..\itextsharp-all-5.5.1\itextsharp-dll-core\itextsharp.dll</HintPath>
@@ -44,11 +61,13 @@
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Security" />
     <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xaml" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Algebra\Gruppe\Gruppe.cs" />
@@ -183,6 +202,12 @@
     <Compile Include="form\PointFBox.Designer.cs">
       <DependentUpon>PointFBox.cs</DependentUpon>
     </Compile>
+    <Compile Include="form\PpmBox.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="form\PpmBox.Designer.cs">
+      <DependentUpon>PpmBox.cs</DependentUpon>
+    </Compile>
     <Compile Include="form\ScrollBox.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -311,6 +336,9 @@
     <EmbeddedResource Include="form\PointFBox.resx">
       <DependentUpon>PointFBox.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="form\PpmBox.resx">
+      <DependentUpon>PpmBox.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Testing\TestForm.resx">
       <DependentUpon>TestForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -319,36 +347,36 @@
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Fonts\calibri.ttf">
+    <Content Include="Fonts\calibri.ttf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Fonts\calibrib.ttf">
+    </Content>
+    <Content Include="Fonts\calibrib.ttf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Fonts\calibrii.ttf">
+    </Content>
+    <Content Include="Fonts\calibrii.ttf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Fonts\calibril.ttf">
+    </Content>
+    <Content Include="Fonts\calibril.ttf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Fonts\calibrili.ttf">
+    </Content>
+    <Content Include="Fonts\calibrili.ttf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Fonts\calibriz.ttf">
+    </Content>
+    <Content Include="Fonts\calibriz.ttf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Fonts\Exocet1.ttf">
+    </Content>
+    <Content Include="Fonts\Exocet1.ttf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Fonts\Exocet2.ttf">
+    </Content>
+    <Content Include="Fonts\Exocet2.ttf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Fonts\JH_FALLOUT.TTF">
+    </Content>
+    <Content Include="Fonts\JH_FALLOUT.TTF">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Fonts\Plain Germanica.ttf">
+    </Content>
+    <Content Include="Fonts\Plain Germanica.ttf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
+    </Content>
     <None Include="Subprozesse\MakePDF.vshost.exe.manifest">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

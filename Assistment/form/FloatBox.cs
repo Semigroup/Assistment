@@ -38,12 +38,12 @@ namespace Assistment.form
             if (Valid())
             {
                 this.textBox1.ForeColor = Color.Black;
-                UserValueChanged(sender, e);
+                UserValueChanged(this, e);
             }
             else
             {
                 this.textBox1.ForeColor = Color.Red;
-                InvalidChange(sender, e);
+                InvalidChange(this, e);
             }
         }
 

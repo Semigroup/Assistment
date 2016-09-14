@@ -34,13 +34,11 @@ namespace Assistment.Texts
             Blitz
         }
 
-        public Brush HintergrundFarbe { get; private set; }
-        public Pen RandFarbe { get; private set; }
-        public float RandHohe { get; private set; }
-        public DrawBox Inhalt { get; private set; }
+        public Brush HintergrundFarbe { get;  set; }
+        public Pen RandFarbe { get;  set; }
+        public float RandHohe { get;  set; }
+        public DrawBox Inhalt { get; set; }
         public float Scaling { get; set; }
-
-        private Image Image;
 
         public Titel(DrawBox Inhalt, float RandHohe, Pen RandFarbe, Brush HintergrundFarbe)
             : this(Inhalt, RandHohe, RandFarbe, HintergrundFarbe, 1)
@@ -94,7 +92,7 @@ namespace Assistment.Texts
         public override void draw(DrawContext con)
         {
             Size s = box.Size.mul(Scaling).Max(1, 1).ToSize();
-            Image = new Bitmap(s.Width, s.Height + 1);
+            using (Image Image = new Bitmap(s.Width, s.Height + 1))
             using (Graphics g = Image.GetHighGraphics(Scaling))
             {
                 RectangleF pseudoBox = new RectangleF(RandHohe, RandHohe, Inhalt.box.Width, Inhalt.box.Height);
@@ -104,9 +102,8 @@ namespace Assistment.Texts
                 Weg z = t => y(t);
                 Pen RandFarbe = (Pen)this.RandFarbe.Clone();
                 g.FillDrawWegAufOrientierbarerWeg(HintergrundFarbe, RandFarbe, z, ow, samples);
+                con.drawImage(Image, box);
             }
-
-            con.drawImage(Image, box);
             Inhalt.draw(con);
         }
         public override void InStringBuilder(StringBuilder sb, string tabs)

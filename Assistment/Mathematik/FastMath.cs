@@ -99,5 +99,29 @@ namespace Assistment.Mathematik
         {
             return Math.Min(a, b);
         }
+        /// <summary>
+        /// Nicht optimal implementiert
+        /// </summary>
+        /// <param name="As"></param>
+        /// <returns></returns>
+        public static int Min(params int[] As)
+        {
+            int a = int.MaxValue;
+            foreach (var item in As)
+                a = Math.Min(a, item);
+            return a;
+        }
+        /// <summary>
+        /// Nicht optimal implementiert
+        /// </summary>
+        /// <param name="As"></param>
+        /// <returns></returns>
+        public static int Max(params int[] As)
+        {
+            int a = int.MinValue;
+            foreach (var item in As)
+                a = Math.Max(a, item);
+            return a;
+        }
     }
 }

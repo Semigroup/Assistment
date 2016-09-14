@@ -107,8 +107,6 @@ namespace Assistment.form
                 item.DDispose();
             this.Dispose();
         }
-
-
     }
 
     public static class WerteListeErweiterer
@@ -140,6 +138,13 @@ namespace Assistment.form
         {
             ChainedSizeFBox csb = new ChainedSizeFBox();
             csb.Chained = Chained;
+            AddWertePaar(WerteListe, csb, value, Name);
+        }
+        public static void AddChainedSizeFBox(this IWerteListe WerteListe, SizeF value, string Name, bool Chained, SizeF UserSizeMaximum)
+        {
+            ChainedSizeFBox csb = new ChainedSizeFBox();
+            csb.Chained = Chained;
+            csb.UserSizeMaximum = UserSizeMaximum;
             AddWertePaar(WerteListe, csb, value, Name);
         }
         public static void AddBigStringBox(this IWerteListe WerteListe, string value, string Name)

@@ -23,6 +23,24 @@ namespace Assistment.form
         public event EventHandler UserValueChanged = delegate { };
         public event EventHandler InvalidChange = delegate { };
 
+        public SizeF UserSizeMaximum
+        {
+            get { return new SizeF(XBox.UserValueMaximum, YBox.UserValueMaximum); }
+            set
+            {
+                XBox.UserValueMaximum = value.Width;
+                YBox.UserValueMaximum = value.Height;
+            }
+        }
+        public SizeF UserSizeMinimum
+        {
+            get { return new SizeF(XBox.UserValueMinimum, YBox.UserValueMinimum); }
+            set
+            {
+                XBox.UserValueMinimum = value.Width;
+                YBox.UserValueMinimum = value.Height;
+            }
+        }
 
         public ChainedSizeFBox()
         {

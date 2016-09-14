@@ -388,6 +388,32 @@ namespace Assistment.Drawing.LinearAlgebra
     }
     public static class SizeFErweiterer
     {
+        /// <summary>
+        /// Sorgt dafür, dass Neu.Width = Constraintment.Width oder Neu.Height = Constraintment.Height
+        /// <para>und Alt.Ratio = Neu.Ratio</para>
+        /// <para>Nimmt an, dass Alt, Constraintment > (0,0) </para>
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="Constraintment"></param>
+        /// <returns></returns>
+        public static SizeF Constraint(this SizeF Alt, SizeF Constraintment)
+        {
+            float r = Alt.ratio();
+            float w = Constraintment.Width / Alt.Width;
+            float h = Constraintment.Height / Alt.Height;
+            if (w > h)
+            {
+                Alt.Height = Constraintment.Height;
+                Alt.Width = r * Alt.Height;
+            }
+            else
+            {
+                Alt.Width = Constraintment.Width;
+                Alt.Height = Alt.Width / r;
+            }
+            return Alt;
+        }
+
         public static SizeF add(this SizeF a, SizeF c)
         {
             return new SizeF(a.Width + c.Width, a.Height + c.Height);
@@ -627,7 +653,6 @@ namespace Assistment.Drawing.LinearAlgebra
             return Math.Abs(a.X - b.X) + Math.Abs(a.Y - b.Y) < 0.00001f;
         }
     }
-
     public static class RectangleFErweiterer
     {
         public static PointF Center(this RectangleF Rectangle)

@@ -6,12 +6,20 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using System.Windows.Media.Imaging;
 using System.IO;
+
+using Assistment.Drawing.LinearAlgebra;
 
 namespace Assistment.form
 {
     public partial class ImageSelectBox : UserControl, IWertBox<string>
     {
+        /// <summary>
+        /// Maximum für Image.Width * Image.Height
+        /// </summary>
+        public int MaximumImageSize { get; set; }
+
         private string path;
         public string ImagePath
         {
@@ -65,11 +73,29 @@ namespace Assistment.form
             }
             try
             {
+                if (MaximumImageSize > 0)
+                    using (var imageStream = File.OpenRead(path))
+                    {
+                        BitmapDecoder decoder = BitmapDecoder.Create(imageStream,
+                            BitmapCreateOptions.IgnoreColorProfile,
+                            BitmapCacheOption.None);
+                        Size s = new Size(decoder.Frames[0].PixelWidth, decoder.Frames[0].PixelHeight);
+                        if (s.Width * s.Height > MaximumImageSize)
+                        {
+                            MessageBox.Show("Das Bild " + path + " wurde nicht geladen, da seine Größe von "
+                                + (s.Width * s.Height) + " = " + s.Width + " x " + s.Height + " Pixeln, die maximal erlaubte Größe von "
+                                + MaximumImageSize + " Pixeln überschreitet.", "Memory-Überschreitung!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            throw new OutOfMemoryException();
+                        }
+                    }
                 using (Image Image = Image.FromFile(path))
                 {
                     this.path = path;
                     g.Clear(Color.Gray);
-                    g.DrawImage(Image, new Rectangle(new Point(), label1.Size));
+                    SizeF Size = Image.Size;
+                    Size = Size.Constraint(label1.Size);
+                    PointF p = Size.sub(label1.Size).div(-2).ToPointF();
+                    g.DrawImage(Image, new RectangleF(p, Size));
                 }
                 openFileDialog1.InitialDirectory = Path.GetDirectoryName(path);
                 openFileDialog1.FileName = Path.GetFileName(path);
