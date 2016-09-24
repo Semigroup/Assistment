@@ -265,5 +265,10 @@ namespace Assistment.Forms
         {
             throw new NotImplementedException();
         }
+
+        public override void fillPolygon(Brush Brush, PointF[] polygon)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

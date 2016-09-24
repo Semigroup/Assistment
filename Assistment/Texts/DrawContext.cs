@@ -8,6 +8,9 @@ using iTextSharp.text.pdf;
 using System.Drawing.Imaging;
 using Assistment.Drawing.LinearAlgebra;
 using Assistment.Extensions;
+using System;
+using System.Drawing;
+using Microsoft.Win32;
 
 namespace Assistment.Texts
 {
@@ -45,6 +48,7 @@ namespace Assistment.Texts
         }
         public abstract void drawLine(Pen pen, float x1, float y1, float x2, float y2);
         public abstract void drawPolygon(Pen pen, PointF[] polygon);
+        public abstract void fillPolygon(Brush Brush, PointF[] polygon);
         public void drawString(string text, Font font, Brush brush, PointF point, float height)
         {
             this.drawString(text, font, brush, point.X, point.Y, height);
@@ -169,6 +173,11 @@ namespace Assistment.Texts
         public override void newPage()
         {
         }
+
+        public override void fillPolygon(System.Drawing.Brush Brush, System.Drawing.PointF[] polygon)
+        {
+            g.FillPolygon(Brush, polygon);
+        }
     }
     public class DrawContextDocument : DrawContext
     {
@@ -176,11 +185,14 @@ namespace Assistment.Texts
         /// Standard-Größenangaben müssen mit diesem Wert multipliziert werden, bevor sie an die itext-Api übergeben werden.
         /// </summary>
         public const float factor = 0.6f;
+        public const float FontFactor = 1.0f;
+        public const float FontOffset = 2.7f;
 
         private iTextSharp.text.pdf.PdfContentByte pCon;
         private float yOff;
         private SortedDictionary<Image, iTextSharp.text.Image> bilder;
         private SortedDictionary<Color, iTextSharp.text.BaseColor> farben;
+        //private SortedDictionary<Font, BaseFont> fonts;
         public readonly iTextSharp.text.BaseColor STANDARD = iTextSharp.text.BaseColor.BLACK;
         private static string FontPath = Directory.GetCurrentDirectory() + @"\Fonts\";
         private static bool madeBaseFonts = false;
@@ -196,39 +208,39 @@ namespace Assistment.Texts
         /// </summary>
         private static BaseFont[] fonts;
 
-        public struct SeitennummerOptionen
-        {
-            public SeitennummerOptionen(float x, float y)
-            {
-                this.ort = new PointF(x, y);
-                this.font = new FontMeasurer("Calibri", 11);
-                this.backGerade = Brushes.White;
-                this.backUngerade = Brushes.White;
-                this.fontfarbeGerade = Brushes.Black;
-                this.fontfarbeUngerade = Brushes.Black;
-                this.text = "";
+        //public struct SeitennummerOptionen
+        //{
+        //    public SeitennummerOptionen(float x, float y)
+        //    {
+        //        this.ort = new PointF(x, y);
+        //        this.font = new FontGraphicsMeasurer("Calibri", 11);
+        //        this.backGerade = Brushes.White;
+        //        this.backUngerade = Brushes.White;
+        //        this.fontfarbeGerade = Brushes.Black;
+        //        this.fontfarbeUngerade = Brushes.Black;
+        //        this.text = "";
 
-                this.aktiv = false;
-            }
+        //        this.aktiv = false;
+        //    }
 
-            /// <summary>
-            /// ignoriert den einzug/margin
-            /// </summary>
-            public PointF ort;
-            public xFont font;
-            public Brush backGerade;
-            public Brush backUngerade;
-            public Brush fontfarbeGerade;
-            public Brush fontfarbeUngerade;
+        //    /// <summary>
+        //    /// ignoriert den einzug/margin
+        //    /// </summary>
+        //    public PointF ort;
+        //    public xFont font;
+        //    public Brush backGerade;
+        //    public Brush backUngerade;
+        //    public Brush fontfarbeGerade;
+        //    public Brush fontfarbeUngerade;
 
-            public string text;
+        //    public string text;
 
-            public bool aktiv;
-        }
-        public static SeitennummerOptionen STANDARD_SN_OPTION = new SeitennummerOptionen(10, 10);
-        public SeitennummerOptionen seitennummer = STANDARD_SN_OPTION;
+        //    public bool aktiv;
+        //}
+        //public static SeitennummerOptionen STANDARD_SN_OPTION = new SeitennummerOptionen(10, 10);
+        //public SeitennummerOptionen seitennummer = STANDARD_SN_OPTION;
 
-        private class sortierer : IComparer<Image>, IComparer<Color>
+        private class sortierer : IComparer<Image>, IComparer<Color>, IComparer<Font>
         {
             public int Compare(Image x, Image y)
             {
@@ -238,6 +250,11 @@ namespace Assistment.Texts
             public int Compare(Color x, Color y)
             {
                 return x.ToArgb() - y.ToArgb();
+            }
+
+            public int Compare(System.Drawing.Font x, System.Drawing.Font y)
+            {
+                return x.Name.CompareTo(y.Name);
             }
         }
 
@@ -251,6 +268,7 @@ namespace Assistment.Texts
             this.yOff = pCon.PdfDocument.PageSize.Height;
             this.bilder = new SortedDictionary<Image, iTextSharp.text.Image>(new sortierer());
             this.farben = new SortedDictionary<Color, iTextSharp.text.BaseColor>(new sortierer());
+            //this.fonts = new SortedDictionary<Font, BaseFont>(new sortierer());
             this.backcolor = Brushes.White;
             this.Bildhohe = Bildhohe;
 
@@ -275,6 +293,39 @@ namespace Assistment.Texts
             }
         }
 
+        //private string getFontFile(Font Font)
+        //{
+        //    Console.WriteLine(Font.Name + " -> " + Font.OriginalFontName + " -> " + Font.SystemFontName);
+        //    RegistryKey keys = null;
+        //    try
+        //    {
+        //        keys = Registry.LocalMachine.OpenSubKey(@"Software\Microsoft\Windows NT\CurrentVersion\Fonts", false);
+        //        if (keys == null)
+        //            keys = Registry.LocalMachine.OpenSubKey(@"Software\Microsoft\Windows\CurrentVersion\Fonts", false);
+        //        if (keys == null)
+        //            throw new Exception("Can't find font registry database.");
+        //        StringBuilder name = new StringBuilder(keys.Name);
+        //        if (Font.Bold)
+        //            name.Append(" Bold");
+        //        if (Font.Italic)
+        //            name.Append(" Italic");
+        //        name.Append(" (TrueType)");
+        //        string fullname = name.ToString();
+        //        string basename = keys.Name + " (TrueType)";
+        //        Console.WriteLine(fullname + ",  " + basename);
+        //        object file = keys.GetValue(fullname);
+        //        if (file == null)
+        //            file = keys.GetValue(basename);
+        //        if (file != null)
+        //            return file.ToString();
+        //        return null;
+        //    }
+        //    finally
+        //    {
+        //        if (keys != null)
+        //            keys.Dispose();
+        //    }
+        //}
         private BaseFont getFont(Font f)
         {
             int i;
@@ -299,6 +350,16 @@ namespace Assistment.Texts
             if ((f.Style & FontStyle.Italic) != 0)
                 i += 2;
             return fonts[i];
+            //if (fonts.ContainsKey(f))
+            //    return fonts[f];
+            //else
+            //{
+            //    string fontFile = getFontFile(f);
+            //    Console.WriteLine(fontFile + " von " + f.Name + ", " + f.Size);
+            //    BaseFont bf = BaseFont.CreateFont(fontFile, BaseFont.CP1252, BaseFont.EMBEDDED);
+            //    fonts.Add(f, bf);
+            //    return bf;
+            //}
         }
         private iTextSharp.text.BaseColor getColor(Color c)
         {
@@ -342,7 +403,7 @@ namespace Assistment.Texts
             {
                 for (int i = pCon.PdfDocument.PageNumber; i < (int)Math.Ceiling(factor * y / pCon.PdfDocument.PageSize.Height); i++)
                 {
-                    schreibSeitennummer();
+                    //schreibSeitennummer();
                     yOff += pCon.PdfDocument.PageSize.Height;
                     pCon.PdfDocument.NewPage();
                 }
@@ -354,30 +415,30 @@ namespace Assistment.Texts
             adjustPageNumber(y + 2);
         }
 
-        private void schreibSeitennummer()
-        {
-            if (seitennummer.aktiv)
-            {
-                string s = pCon.PdfDocument.PageNumber.ToString() + " " + seitennummer.text;
+        //private void schreibSeitennummer()
+        //{
+        //    if (seitennummer.aktiv)
+        //    {
+        //        string s = pCon.PdfDocument.PageNumber.ToString() + " " + seitennummer.text;
 
-                RectangleF r = new RectangleF();
-                r.Location = seitennummer.ort;
-                r.Y += (pCon.PdfDocument.PageNumber - 1) * pCon.PdfDocument.PageSize.Height / factor;
-                r.Height = seitennummer.font.yMass(s);
-                r.Width = seitennummer.font.xMass(s);
+        //        RectangleF r = new RectangleF();
+        //        r.Location = seitennummer.ort;
+        //        r.Y += (pCon.PdfDocument.PageNumber - 1) * pCon.PdfDocument.PageSize.Height / factor;
+        //        r.Height = seitennummer.font.yMass(s);
+        //        r.Width = seitennummer.font.xMass(s);
 
-                if (pCon.PdfDocument.PageNumber % 2 == 0)
-                {
-                    fillRectangle(seitennummer.backGerade, r);
-                    drawString(s, seitennummer.font.getFont(), seitennummer.fontfarbeGerade, r.Location, r.Height);
-                }
-                else
-                {
-                    fillRectangle(seitennummer.backUngerade, r);
-                    drawString(s, seitennummer.font.getFont(), seitennummer.fontfarbeUngerade, r.Location, r.Height);
-                }
-            }
-        }
+        //        if (pCon.PdfDocument.PageNumber % 2 == 0)
+        //        {
+        //            fillRectangle(seitennummer.backGerade, r);
+        //            drawString(s, seitennummer.font.getFont(), seitennummer.fontfarbeGerade, r.Location, r.Height);
+        //        }
+        //        else
+        //        {
+        //            fillRectangle(seitennummer.backUngerade, r);
+        //            drawString(s, seitennummer.font.getFont(), seitennummer.fontfarbeUngerade, r.Location, r.Height);
+        //        }
+        //    }
+        //}
 
         private void SetPen(Pen Pen)
         {
@@ -422,9 +483,9 @@ namespace Assistment.Texts
         {
             adjustPageNumber(y + height);
             pCon.SetColorFill(getColor(brush));
-            pCon.SetFontAndSize(getFont(font), font.Size);
+            pCon.SetFontAndSize(getFont(font), font.Size * FontFactor);
             pCon.BeginText();
-            pCon.SetTextMatrix(factor * x, yOff + 2 - factor * (y + height));
+            pCon.SetTextMatrix(factor * x, yOff - factor * (y + height) + FontOffset);//+ 2
             pCon.ShowText(text);
             pCon.EndText();
             pCon.Stroke();
@@ -432,14 +493,14 @@ namespace Assistment.Texts
         public override void drawEllipse(Pen pen, float x, float y, float width, float height)
         {
             adjustPageNumber(y + height);
-            pCon.Ellipse(factor * x, yOff - factor * y, factor * width, -factor * height );
+            pCon.Ellipse(factor * x, yOff - factor * y, factor * width, -factor * height);
             SetPen(pen);
             pCon.Stroke();
         }
         public override void fillEllipse(Brush brush, float x, float y, float width, float height)
         {
             adjustPageNumber(y + height);
-            pCon.Ellipse(factor * x, yOff - factor * y, factor * width, -factor * height );
+            pCon.Ellipse(factor * x, yOff - factor * y, factor * width, -factor * height);
             pCon.SetColorFill(getColor(brush));
             pCon.FillStroke();
         }
@@ -468,7 +529,7 @@ namespace Assistment.Texts
 
         public override void Dispose()
         {
-            schreibSeitennummer();
+            //schreibSeitennummer();
             pCon = null;
             bilder = null;
             farben = null;
@@ -494,6 +555,17 @@ namespace Assistment.Texts
             drawImage(img, Pic.Transform(T));
 
             pCon.RestoreState();
+        }
+
+        public override void fillPolygon(System.Drawing.Brush Brush, System.Drawing.PointF[] polygon)
+        {
+            float bottom = polygon.Map(p => p.Y).Max();
+            adjustPageNumber(bottom);
+            pCon.MoveTo(factor * polygon[0].X, (yOff - factor * polygon[0].Y));
+            for (int i = 1; i < polygon.Length; i++)
+                pCon.LineTo(factor * polygon[i].X, (yOff - factor * polygon[i].Y));
+            pCon.SetColorFill(getColor(Brush));
+            pCon.Fill();
         }
     }
 }

@@ -26,7 +26,7 @@ namespace Assistment.Testing
             this.trace = false;
             this.BackgroundImage = new Bitmap(this.Width, this.Height);
             g = Graphics.FromImage(this.BackgroundImage);
-            font = new FontMeasurer("Calibri", 22);
+            font = new FontGraphicsMeasurer("Calibri", 22);
             mal();
         }
 

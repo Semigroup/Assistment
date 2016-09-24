@@ -15,7 +15,7 @@ namespace Assistment.Texts
 {
     public abstract class DrawBox
     {
-        public static readonly xFont StandardFont = new FontMeasurer("Calibri", 11);
+        public static readonly xFont StandardFont = new FontGraphicsMeasurer("Calibri", 11);
 
         public RectangleF box;
         public bool endsLine;
@@ -186,7 +186,6 @@ namespace Assistment.Texts
             pageSize.BackgroundColor = new iTextSharp.text.BaseColor(backColor);
 
             using (iTextSharp.text.Document doc = new iTextSharp.text.Document())
-            //using ()
             {
                 PdfWriter writer = PdfWriter.GetInstance(doc, System.IO.File.Create(name + ".pdf"));
                 doc.SetPageSize(pageSize);
@@ -195,10 +194,7 @@ namespace Assistment.Texts
                 PdfContentByte pCon = writer.DirectContent;
                 pCon.SetLineWidth(0.3f);
                 using (DrawContextDocument dcd = new DrawContextDocument(pCon, height))
-                {
                     this.draw(dcd);
-                    //doc.Close();
-                }
             }
         }
         public void createPDF(string name)
@@ -871,6 +867,15 @@ namespace Assistment.Texts
             return i;
         }
         #endregion
+
+        public void addZoomedImage(Image Image, float DesiredHeight)
+        {
+            this.addImage(Image, Image.Width * DesiredHeight / Image.Height, DesiredHeight);
+        }
+        public void addZoomedImage(Image Image)
+        {
+            this.addZoomedImage(Image, preferedFont.getZeilenabstand());
+        }
 
         /// <summary>
         /// true iff this container doesnt contain any DrawBoxes

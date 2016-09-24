@@ -89,9 +89,9 @@ namespace Assistment.Xml
                 return DateTime.Parse(s);
         }
 
-        public static FontMeasurer getFontX(this XmlReader reader, string name)
+        public static xFont getFontX(this XmlReader reader, string name)
         {
-            return new FontMeasurer(reader.getString(name), reader.getFloat(name + "_Size"));
+            return new FontGraphicsMeasurer(reader.getString(name), reader.getFloat(name + "_Size"));
         }
 
         public static Color getColorHexARGB(this XmlReader reader, string name)
