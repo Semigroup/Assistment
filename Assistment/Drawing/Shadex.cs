@@ -143,15 +143,19 @@ namespace Assistment.Drawing
             h1 = sqrt(h(t1));
             for (int i = 0; i < stachel; i++)
             {
-                t0 = t1;
-                t1 += f;
+                t0 = t1;//t0 = i / stachel
+                t1 += f;//t1 = (i+1)/stachel
                 h0 = h1;
                 h1 = sqrt(h(t1));
-                t[i] = (h0 * t1 + h1 * t0) / (h1 + h0);
-                if (h0 != 0)
-                    c[i] = h0 / (t0 - t[i]);
+                float nomin = h1 + h0;
+                if (nomin.Equal(0))
+                    t[i] = t1;
                 else
+                    t[i] = (h0 * t1 + h1 * t0) / (h1 + h0);
+                if (t0.Equal(t[i]))
                     c[i] = h1 / (t1 - t[i]);
+                else
+                    c[i] = h0 / (t0 - t[i]);
                 c[i] *= c[i];
             }
             return T =>
@@ -271,10 +275,9 @@ namespace Assistment.Drawing
             PointF[] N = new PointF[samples];
             #region Berechne P und N
             {
-                float d = 1f / (samples);
                 for (int i = 0; i < samples; i++)
                 {
-                    float t = i * d;
+                    float t = i * 1f / samples;
                     N[i] = y.normale(t).mul(h(t));
                     P[i] = saxpy(y.weg(t), layer, N[i]);
                 }
