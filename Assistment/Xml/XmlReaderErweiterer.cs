@@ -236,21 +236,54 @@ namespace Assistment.Xml
                 Reader.Read();
             return !Reader.EOF;
         }
+        /// <summary>
+        /// Liest bis zum nächsten Node, der weder Whitespace noch None ist
+        /// <para>gibt !EOF zurück</para>
+        /// </summary>
+        /// <param name="Reader"></param>
+        public static bool NextRelevant(this XmlReader Reader)
+        {
+            Reader.Read();
+            while ((Reader.NodeType == XmlNodeType.Whitespace || Reader.NodeType == XmlNodeType.None) && !Reader.EOF)
+                Reader.Read();
+            return !Reader.EOF;
+        }
 
         public static string DumpInfo(this XmlReader Reader)
         {
-            string s = Reader.Name + " in " + Reader.BaseURI + "\r\n";
+            string s = Reader.Name + " (" + Reader.NodeType + ") in " + Reader.BaseURI + "\r\n";
             IXmlLineInfo impl = Reader as IXmlLineInfo;
             s += "Z: " + impl.LineNumber + ", S: " + impl.LinePosition;
             s += "\r\n";
             s += Reader.AttributeCount + " Attribute: \r\n";
             for (int i = 0; i < Reader.AttributeCount; i++)
                 s += Reader.GetAttribute(i) + ", ";
+            s += "\r\nTiefe: " + Reader.Depth;
             return s;
         }
         public static void Dump(this XmlReader Reader)
         {
             MessageBox.Show(Reader.DumpInfo());
+        }
+
+        public static XmlReader GetXmlReader(this string File)
+        {
+            XmlReader reader = XmlReader.Create(File);
+            reader.NextRelevant();
+            reader.NextRelevant();
+            return reader;
+        }
+        public static XmlWriter GetXmlWriter(this string File)
+        {
+            XmlWriterSettings Settings = new XmlWriterSettings();
+            Settings.CloseOutput = true;
+            Settings.Indent = true;
+            Settings.IndentChars = "    ";
+            Settings.NewLineChars ="\r\n";
+            Settings.NewLineHandling = NewLineHandling.Replace;
+            Settings.NewLineOnAttributes = true;
+            XmlWriter writer = XmlWriter.Create(File, Settings);
+            return writer;
         }
     }
 }
