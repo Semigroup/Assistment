@@ -434,5 +434,24 @@ namespace Assistment.Extensions
             }
             return dic;
         }
+
+        public static T[] FlatClone<T>(this T[] Array)
+        {
+            T[] ts = new T[Array.Length];
+            ts.CountMap(i => Array[i]);
+            return ts;
+        }
+        public static T[] DeepClone<T>(this T[] Array) where T : class, ICloneable
+        {
+            T[] ts = new T[Array.Length];
+            ts.CountMap(i =>
+            {
+                if (Array[i] == null)
+                    return null;
+                else
+                    return Array[i].Clone();
+            });
+            return ts;
+        }
     }
 }
