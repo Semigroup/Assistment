@@ -1,26 +1,30 @@
-texture2D Restriction;
-float4 Color;
+sampler firstSampler;
 
-sampler2D RestSamp = sampler_state {
-    texture = <Restriction>;
-    AddressU  = CLAMP;
-    AddressV = CLAMP;
-    FILTER = MIN_MAG_LINEAR_MIP_POINT;
-};
-
-float4 PixelShaderFunction(float2 uv : TEXCOORD0) : COLOR0
+float4 RestrictedPaintig(float2 p: TEXCOORD0, float4 c: COLOR0) : COLOR0
 {
-	float4 b = tex2D(RestSamp, uv);
+	float4 b = tex2D(firstSampler, p);
 	if(b.a > 0)
-		return Color;
+		return c;
 	else
 		return float4(0, 0, 0, 0);
+}
+float4 BlurredPainting(float2 p: TEXCOORD0) : COLOR0
+{
+	float4 v = float4(0,0,0,0);
+	float b = 1;
+	int n = 15;
+	for(int i = 0; i < n; i++)
+	{
+		v += tex2D(firstSampler, p + float2(i * 0.01, 0)) * b;
+		b *= 0.7;
+	}
+	return v / 3;
 }
 
 technique Technique1
 {
     pass Pass1
     {
-        PixelShader = compile ps_2_0 PixelShaderFunction();
+        PixelShader = compile ps_2_0 BlurredPainting();
     }
 }

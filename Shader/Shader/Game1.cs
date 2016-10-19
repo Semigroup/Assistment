@@ -26,7 +26,7 @@ namespace Shader
         protected override void Initialize()
         {
             base.Initialize();
-            
+
         }
         protected override void LoadContent()
         {
@@ -44,36 +44,24 @@ namespace Shader
             // TODO: Entladen Sie jeglichen Nicht-ContentManager-Content hier
         }
 
-        /// <summary>
-        /// Ermöglicht dem Spiel die Ausführung der Logik, wie zum Beispiel Aktualisierung der Welt,
-        /// Überprüfung auf Kollisionen, Erfassung von Eingaben und Abspielen von Ton.
-        /// </summary>
-        /// <param name="gameTime">Bietet einen Schnappschuss der Timing-Werte.</param>
         protected override void Update(GameTime gameTime)
         {
-            //// Ermöglicht ein Beenden des Spiels
-            //if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
-            //    this.Exit();
-
-            //// TODO: Fügen Sie Ihre Aktualisierungslogik hier hinzu
-
-            //base.Update(gameTime);
+            base.Update(gameTime);
         }
-        /// <summary>
-        /// Dies wird aufgerufen, wenn das Spiel selbst zeichnen soll.
-        /// </summary>
-        /// <param name="gameTime">Bietet einen Schnappschuss der Timing-Werte.</param>
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
-            base.Draw(gameTime);
+
             spriteBatch.Begin(SpriteSortMode.BackToFront,
-               new BlendState(),
-               new SamplerState(),
-               new DepthStencilState(),
-               new RasterizerState(),
-               Effect);
-            spriteBatch.Draw(Texture, 
+            BlendState.AlphaBlend,
+            SamplerState.LinearClamp,
+            DepthStencilState.None,
+            RasterizerState.CullNone,
+            Effect);
+            spriteBatch.Draw(Texture, new Vector2(100,100), Color.Red);
+            spriteBatch.End();
+
+            base.Draw(gameTime);
         }
     }
 }
