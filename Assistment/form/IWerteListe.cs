@@ -62,15 +62,27 @@ namespace Assistment.form
                 throw new NotImplementedException();
 
             IWertBox<T> wb = ob as IWertBox<T>;
+            if (wb == null)
+                throw new ArgumentException();
             return wb.GetValue();
+        }
+        public void ShowBox(string Name, bool Visible)
+        {
+            IWertBox ob;
+            if (!dictionary.TryGetValue(Name, out ob))
+                throw new NotImplementedException();
+
+            Control wb = ob as Control;
+            wb.Visible = Visible;
         }
         public void SetValue<T>(string Name, T Value)
         {
             IWertBox ob;
             if (!dictionary.TryGetValue(Name, out ob))
                 throw new NotImplementedException();
-
             IWertBox<T> wb = ob as IWertBox<T>;
+            if (wb == null)
+                throw new ArgumentException();
             wb.SetValue(Value);
         }
         public void Setup()
@@ -111,6 +123,12 @@ namespace Assistment.form
 
     public static class WerteListeErweiterer
     {
+        public static void ShowBox(this WerteListe WerteListe, bool Visible, params string[] Namen)
+        {
+            foreach (var item in Namen)
+                WerteListe.ShowBox(item, Visible);
+        }
+
         public static void AddWertePaar<T>(this IWerteListe WerteListe, IWertBox<T> WerteBox, T value, string Name)
         {
             WerteBox.SetValue(value);
