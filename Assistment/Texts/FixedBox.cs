@@ -39,7 +39,6 @@ namespace Assistment.Texts
         {
             return box.Height;
         }
-
         public override void setup(RectangleF box)
         {
             this.box = new RectangleF(box.Location, FixSize);

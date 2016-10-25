@@ -562,6 +562,18 @@ namespace Assistment.Drawing.LinearAlgebra
             else
                 return new Size(ls[DinANumber], ls[DinANumber + 1]);
         }
+
+        /// <summary>
+        /// vertauscht die koordinaten
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="c"></param>
+        /// <returns></returns>
+        public static SizeF permut(this SizeF a)
+        {
+            return new SizeF(a.Height, a.Width);
+        }
+
     }
     public static class PointErweiterer
     {

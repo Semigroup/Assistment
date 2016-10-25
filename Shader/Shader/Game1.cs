@@ -8,6 +8,8 @@ using Microsoft.Xna.Framework.GamerServices;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
+using System.Drawing.Imaging;
+using System.Runtime.InteropServices;
 
 namespace Shader
 {
@@ -62,6 +64,24 @@ namespace Shader
             spriteBatch.End();
 
             base.Draw(gameTime);
+        }
+
+        public Texture2D ToTexture(System.Drawing.Bitmap Bitmap)
+        {
+            Texture2D tex = new Texture2D(GraphicsDevice, Bitmap.Width, Bitmap.Height, false, SurfaceFormat.Color);
+
+            BitmapData data = Bitmap.LockBits(
+                new System.Drawing.Rectangle(0, 0, Bitmap.Width, Bitmap.Height), 
+                System.Drawing.Imaging.ImageLockMode.ReadOnly, 
+                Bitmap.PixelFormat);
+
+            int bufferSize = data.Height * data.Stride;
+            byte[] bytes = new byte[bufferSize];
+            Marshal.Copy(data.Scan0, bytes, 0, bytes.Length);
+            tex.SetData(bytes);
+            Bitmap.UnlockBits(data);
+
+            return tex;
         }
     }
 }
