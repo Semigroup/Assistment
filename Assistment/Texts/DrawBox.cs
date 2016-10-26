@@ -56,6 +56,10 @@ namespace Assistment.Texts
         {
             this.setup(new RectangleF(Location, new SizeF(this.getMin(), float.MaxValue)));
         }
+        public void setup(SizeF Size)
+        {
+            this.setup(new RectangleF(box.Location, Size));
+        }
         public void setup(float Width)
         {
             this.setup(box.Location, Width);

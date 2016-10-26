@@ -8,8 +8,6 @@ using iTextSharp.text.pdf;
 using System.Drawing.Imaging;
 using Assistment.Drawing.LinearAlgebra;
 using Assistment.Extensions;
-using System;
-using System.Drawing;
 using Microsoft.Win32;
 
 namespace Assistment.Texts
