@@ -73,7 +73,10 @@ namespace Assistment.form
                 throw new NotImplementedException();
 
             Control wb = ob as Control;
-            wb.Visible = Visible;
+            if (Visible)
+                wb.Show();
+            else
+                wb.Hide();
         }
         public void SetValue<T>(string Name, T Value)
         {
