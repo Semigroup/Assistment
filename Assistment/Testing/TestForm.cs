@@ -18,6 +18,12 @@ namespace Assistment.Testing
         bool trace;
         Graphics g;
         xFont font;
+
+        public TestForm() : this(new CString())
+        {
+
+        }
+
         public TestForm(CString cs)
         {
             InitializeComponent();

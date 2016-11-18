@@ -50,6 +50,7 @@ namespace Assistment.Texts
                 AssignedWidths = new float[n];
                 for (int i = 0; i < n; i++)
                     AssignedWidths[i] = DrawBoxs[i].getMin();
+                Box.Width = AssignedWidths.Sum();
             }
             public void ComplexAssignment()
             {
@@ -227,25 +228,22 @@ namespace Assistment.Texts
         }
         public override void setup(RectangleF box)
         {
+            this.box = new RectangleF(box.Location, new SizeF());
             if (words.Count == 0)
-            {
-                this.box = new RectangleF(box.Location, new SizeF());
                 return;
-            }
 
             List<Line> Lines = Line.BreakDown(words, box.Width);
             PointF Location = box.Location;
 
-            Assigne(Lines.First());
-            Lines.First().Setup(Location, alignment, RightToLeft);
-            Location.Y += Lines.First().Box.Height;
-            this.box = Lines.First().Box;
-            foreach (var line in Lines.Skip(1))
+            foreach (var line in Lines)
             {
                 Assigne(line);
                 line.Setup(Location, alignment, RightToLeft);
                 Location.Y += line.Box.Height;
-                this.box = this.box.Extend(line.Box);
+                if (this.box.Size.Inhalt() > 0)
+                    this.box = this.box.Extend(line.Box);
+                else
+                    this.box = line.Box;
             }
         }
         public override void draw(DrawContext con)

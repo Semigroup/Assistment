@@ -385,6 +385,28 @@ namespace Assistment.Drawing.LinearAlgebra
                 c[i] = Color.FromArgb(Alpha, Colors[i]);
             return c;
         }
+
+        public static string ToHexString(this Color Color)
+        {
+            return Color.A.ToString("x2") + Color.R.ToString("x2") + Color.G.ToString("x2") + Color.B.ToString("x2");
+        }
+        public static Color ToColor( this string hex)
+        {
+            int c = 0;
+            int j;
+            for (int i = 7; i >= 0; i--)
+            {
+                c = c << 4;
+                j = (hex[7 - i] - '0');
+                if (j > 9)
+                    j -= 7;
+                if (j > 16)
+                    j -= 32;
+                c += j;
+            }
+            return Color.FromArgb(c);
+        }
+
     }
     public static class SizeFErweiterer
     {

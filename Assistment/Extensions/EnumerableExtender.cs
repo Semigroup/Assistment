@@ -262,12 +262,12 @@ namespace Assistment.Extensions
         /// <returns></returns>
         public static int IndexOfMaxim<T>(this T[] Array, Func<T, float> OptimierFunktion)
         {
-            float o = float.MaxValue;
+            float o = float.MinValue;
             int Index = -1;
             for (int i = 0; i < Array.Length; i++)
             {
                 float value = OptimierFunktion(Array[i]);
-                if (value < o)
+                if (value > o)
                 {
                     o = value;
                     Index = i;

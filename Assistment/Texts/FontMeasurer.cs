@@ -452,6 +452,11 @@ namespace Assistment.Texts
         {
             return Font.Size;
         }
+
+        public static FontGraphicsMeasurer operator *(FontGraphicsMeasurer FontMeasurer, float Scalar)
+        {
+            return new FontGraphicsMeasurer(FontMeasurer.Font.Name, FontMeasurer.Font.Size * Scalar);
+        }
     }
 
     public static class FontErweiterer
