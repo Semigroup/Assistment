@@ -453,5 +453,16 @@ namespace Assistment.Extensions
             });
             return ts;
         }
+
+        public static int IndexOfTrue<T>(this IEnumerable<T> Enumerable, Predicate<T> Predicate)
+        {
+            int index = 0;
+            foreach (var item in Enumerable)
+                if (Predicate(item))
+                    return index;
+                else
+                    index++;
+            return -1;
+        }
     }
 }

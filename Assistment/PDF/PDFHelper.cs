@@ -66,6 +66,79 @@ namespace Assistment.PDF
             }
         }
         /// <summary>
+        /// kein .pdf an output anhängen, macht er automatisch
+        /// </summary>
+        /// <param name="output"></param>
+        /// <param name="MaximaleGrose">Größe in Byte</param>
+        /// <param name="pdfFiles"></param>
+        public static void ConcatSplitDoppelseitig(string output, long MaximaleGrose, params string[] pdfFiles)
+        {
+            long grose = 0;
+            List<int> Anfange = new List<int>();
+            for (int i = 0; i < pdfFiles.Length; i += 2)
+            {
+                long aktGrose = new FileInfo(pdfFiles[i]).Length;
+                aktGrose += new FileInfo(pdfFiles[i + 1]).Length;
+                grose += aktGrose;
+                if (grose > MaximaleGrose)
+                {
+                    Anfange.Add(i);
+                    grose = aktGrose;
+                }
+            }
+            int n = Anfange.Count + 1;
+            if (n == 1)
+                Concat(output, pdfFiles);
+            else
+            {
+                int anfang = 0;
+                int part = 1;
+                foreach (var item in Anfange)
+                {
+                    Concat(output + ", Teil " + part + " von " + n + " (S. " + (anfang + 1) + " - S. " + item + ")", pdfFiles.FromTo(anfang, item).ToArray());
+                    anfang = item;
+                    part++;
+                }
+                Concat(output + ", Teil " + n + " von " + n + " (S. " + (anfang + 1) + " - S. " + pdfFiles.Length + ")", pdfFiles.FromTo(anfang, pdfFiles.Length ).ToArray());
+            }
+        }
+        /// <summary>
+        /// kein .pdf an output anhängen, macht er automatisch
+        /// </summary>
+        /// <param name="output"></param>
+        /// <param name="MaximaleGrose">Größe in Byte</param>
+        /// <param name="pdfFiles"></param>
+        public static void ConcatSplit(string output, long MaximaleGrose, params string[] pdfFiles)
+        {
+            long grose = 0;
+            List<int> Anfange = new List<int>();
+            for (int i = 0; i < pdfFiles.Length; i += 1)
+            {
+                long aktGrose = new FileInfo(pdfFiles[i]).Length;
+                grose += aktGrose;
+                if (grose > MaximaleGrose)
+                {
+                    Anfange.Add(i);
+                    grose = aktGrose;
+                }
+            }
+            int n = Anfange.Count + 1;
+            if (n == 1)
+                Concat(output, pdfFiles);
+            else
+            {
+                int anfang = 0;
+                int part = 1;
+                foreach (var item in Anfange)
+                {
+                    Concat(output + ", Teil " + part + " von " + n + " (S. " + (anfang + 1) + " - S. " + item + ")", pdfFiles.FromTo(anfang, item).ToArray());
+                    anfang = item;
+                    part++;
+                }
+                Concat(output + ", Teil " + n + " von " + n + " (S. " + (anfang + 1) + " - S. " + pdfFiles.Length + ")", pdfFiles.FromTo(anfang, pdfFiles.Length).ToArray());
+            }
+        }
+        /// <summary>
         /// </summary>
         /// <param name="output"></param>
         /// <param name="pdfFiles"></param>

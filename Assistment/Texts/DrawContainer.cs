@@ -664,6 +664,16 @@ namespace Assistment.Texts
         /// <param name="word"></param>
         /// <returns>true iff genau eines entfernt wurde</returns>
         public abstract bool remove(DrawBox word);
+        public int RemoveWhitespaces()
+        {
+            List<DrawBox> ToRemove = new List<DrawBox>();
+            foreach (var item in this)
+                if (item is Whitespace)
+                    ToRemove.Add(item);
+            foreach (var item in ToRemove)
+                this.remove(item);
+            return ToRemove.Count;
+        }
         /// <summary>
         /// entfernt alle Elemente
         /// </summary>
