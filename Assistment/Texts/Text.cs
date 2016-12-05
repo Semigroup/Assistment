@@ -55,5 +55,15 @@ namespace Assistment.Texts
             t.addRegex(text);
             return t;
         }
+        public Text FirstLine()
+        {
+            Text t = new Text();
+            foreach (var item in this)
+                if (item.endsLine)
+                    break;
+                else
+                    t.add(item);
+            return t;
+        }
     }
 }

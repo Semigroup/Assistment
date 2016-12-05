@@ -222,6 +222,20 @@ namespace Assistment.Texts
             f.Dispose();
         }
 
+        public static CString operator *(CString box1, DrawBox box2)
+        {
+            CString t = box1.clone() as CString;
+            t.add(box2);
+            return t;
+        }
+        public static CString operator *(DrawBox box1, DrawBox box2)
+        {
+            CString t = new CString();
+            t.add(box1);
+            t.addAbsatz();
+            t.add(box2);
+            return t;
+        }
         public static CString operator +(DrawBox box1, DrawBox box2)
         {
             CString t = new CString();

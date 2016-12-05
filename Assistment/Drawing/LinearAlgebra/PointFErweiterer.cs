@@ -815,5 +815,16 @@ namespace Assistment.Drawing.LinearAlgebra
             T.Location = Destination.Location.sub(Source.Location.mul(T.Size));
             return T;
         }
+
+        /// <summary>
+        /// gibt loc + (u,v) * size zurück
+        /// </summary>
+        /// <param name="u"></param>
+        /// <param name="v"></param>
+        /// <returns></returns>
+        public static PointF Koord(this RectangleF Rectangle, float u, float v)
+        {
+            return Rectangle.Location.add(Rectangle.Size.mul(u, v).ToPointF());
+        }
     }
 }
