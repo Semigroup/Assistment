@@ -62,7 +62,7 @@ namespace Assistment.PDF
                         writer.FreeReader(reader);
                     }
                 document.Close();
-                File.WriteAllBytes(output + ".pdf", ms.ToArray());
+                 File.WriteAllBytes(output + ".pdf", ms.ToArray());
             }
         }
         /// <summary>

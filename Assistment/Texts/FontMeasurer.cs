@@ -346,6 +346,11 @@ namespace Assistment.Texts
         }
         public FontGraphicsMeasurer(string schrift, float grose)
         {
+            if (Environment.OSVersion.Version >= new Version(6, 2, 9200, 0))
+            {
+                grose *= 1.3f;
+            }
+
             b = new Bitmap(100, 100);
             g = b.GetHighGraphics();
             g.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAlias;

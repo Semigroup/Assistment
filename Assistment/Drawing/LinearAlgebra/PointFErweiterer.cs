@@ -232,6 +232,15 @@ namespace Assistment.Drawing.LinearAlgebra
             return new PointF((float)Math.Ceiling(a.X), (float)Math.Ceiling(a.Y));
         }
         /// <summary>
+        /// rundet die beiden Komponenten des Punktes ab
+        /// </summary>
+        /// <param name="a"></param>
+        /// <returns></returns>
+        public static Point ToPoint(this PointF a)
+        {
+            return new Point((int)Math.Floor(a.X), (int)Math.Floor(a.Y));
+        }
+        /// <summary>
         /// Lesser or equal than
         /// <para>
         /// true iff beide Komponenten dieses Punktes sind kleiner gleich denen von b
@@ -495,6 +504,15 @@ namespace Assistment.Drawing.LinearAlgebra
         /// <param name="a"></param>
         /// <returns></returns>
         public static float Inhalt(this SizeF a)
+        {
+            return a.Width * a.Height;
+        }
+        /// <summary>
+        /// Width * Height
+        /// </summary>
+        /// <param name="a"></param>
+        /// <returns></returns>
+        public static int Inhalt(this Size a)
         {
             return a.Width * a.Height;
         }
