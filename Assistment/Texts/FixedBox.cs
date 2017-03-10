@@ -21,10 +21,9 @@ namespace Assistment.Texts
         public FixedBox(SizeF Size, bool HorizontallyFixed, bool VerticallyFixed, DrawBox DrawBox)
             : base(DrawBox)
         {
-            this.FixSize = Size;
             this.HorizontallyFixed = HorizontallyFixed;
             this.VerticallyFixed = VerticallyFixed;
-            this.box.Size = FixSize;
+            this.box.Size = FixSize = Size;
         }
 
         public override float getSpace()

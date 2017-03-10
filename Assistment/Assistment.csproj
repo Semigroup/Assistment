@@ -176,6 +176,9 @@
     <Compile Include="form\IWerteListe.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="form\LabelBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="form\Logger.cs">
       <SubType>Form</SubType>
     </Compile>

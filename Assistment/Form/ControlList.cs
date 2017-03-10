@@ -30,6 +30,7 @@ namespace Assistment.form
 
         public void Setup()
         {
+            //MessageBox.Show(DebugInfo());
             Width = 0;
             foreach (var item in Liste)
                 if (item.Visible)
@@ -45,6 +46,7 @@ namespace Assistment.form
                     h = item.Bottom;
                 }
             Height = h + d;
+            //MessageBox.Show(Width + ", " + Height);
             //this.OnResize(new EventArgs());
         }
 
@@ -84,6 +86,21 @@ namespace Assistment.form
         System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
         {
             return GetEnumerator();
+        }
+
+        public string DebugInfo()
+        {
+            string s = "";
+            s += Visible ? "Visible: " : "Not: ";
+            s += this.Bounds;
+            s += "\r\n\r\n";
+            foreach (var item in Liste)
+            {
+                s += item.Visible ? "Visible: " : "Not: ";
+                s += item.Bounds;
+                s += "\r\n";
+            }
+            return s;
         }
     }
 }

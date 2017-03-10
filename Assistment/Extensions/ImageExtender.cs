@@ -270,7 +270,21 @@ namespace Assistment.Extensions
             Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighQuality;
             Graphics.TextRenderingHint = System.Drawing.Text.TextRenderingHint.ClearTypeGridFit;
         }
+        public static void Lower(this Graphics Graphics)
+        {
+            Graphics.CompositingQuality = System.Drawing.Drawing2D.CompositingQuality.HighSpeed;
+            Graphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.Low;
+            Graphics.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.HighSpeed;
+            Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighSpeed;
+            Graphics.TextRenderingHint = System.Drawing.Text.TextRenderingHint.SingleBitPerPixel;
+        }
 
+        public static Graphics GetLowGraphics(this Image Image)
+        {
+            Graphics g = Graphics.FromImage(Image);
+            g.Lower();
+            return g;
+        }
         public static Graphics GetHighGraphics(this Image Image)
         {
             Graphics g = Graphics.FromImage(Image);
@@ -288,6 +302,14 @@ namespace Assistment.Extensions
         {
             Graphics g = Image.GetHighGraphics();
             g.Clear(BackgroundColor);
+            return g;
+        }
+        public static Graphics GetGraphics(this Image Image, float Scaling, Color? BackgroundColor, bool high)
+        {
+            Graphics g = high ? Image.GetHighGraphics() : Image.GetLowGraphics();
+            if (BackgroundColor.HasValue)
+                g.Clear(BackgroundColor.Value);
+            g.ScaleTransform(Scaling, Scaling);
             return g;
         }
 

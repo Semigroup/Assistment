@@ -35,7 +35,7 @@ namespace Assistment.form
         public event EventHandler UserValueChanged = delegate { };
         public event EventHandler InvalidChange = delegate { };
         public event WertEventHandler WertChanged = delegate { };
-        private ControlList List;
+        public ControlList List;
 
         public WerteListe()
             : base(new ControlList())
@@ -66,6 +66,19 @@ namespace Assistment.form
                 throw new ArgumentException();
             return wb.GetValue();
         }
+        /// <summary>
+        /// Gibt nicht null, sondern leerer String bei null aus
+        /// </summary>
+        /// <param name="Name"></param>
+        /// <returns></returns>
+        public string GetString(string Name)
+        {
+            string s = GetValue<string>(Name);
+            if (s == null)
+                return "";
+            else
+                return s;
+        }
         public void ShowBox(string Name, bool Visible)
         {
             IWertBox ob;
@@ -73,10 +86,7 @@ namespace Assistment.form
                 throw new NotImplementedException();
 
             Control wb = ob as Control;
-            if (Visible)
-                wb.Show();
-            else
-                wb.Hide();
+            wb.Visible = Visible;
         }
         public void SetValue<T>(string Name, T Value)
         {
@@ -183,6 +193,10 @@ namespace Assistment.form
         public static void AddColorBox(this IWerteListe WerteListe, Color value, string Name)
         {
             AddWertePaar(WerteListe, new ColorBox(), value, Name);
+        }
+        public static void AddLabelBox(this IWerteListe WerteListe, object value, string Name)
+        {
+            AddWertePaar(WerteListe, new LabelBox(), value.ToString(), Name);
         }
         public static void AddEnumBox(this IWerteListe WerteListe, object value, string Name)
         {
