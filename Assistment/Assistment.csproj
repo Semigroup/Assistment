@@ -385,6 +385,9 @@
     <Content Include="Fonts\Plain Germanica.ttf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <None Include="Fonts\Stencil Army WW I.ttf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Subprozesse\MakePDF.vshost.exe.manifest">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

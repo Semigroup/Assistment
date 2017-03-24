@@ -142,22 +142,11 @@ namespace Assistment.Extensions
             }
         }
 
-        public static string SumText(this IEnumerable<object> text)
+        public static string SumText<T>(this IEnumerable<T> text)
         {
-            StringBuilder sb = new StringBuilder();
-            bool neu = true;
-            foreach (var item in text)
-            {
-                if (neu)
-                    neu = false;
-                else
-                    sb.AppendLine();
-                sb.Append(item);
-            }
-            return sb.ToString();
+            return text.SumText("\r\n");
         }
-
-        public static string SumText(this IEnumerable<object> text, string Separator)
+        public static string SumText<T>(this IEnumerable<T> text, string Separator)
         {
             StringBuilder sb = new StringBuilder();
             bool neu = true;

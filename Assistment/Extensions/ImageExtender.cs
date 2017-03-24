@@ -279,20 +279,28 @@ namespace Assistment.Extensions
             Graphics.TextRenderingHint = System.Drawing.Text.TextRenderingHint.SingleBitPerPixel;
         }
 
+        public static void CleanResolution(this Image Image)
+        {
+            (Image as Bitmap).SetResolution(96, 96);
+        }
+
         public static Graphics GetLowGraphics(this Image Image)
         {
+            Image.CleanResolution();
             Graphics g = Graphics.FromImage(Image);
             g.Lower();
             return g;
         }
         public static Graphics GetHighGraphics(this Image Image)
         {
+            Image.CleanResolution();
             Graphics g = Graphics.FromImage(Image);
             g.Raise();
             return g;
         }
         public static Graphics GetHighGraphics(this Image Image, float Scaling)
         {
+            Image.CleanResolution();
             Graphics g = Graphics.FromImage(Image);
             g.Raise();
             g.ScaleTransform(Scaling, Scaling);
