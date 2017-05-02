@@ -41,7 +41,7 @@ namespace Assistment.Extensions
                 for (int i = 0; i < 4; i++)
                     Values[i] = data[offset + i] / 255f;
         }
-        public ColorF(float[] Values)
+        public ColorF(params float[] Values)
             : this()
         {
             for (int i = 0; i < 4; i++)
@@ -261,6 +261,29 @@ namespace Assistment.Extensions
         {
             ImageBox ib = new ImageBox(701, Image);
             ib.createPDF(name);
+        }
+        public static void savePdf(this Image Image, string name, int dinA, bool Hoch)
+        {
+            iTextSharp.text.Rectangle[] dinAs = new iTextSharp.text.Rectangle[]{
+            iTextSharp.text.PageSize.A0,
+            iTextSharp.text.PageSize.A1,
+            iTextSharp.text.PageSize.A2,
+            iTextSharp.text.PageSize.A3,
+            iTextSharp.text.PageSize.A4,
+            iTextSharp.text.PageSize.A5,
+            iTextSharp.text.PageSize.A6,
+            iTextSharp.text.PageSize.A7,
+            iTextSharp.text.PageSize.A8,
+            iTextSharp.text.PageSize.A9,
+            iTextSharp.text.PageSize.A10
+            };
+            SizeF s = dinA.DinA(Hoch);
+            s = s.mul(4.725f);
+            ImageBox ib = new ImageBox(s.Width, Image);
+            iTextSharp.text.Rectangle p = dinAs[dinA];
+            if (!Hoch)
+                p = p.Rotate();
+            ib.createPDF(name, s.Width, s.Height, p);
         }
         public static void Raise(this Graphics Graphics)
         {
