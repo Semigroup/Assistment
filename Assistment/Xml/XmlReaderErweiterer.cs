@@ -40,6 +40,10 @@ namespace Assistment.Xml
             else
                 return s;
         }
+        public static string[] getStrings(this XmlReader reader, string name, string seperators)
+        {
+            return reader.getString(name).Split(seperators.ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
+        }
         public static int getInt(this XmlReader reader, string name)
         {
             string s = reader.GetAttribute(name);
