@@ -148,6 +148,10 @@ namespace Assistment.Extensions
             return C;
         }
 
+        public static implicit operator SolidBrush(ColorF d)
+        {
+            return new SolidBrush(d.ToColor());
+        }
         public static implicit operator Color(ColorF d)
         {
             return d.ToColor();

@@ -290,6 +290,8 @@
     <Compile Include="Texts\Titel.cs" />
     <Compile Include="Texts\Word.cs" />
     <Compile Include="Texts\WrappingBox.cs" />
+    <Compile Include="Xml\ChunkCollection.cs" />
+    <Compile Include="Xml\XmlFile.cs" />
     <Compile Include="Xml\XmlReaderErweiterer.cs" />
   </ItemGroup>
   <ItemGroup>

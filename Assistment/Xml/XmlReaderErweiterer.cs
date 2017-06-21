@@ -224,9 +224,7 @@ namespace Assistment.Xml
         public static void Add<T>(this ICollection<T> Collection, params T[] Values)
         {
             foreach (var item in Values)
-            {
                 Collection.Add(item);
-            }
         }
 
         /// <summary>

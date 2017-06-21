@@ -18,7 +18,7 @@ namespace Assistment.Latex
         /// </summary>
         public int ContentDepth = 0;
         private Stack<string> Environment = new Stack<string>();
-        private Regex NewLine = new Regex("\r?\n");
+        private Regex NewLineRegex = new Regex("\r?\n");
 
         public LatexWriter(string Path)
             : base(Path)
@@ -178,7 +178,7 @@ namespace Assistment.Latex
 
         public void WriteText(string text)
         {
-            Write(NewLine.Replace(text, "\\\\\r\n"));
+            Write(NewLineRegex.Replace(text, "\\\\\r\n"));
         }
 
         public void Absatz()

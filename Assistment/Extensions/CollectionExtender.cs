@@ -11,5 +11,10 @@ namespace Assistment.Extensions
         {
             return list.RemoveAll(x => toRemove.Contains(x));
         }
+        public static void Add<T>(this ICollection<T> Collection, IEnumerable<T> enumerable)
+        {
+            foreach (var item in enumerable)
+                Collection.Add(item);
+        }
     }
 }
