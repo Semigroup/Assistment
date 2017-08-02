@@ -346,10 +346,10 @@ namespace Assistment.Texts
         }
         public FontGraphicsMeasurer(string schrift, float grose)
         {
-            if (Environment.OSVersion.Version >= new Version(6, 2, 9200, 0))
-            {
-                grose *= 1.3f;
-            }
+            //if (Environment.OSVersion.Version >= new Version(6, 2, 9200, 0))
+            //{
+            //    grose *= 1.25f;// 1.248f;
+            //}
 
             b = new Bitmap(100, 100);
             g = b.GetHighGraphics();
