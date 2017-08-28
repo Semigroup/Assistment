@@ -12,6 +12,8 @@
     <AssemblyName>Assistment</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -53,6 +55,9 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="GoogleSearchAPI">
+      <HintPath>..\..\Werwolf\GISearchClient_Source\GoogleSearchAPI.dll</HintPath>
+    </Reference>
     <Reference Include="itextsharp">
       <HintPath>..\..\..\itextsharp-all-5.5.1\itextsharp-dll-core\itextsharp.dll</HintPath>
     </Reference>
@@ -63,6 +68,7 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Security" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xaml" />
     <Reference Include="System.Xml.Linq" />
@@ -165,6 +171,18 @@
     </Compile>
     <Compile Include="form\IntBox.Designer.cs">
       <DependentUpon>IntBox.cs</DependentUpon>
+    </Compile>
+    <Compile Include="form\Internet\InternetChoosePictureForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="form\Internet\InternetChoosePictureForm.Designer.cs">
+      <DependentUpon>InternetChoosePictureForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="form\Internet\InternetImageResult.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="form\Internet\InternetImageResult.Designer.cs">
+      <DependentUpon>InternetImageResult.cs</DependentUpon>
     </Compile>
     <Compile Include="form\IntPlusMinusBox.cs">
       <SubType>UserControl</SubType>
@@ -327,6 +345,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="form\IntBox.resx">
       <DependentUpon>IntBox.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="form\Internet\InternetChoosePictureForm.resx">
+      <DependentUpon>InternetChoosePictureForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="form\Internet\InternetImageResult.resx">
+      <DependentUpon>InternetImageResult.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="form\IntPlusMinusBox.resx">
       <DependentUpon>IntPlusMinusBox.cs</DependentUpon>

@@ -9,6 +9,8 @@ using System.Windows.Forms;
 using System.Windows.Media.Imaging;
 using System.IO;
 
+using Assistment.form.Internet;
+
 using Assistment.Drawing.LinearAlgebra;
 
 namespace Assistment.form
@@ -48,6 +50,7 @@ namespace Assistment.form
                 int y = value ? 147 : 0;
                 button1.Location = new Point(button1.Left, y);
                 button2.Location = new Point(button2.Left, y);
+                InternetButton.Location = new Point(InternetButton.Left, y);
                 this.Height = button1.Bottom;
             }
         }
@@ -145,6 +148,11 @@ namespace Assistment.form
             this.Dispose();
             if (g != null)
                 g.Dispose();
+        }
+
+        private void InternetButton_Click(object sender, EventArgs e)
+        {
+            new InternetChoosePictureForm().ShowDialog();
         }
     }
 }
