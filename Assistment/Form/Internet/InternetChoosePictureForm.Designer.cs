@@ -31,6 +31,7 @@
             this.SuchButton = new System.Windows.Forms.Button();
             this.SuchTextBox = new System.Windows.Forms.TextBox();
             this.textBox1 = new System.Windows.Forms.TextBox();
+            this.scrollList1 = new Assistment.form.ScrollList();
             this.SuspendLayout();
             // 
             // SuchButton
@@ -55,14 +56,22 @@
             this.textBox1.Location = new System.Drawing.Point(38, 60);
             this.textBox1.Multiline = true;
             this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(456, 347);
+            this.textBox1.Size = new System.Drawing.Size(698, 107);
             this.textBox1.TabIndex = 2;
+            // 
+            // scrollList1
+            // 
+            this.scrollList1.Location = new System.Drawing.Point(38, 173);
+            this.scrollList1.Name = "scrollList1";
+            this.scrollList1.Size = new System.Drawing.Size(732, 374);
+            this.scrollList1.TabIndex = 3;
             // 
             // InternetChoosePictureForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(782, 559);
+            this.Controls.Add(this.scrollList1);
             this.Controls.Add(this.textBox1);
             this.Controls.Add(this.SuchTextBox);
             this.Controls.Add(this.SuchButton);
@@ -78,5 +87,6 @@
         private System.Windows.Forms.Button SuchButton;
         private System.Windows.Forms.TextBox SuchTextBox;
         private System.Windows.Forms.TextBox textBox1;
+        private ScrollList scrollList1;
     }
 }
