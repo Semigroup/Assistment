@@ -3,13 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
+using Google;
 using Google.Apis;
 using Google.Apis.Customsearch;
+using Google.Apis.Customsearch.v1;
 using Google.Apis.Customsearch.v1.Data;
 using Google.Apis.Services;
-using Google.Apis.Customsearch.v1;
-using Google.Apis;
-using Google;
 
 namespace Assistment.Google
 {

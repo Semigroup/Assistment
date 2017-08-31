@@ -73,7 +73,6 @@
     <Reference Include="Google.Apis.PlatformServices">
       <HintPath>..\..\..\CSArbeiten\GoogleTest\packages\Google.Apis.1.28.0\lib\net45\Google.Apis.PlatformServices.dll</HintPath>
     </Reference>
-    <Reference Include="GoogleSearchAPI, Version=0.4.0.133, Culture=neutral, PublicKeyToken=null" />
     <Reference Include="itextsharp">
       <HintPath>..\..\..\itextsharp-all-5.5.1\itextsharp-dll-core\itextsharp.dll</HintPath>
     </Reference>
@@ -135,139 +134,139 @@
     <Compile Include="Extensions\ImageExtender.cs" />
     <Compile Include="Extensions\PrimitiveExtender.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
-    <Compile Include="form\BallPointFBox.cs">
+    <Compile Include="Form\BallPointFBox.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="form\BallPointFBox.Designer.cs">
+    <Compile Include="Form\BallPointFBox.Designer.cs">
       <DependentUpon>BallPointFBox.cs</DependentUpon>
     </Compile>
-    <Compile Include="form\BoolBox.cs">
+    <Compile Include="Form\BoolBox.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="form\ButtonReihe.cs">
+    <Compile Include="Form\ButtonReihe.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="form\ChainedSizeFBox.cs">
+    <Compile Include="Form\ChainedSizeFBox.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="form\ChainedSizeFBox.Designer.cs">
+    <Compile Include="Form\ChainedSizeFBox.Designer.cs">
       <DependentUpon>ChainedSizeFBox.cs</DependentUpon>
     </Compile>
-    <Compile Include="form\ColorBox.cs">
+    <Compile Include="Form\ColorBox.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="form\ColorBox.Designer.cs">
+    <Compile Include="Form\ColorBox.Designer.cs">
       <DependentUpon>ColorBox.cs</DependentUpon>
     </Compile>
-    <Compile Include="form\ControlForm.cs">
+    <Compile Include="Form\ControlForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="form\ControlList.cs">
+    <Compile Include="Form\ControlList.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="form\EnumBox.cs">
+    <Compile Include="Form\EnumBox.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="form\EnumBox.Designer.cs">
+    <Compile Include="Form\EnumBox.Designer.cs">
       <DependentUpon>EnumBox.cs</DependentUpon>
     </Compile>
-    <Compile Include="form\FloatBox.cs">
+    <Compile Include="Form\FloatBox.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="form\FloatBox.Designer.cs">
+    <Compile Include="Form\FloatBox.Designer.cs">
       <DependentUpon>FloatBox.cs</DependentUpon>
     </Compile>
-    <Compile Include="form\FontBox.cs">
+    <Compile Include="Form\FontBox.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="form\FontBox.Designer.cs">
+    <Compile Include="Form\FontBox.Designer.cs">
       <DependentUpon>FontBox.cs</DependentUpon>
     </Compile>
-    <Compile Include="form\IIndexable.cs" />
-    <Compile Include="form\ImageSelectBox.cs">
+    <Compile Include="Form\IIndexable.cs" />
+    <Compile Include="Form\ImageSelectBox.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="form\ImageSelectBox.Designer.cs">
+    <Compile Include="Form\ImageSelectBox.Designer.cs">
       <DependentUpon>ImageSelectBox.cs</DependentUpon>
     </Compile>
-    <Compile Include="form\IntBox.cs">
+    <Compile Include="Form\IntBox.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="form\IntBox.Designer.cs">
+    <Compile Include="Form\IntBox.Designer.cs">
       <DependentUpon>IntBox.cs</DependentUpon>
     </Compile>
-    <Compile Include="form\Internet\InternetChoosePictureForm.cs">
+    <Compile Include="Form\Internet\InternetChoosePictureForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="form\Internet\InternetChoosePictureForm.Designer.cs">
+    <Compile Include="Form\Internet\InternetChoosePictureForm.Designer.cs">
       <DependentUpon>InternetChoosePictureForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="form\Internet\InternetImageResult.cs">
+    <Compile Include="Form\Internet\InternetImageResult.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="form\Internet\InternetImageResult.Designer.cs">
+    <Compile Include="Form\Internet\InternetImageResult.Designer.cs">
       <DependentUpon>InternetImageResult.cs</DependentUpon>
     </Compile>
-    <Compile Include="form\IntPlusMinusBox.cs">
+    <Compile Include="Form\IntPlusMinusBox.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="form\IntPlusMinusBox.Designer.cs">
+    <Compile Include="Form\IntPlusMinusBox.Designer.cs">
       <DependentUpon>IntPlusMinusBox.cs</DependentUpon>
     </Compile>
-    <Compile Include="form\IWertBox.cs" />
-    <Compile Include="form\IWerteListe.cs" />
-    <Compile Include="form\LabelBox.cs">
+    <Compile Include="Form\IWertBox.cs" />
+    <Compile Include="Form\IWerteListe.cs" />
+    <Compile Include="Form\LabelBox.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="form\Logger.cs">
+    <Compile Include="Form\Logger.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="form\Logger.Designer.cs">
+    <Compile Include="Form\Logger.Designer.cs">
       <DependentUpon>Logger.cs</DependentUpon>
     </Compile>
-    <Compile Include="form\PDFDialog.cs">
+    <Compile Include="Form\PDFDialog.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="form\PDFDialog.Designer.cs">
+    <Compile Include="Form\PDFDialog.Designer.cs">
       <DependentUpon>PDFDialog.cs</DependentUpon>
     </Compile>
-    <Compile Include="form\PenBox.cs">
+    <Compile Include="Form\PenBox.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="form\PenBox.Designer.cs">
+    <Compile Include="Form\PenBox.Designer.cs">
       <DependentUpon>PenBox.cs</DependentUpon>
     </Compile>
-    <Compile Include="form\PointBox.cs">
+    <Compile Include="Form\PointBox.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="form\PointBox.Designer.cs">
+    <Compile Include="Form\PointBox.Designer.cs">
       <DependentUpon>PointBox.cs</DependentUpon>
     </Compile>
-    <Compile Include="form\PointFBox.cs">
+    <Compile Include="Form\PointFBox.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="form\PointFBox.Designer.cs">
+    <Compile Include="Form\PointFBox.Designer.cs">
       <DependentUpon>PointFBox.cs</DependentUpon>
     </Compile>
-    <Compile Include="form\PpmBox.cs">
+    <Compile Include="Form\PpmBox.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="form\PpmBox.Designer.cs">
+    <Compile Include="Form\PpmBox.Designer.cs">
       <DependentUpon>PpmBox.cs</DependentUpon>
     </Compile>
-    <Compile Include="form\ScrollBox.cs">
+    <Compile Include="Form\ScrollBox.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="form\ScrollList.cs">
+    <Compile Include="Form\ScrollList.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="form\SteuerBox.cs">
+    <Compile Include="Form\SteuerBox.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="form\StringBox.cs">
+    <Compile Include="Form\StringBox.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="form\WertPaar.cs">
+    <Compile Include="Form\WertPaar.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Google\IKeyGenerator.cs" />
@@ -341,61 +340,61 @@
     <EmbeddedResource Include="FormsAlt\DoubleBufferedForm.resx">
       <DependentUpon>DoubleBufferedForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="form\BallPointFBox.resx">
+    <EmbeddedResource Include="Form\BallPointFBox.resx">
       <DependentUpon>BallPointFBox.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="form\ChainedSizeFBox.resx">
+    <EmbeddedResource Include="Form\ChainedSizeFBox.resx">
       <DependentUpon>ChainedSizeFBox.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="form\ColorBox.resx">
+    <EmbeddedResource Include="Form\ColorBox.resx">
       <DependentUpon>ColorBox.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="form\ControlForm.resx">
+    <EmbeddedResource Include="Form\ControlForm.resx">
       <DependentUpon>ControlForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="form\ControlList.resx">
+    <EmbeddedResource Include="Form\ControlList.resx">
       <DependentUpon>ControlList.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="form\EnumBox.resx">
+    <EmbeddedResource Include="Form\EnumBox.resx">
       <DependentUpon>EnumBox.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="form\FloatBox.resx">
+    <EmbeddedResource Include="Form\FloatBox.resx">
       <DependentUpon>FloatBox.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="form\FontBox.resx">
+    <EmbeddedResource Include="Form\FontBox.resx">
       <DependentUpon>FontBox.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="form\ImageSelectBox.resx">
+    <EmbeddedResource Include="Form\ImageSelectBox.resx">
       <DependentUpon>ImageSelectBox.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="form\IntBox.resx">
+    <EmbeddedResource Include="Form\IntBox.resx">
       <DependentUpon>IntBox.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="form\Internet\InternetChoosePictureForm.resx">
+    <EmbeddedResource Include="Form\Internet\InternetChoosePictureForm.resx">
       <DependentUpon>InternetChoosePictureForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="form\Internet\InternetImageResult.resx">
+    <EmbeddedResource Include="Form\Internet\InternetImageResult.resx">
       <DependentUpon>InternetImageResult.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="form\IntPlusMinusBox.resx">
+    <EmbeddedResource Include="Form\IntPlusMinusBox.resx">
       <DependentUpon>IntPlusMinusBox.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="form\Logger.resx">
+    <EmbeddedResource Include="Form\Logger.resx">
       <DependentUpon>Logger.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="form\PDFDialog.resx">
+    <EmbeddedResource Include="Form\PDFDialog.resx">
       <DependentUpon>PDFDialog.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="form\PenBox.resx">
+    <EmbeddedResource Include="Form\PenBox.resx">
       <DependentUpon>PenBox.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="form\PointBox.resx">
+    <EmbeddedResource Include="Form\PointBox.resx">
       <DependentUpon>PointBox.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="form\PointFBox.resx">
+    <EmbeddedResource Include="Form\PointFBox.resx">
       <DependentUpon>PointFBox.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="form\PpmBox.resx">
+    <EmbeddedResource Include="Form\PpmBox.resx">
       <DependentUpon>PpmBox.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Testing\TestForm.resx">

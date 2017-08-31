@@ -8,6 +8,7 @@ using System.Text;
 using System.Windows.Forms;
 using System.Windows.Media.Imaging;
 using System.IO;
+using System.Net;
 
 using Assistment.form.Internet;
 
@@ -21,6 +22,21 @@ namespace Assistment.form
         /// Maximum für Image.Width * Image.Height
         /// </summary>
         public int MaximumImageSize { get; set; }
+        private string internetResultsDirectory;
+        /// <summary>
+        /// Bilder aus dem Internet werden hier abgespeichert.
+        /// <para>Ist dieser Wert null (Defaultwert), so wird der Internet-Button ausgegraut.</para>
+        /// </summary>
+        public string InternetResultsDirectory
+        {
+            get { return internetResultsDirectory; }
+            set
+            {
+                internetResultsDirectory = value;
+                InternetButton.Enabled = value != null;
+            }
+        }
+
 
         private string path;
         public string ImagePath
@@ -149,10 +165,17 @@ namespace Assistment.form
             if (g != null)
                 g.Dispose();
         }
-
         private void InternetButton_Click(object sender, EventArgs e)
         {
-            new InternetChoosePictureForm().ShowDialog();
+            using (InternetChoosePictureForm Form = new InternetChoosePictureForm())
+            {
+                Form.ShowDialog();
+                if (Form.Dialog.Success)
+                using (WebClient myClient = new WebClient())
+                {
+                    myClient.DownloadFile(Form.Dialog.Result.Image.ContextLink, @"C:\Users\akin1\Desktop\Test.png");
+                }
+            }
         }
     }
 }

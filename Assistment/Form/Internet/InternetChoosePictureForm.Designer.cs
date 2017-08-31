@@ -30,7 +30,6 @@
         {
             this.SuchButton = new System.Windows.Forms.Button();
             this.SuchTextBox = new System.Windows.Forms.TextBox();
-            this.textBox1 = new System.Windows.Forms.TextBox();
             this.scrollList1 = new Assistment.form.ScrollList();
             this.SuspendLayout();
             // 
@@ -50,21 +49,14 @@
             this.SuchTextBox.Name = "SuchTextBox";
             this.SuchTextBox.Size = new System.Drawing.Size(677, 20);
             this.SuchTextBox.TabIndex = 1;
-            // 
-            // textBox1
-            // 
-            this.textBox1.Location = new System.Drawing.Point(38, 60);
-            this.textBox1.Multiline = true;
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(698, 107);
-            this.textBox1.TabIndex = 2;
+            this.SuchTextBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.SuchTextBox_KeyPress);
             // 
             // scrollList1
             // 
-            this.scrollList1.Location = new System.Drawing.Point(38, 173);
+            this.scrollList1.Location = new System.Drawing.Point(12, 40);
             this.scrollList1.Name = "scrollList1";
-            this.scrollList1.Size = new System.Drawing.Size(732, 374);
-            this.scrollList1.TabIndex = 3;
+            this.scrollList1.Size = new System.Drawing.Size(758, 518);
+            this.scrollList1.TabIndex = 2;
             // 
             // InternetChoosePictureForm
             // 
@@ -72,11 +64,11 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(782, 559);
             this.Controls.Add(this.scrollList1);
-            this.Controls.Add(this.textBox1);
             this.Controls.Add(this.SuchTextBox);
             this.Controls.Add(this.SuchButton);
             this.Name = "InternetChoosePictureForm";
             this.Text = "InternetChoosePictureForm";
+            this.SizeChanged += new System.EventHandler(this.InternetChoosePictureForm_SizeChanged);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -86,7 +78,6 @@
 
         private System.Windows.Forms.Button SuchButton;
         private System.Windows.Forms.TextBox SuchTextBox;
-        private System.Windows.Forms.TextBox textBox1;
         private ScrollList scrollList1;
     }
 }

@@ -239,6 +239,14 @@ namespace Assistment.form
             isb.AddListener(ImageChanged);
             AddWertePaar(WerteListe, isb, value, Name);
         }
+        public static void AddImageBox(this IWerteListe WerteListe, string value, string Name, bool ShowImage, EventHandler ImageChanged, string InternetResultsDirectory)
+        {
+            ImageSelectBox isb = new ImageSelectBox();
+            isb.ShowImage = ShowImage;
+            isb.AddListener(ImageChanged);
+            isb.InternetResultsDirectory = InternetResultsDirectory;
+            AddWertePaar(WerteListe, isb, value, Name);
+        }
         public static void AddFontBox(this IWerteListe WerteListe, Font value, string Name)
         {
             AddWertePaar(WerteListe, new FontBox(), value, Name);
