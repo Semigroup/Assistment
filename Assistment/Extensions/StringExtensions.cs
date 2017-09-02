@@ -114,6 +114,37 @@ namespace Assistment.Extensions
         {
             return FILENAME_CLEANER.Replace(text, " ");
         }
+        /// <summary>
+        /// Falls bereits eine Datei mit diesem Path vorhanden ist, wird der FileName angepasst, bis er nicht mehr mit einer anderen Datei kollidiert.
+        /// </summary>
+        /// <param name="text"></param>
+        /// <returns></returns>
+        public static string DecollideFilename(this string filepath)
+        {
+            if (File.Exists(filepath))
+            {
+                string directory = Path.GetDirectoryName(filepath);
+                string name = Path.GetFileNameWithoutExtension(filepath);
+                string exstension = Path.GetExtension(filepath);
+
+                int i = name.Length;
+                for (; i >= 0; i--)
+                    if (!('0' <= name[i] && name[i] <= '9'))
+                        break;
+                int number = i < name.Length ? int.Parse(name.Substring(i)) : 0;
+                name = name.Substring(0, i);
+
+                while (true)
+                {
+                    number++;
+                    string NewFilePath = Path.Combine(directory, name + number + exstension);
+                    if (!File.Exists(NewFilePath))
+                        return NewFilePath;
+                }
+            }
+            else
+                return filepath;
+        }
 
         private static PointF align(SizeF size, RectangleF layout, StringFormat format)
         {

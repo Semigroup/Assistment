@@ -14,6 +14,8 @@ using Google.Apis.Customsearch.v1;
 using Google.Apis.Customsearch.v1.Data;
 using Google.Apis.Services;
 
+using Assistment.Drawing.LinearAlgebra;
+
 
 namespace Assistment.form.Internet
 {
@@ -32,10 +34,11 @@ namespace Assistment.form.Internet
             this.Form = Form;
             this.Result = Result;
             pictureBox1.ImageLocation = Result.Image.ThumbnailLink;
-            this.label2.Text =
-                (Result.Image.Width.Value / Form.PPM).ToString("F1") + " mm x " + (Result.Image.Height.Value / Form.PPM).ToString("F1") + " mm";
-
+            SizeF resultSize = new SizeF(Result.Image.Width.Value / Form.PPM, Result.Image.Height.Value / Form.PPM);
+            this.label2.Text = resultSize.Width.ToString("F1") + " mm x " + resultSize.Height.ToString("F1") + " mm";
             this.label3.Text = Result.Title;
+            float quality = Math.Min(resultSize.div(Form.DesiredSize).Min(),1);
+            this.BackColor = Color.Red.tween(Color.Green, quality);
         }
 
         private void SaveButton_Click(object sender, EventArgs e)

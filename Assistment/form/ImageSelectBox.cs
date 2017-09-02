@@ -180,8 +180,12 @@ namespace Assistment.form
                     using (WebClient myClient = new WebClient())
                     {
                         Google.Apis.Customsearch.v1.Data.Result Result = Form.Dialog.Result;
+                        if (!Directory.Exists(internetResultsDirectory))
+                            Directory.CreateDirectory(internetResultsDirectory);
                         string path = internetResultsDirectory + Result.Title.ToFileName() + Path.GetExtension(Result.Link);
-                        myClient.DownloadFile(Result.Link,path );
+                        path = path.DecollideFilename();
+                        myClient.DownloadFile(Result.Link, path);
+                        this.ImagePath = path;
                     }
             }
         }

@@ -38,6 +38,7 @@ namespace Assistment.form.Internet
         private PictureBox PictureBox;
 
         public float PPM => ppmBox1.Ppm;
+        public SizeF DesiredSize => pointFBox1.UserSize;
 
         public InternetChoosePictureForm()
         {
@@ -81,39 +82,51 @@ namespace Assistment.form.Internet
             if (Searching || List.Start > 100)
                 return;
             Searching = true;
-            Search Results = await List.ExecuteAsync();
-            if (List.Start == 1)
-                scrollList1.ControlList.Clear();
-            else
-                scrollList1.ControlList.Remove(MoreResults);
-            if (Results.Items == null)
-                scrollList1.AddControl(new Label
-                {
-                    Text = "Keine Suchergebnisse gefunden :(",
-                    AutoSize = true
-                });
-            else
+            Search Results = null;
+            try
             {
-                foreach (Result Result in Results.Items)
-                {
-                    InternetImageResult pb = new InternetImageResult();
-                    pb.SetUp(Result, this);
-                    scrollList1.AddControl(pb);
-                    requiredSolutions--;
-                }
-                if (List.Start < 100)
-                    scrollList1.AddControl(MoreResults);
+                 Results = await List.ExecuteAsync();
+            }
+            catch (Google.GoogleApiException)
+            {
+                MessageBox.Show("Heute wurden über diese Software bereits mehr als hundert Google-Anfragen gestellt.\r\nEntweder wartest Du bis morgen oder benutzt ganz altmodisch Google via Deinem Browser :(");
+            }
+            if (Results != null)
+            {
+
+                if (List.Start == 1)
+                    scrollList1.ControlList.Clear();
                 else
+                    scrollList1.ControlList.Remove(MoreResults);
+                if (Results.Items == null)
                     scrollList1.AddControl(new Label
                     {
-                        Text = "Sorry, es können nur 100 Objekte pro Suche durchsucht werden.\r\nFür mehr Suchergebnisse musst Du schon Google persönlich fragen :(",
+                        Text = "Keine Suchergebnisse gefunden :(",
                         AutoSize = true
                     });
+                else
+                {
+                    foreach (Result Result in Results.Items)
+                    {
+                        InternetImageResult pb = new InternetImageResult();
+                        pb.SetUp(Result, this);
+                        scrollList1.AddControl(pb);
+                        requiredSolutions--;
+                    }
+                    if (List.Start < 100)
+                        scrollList1.AddControl(MoreResults);
+                    else
+                        scrollList1.AddControl(new Label
+                        {
+                            Text = "Sorry, es können nur 100 Ergebnisse pro Suche aufgezählt werden.\r\nFür mehr Suchergebnisse musst Du schon Google persönlich fragen :(",
+                            AutoSize = true
+                        });
+                }
+                scrollList1.SetUp();
+                List.Start += 10;
             }
-            scrollList1.SetUp();
-            List.Start += 10;
             Searching = false;
-            if (requiredSolutions > 0 && iteration > 0)
+            if (requiredSolutions > 0 && iteration > 0 && Results != null)
                 AppendResults(--iteration, requiredSolutions);
         }
         private void InternetChoosePictureForm_SizeChanged(object sender, EventArgs e)
