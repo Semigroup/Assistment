@@ -10,7 +10,7 @@ using Google.Apis.Customsearch.v1;
 using Google.Apis.Customsearch.v1.Data;
 using Google.Apis.Services;
 
-namespace Assistment.Google
+namespace Assistment.GoogleKeys
 {
     public static class ServiceProvider
     {

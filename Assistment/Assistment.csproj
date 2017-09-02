@@ -61,36 +61,54 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Google.Apis">
-      <HintPath>..\..\..\CSArbeiten\GoogleTest\packages\Google.Apis.1.28.0\lib\net45\Google.Apis.dll</HintPath>
+    <Reference Include="Google.Apis, Version=1.29.1.0, Culture=neutral, PublicKeyToken=4b01fa6e34db77ab, processorArchitecture=MSIL">
+      <HintPath>..\..\Werwolf\Software\Werwolf\packages\Google.Apis.1.29.1\lib\net45\Google.Apis.dll</HintPath>
     </Reference>
-    <Reference Include="Google.Apis.Core">
-      <HintPath>..\..\..\CSArbeiten\GoogleTest\packages\Google.Apis.Core.1.28.0\lib\net45\Google.Apis.Core.dll</HintPath>
+    <Reference Include="Google.Apis.Core, Version=1.29.1.0, Culture=neutral, PublicKeyToken=4b01fa6e34db77ab, processorArchitecture=MSIL">
+      <HintPath>..\..\Werwolf\Software\Werwolf\packages\Google.Apis.Core.1.29.1\lib\net45\Google.Apis.Core.dll</HintPath>
     </Reference>
-    <Reference Include="Google.Apis.Customsearch.v1">
-      <HintPath>..\..\..\CSArbeiten\GoogleTest\packages\Google.Apis.Customsearch.v1.1.28.0.896\lib\net45\Google.Apis.Customsearch.v1.dll</HintPath>
+    <Reference Include="Google.Apis.Customsearch.v1, Version=1.29.1.896, Culture=neutral, PublicKeyToken=4b01fa6e34db77ab, processorArchitecture=MSIL">
+      <HintPath>..\..\Werwolf\Software\Werwolf\packages\Google.Apis.Customsearch.v1.1.29.1.896\lib\net45\Google.Apis.Customsearch.v1.dll</HintPath>
     </Reference>
-    <Reference Include="Google.Apis.PlatformServices">
-      <HintPath>..\..\..\CSArbeiten\GoogleTest\packages\Google.Apis.1.28.0\lib\net45\Google.Apis.PlatformServices.dll</HintPath>
+    <Reference Include="Google.Apis.PlatformServices, Version=1.29.1.0, Culture=neutral, PublicKeyToken=4b01fa6e34db77ab, processorArchitecture=MSIL">
+      <HintPath>..\..\Werwolf\Software\Werwolf\packages\Google.Apis.1.29.1\lib\net45\Google.Apis.PlatformServices.dll</HintPath>
     </Reference>
     <Reference Include="itextsharp">
       <HintPath>..\..\..\itextsharp-all-5.5.1\itextsharp-dll-core\itextsharp.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\CSArbeiten\GoogleTest\packages\Newtonsoft.Json.10.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\..\Werwolf\Software\Werwolf\packages\Newtonsoft.Json.10.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.Entity" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.IO, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\Werwolf\Software\Werwolf\packages\System.IO.4.3.0\lib\net462\System.IO.dll</HintPath>
+    </Reference>
     <Reference Include="System.Net" />
-    <Reference Include="System.Net.Http">
-      <HintPath>..\..\..\CSArbeiten\GoogleTest\packages\System.Net.Http.4.3.1\lib\net46\System.Net.Http.dll</HintPath>
+    <Reference Include="System.Net.Http, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\Werwolf\Software\Werwolf\packages\System.Net.Http.4.3.1\lib\net46\System.Net.Http.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\Werwolf\Software\Werwolf\packages\System.Runtime.4.3.0\lib\net462\System.Runtime.dll</HintPath>
     </Reference>
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Security" />
+    <Reference Include="System.Security.Cryptography.Algorithms, Version=4.2.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\Werwolf\Software\Werwolf\packages\System.Security.Cryptography.Algorithms.4.3.0\lib\net463\System.Security.Cryptography.Algorithms.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Security.Cryptography.Encoding, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\Werwolf\Software\Werwolf\packages\System.Security.Cryptography.Encoding.4.3.0\lib\net46\System.Security.Cryptography.Encoding.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Security.Cryptography.Primitives, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\Werwolf\Software\Werwolf\packages\System.Security.Cryptography.Primitives.4.3.0\lib\net46\System.Security.Cryptography.Primitives.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Security.Cryptography.X509Certificates, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\Werwolf\Software\Werwolf\packages\System.Security.Cryptography.X509Certificates.4.3.0\lib\net461\System.Security.Cryptography.X509Certificates.dll</HintPath>
+    </Reference>
     <Reference Include="System.Web" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xaml" />
@@ -134,144 +152,144 @@
     <Compile Include="Extensions\ImageExtender.cs" />
     <Compile Include="Extensions\PrimitiveExtender.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
-    <Compile Include="Form\BallPointFBox.cs">
+    <Compile Include="form\BallPointFBox.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Form\BallPointFBox.Designer.cs">
+    <Compile Include="form\BallPointFBox.Designer.cs">
       <DependentUpon>BallPointFBox.cs</DependentUpon>
     </Compile>
-    <Compile Include="Form\BoolBox.cs">
+    <Compile Include="form\BoolBox.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Form\ButtonReihe.cs">
+    <Compile Include="form\ButtonReihe.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Form\ChainedSizeFBox.cs">
+    <Compile Include="form\ChainedSizeFBox.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Form\ChainedSizeFBox.Designer.cs">
+    <Compile Include="form\ChainedSizeFBox.Designer.cs">
       <DependentUpon>ChainedSizeFBox.cs</DependentUpon>
     </Compile>
-    <Compile Include="Form\ColorBox.cs">
+    <Compile Include="form\ColorBox.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Form\ColorBox.Designer.cs">
+    <Compile Include="form\ColorBox.Designer.cs">
       <DependentUpon>ColorBox.cs</DependentUpon>
     </Compile>
-    <Compile Include="Form\ControlForm.cs">
+    <Compile Include="form\ControlForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Form\ControlList.cs">
+    <Compile Include="form\ControlList.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Form\EnumBox.cs">
+    <Compile Include="form\EnumBox.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Form\EnumBox.Designer.cs">
+    <Compile Include="form\EnumBox.Designer.cs">
       <DependentUpon>EnumBox.cs</DependentUpon>
     </Compile>
-    <Compile Include="Form\FloatBox.cs">
+    <Compile Include="form\FloatBox.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Form\FloatBox.Designer.cs">
+    <Compile Include="form\FloatBox.Designer.cs">
       <DependentUpon>FloatBox.cs</DependentUpon>
     </Compile>
-    <Compile Include="Form\FontBox.cs">
+    <Compile Include="form\FontBox.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Form\FontBox.Designer.cs">
+    <Compile Include="form\FontBox.Designer.cs">
       <DependentUpon>FontBox.cs</DependentUpon>
     </Compile>
-    <Compile Include="Form\IIndexable.cs" />
-    <Compile Include="Form\ImageSelectBox.cs">
+    <Compile Include="form\IIndexable.cs" />
+    <Compile Include="form\ImageSelectBox.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Form\ImageSelectBox.Designer.cs">
+    <Compile Include="form\ImageSelectBox.Designer.cs">
       <DependentUpon>ImageSelectBox.cs</DependentUpon>
     </Compile>
-    <Compile Include="Form\IntBox.cs">
+    <Compile Include="form\IntBox.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Form\IntBox.Designer.cs">
+    <Compile Include="form\IntBox.Designer.cs">
       <DependentUpon>IntBox.cs</DependentUpon>
     </Compile>
-    <Compile Include="Form\Internet\InternetChoosePictureForm.cs">
+    <Compile Include="form\Internet\InternetChoosePictureForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Form\Internet\InternetChoosePictureForm.Designer.cs">
+    <Compile Include="form\Internet\InternetChoosePictureForm.Designer.cs">
       <DependentUpon>InternetChoosePictureForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Form\Internet\InternetImageResult.cs">
+    <Compile Include="form\Internet\InternetImageResult.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Form\Internet\InternetImageResult.Designer.cs">
+    <Compile Include="form\Internet\InternetImageResult.Designer.cs">
       <DependentUpon>InternetImageResult.cs</DependentUpon>
     </Compile>
-    <Compile Include="Form\IntPlusMinusBox.cs">
+    <Compile Include="form\IntPlusMinusBox.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Form\IntPlusMinusBox.Designer.cs">
+    <Compile Include="form\IntPlusMinusBox.Designer.cs">
       <DependentUpon>IntPlusMinusBox.cs</DependentUpon>
     </Compile>
-    <Compile Include="Form\IWertBox.cs" />
-    <Compile Include="Form\IWerteListe.cs" />
-    <Compile Include="Form\LabelBox.cs">
+    <Compile Include="form\IWertBox.cs" />
+    <Compile Include="form\IWerteListe.cs" />
+    <Compile Include="form\LabelBox.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Form\Logger.cs">
+    <Compile Include="form\Logger.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Form\Logger.Designer.cs">
+    <Compile Include="form\Logger.Designer.cs">
       <DependentUpon>Logger.cs</DependentUpon>
     </Compile>
-    <Compile Include="Form\PDFDialog.cs">
+    <Compile Include="form\PDFDialog.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Form\PDFDialog.Designer.cs">
+    <Compile Include="form\PDFDialog.Designer.cs">
       <DependentUpon>PDFDialog.cs</DependentUpon>
     </Compile>
-    <Compile Include="Form\PenBox.cs">
+    <Compile Include="form\PenBox.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Form\PenBox.Designer.cs">
+    <Compile Include="form\PenBox.Designer.cs">
       <DependentUpon>PenBox.cs</DependentUpon>
     </Compile>
-    <Compile Include="Form\PointBox.cs">
+    <Compile Include="form\PointBox.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Form\PointBox.Designer.cs">
+    <Compile Include="form\PointBox.Designer.cs">
       <DependentUpon>PointBox.cs</DependentUpon>
     </Compile>
-    <Compile Include="Form\PointFBox.cs">
+    <Compile Include="form\PointFBox.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Form\PointFBox.Designer.cs">
+    <Compile Include="form\PointFBox.Designer.cs">
       <DependentUpon>PointFBox.cs</DependentUpon>
     </Compile>
-    <Compile Include="Form\PpmBox.cs">
+    <Compile Include="form\PpmBox.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Form\PpmBox.Designer.cs">
+    <Compile Include="form\PpmBox.Designer.cs">
       <DependentUpon>PpmBox.cs</DependentUpon>
     </Compile>
-    <Compile Include="Form\ScrollBox.cs">
+    <Compile Include="form\ScrollBox.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Form\ScrollList.cs">
+    <Compile Include="form\ScrollList.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Form\SteuerBox.cs">
+    <Compile Include="form\SteuerBox.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Form\StringBox.cs">
+    <Compile Include="form\StringBox.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Form\WertPaar.cs">
+    <Compile Include="form\WertPaar.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Google\IKeyGenerator.cs" />
-    <Compile Include="Google\KeyGenerator.cs" />
-    <Compile Include="Google\ServiceProvider.cs" />
+    <Compile Include="GoogleKeys\IKeyGenerator.cs" />
+    <Compile Include="GoogleKeys\KeyGenerator.cs" />
+    <Compile Include="GoogleKeys\ServiceProvider.cs" />
     <Compile Include="Latex\LatexWriter.cs" />
     <Compile Include="Mathematik\FastMath.cs" />
     <Compile Include="Mathematik\LinearSolver.cs" />
@@ -340,61 +358,61 @@
     <EmbeddedResource Include="FormsAlt\DoubleBufferedForm.resx">
       <DependentUpon>DoubleBufferedForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Form\BallPointFBox.resx">
+    <EmbeddedResource Include="form\BallPointFBox.resx">
       <DependentUpon>BallPointFBox.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Form\ChainedSizeFBox.resx">
+    <EmbeddedResource Include="form\ChainedSizeFBox.resx">
       <DependentUpon>ChainedSizeFBox.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Form\ColorBox.resx">
+    <EmbeddedResource Include="form\ColorBox.resx">
       <DependentUpon>ColorBox.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Form\ControlForm.resx">
+    <EmbeddedResource Include="form\ControlForm.resx">
       <DependentUpon>ControlForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Form\ControlList.resx">
+    <EmbeddedResource Include="form\ControlList.resx">
       <DependentUpon>ControlList.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Form\EnumBox.resx">
+    <EmbeddedResource Include="form\EnumBox.resx">
       <DependentUpon>EnumBox.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Form\FloatBox.resx">
+    <EmbeddedResource Include="form\FloatBox.resx">
       <DependentUpon>FloatBox.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Form\FontBox.resx">
+    <EmbeddedResource Include="form\FontBox.resx">
       <DependentUpon>FontBox.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Form\ImageSelectBox.resx">
+    <EmbeddedResource Include="form\ImageSelectBox.resx">
       <DependentUpon>ImageSelectBox.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Form\IntBox.resx">
+    <EmbeddedResource Include="form\IntBox.resx">
       <DependentUpon>IntBox.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Form\Internet\InternetChoosePictureForm.resx">
+    <EmbeddedResource Include="form\Internet\InternetChoosePictureForm.resx">
       <DependentUpon>InternetChoosePictureForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Form\Internet\InternetImageResult.resx">
+    <EmbeddedResource Include="form\Internet\InternetImageResult.resx">
       <DependentUpon>InternetImageResult.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Form\IntPlusMinusBox.resx">
+    <EmbeddedResource Include="form\IntPlusMinusBox.resx">
       <DependentUpon>IntPlusMinusBox.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Form\Logger.resx">
+    <EmbeddedResource Include="form\Logger.resx">
       <DependentUpon>Logger.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Form\PDFDialog.resx">
+    <EmbeddedResource Include="form\PDFDialog.resx">
       <DependentUpon>PDFDialog.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Form\PenBox.resx">
+    <EmbeddedResource Include="form\PenBox.resx">
       <DependentUpon>PenBox.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Form\PointBox.resx">
+    <EmbeddedResource Include="form\PointBox.resx">
       <DependentUpon>PointBox.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Form\PointFBox.resx">
+    <EmbeddedResource Include="form\PointFBox.resx">
       <DependentUpon>PointFBox.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Form\PpmBox.resx">
+    <EmbeddedResource Include="form\PpmBox.resx">
       <DependentUpon>PpmBox.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Testing\TestForm.resx">
@@ -435,9 +453,11 @@
     <Content Include="Fonts\Plain Germanica.ttf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <None Include="app.config" />
     <None Include="Fonts\Stencil Army WW I.ttf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="packages.config" />
     <None Include="Subprozesse\MakePDF.vshost.exe.manifest">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

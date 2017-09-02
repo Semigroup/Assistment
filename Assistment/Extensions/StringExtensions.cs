@@ -105,7 +105,11 @@ namespace Assistment.Extensions
         {
             return path.Verzeichnis() + newName + path.Endung();
         }
-
+        /// <summary>
+        /// Ersetzt alles, was W+ matcht durch ein Whitespace
+        /// </summary>
+        /// <param name="text"></param>
+        /// <returns></returns>
         public static string ToFileName(this string text)
         {
             return FILENAME_CLEANER.Replace(text, " ");

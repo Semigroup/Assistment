@@ -31,7 +31,7 @@ namespace Assistment.form
 #endif
         }
 
-        public ScrollBox(Control Control)
+        public ScrollBox()
         {
             this.ControlChangesSize = new EventHandler((o, e) => OnSizeChanged(e));
 
@@ -42,20 +42,26 @@ namespace Assistment.form
             hScrollBar = new HScrollBar();
             hScrollBar.ValueChanged += new EventHandler(AdjustControlLocation);
             hActive = false;
+        }
 
-            this.Control = Control;
-            this.Control.SizeChanged += ControlChangesSize;
-            this.Controls.Add(Control);
+        public ScrollBox(Control Control) : this()
+        {
+            SetControl(Control);
         }
 
         public void SetControl(Control Control)
         {
-            this.Control.SizeChanged -= ControlChangesSize;
-            this.Controls.Remove(Control);
-
+            if (this.Control != null)
+            {
+                this.Control.SizeChanged -= ControlChangesSize;
+                this.Controls.Remove(Control);
+            }
             this.Control = Control;
-            Control.SizeChanged += ControlChangesSize;
-            this.Controls.Add(Control);
+            if (this.Control != null)
+            {
+                Control.SizeChanged += ControlChangesSize;
+                this.Controls.Add(Control);
+            }
         }
 
         public void AdjustControlLocation(object sender, EventArgs e)

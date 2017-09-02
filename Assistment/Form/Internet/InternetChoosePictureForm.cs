@@ -17,7 +17,7 @@ using Google.Apis.Customsearch.v1.Data;
 using Google.Apis.Services;
 using Google.Apis.Customsearch.v1;
 using Google;
-using Assistment.Google;
+using Assistment.GoogleKeys;
 
 namespace Assistment.form.Internet
 {
@@ -29,21 +29,20 @@ namespace Assistment.form.Internet
             public Result Result { get; set; }
         }
 
-        /// <summary>
-        /// Pixel pro Millimeter
-        /// </summary>
-        public float PPM { get; set; }
         private bool Searching;
         private CustomsearchService Search;
         private CseResource.ListRequest List;
         public Button MoreResults { get; set; }
         public DialogResult Dialog { get; set; }
+        private ScrollBox ScrollBox;
+        private PictureBox PictureBox;
+
+        public float PPM => ppmBox1.Ppm;
 
         public InternetChoosePictureForm()
         {
             InitializeComponent();
             Search = ServiceProvider.GetSearchService();
-            PPM = 600 / 25.4f;
 
             MoreResults = new Button()
             {
@@ -52,11 +51,22 @@ namespace Assistment.form.Internet
             };
             MoreResults.Click += MoreResults_Click;
             this.Dialog = new DialogResult();
+
+            ScrollBox = new ScrollBox();
+            PictureBox = new PictureBox();
+            ScrollBox.SetControl(PictureBox);
+            ScrollBox.Top = scrollList1.Top;
+            this.Controls.Add(ScrollBox);
+            InternetChoosePictureForm_SizeChanged(this, new EventArgs());
         }
 
+        public void SetDesiredSize(SizeF SizeInMM)
+        {
+            pointFBox1.UserSize = SizeInMM;
+        }
         private void MoreResults_Click(object sender, EventArgs e)
         {
-            AppendResults();
+            AppendResults(10, 100);
         }
         private void SuchButton_Click(object sender, EventArgs e)
         {
@@ -64,11 +74,11 @@ namespace Assistment.form.Internet
                 return;
             List = Search.SearchImages(SuchTextBox.Text);
 
-            AppendResults();
+            MoreResults_Click(sender, e);
         }
-        private async void AppendResults()
+        private async void AppendResults(int iteration, int requiredSolutions)
         {
-            if (Searching)
+            if (Searching || List.Start > 100)
                 return;
             Searching = true;
             Search Results = await List.ExecuteAsync();
@@ -89,16 +99,27 @@ namespace Assistment.form.Internet
                     InternetImageResult pb = new InternetImageResult();
                     pb.SetUp(Result, this);
                     scrollList1.AddControl(pb);
+                    requiredSolutions--;
                 }
-                scrollList1.AddControl(MoreResults);
+                if (List.Start < 100)
+                    scrollList1.AddControl(MoreResults);
+                else
+                    scrollList1.AddControl(new Label
+                    {
+                        Text = "Sorry, es können nur 100 Objekte pro Suche durchsucht werden.\r\nFür mehr Suchergebnisse musst Du schon Google persönlich fragen :(",
+                        AutoSize = true
+                    });
             }
             scrollList1.SetUp();
             List.Start += 10;
             Searching = false;
+            if (requiredSolutions > 0 && iteration > 0)
+                AppendResults(--iteration, requiredSolutions);
         }
         private void InternetChoosePictureForm_SizeChanged(object sender, EventArgs e)
         {
-            scrollList1.Height = this.ClientSize.Height - scrollList1.Location.Y;
+            ScrollBox.Height = scrollList1.Height = this.ClientSize.Height - scrollList1.Location.Y;
+            ScrollBox.Width = scrollList1.Left = this.ClientSize.Width - scrollList1.Width;
         }
         private void SuchTextBox_KeyPress(object sender, KeyPressEventArgs e)
         {
@@ -118,6 +139,13 @@ namespace Assistment.form.Internet
             Dialog.Result = Result;
             Dialog.Success = true;
             this.Close();
+        }
+        public void ShowResult(Result Result)
+        {
+            PictureBox.ImageLocation = Result.Link;
+            PictureBox.Height = Result.Image.Height.Value;
+            PictureBox.Width = Result.Image.Width.Value;
+            PictureBox.Refresh();
         }
     }
 }

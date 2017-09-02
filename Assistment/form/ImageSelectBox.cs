@@ -10,6 +10,8 @@ using System.Windows.Media.Imaging;
 using System.IO;
 using System.Net;
 
+using Assistment.Extensions;
+
 using Assistment.form.Internet;
 
 using Assistment.Drawing.LinearAlgebra;
@@ -37,7 +39,6 @@ namespace Assistment.form
             }
         }
 
-
         private string path;
         public string ImagePath
         {
@@ -54,6 +55,10 @@ namespace Assistment.form
         public event EventHandler InvalidChange = delegate { };
         private Graphics g;
         private bool valid = true;
+        /// <summary>
+        /// in mm
+        /// </summary>
+        public SizeF DesiredInternetSize { get; set; } = new SizeF(10, 10);
 
         private bool showImage = true;
         public bool ShowImage
@@ -169,12 +174,15 @@ namespace Assistment.form
         {
             using (InternetChoosePictureForm Form = new InternetChoosePictureForm())
             {
+                Form.SetDesiredSize(DesiredInternetSize);
                 Form.ShowDialog();
                 if (Form.Dialog.Success)
-                using (WebClient myClient = new WebClient())
-                {
-                    myClient.DownloadFile(Form.Dialog.Result.Image.ContextLink, @"C:\Users\akin1\Desktop\Test.png");
-                }
+                    using (WebClient myClient = new WebClient())
+                    {
+                        Google.Apis.Customsearch.v1.Data.Result Result = Form.Dialog.Result;
+                        string path = internetResultsDirectory + Result.Title.ToFileName() + Path.GetExtension(Result.Link);
+                        myClient.DownloadFile(Result.Link,path );
+                    }
             }
         }
     }

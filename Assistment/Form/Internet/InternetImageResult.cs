@@ -34,6 +34,8 @@ namespace Assistment.form.Internet
             pictureBox1.ImageLocation = Result.Image.ThumbnailLink;
             this.label2.Text =
                 (Result.Image.Width.Value / Form.PPM).ToString("F1") + " mm x " + (Result.Image.Height.Value / Form.PPM).ToString("F1") + " mm";
+
+            this.label3.Text = Result.Title;
         }
 
         private void SaveButton_Click(object sender, EventArgs e)
@@ -46,7 +48,7 @@ namespace Assistment.form.Internet
         }
         private void Ansehen_Click(object sender, EventArgs e)
         {
-
+            Form.ShowResult(Result);
         }
     }
 }
