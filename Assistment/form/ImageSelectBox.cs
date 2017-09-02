@@ -184,7 +184,19 @@ namespace Assistment.form
                             Directory.CreateDirectory(internetResultsDirectory);
                         string path = internetResultsDirectory + Result.Title.ToFileName() + Path.GetExtension(Result.Link);
                         path = path.DecollideFilename();
-                        myClient.DownloadFile(Result.Link, path);
+                        try
+                        {
+                            myClient.DownloadFile(Result.Link, path);
+                        }
+                        catch (Exception)
+                        {
+                            MessageBox.Show("Das Bild bei der Adresse\r\n" 
+                                + Result.Link 
+                                + "\r\nkonnte nicht am Ort\r\n" 
+                                + path 
+                                + "\r\ngespeichert werden.");
+                            return;
+                        }
                         this.ImagePath = path;
                     }
             }
