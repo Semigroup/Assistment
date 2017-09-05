@@ -67,7 +67,7 @@ namespace Assistment.form.Internet
         }
         private void MoreResults_Click(object sender, EventArgs e)
         {
-            AppendResults(10, 100);
+            AppendResults(1, 10);
         }
         private void SuchButton_Click(object sender, EventArgs e)
         {

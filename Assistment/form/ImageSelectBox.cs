@@ -182,7 +182,7 @@ namespace Assistment.form
                         Google.Apis.Customsearch.v1.Data.Result Result = Form.Dialog.Result;
                         if (!Directory.Exists(internetResultsDirectory))
                             Directory.CreateDirectory(internetResultsDirectory);
-                        string path = internetResultsDirectory + Result.Title.ToFileName() + Path.GetExtension(Result.Link);
+                        string path = internetResultsDirectory  +  Result.Title.ToFileName() + Path.GetExtension(Result.Link);
                         path = path.DecollideFilename();
                         try
                         {

@@ -8,11 +8,14 @@ using System.Windows.Forms;
 using System.Drawing;
 
 using Assistment.Texts;
+using System.Globalization;
 
 namespace Assistment.Xml
 {
     public static class XmlReaderErweiterer
     {
+        public static CultureInfo PreferedCultureInfo = new CultureInfo(1031);
+
         public static void writeEnum<T>(this XmlWriter writer, string name, T value)
         {
             writer.writeAttribute(name, Enum.GetName(typeof(T), value));
@@ -50,7 +53,7 @@ namespace Assistment.Xml
             if (s == null || s == "")
                 return 0;
             else
-                return int.Parse(s);
+                return int.Parse(s, PreferedCultureInfo);
         }
         public static float getFloat(this XmlReader reader, string name)
         {
@@ -58,7 +61,7 @@ namespace Assistment.Xml
             if (s == null || s == "")
                 return 0;
             else
-                return float.Parse(s);
+                return float.Parse(s, PreferedCultureInfo);
         }
         public static SizeF getSizeF(this XmlReader reader, string name)
         {
@@ -90,7 +93,7 @@ namespace Assistment.Xml
             if (s == null || s == "")
                 return DateTime.Now;
             else
-                return DateTime.Parse(s);
+                return DateTime.Parse(s, PreferedCultureInfo);
         }
 
         public static xFont getFontX(this XmlReader reader, string name)
@@ -155,7 +158,7 @@ namespace Assistment.Xml
         public static void writeBoolean(this XmlWriter writer, string name, bool value)
         {
             if (value)
-                writer.WriteAttributeString(name, value.ToString());
+                writer.WriteAttributeString(name, value.ToString(PreferedCultureInfo));
         }
         /// <summary>
         /// schreibt nur, falls value != 0
@@ -166,12 +169,12 @@ namespace Assistment.Xml
         public static void writeInt(this XmlWriter writer, string name, int value)
         {
             if (value != 0)
-                writer.WriteAttributeString(name, value.ToString());
+                writer.WriteAttributeString(name, value.ToString(PreferedCultureInfo));
         }
         public static void writeFloat(this XmlWriter writer, string name, float value)
         {
             if (value != 0)
-                writer.WriteAttributeString(name, value.ToString());
+                writer.WriteAttributeString(name, value.ToString(PreferedCultureInfo));
         }
         public static void writeSize(this XmlWriter writer, string name, SizeF Size)
         {
