@@ -30,6 +30,7 @@ namespace Assistment.Texts
         float getCharToleranz();
         float getWhitespace();
         float getGeviertgrose();
+        xFont getFontOfSize(float size);
     }
     public class DummyFont : xFont
     {
@@ -116,6 +117,11 @@ namespace Assistment.Texts
         public float getGeviertgrose()
         {
             return 0;
+        }
+
+        public xFont getFontOfSize(float size)
+        {
+            return new DummyFont();
         }
     }
     //public class FontMeasurer : xFont
@@ -456,6 +462,11 @@ namespace Assistment.Texts
         public float getGeviertgrose()
         {
             return Font.Size;
+        }
+
+        public xFont getFontOfSize(float size)
+        {
+            return new FontGraphicsMeasurer(Font.Name, size);
         }
 
         public static FontGraphicsMeasurer operator *(FontGraphicsMeasurer FontMeasurer, float Scalar)

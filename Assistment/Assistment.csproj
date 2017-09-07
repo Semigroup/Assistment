@@ -126,6 +126,9 @@
     <Compile Include="Algebra\Gruppe\Magma.cs" />
     <Compile Include="Algebra\Gruppe\Monoid.cs" />
     <Compile Include="Algebra\Gruppe\Produkt.cs" />
+    <Compile Include="Drawing\Algorithms\ImageAlgorithm.cs" />
+    <Compile Include="Drawing\Algorithms\ImageAlgorithmBase.cs" />
+    <Compile Include="Drawing\Algorithms\PolygonFillingAlgorithm.cs" />
     <Compile Include="Drawing\CyberShadex.cs" />
     <Compile Include="Drawing\Geometries\Erweiterer.cs" />
     <Compile Include="Drawing\Geometries\Geometrie.cs" />
