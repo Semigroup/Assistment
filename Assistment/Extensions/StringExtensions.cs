@@ -145,6 +145,15 @@ namespace Assistment.Extensions
             else
                 return filepath;
         }
+        /// <summary>
+        /// macht slashs zu backslashs
+        /// </summary>
+        /// <param name="text"></param>
+        /// <returns></returns>
+        public static string FlipForwardSlash(this string text)
+        {
+            return text.Replace('\\', '/');
+        }
 
         private static PointF align(SizeF size, RectangleF layout, StringFormat format)
         {

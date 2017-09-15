@@ -29,7 +29,8 @@ namespace Assistment.Texts.Paper
 
         private bool FirstBreak = false;
 
-        public CardSheet(int Spalten, int Zeilen, SizeF KartenSize) : this(Spalten, Zeilen, KartenSize, PageSizeA4)
+        public CardSheet(int Spalten, int Zeilen, SizeF KartenSize) 
+            : this(Spalten, Zeilen, KartenSize, PageSizeA4)
         {
 
         }

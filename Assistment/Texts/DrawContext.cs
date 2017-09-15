@@ -384,7 +384,13 @@ namespace Assistment.Texts
             iTextSharp.text.Image result;
             if (!bilder.TryGetValue(img, out result))
             {
-                if (img.RawFormat.Equals(ImageFormat.Jpeg))
+                byte[] b1 = img.RawFormat.Guid.ToByteArray();
+                byte[] b2 = ImageFormat.Jpeg.Guid.ToByteArray();
+                bool equals = true;
+                for (int i = 0; i < b1.Length; i++)
+                    if (b1[i] != b2[i])
+                        equals = false;
+                if (equals)
                     result = iTextSharp.text.Image.GetInstance(img, img.RawFormat);
                 else
                     result = iTextSharp.text.Image.GetInstance(img, color: null);

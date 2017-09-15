@@ -74,6 +74,12 @@ namespace Assistment.form.Internet
             if (SuchTextBox.Text.Length == 0)
                 return;
             List = Search.SearchImages(SuchTextBox.Text);
+            if (radioButton1.Checked)
+                List.ImgSize = CseResource.ListRequest.ImgSizeEnum.Large;
+            else if (radioButton2.Checked)
+                List.ImgSize = CseResource.ListRequest.ImgSizeEnum.Medium;
+            else
+                List.ImgSize = null;
 
             MoreResults_Click(sender, e);
         }
