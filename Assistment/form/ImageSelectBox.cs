@@ -82,6 +82,8 @@ namespace Assistment.form
             label1.Image = new Bitmap(label1.Width, label1.Height);
             g = Graphics.FromImage(label1.Image);
             SetPath(null);
+            internetResultsDirectory = Path.GetTempPath();
+            this.InternetButton.Enabled = true;
         }
         private void SetPath(string path)
         {
@@ -182,7 +184,8 @@ namespace Assistment.form
                         Google.Apis.Customsearch.v1.Data.Result Result = Form.Dialog.Result;
                         if (!Directory.Exists(internetResultsDirectory))
                             Directory.CreateDirectory(internetResultsDirectory);
-                        string path = internetResultsDirectory  +  Result.Title.ToFileName() + Path.GetExtension(Result.Link);
+                        string path = Path.Combine(internetResultsDirectory,
+                            Result.Title.ToFileName() + Path.GetExtension(Result.Link));
                         path = path.DecollideFilename();
                         try
                         {
@@ -190,10 +193,10 @@ namespace Assistment.form
                         }
                         catch (Exception)
                         {
-                            MessageBox.Show("Das Bild bei der Adresse\r\n" 
-                                + Result.Link 
-                                + "\r\nkonnte nicht am Ort\r\n" 
-                                + path 
+                            MessageBox.Show("Das Bild bei der Adresse\r\n"
+                                + Result.Link
+                                + "\r\nkonnte nicht am Ort\r\n"
+                                + path
                                 + "\r\ngespeichert werden.");
                             return;
                         }

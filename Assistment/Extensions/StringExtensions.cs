@@ -129,7 +129,7 @@ namespace Assistment.Extensions
 
                 int i = name.Length;
                 for (; i >= 0; i--)
-                    if (!('0' <= name[i] && name[i] <= '9'))
+                    if (!('0' <= name[i-1] && name[i-1] <= '9'))
                         break;
                 int number = i < name.Length ? int.Parse(name.Substring(i)) : 0;
                 name = name.Substring(0, i);
