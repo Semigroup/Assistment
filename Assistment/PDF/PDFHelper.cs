@@ -50,19 +50,21 @@ namespace Assistment.PDF
         public static void Concat(string output, params string[] pdfFiles)
         {
             using (var ms = new MemoryStream())
-            using (var document = new Document())
             {
-                PdfCopy writer = new PdfCopy(document, ms);
-                document.Open();
-                foreach (var item in pdfFiles)
-                    using (PdfReader reader = new PdfReader(item))
-                    {
-                        for (int i = 1; i <= reader.NumberOfPages; i++)
-                            writer.AddPage(writer.GetImportedPage(reader, i));
-                        writer.FreeReader(reader);
-                    }
-                document.Close();
-                 File.WriteAllBytes(output + ".pdf", ms.ToArray());
+                using (var document = new Document())
+                {
+                    PdfCopy writer = new PdfCopy(document, ms);
+                    document.Open();
+                    foreach (var item in pdfFiles)
+                        using (PdfReader reader = new PdfReader(item))
+                        {
+                            for (int i = 1; i <= reader.NumberOfPages; i++)
+                                writer.AddPage(writer.GetImportedPage(reader, i));
+                            writer.FreeReader(reader);
+                        }
+                    document.Close();
+                }
+                File.WriteAllBytes(output + ".pdf", ms.ToArray());
             }
         }
         /// <summary>
