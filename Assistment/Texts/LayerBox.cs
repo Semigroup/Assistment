@@ -14,6 +14,10 @@ namespace Assistment.Texts
         private List<DrawBox> Layers = new List<DrawBox>();
         private float min = 0, max = 0, space = 0;
 
+        public override int Count => Layers.Count;
+
+        public override bool IsReadOnly => false;
+
         public override void add(DrawBox word)
         {
             Layers.Add(word);
@@ -114,6 +118,15 @@ namespace Assistment.Texts
             foreach (DrawBox item in Layers)
                 item.InStringBuilder(sb, ttabs);
             sb.AppendLine(tabs + ".");
+        }
+
+        public override bool Contains(DrawBox item)
+        {
+            return Layers.Contains(item);
+        }
+        public override void CopyTo(DrawBox[] array, int arrayIndex)
+        {
+            Layers.CopyTo(array, arrayIndex);
         }
     }
 }

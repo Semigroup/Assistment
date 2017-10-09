@@ -12,7 +12,7 @@ namespace Assistment.form
 {
     public class ScrollList : ScrollBox
     {
-        public ControlList ControlList { get { return Control as ControlList; } }
+        public ControlList ControlList { get => Control as ControlList; }
 
         public ScrollList()
             : base(new ControlList())

@@ -27,9 +27,13 @@ namespace Assistment.Texts.Paper
         public SizeF Zwischenplatz { get; private set; }
         public SizeF PageSize { get; private set; }
 
+        public override int Count => Eintrage;
+
+        public override bool IsReadOnly => false;
+
         private bool FirstBreak = false;
 
-        public CardSheet(int Spalten, int Zeilen, SizeF KartenSize) 
+        public CardSheet(int Spalten, int Zeilen, SizeF KartenSize)
             : this(Spalten, Zeilen, KartenSize, PageSizeA4)
         {
 
@@ -148,6 +152,16 @@ namespace Assistment.Texts.Paper
         }
 
         public override void InStringBuilder(StringBuilder sb, string tabs)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override bool Contains(DrawBox item)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void CopyTo(DrawBox[] array, int arrayIndex)
         {
             throw new NotImplementedException();
         }

@@ -143,6 +143,9 @@ namespace Assistment.Texts
         /// </summary>
         public bool RightToLeft;
 
+        public override int Count => words.Count;
+        public override bool IsReadOnly => false;
+
         public PreText()
         {
             words = new List<DrawBox>();
@@ -264,6 +267,15 @@ namespace Assistment.Texts
         {
             words.Clear();
             min = max = currentMax = space = 0;
+        }
+
+        public override bool Contains(DrawBox item)
+        {
+            return words.Contains(item);
+        }
+        public override void CopyTo(DrawBox[] array, int arrayIndex)
+        {
+             words.CopyTo(array, arrayIndex);
         }
 
         protected abstract void Assigne(Line Line);

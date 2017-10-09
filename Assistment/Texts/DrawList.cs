@@ -11,6 +11,9 @@ namespace Assistment.Texts
         private List<DrawBox> list = new List<DrawBox>();
         private float min, max, space = 0;
 
+        public override int Count => list.Count;
+        public override bool IsReadOnly => false;
+
         public DrawList()
         {
 
@@ -127,6 +130,15 @@ namespace Assistment.Texts
         {
             list.Clear();
             min = max = space = 0;
+        }
+
+        public override bool Contains(DrawBox item)
+        {
+            return list.Contains(item);
+        }
+        public override void CopyTo(DrawBox[] array, int arrayIndex)
+        {
+            list.CopyTo(array, arrayIndex);
         }
     }
 }

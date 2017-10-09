@@ -13,10 +13,14 @@ using Assistment.Drawing.LinearAlgebra;
 
 namespace Assistment.Texts
 {
-    public abstract class DrawContainer : DrawBox, IEnumerable<DrawBox>
+    public abstract class DrawContainer : DrawBox, ICollection<DrawBox>
     {
         public float alignment = 0;
         public xFont preferedFont = StandardFont;
+
+        public abstract int Count { get; }
+
+        public abstract bool IsReadOnly { get; }
 
         public override void Move(PointF ToMove)
         {
@@ -691,6 +695,21 @@ namespace Assistment.Texts
             foreach (var item in this)
                 sb.Append(item.ToString());
             return sb.ToString();
+        }
+
+        public void Add(DrawBox item)
+        {
+            this.add(item);
+        }
+        public void Clear()
+        {
+            this.clear();
+        }
+        public abstract bool Contains(DrawBox item);
+        public abstract void CopyTo(DrawBox[] array, int arrayIndex);
+        public bool Remove(DrawBox item)
+        {
+            return this.remove(item);
         }
 
         public static implicit operator DrawContainer(string text)
