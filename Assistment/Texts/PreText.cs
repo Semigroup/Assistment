@@ -32,16 +32,16 @@ namespace Assistment.Texts
             public void Add(DrawBox DrawBox)
             {
                 List.Add(DrawBox);
-                if (DrawBox.getMin() > 0.01f)
+                if (DrawBox.Min> 0.01f)
                 {
-                    Box.Width += DrawBox.getMin();
-                    Box.Height = Math.Max(Box.Height, DrawBox.getSpace() / DrawBox.getMin());
+                    Box.Width += DrawBox.Min;
+                    Box.Height = Math.Max(Box.Height, DrawBox.Space/ DrawBox.Min);
                 }
-                LineEnds = LineEnds || Box.Width >= MaxWidth || DrawBox.endsLine;
+                LineEnds = LineEnds || Box.Width >= MaxWidth || DrawBox.EndsLine;
             }
             public bool CanAdd(DrawBox DrawBox)
             {
-                return !LineEnds && Box.Width + DrawBox.getMin() <= MaxWidth;
+                return !LineEnds && Box.Width + DrawBox.Min<= MaxWidth;
             }
             public void SimpleAssignment()
             {
@@ -49,7 +49,7 @@ namespace Assistment.Texts
                 int n = DrawBoxs.Length;
                 AssignedWidths = new float[n];
                 for (int i = 0; i < n; i++)
-                    AssignedWidths[i] = DrawBoxs[i].getMin();
+                    AssignedWidths[i] = DrawBoxs[i].Min;
                 Box.Width = AssignedWidths.Sum();
             }
             public void ComplexAssignment()
@@ -59,10 +59,10 @@ namespace Assistment.Texts
                 if (n == 0)
                     return;
 
-                int I = DrawBoxs.IndexOfMaxim(x => x.getMax() > 1 ? x.getSpace() / x.getMax() : 0);
+                int I = DrawBoxs.IndexOfMaxim(x => x.Max> 1 ? x.Space/ x.Max: 0);
                 if (I < 0)
                     return;
-                float h = DrawBoxs[I].getSpace() / DrawBoxs[I].getMax(); // Mindesthöhe = min{ A_i / max_i | i }
+                float h = DrawBoxs[I].Space/ DrawBoxs[I].Max; // Mindesthöhe = min{ A_i / max_i | i }
                 h = Math.Min(1, h);
 
                 float Space = 0;
@@ -72,19 +72,19 @@ namespace Assistment.Texts
                 for (int i = 0; i < n; i++)
                 {
                     DrawBox item = DrawBoxs[i];
-                    if (item.getMin() < 0.01f)
+                    if (item.Min< 0.01f)
                         break;
-                    float maxHeight = item.getSpace() / item.getMin();
+                    float maxHeight = item.Space/ item.Min;
                     if (maxHeight > h)
                     {
                         ToChange.Add(i);
-                        Space += item.getSpace();
+                        Space += item.Space;
                     }
                     else
-                        Width -= item.getMin();
+                        Width -= item.Min;
                 }
                 foreach (var i in ToChange)
-                    AssignedWidths[i] = Width * DrawBoxs[i].getSpace() / Space;
+                    AssignedWidths[i] = Width * DrawBoxs[i].Space/ Space;
                 Box.Width = AssignedWidths.Sum();
             }
             public void Setup(PointF Location, float Alignment, bool RightToLeft)
@@ -97,8 +97,9 @@ namespace Assistment.Texts
                     Box.Location = Location;
                     for (int i = 0; i < n; i++)
                     {
-                        DrawBoxs[i].setup(Location, AssignedWidths[i]);
-                        Box.Height = Math.Max(Box.Height, DrawBoxs[i].box.Height);
+                        RectangleF itemBox = new RectangleF(Location, new SizeF(AssignedWidths[i], 0));
+                        DrawBoxs[i].Setup(itemBox, i == 0);
+                        Box.Height = Math.Max(Box.Height, DrawBoxs[i].Box.Height);
                         Location.X = DrawBoxs[i].Right;
                     }
                 }
@@ -108,8 +109,11 @@ namespace Assistment.Texts
                     for (int i = 0; i < n; i++)
                     {
                         Location.X -= AssignedWidths[i];
-                        Box.Height = Math.Max(Box.Height, DrawBoxs[i].box.Height);
-                        DrawBoxs[i].setup(Location, AssignedWidths[i]);
+
+                        RectangleF itemBox = new RectangleF(Location, new SizeF(AssignedWidths[i], 0));
+                        DrawBoxs[i].Setup(itemBox, i == 0);
+                        Box.Height = Math.Max(Box.Height, DrawBoxs[i].Box.Height);
+                        Location.X = DrawBoxs[i].Left;
                     }
                     Box.Location = Location;
                 }
@@ -133,7 +137,7 @@ namespace Assistment.Texts
             }
         }
 
-        protected List<DrawBox> words { get; private set; }
+        protected List<DrawBox> Words { get; private set; }
         private float min, max, space;
         private float currentMax;
         /// <summary>
@@ -143,12 +147,12 @@ namespace Assistment.Texts
         /// </summary>
         public bool RightToLeft;
 
-        public override int Count => words.Count;
+        public override int Count => Words.Count;
         public override bool IsReadOnly => false;
 
         public PreText()
         {
-            words = new List<DrawBox>();
+            Words = new List<DrawBox>();
             min = max = currentMax = space = 0;
             RightToLeft = false;
         }
@@ -158,124 +162,115 @@ namespace Assistment.Texts
         /// <param name="PreText"></param>
         public PreText(PreText PreText)
         {
-            words = new List<DrawBox>();
-            foreach (var item in PreText.words)
-                words.Add(item.clone());
+            Words = new List<DrawBox>();
+            foreach (var item in PreText.Words)
+                Words.Add(item.Clone());
             this.min = PreText.min;
             this.max = PreText.max;
             this.currentMax = PreText.currentMax;
             this.space = PreText.space;
             this.RightToLeft = PreText.RightToLeft;
-            this.preferedFont = PreText.preferedFont;
-            this.alignment = PreText.alignment;
+            this.PreferedFont = PreText.PreferedFont;
+            this.Alignment = PreText.Alignment;
         }
 
-        public override void add(DrawBox word)
+        public override void Add(DrawBox word)
         {
-            words.Add(word);
-            min = Math.Max(min, word.getMin());
-            currentMax += word.getMax();
-            space += word.getSpace();
-            if (word.endsLine)
+            Words.Add(word);
+            min = Math.Max(min, word.Min);
+            currentMax += word.Max;
+            space += word.Space;
+            if (word.EndsLine)
             {
                 max = Math.Max(max, currentMax);
                 currentMax = 0;
             }
         }
-        public override void insert(int index, DrawBox word)
+        public override void Insert(int index, DrawBox word)
         {
-            words.Insert(index, word);
-            this.update();
+            Words.Insert(index, word);
+            this.Update();
         }
-        public override void remove(int index)
+        public override void Remove(int index)
         {
-            words.RemoveAt(index);
-            this.update();
+            Words.RemoveAt(index);
+            this.Update();
         }
-        public override bool remove(DrawBox word)
+        public override bool Remove(DrawBox word)
         {
-            bool result = words.Remove(word);
+            bool result = Words.Remove(word);
             if (result)
-                this.update();
+                this.Update();
             return result;
         }
 
-        public override float getSpace()
-        {
-            return space;
-        }
-        public override float getMin()
-        {
-            return min;
-        }
-        public override float getMax()
-        {
-            return Math.Max(max, currentMax);
-        }
+        public override float Space => space;
+        public override float Min => min;
+        public override float Max => Math.Max(max, currentMax);
 
-        public override void update()
+        public override void Update()
         {
             min = max = currentMax = space = 0;
-            foreach (DrawBox word in words)
+            foreach (DrawBox word in Words)
             {
-                word.update();
-                min = Math.Max(min, word.getMin());
-                currentMax += word.getMax();
-                space += word.getSpace();
-                if (word.endsLine)
+                word.Update();
+                min = Math.Max(min, word.Min);
+                currentMax += word.Max;
+                space += word.Space;
+                if (word.EndsLine)
                 {
                     max = Math.Max(max, currentMax);
                     currentMax = 0;
                 }
             }
         }
-        public override void setup(RectangleF box)
+        public override void Setup(RectangleF box)
         {
-            this.box = new RectangleF(box.Location, new SizeF());
-            if (words.Count == 0)
+            this.Box = new RectangleF(box.Location, new SizeF());
+            if (Words.Count == 0)
                 return;
 
-            List<Line> Lines = Line.BreakDown(words, box.Width);
+            List<Line> Lines = Line.BreakDown(Words, box.Width);
             PointF Location = box.Location;
 
             foreach (var line in Lines)
             {
                 Assigne(line);
-                line.Setup(Location, alignment, RightToLeft);
+                line.Setup(Location, Alignment, RightToLeft);
                 Location.Y += line.Box.Height;
-                if (this.box.Size.Inhalt() > 0)
-                    this.box = this.box.Extend(line.Box);
+                if (this.Box.Size.Inhalt() > 0)
+                    this.Box = this.Box.Extend(line.Box);
                 else
-                    this.box = line.Box;
+                    this.Box = line.Box;
             }
         }
-        public override void draw(DrawContext con)
+        public override void Draw(DrawContext con)
         {
-            foreach (DrawBox item in words)
+            foreach (DrawBox item in Words)
             {
-                if (item.box.Y < con.Bildhohe)
-                    item.draw(con);
+                if (item.Box.Y < con.Bildhohe)
+                    item.Draw(con);
                 else break;
             }
         }
 
         public override IEnumerator<DrawBox> GetEnumerator()
         {
-            return words.GetEnumerator();
+            return Words.GetEnumerator();
         }
-        public override void clear()
+        public override void Clear()
         {
-            words.Clear();
+            Words.Clear();
             min = max = currentMax = space = 0;
         }
 
         public override bool Contains(DrawBox item)
         {
-            return words.Contains(item);
+            return Words.Contains(item);
         }
         public override void CopyTo(DrawBox[] array, int arrayIndex)
         {
-             words.CopyTo(array, arrayIndex);
+             Words.CopyTo(array, arrayIndex);
         }
 
         protected abstract void Assigne(Line Line);

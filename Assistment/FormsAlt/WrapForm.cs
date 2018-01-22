@@ -26,45 +26,36 @@ namespace Assistment.Forms
         {
         }
 
-        public override float getSpace()
-        {
-            return drawBox.getSpace();
-        }
+        public override float Space => drawBox.Space;
 
-        public override float getMin()
-        {
-            return drawBox.getMin();
-        }
+        public override float Min => drawBox.Min;
 
-        public override float getMax()
-        {
-            return drawBox.getMax();
-        }
+        public override float Max => drawBox.Max;
 
-        public override void update()
+        public override void Update()
         {
-            drawBox.update();
+            drawBox.Update();
         }
-        public override void setup(RectangleF box)
+        public override void Setup(RectangleF box)
         {
-            drawBox.setup(box);
-            this.box = drawBox.box;
+            drawBox.Setup(box);
+            this.Box = drawBox.Box;
         }
-        public override void draw(DrawContext con)
+        public override void Draw(DrawContext con)
         {
-            drawBox.draw(con);
+            drawBox.Draw(con);
         }
 
         public override FormBox flone()
         {
-            return new WrapForm(drawBox.clone());
+            return new WrapForm(drawBox.Clone());
         }
 
         public override void InStringBuilder(StringBuilder sb, string tabs)
         {
             string ttabs = "\t" + tabs;
             sb.AppendLine(tabs + "WrapForm:");
-            sb.AppendLine(tabs + "\tbox: " + box);
+            sb.AppendLine(tabs + "\tbox: " + Box);
             sb.AppendLine(tabs + "\tdrawBox: ");
             drawBox.InStringBuilder(sb, ttabs);
             sb.AppendLine(tabs + ".");

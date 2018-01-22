@@ -138,7 +138,7 @@ namespace Assistment.form
                 using (Image img2 = Image.FromFile(imageFile))
                 {
                     ImageBox ib = new ImageBox(width, height, img2);
-                    ib.createPDF(Speicherort, r);
+                    ib.CreatePDF(Speicherort, r);
                     img2.Dispose();
                 }
             }

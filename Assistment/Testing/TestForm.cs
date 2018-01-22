@@ -38,12 +38,12 @@ namespace Assistment.Testing
 
         public void mal()
         {
-            if (textWidth >= cs.getMin())
+            if (textWidth >= cs.Min)
             {
                 g.Clear(Color.White);
                 DrawContextGraphics con = new DrawContextGraphics(g);//new RectangleF(0, 0, textWidth, 0),
-                cs.setup(new RectangleF(0, 0, textWidth, 0));
-                cs.draw(con);
+                cs.Setup(new RectangleF(0, 0, textWidth, 0));
+                cs.Draw(con);
             }
             else
                 g.Clear(Color.Red);
@@ -95,7 +95,7 @@ namespace Assistment.Testing
         private void textBox1_TextChanged_1(object sender, EventArgs e)
         {
             cs = new CString();
-            cs.addRegex(textBox1.Text, font);
+            cs.AddRegex(textBox1.Text, font);
             this.mal();
         }
 
@@ -131,33 +131,24 @@ namespace Assistment.Testing
             this.brush = new SolidBrush(Color.FromArgb(rand.Next() | (255 << 24)));
         }
 
-        public override float getSpace()
-        {
-            return space;
-        }
-        public override float getMin()
-        {
-            return min;
-        }
-        public override float getMax()
-        {
-            return max;
-        }
+        public override float Space => space;
+        public override float Min => min;
+        public override float Max => max;
 
-        public override void draw(DrawContext con)
+        public override void Draw(DrawContext con)
         {
             if (brush != null)
-                con.fillRectangle(brush, box);
+                con.fillRectangle(brush, Box);
             if (pen != null)
-                con.drawRectangle(pen, box);
+                con.drawRectangle(pen, Box);
         }
 
-        public override void update()
+        public override void Update()
         {
         }
 
 
-        public override DrawBox clone()
+        public override DrawBox Clone()
         {
             return new testBox(space, min, max, pen, brush);
         }
@@ -165,7 +156,7 @@ namespace Assistment.Testing
         public override void InStringBuilder(StringBuilder sb, string tabs)
         {
             sb.AppendLine(tabs + "Word:");
-            sb.AppendLine(tabs + "\tbox: " + box);
+            sb.AppendLine(tabs + "\tbox: " + Box);
             sb.AppendLine(tabs + "\tspace: " + space);
             sb.AppendLine(tabs + "\tmin: " + min);
             sb.AppendLine(tabs + "\tmax: " + max);
@@ -180,9 +171,9 @@ namespace Assistment.Testing
             sb.AppendLine(tabs);
         }
 
-        public override void setup(RectangleF box)
+        public override void Setup(RectangleF box)
         {
-            this.box = new RectangleF(box.X, box.Y, box.Width, space / box.Width);
+            this.Box = new RectangleF(box.X, box.Y, box.Width, space / box.Width);
 
         }
     }

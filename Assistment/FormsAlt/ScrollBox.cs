@@ -53,22 +53,13 @@ namespace Assistment.Forms
             this.pressedPoint = new PointF();
         }
 
-        public override float getSpace()
-        {
-            return 4 * barBreite * barBreite;// *Math.Max(relative, 1);
-        }
-        public override float getMin()
-        {
-            return 2 * barBreite;
-        }
-        public override float getMax()
-        {
-            return Math.Max(body.getMax(), 2 * barBreite);
-        }
+        public override float Space => 4 * barBreite * barBreite;// *Math.Max(relative, 1);
+        public override float Min => 2 * barBreite;
+        public override float Max => Math.Max(body.Max, 2 * barBreite);
 
-        public override void update()
+        public override void Update()
         {
-            body.update();
+            body.Update();
             xBar = Math.Min(cache.Width - destination.Width, Math.Max(0, xBar));
             yBar = Math.Min(cache.Height - destination.Height, Math.Max(0, yBar));
         }
@@ -76,33 +67,33 @@ namespace Assistment.Forms
         /// ruft drawChache auf
         /// </summary>
         /// <param name="box"></param>
-        public override void setup(RectangleF box)
+        public override void Setup(RectangleF box)
         {
-            this.box = box;
+            this.Box = box;
 
             drawCache();
             setupSourceAndBars();
         }
         private void drawCache()
         {
-            RectangleF r = new RectangleF(0, 0, box.Width - barBreite, box.Height - barBreite);
-            body.setup(r);
+            RectangleF r = new RectangleF(0, 0, Box.Width - barBreite, Box.Height - barBreite);
+            body.Setup(r);
             if (cache != null)
                 cache.Dispose();
-            cache = new Bitmap((int)Math.Ceiling(body.box.Width), (int)Math.Ceiling(body.box.Height));
+            cache = new Bitmap((int)Math.Ceiling(body.Box.Width), (int)Math.Ceiling(body.Box.Height));
             Graphics g = Graphics.FromImage(cache);
             g.CompositingQuality = System.Drawing.Drawing2D.CompositingQuality.HighQuality;
             g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
             g.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.HighQuality;
             g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
             g.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAlias;
-            body.draw(new DrawContextGraphics(g));
-            destination = new RectangleF(box.Location, new SizeF(Math.Min(cache.Width, box.Width - barBreite), Math.Min(cache.Height, box.Height - barBreite)));
+            body.Draw(new DrawContextGraphics(g));
+            destination = new RectangleF(Box.Location, new SizeF(Math.Min(cache.Width, Box.Width - barBreite), Math.Min(cache.Height, Box.Height - barBreite)));
             if (!rechts)
                 destination.X += barBreite;
             if (!unten)
                 destination.Y += barBreite;
-            body.setup(destination);
+            body.Setup(destination);
 
         }
         private void setupSourceAndBars()
@@ -122,7 +113,7 @@ namespace Assistment.Forms
             if (rechts)
                 verticalBar.X += destination.Width + barBreite;
         }
-        public override void draw(DrawContext con)
+        public override void Draw(DrawContext con)
         {
             con.drawClippedImage(cache, destination, source);
             drawBars(con);
@@ -140,7 +131,7 @@ namespace Assistment.Forms
                 else
                     con.fillRectangle(Brushes.Blue, horizontalBar);
             }
-            if (cache.Height + barBreite > box.Height)
+            if (cache.Height + barBreite > Box.Height)
             {
                 if (verticalActive)
                     con.fillRectangle(Brushes.Red, verticalBar);
@@ -151,24 +142,24 @@ namespace Assistment.Forms
 
         public override void click(PointF point)
         {
-            if (box.Contains(point))
+            if (Box.Contains(point))
             {
                 context.activate(this);
                 if (destination.Contains(point))
                 {
-                    if (body.check(point))
+                    if (body.Check(point))
                         body.click(point);
                 }
                 else
                 {
                     if (verticalBar.Contains(point))
                     {
-                        pressedPoint.Y = point.Y - verticalBar.Y + box.Y;
+                        pressedPoint.Y = point.Y - verticalBar.Y + Box.Y;
                         verticalActive = true;
                     }
                     if (horizontalBar.Contains(point))
                     {
-                        pressedPoint.X = point.X - horizontalBar.X + box.X;
+                        pressedPoint.X = point.X - horizontalBar.X + Box.X;
                         horizontalActive = true;
                     }
                 }
@@ -209,7 +200,7 @@ namespace Assistment.Forms
         {
             string ttabs = "\t" + tabs;
             sb.AppendLine(tabs + "Scrollbox:");
-            sb.AppendLine(tabs + "\tbox: " + box);
+            sb.AppendLine(tabs + "\tbox: " + Box);
             sb.AppendLine(tabs + "\txBar: " + xBar);
             sb.AppendLine(tabs + "\tyBar: " + yBar);
             sb.AppendLine(tabs + "\tbarBreite: " + barBreite);

@@ -71,16 +71,28 @@ namespace Assistment.Drawing.Geometries
         {
             return t => weg(t).rot(w);
         }
-
         public static Weg scale(this Weg weg, float c)
         {
             return t => weg(t).mul(c);
         }
-
         public static Weg Concat(this Weg Weg1, Weg Weg2)
         {
             PointF d = Weg1(1).sub(Weg2(0));
             return t => (t <= 0.5f) ? Weg1(2 * t) : Weg2(2 * t - 1).add(d);
+        }
+        public static Weg Frequent(this Weg Weg, int numberOfRepetitions)
+            => Frequent(Weg, numberOfRepetitions, 1f / numberOfRepetitions);
+        public static Weg Frequent(this Weg Weg, int numberOfRepetitions, float lengthOfUnit)
+        {
+            return t =>
+            {
+                int i = (int)(t * numberOfRepetitions);
+                if (i == numberOfRepetitions)
+                    i--;
+                float t0 = t * numberOfRepetitions - i;
+                PointF P = Weg(t0);
+                return new PointF(P.X / numberOfRepetitions + lengthOfUnit * i, P.Y);
+            };
         }
     }
 

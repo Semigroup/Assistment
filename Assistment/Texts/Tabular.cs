@@ -50,25 +50,16 @@ namespace Assistment.Texts
             this.columnPens = new Pen[Columns + 1];
             this.Columns = Columns;
             this.rows = new List<row>();
-            this.endsLine = false;
-            this.box = new RectangleF();
+            this.EndsLine = false;
+            this.Box = new RectangleF();
             this.mins = new float[Columns];
             this.maxs = new float[Columns];
         }
 
-        public override float getSpace()
-        {
-            return space;
-        }
-        public override float getMin()
-        {
-            return min;
-        }
-        public override float getMax()
-        {
-            return max;
-        }
-        public override void update()
+        public override float Space => space;
+        public override float Min => min;
+        public override float Max => max;
+        public override void Update()
         {
             DrawBox drawBox;
             float height;
@@ -83,9 +74,9 @@ namespace Assistment.Texts
                     drawBox = item.drawBoxes[i];
                     if (drawBox != null)
                     {
-                        drawBox.update();
-                        this.mins[i] = Math.Max(this.mins[i], drawBox.getMin());
-                        this.maxs[i] = Math.Max(this.maxs[i], drawBox.getMax());
+                        drawBox.Update();
+                        this.mins[i] = Math.Max(this.mins[i], drawBox.Min);
+                        this.maxs[i] = Math.Max(this.maxs[i], drawBox.Max);
                     }
                 }
             }
@@ -96,7 +87,7 @@ namespace Assistment.Texts
                 {
                     drawBox = item.drawBoxes[i];
                     if (drawBox != null && mins[i] > 0)
-                        height = Math.Max(height, drawBox.getSpace() / this.mins[i]);
+                        height = Math.Max(height, drawBox.Space/ this.mins[i]);
                 }
                 item.height = height;
                 absHeight += height;
@@ -167,23 +158,23 @@ namespace Assistment.Texts
             {
                 rows[row].drawBoxes[column] = value;
 
-                float minAdd = Math.Max(this.mins[column], value.getMin()) - this.mins[column];
+                float minAdd = Math.Max(this.mins[column], value.Min) - this.mins[column];
                 this.mins[column] += minAdd;
                 this.min += minAdd;
 
-                float maxAdd = Math.Max(this.maxs[column], value.getMax()) - this.maxs[column];
+                float maxAdd = Math.Max(this.maxs[column], value.Max) - this.maxs[column];
                 this.maxs[column] += maxAdd;
                 this.max += maxAdd;
             }
         }
 
-        public override void setup(RectangleF box)
+        public override void Setup(RectangleF box)
         {
-            this.update();
+            this.Update();
             RectangleF[] cell = new RectangleF[Columns];
             DrawBox drawBox;
-            this.box = box;
-            this.box.Height = 0;
+            this.Box = box;
+            this.Box.Height = 0;
             float height;
             float width = 0;
             float diff = 0;
@@ -200,33 +191,33 @@ namespace Assistment.Texts
                 cell[i].Width = mins[i] + (maxs[i] - mins[i]) * t;
                 width += cell[i].Width;
             }
-            this.box.Width = width;
+            this.Box.Width = width;
 
             foreach (row item in rows)
             {
                 height = 0;
                 for (int i = 0; i < Columns; i++)
                 {
-                    cell[i].Y = this.box.Bottom;
+                    cell[i].Y = this.Box.Bottom;
                     drawBox = item.drawBoxes[i];
                     if (drawBox != null)
                     {
-                        drawBox.setup(cell[i]);
-                        height = Math.Max(drawBox.box.Height, height);
+                        drawBox.Setup(cell[i]);
+                        height = Math.Max(drawBox.Box.Height, height);
                     }
                 }
                 item.height = height;
-                this.box.Height += height;
+                this.Box.Height += height;
             }
         }
-        public override void draw(DrawContext con)
+        public override void Draw(DrawContext con)
         {
             DrawBox drawBox;
-            float height = box.Y;
+            float height = Box.Y;
             float[] widths = new float[Columns + 1];
             for (int i = 0; i < Columns; i++)
-                widths[i] = box.X;
-            widths[Columns] = box.Right;
+                widths[i] = Box.X;
+            widths[Columns] = Box.Right;
 
             foreach (row item in rows)
             {
@@ -234,22 +225,22 @@ namespace Assistment.Texts
                 if (height > con.Bildhohe)
                     return;
                 if (item.pen != null)
-                    con.drawLine(item.pen, box.X, height, box.Right, height);
+                    con.drawLine(item.pen, Box.X, height, Box.Right, height);
                 for (int i = 0; i < Columns; i++)
                 {
                     drawBox = item.drawBoxes[i];
                     if (drawBox != null)
                     {
-                        drawBox.draw(con);
-                        widths[i] = drawBox.box.X;
+                        drawBox.Draw(con);
+                        widths[i] = drawBox.Box.X;
                     }
                 }
             }
             for (int i = 0; i < Columns + 1; i++)
                 if (columnPens[i] != null)
-                    con.drawLine(columnPens[i], widths[i], box.Top, widths[i], box.Bottom);
+                    con.drawLine(columnPens[i], widths[i], Box.Top, widths[i], Box.Bottom);
         }
-        public override DrawBox clone()
+        public override DrawBox Clone()
         {
             Tabular tab = new Tabular(this.Columns);
             tab.space = this.space;
@@ -267,7 +258,7 @@ namespace Assistment.Texts
                 nRow.pen = item.pen;
                 nRow.drawBoxes = new DrawBox[Columns];
                 for (int i = 0; i < Columns; i++)
-                    nRow.drawBoxes[i] = item.drawBoxes[i].clone();
+                    nRow.drawBoxes[i] = item.drawBoxes[i].Clone();
                 nRow.height = item.height;
                 tab.rows.Add(nRow);
             }
@@ -278,7 +269,7 @@ namespace Assistment.Texts
             int j = 0;
             string ttabs = "\t" + tabs;
             sb.AppendLine(tabs + "Tabular:");
-            sb.AppendLine(tabs + "\tbox: " + box);
+            sb.AppendLine(tabs + "\tbox: " + Box);
             sb.AppendLine(tabs + "\tColumns: " + Columns);
             foreach (row item in rows)
             {

@@ -20,29 +20,20 @@ namespace Assistment.Forms
             return new AlignedDrawForm(drawable);
         }
 
-        public override float getSpace()
-        {
-            return 0;
-        }
-        public override float getMin()
-        {
-            return 0;
-        }
-        public override float getMax()
-        {
-            return 0;
-        }
+        public override float Space => 0;
+        public override float Min => 0;
+        public override float Max => 0;
 
-        public override void update()
+        public override void Update()
         {
         }
 
-        public override void setup(System.Drawing.RectangleF box)
+        public override void Setup(System.Drawing.RectangleF box)
         {
-            this.box = box;
+            this.Box = box;
             contextAligner = new ContextAligner(box, drawable);
         }
-        public override void draw(Texts.DrawContext con)
+        public override void Draw(Texts.DrawContext con)
         {
             contextAligner.context = con;
             drawable.draw(contextAligner);
@@ -52,7 +43,7 @@ namespace Assistment.Forms
         {
             string ttabs = "\t" + tabs;
             sb.AppendLine(tabs + "AlignedDrawForm:");
-            sb.AppendLine(tabs + "\tbox: " + box);
+            sb.AppendLine(tabs + "\tbox: " + Box);
             sb.AppendLine(tabs + "\tdrawable.RelativeSize: " + drawable.getRelativeSize());
             sb.AppendLine(tabs + "\tdrawable: "+drawable);
             sb.AppendLine(tabs + ".");

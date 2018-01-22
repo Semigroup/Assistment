@@ -20,7 +20,7 @@ namespace Assistment.Forms
 
         public bool check()
         {
-            return check(context.position);
+            return Check(context.position);
         }
         public void click()
         {
@@ -37,21 +37,21 @@ namespace Assistment.Forms
 
         public virtual void click(PointF point)
         {
-            if (check(point))
+            if (Check(point))
                 context.activate(this);
             else
                 context.deactivate(this);
         }
         public virtual void move(PointF point)
         {
-            if (check(point))
+            if (Check(point))
                 context.activate(this);
             else
                 context.deactivate(this);
         }
         public virtual void release(PointF point)
         {
-            if (check(point))
+            if (Check(point))
                 context.activate(this);
             else
                 context.deactivate(this);
@@ -59,16 +59,16 @@ namespace Assistment.Forms
 
         public virtual void draw()
         {
-            draw(context);
+            Draw(context);
         }
         public virtual void drawAgain()
         {
-            context.clear(box);
+            context.clear(Box);
             draw();
         }
 
         public abstract FormBox flone();
-        public override DrawBox clone()
+        public override DrawBox Clone()
         {
             return flone();
         }

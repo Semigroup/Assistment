@@ -333,6 +333,7 @@
     <Compile Include="FormsAlt\Klappbox.cs" />
     <Compile Include="FormsAlt\Mosaik.cs" />
     <Compile Include="Texts\GeometryBox.cs" />
+    <Compile Include="Texts\ImageBox.cs" />
     <Compile Include="Texts\LayerBox.cs" />
     <Compile Include="Texts\Paper\CardSheet.cs" />
     <Compile Include="Texts\PreText.cs" />
@@ -351,6 +352,7 @@
     </Compile>
     <Compile Include="Texts\Text.cs" />
     <Compile Include="Texts\Titel.cs" />
+    <Compile Include="Texts\Whitespace.cs" />
     <Compile Include="Texts\Word.cs" />
     <Compile Include="Texts\WrappingBox.cs" />
     <Compile Include="Xml\ChunkCollection.cs" />

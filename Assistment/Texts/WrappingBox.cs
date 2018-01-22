@@ -28,36 +28,27 @@ namespace Assistment.Texts
             this.drawBox = Value;
         }
 
-        public override float getSpace()
-        {
-            return DrawBox.getSpace();
-        }
-        public override float getMin()
-        {
-            return DrawBox.getMin();
-        }
-        public override float getMax()
-        {
-            return DrawBox.getMax();
-        }
+        public override float Space => DrawBox.Space;
+        public override float Min => DrawBox.Min;
+        public override float Max => DrawBox.Max;
         public override void Move(System.Drawing.PointF ToMove)
         {
             base.Move(ToMove);
             drawBox.Move(ToMove);
         }
 
-        public override void update()
+        public override void Update()
         {
-            drawBox.update();
+            drawBox.Update();
         }
-        public override void setup(System.Drawing.RectangleF box)
+        public override void Setup(System.Drawing.RectangleF box)
         {
-            drawBox.setup(box);
-            this.box = drawBox.box;
+            drawBox.Setup(box);
+            this.Box = drawBox.Box;
         }
-        public override void draw(DrawContext con)
+        public override void Draw(DrawContext con)
         {
-            drawBox.draw(con);
+            drawBox.Draw(con);
         }
     }
 }

@@ -27,14 +27,14 @@ namespace Assistment.Texts
         public CString(params DrawBox[] DrawBoxes)
             :base()
         {
-            this.addRange(DrawBoxes);
+            this.AddRange(DrawBoxes);
         }
 
         protected override void Assigne(PreText.Line Line)
         {
             Line.ComplexAssignment();
         }
-        public override DrawBox clone()
+        public override DrawBox Clone()
         {
             return new CString(this);
         }
@@ -42,8 +42,8 @@ namespace Assistment.Texts
         {
             string ttabs = "\t" + tabs;
             sb.AppendLine(tabs + "CString:");
-            sb.AppendLine(tabs + "\tbox: " + box);
-            foreach (DrawBox item in words)
+            sb.AppendLine(tabs + "\tbox: " + Box);
+            foreach (DrawBox item in Words)
                 item.InStringBuilder(sb, ttabs);
             sb.AppendLine(tabs + ".");
         }

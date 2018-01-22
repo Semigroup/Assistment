@@ -53,32 +53,30 @@ namespace Assistment.Texts
             this.Scaling = Scaling;
         }
 
-        public override float getSpace()
+        public override float Space
         {
-            float ab = RandHohe * 2;
-            float breite = (Inhalt.getMax() + Inhalt.getMin()) / 2;
-            float hohe = Inhalt.getSpace() / breite;
+            get
+            {
+                float ab = RandHohe * 2;
+                float breite = (Inhalt.Max+ Inhalt.Min) / 2;
+                float hohe = Inhalt.Space / breite;
 
-            return (breite + ab) * (hohe + ab);
-        }
-        public override float getMin()
-        {
-            return Inhalt.getMin() + 2 * RandHohe;
-        }
-        public override float getMax()
-        {
-            return Inhalt.getMax() + 2 * RandHohe;
+                return (breite + ab) * (hohe + ab);
+            }
         }
 
-        public override void update()
+        public override float Min => Inhalt.Min + 2 * RandHohe;
+        public override float Max => Inhalt.Max + 2 * RandHohe;
+
+        public override void Update()
         {
-            Inhalt.update();
+            Inhalt.Update();
         }
-        public override void setup(RectangleF box)
+        public override void Setup(RectangleF box)
         {
             box = box.Inner(RandHohe, RandHohe);
-            Inhalt.setup(box);
-            this.box = Inhalt.box.Inner(-RandHohe, -RandHohe);
+            Inhalt.Setup(box);
+            this.Box = Inhalt.Box.Inner(-RandHohe, -RandHohe);
         }
         public override void Move(PointF ToMove)
         {
@@ -89,22 +87,22 @@ namespace Assistment.Texts
         public abstract Weg GetVerlauf(float units);
         public abstract Art GetArt();
 
-        public override void draw(DrawContext con)
+        public override void Draw(DrawContext con)
         {
-            Size s = box.Size.mul(Scaling).Max(1, 1).ToSize();
+            Size s = Box.Size.mul(Scaling).Max(1, 1).ToSize();
             using (Image Image = new Bitmap(s.Width, s.Height + 1))
             using (Graphics g = Image.GetHighGraphics(Scaling))
             {
-                RectangleF pseudoBox = new RectangleF(RandHohe, RandHohe, Inhalt.box.Width, Inhalt.box.Height);
+                RectangleF pseudoBox = new RectangleF(RandHohe, RandHohe, Inhalt.Box.Width, Inhalt.Box.Height);
                 OrientierbarerWeg ow = OrientierbarerWeg.RundesRechteck(pseudoBox);
                 int samples = 10000;
                 Weg y = GetVerlauf(ow.L / RandHohe);
                 Weg z = t => y(t);
                 Pen RandFarbe = (Pen)this.RandFarbe.Clone();
                 g.FillDrawWegAufOrientierbarerWeg(HintergrundFarbe, RandFarbe, z, ow, samples);
-                con.drawImage(Image, box);
+                con.drawImage(Image, Box);
             }
-            Inhalt.draw(con);
+            Inhalt.Draw(con);
         }
         public override void InStringBuilder(StringBuilder sb, string tabs)
         {
@@ -163,9 +161,9 @@ namespace Assistment.Texts
             return t => new PointF(t, 0);
         }
 
-        public override DrawBox clone()
+        public override DrawBox Clone()
         {
-            return new RunderTitel(Inhalt.clone(), RandHohe, RandFarbe, HintergrundFarbe, Scaling);
+            return new RunderTitel(Inhalt.Clone(), RandHohe, RandFarbe, HintergrundFarbe, Scaling);
         }
 
         public override Titel.Art GetArt()
@@ -200,9 +198,9 @@ namespace Assistment.Texts
             };
         }
 
-        public override DrawBox clone()
+        public override DrawBox Clone()
         {
-            return new StachelTitel(Inhalt.clone(), RandHohe, RandFarbe, HintergrundFarbe, Scaling);
+            return new StachelTitel(Inhalt.Clone(), RandHohe, RandFarbe, HintergrundFarbe, Scaling);
         }
 
         public override Titel.Art GetArt()
@@ -238,9 +236,9 @@ namespace Assistment.Texts
             return ow.weg;
         }
 
-        public override DrawBox clone()
+        public override DrawBox Clone()
         {
-            return new ZahnTitel(Inhalt.clone(), RandHohe, RandFarbe, HintergrundFarbe, Scaling);
+            return new ZahnTitel(Inhalt.Clone(), RandHohe, RandFarbe, HintergrundFarbe, Scaling);
         }
         public override Titel.Art GetArt()
         {
@@ -271,9 +269,9 @@ namespace Assistment.Texts
                 };
         }
 
-        public override DrawBox clone()
+        public override DrawBox Clone()
         {
-            return new WellenTitel(Inhalt.clone(), RandHohe, RandFarbe, HintergrundFarbe, Scaling);
+            return new WellenTitel(Inhalt.Clone(), RandHohe, RandFarbe, HintergrundFarbe, Scaling);
         }
         public override Titel.Art GetArt()
         {
@@ -302,9 +300,9 @@ namespace Assistment.Texts
                     return new PointF(t, (float)y);
                 };
         }
-        public override DrawBox clone()
+        public override DrawBox Clone()
         {
-            return new SagezahnTitel(Inhalt.clone(), RandHohe, RandFarbe, HintergrundFarbe, Scaling);
+            return new SagezahnTitel(Inhalt.Clone(), RandHohe, RandFarbe, HintergrundFarbe, Scaling);
         }
         public override Titel.Art GetArt()
         {
@@ -346,9 +344,9 @@ namespace Assistment.Texts
             return oy.weg;
         }
 
-        public override DrawBox clone()
+        public override DrawBox Clone()
         {
-            return new VierStufenTitel(Inhalt.clone(), RandHohe, RandFarbe, HintergrundFarbe, Scaling);
+            return new VierStufenTitel(Inhalt.Clone(), RandHohe, RandFarbe, HintergrundFarbe, Scaling);
         }
         public override Titel.Art GetArt()
         {
@@ -386,9 +384,9 @@ namespace Assistment.Texts
                 };
         }
 
-        public override DrawBox clone()
+        public override DrawBox Clone()
         {
-            return new KonigTitel(Inhalt.clone(), RandHohe, RandFarbe, HintergrundFarbe, Scaling);
+            return new KonigTitel(Inhalt.Clone(), RandHohe, RandFarbe, HintergrundFarbe, Scaling);
         }
         public override Titel.Art GetArt()
         {
@@ -431,9 +429,9 @@ namespace Assistment.Texts
                 };
         }
 
-        public override DrawBox clone()
+        public override DrawBox Clone()
         {
-            return new ChaosTitel(Inhalt.clone(), RandHohe, RandFarbe, HintergrundFarbe, Scaling);
+            return new ChaosTitel(Inhalt.Clone(), RandHohe, RandFarbe, HintergrundFarbe, Scaling);
         }
         public override Titel.Art GetArt()
         {
@@ -482,9 +480,9 @@ namespace Assistment.Texts
             return w.weg;
         }
 
-        public override DrawBox clone()
+        public override DrawBox Clone()
         {
-            return new KreuzTitel(Inhalt.clone(), RandHohe, RandFarbe, HintergrundFarbe, Scaling);
+            return new KreuzTitel(Inhalt.Clone(), RandHohe, RandFarbe, HintergrundFarbe, Scaling);
         }
         public override Titel.Art GetArt()
         {
@@ -527,9 +525,9 @@ namespace Assistment.Texts
             return w.weg;
         }
 
-        public override DrawBox clone()
+        public override DrawBox Clone()
         {
-            return new TriskelenTitel(Inhalt.clone(), RandHohe, RandFarbe, HintergrundFarbe, Scaling);
+            return new TriskelenTitel(Inhalt.Clone(), RandHohe, RandFarbe, HintergrundFarbe, Scaling);
         }
         public override Titel.Art GetArt()
         {
@@ -572,9 +570,9 @@ namespace Assistment.Texts
             return w.weg;
         }
 
-        public override DrawBox clone()
+        public override DrawBox Clone()
         {
-            return new PikTitel(Inhalt.clone(), RandHohe, RandFarbe, HintergrundFarbe, Scaling);
+            return new PikTitel(Inhalt.Clone(), RandHohe, RandFarbe, HintergrundFarbe, Scaling);
         }
         public override Titel.Art GetArt()
         {
@@ -619,9 +617,9 @@ namespace Assistment.Texts
             return w.weg;
         }
 
-        public override DrawBox clone()
+        public override DrawBox Clone()
         {
-            return new BlitzTitel(Inhalt.clone(), RandHohe, RandFarbe, HintergrundFarbe, Scaling);
+            return new BlitzTitel(Inhalt.Clone(), RandHohe, RandFarbe, HintergrundFarbe, Scaling);
         }
         public override Titel.Art GetArt()
         {

@@ -23,48 +23,39 @@ namespace Assistment.Texts
         {
             this.HorizontallyFixed = HorizontallyFixed;
             this.VerticallyFixed = VerticallyFixed;
-            this.box.Size = FixSize = Size;
+            this.Box.Size = FixSize = Size;
         }
 
-        public override float getSpace()
+        public override float Space => Box.Width * Box.Height;
+        public override float Min => Box.Width;
+        public override float Max => Box.Height;
+        public override void Setup(RectangleF box)
         {
-            return box.Width * box.Height;
-        }
-        public override float getMin()
-        {
-            return box.Width;
-        }
-        public override float getMax()
-        {
-            return box.Height;
-        }
-        public override void setup(RectangleF box)
-        {
-            this.box = new RectangleF(box.Location, FixSize);
+            this.Box = new RectangleF(box.Location, FixSize);
             RectangleF VirtualBox = box;
             if (HorizontallyFixed)
                 VirtualBox.Width = FixSize.Width;
             if (VerticallyFixed)
                 VirtualBox.Height = FixSize.Height;
 
-            DrawBox.setup(VirtualBox);
+            DrawBox.Setup(VirtualBox);
             PointF Rest = new PointF();
             if (HorizontallyFixed)
-                Rest.X = VirtualBox.Width - DrawBox.box.Width;
+                Rest.X = VirtualBox.Width - DrawBox.Box.Width;
             else
-                box.Width = DrawBox.box.Width;
+                box.Width = DrawBox.Box.Width;
 
             if (VerticallyFixed)
-                Rest.Y = VirtualBox.Height - DrawBox.box.Height;
+                Rest.Y = VirtualBox.Height - DrawBox.Box.Height;
             else
-                box.Height = DrawBox.box.Height;
+                box.Height = DrawBox.Box.Height;
 
             DrawBox.Move(Rest.mul(Alignment));
         }
 
-        public override DrawBox clone()
+        public override DrawBox Clone()
         {
-            FixedBox fb = new FixedBox(this.box.Size, DrawBox.clone());
+            FixedBox fb = new FixedBox(this.Box.Size, DrawBox.Clone());
             fb.Alignment = Alignment;
             return fb;
         }
@@ -72,7 +63,7 @@ namespace Assistment.Texts
         {
             string ttabs = "\t" + tabs;
             sb.AppendLine(tabs + "FixedBox:");
-            sb.AppendLine(tabs + "\tbox: " + box);
+            sb.AppendLine(tabs + "\tbox: " + Box);
             DrawBox.InStringBuilder(sb, ttabs);
             sb.AppendLine(tabs + ".");
         }

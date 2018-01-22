@@ -37,7 +37,7 @@ namespace Assistment.Forms
 
             public void setup(RectangleF mainBox)
             {
-                this.drawOb.setup(getAbsBox(mainBox));
+                this.drawOb.Setup(getAbsBox(mainBox));
             }
         }
 
@@ -64,8 +64,8 @@ namespace Assistment.Forms
         public void addKachel(FormBox drawOb, RectangleF relBox)
         {
             kacheln.Add(new kachel(drawOb, relBox));
-            this.min = Math.Max(drawOb.getMin() / relBox.Width, this.min);
-            this.max = Math.Max(drawOb.getMax() / relBox.Width, this.max);
+            this.min = Math.Max(drawOb.Min/ relBox.Width, this.min);
+            this.max = Math.Max(drawOb.Max/ relBox.Width, this.max);
         }
         /// <summary>
         /// entfernt alle Kacheln mit diesem drawObject
@@ -76,57 +76,48 @@ namespace Assistment.Forms
             kacheln.RemoveAll(X => X.drawOb == drawOb);
         }
 
-        public override float getMax()
-        {
-            return min;
-        }
-        public override float getMin()
-        {
-            return max;
-        }
-        public override float getSpace()
-        {
-            return 0;
-        }
+        public override float Max => min;
+        public override float Min => max;
+        public override float Space => 0;
 
-        public override void setup(RectangleF box)
+        public override void Setup(RectangleF box)
         {
-            this.box = box;
+            this.Box = box;
             foreach (kachel item in kacheln)
-                item.setup(this.box);
+                item.setup(this.Box);
         }
-        public override void update()
+        public override void Update()
         {
             this.min = this.max = 0;
             foreach (kachel item in kacheln)
             {
-                item.drawOb.update();
-                this.min = Math.Max(item.drawOb.getMin() / item.relativBox.Width, this.min);
-                this.max = Math.Max(item.drawOb.getMax() / item.relativBox.Width, this.max);
+                item.drawOb.Update();
+                this.min = Math.Max(item.drawOb.Min/ item.relativBox.Width, this.min);
+                this.max = Math.Max(item.drawOb.Max/ item.relativBox.Width, this.max);
             }
         }
-        public override void draw(Texts.DrawContext con)
+        public override void Draw(Texts.DrawContext con)
         {
             foreach (kachel item in kacheln)
-                item.drawOb.draw(con);
+                item.drawOb.Draw(con);
         }
 
         public override void click(PointF point)
         {
             foreach (var item in kacheln)
-                if (item.drawOb.check(point))
+                if (item.drawOb.Check(point))
                     item.drawOb.click(point);
         }
         public override void move(PointF point)
         {
             foreach (var item in kacheln)
-                if (item.drawOb.check(point))
+                if (item.drawOb.Check(point))
                     item.drawOb.move(point);
         }
         public override void release(PointF point)
         {
             foreach (var item in kacheln)
-                if (item.drawOb.check(point))
+                if (item.drawOb.Check(point))
                     item.drawOb.release(point);
         }
 
@@ -135,7 +126,7 @@ namespace Assistment.Forms
             Mosaik m = new Mosaik();
             foreach (var item in kacheln)
                 m.kacheln.Add(new kachel(item.drawOb.flone(), item.relativBox));
-            m.box = box;
+            m.Box = Box;
             m.max = this.max;
             m.min = this.min;
             return m;
@@ -144,7 +135,7 @@ namespace Assistment.Forms
         {
             string ttabs = "\t" + tabs;
             sb.AppendLine(tabs + "Festes Mosaik:");
-            sb.AppendLine(tabs + "\tbox: " + box);
+            sb.AppendLine(tabs + "\tbox: " + Box);
             foreach (kachel item in kacheln)
                 item.InStringBuilder(sb, ttabs);
             sb.AppendLine(tabs);

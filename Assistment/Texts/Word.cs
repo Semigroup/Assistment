@@ -42,27 +42,18 @@ namespace Assistment.Texts
             this.font = font;
             this.style = style;
             this.pen = pen;
-            this.box = new RectangleF(0, 0, font.xMass(text), font.yMass(text));
+            this.Box = new RectangleF(0, 0, font.xMass(text), font.yMass(text));
         }
 
-        public override float getSpace()
-        {
-            return this.box.Width * this.box.Height;
-        }
-        public override float getMin()
-        {
-            return this.box.Width;
-        }
-        public override float getMax()
-        {
-            return this.box.Width;
-        }
+        public override float Space => this.Box.Width * this.Box.Height;
+        public override float Min => this.Box.Width;
+        public override float Max => this.Box.Width;
 
-        public override void setup(RectangleF box)
+        public override void Setup(RectangleF box)
         {
-            this.box.Location = box.Location;
+            this.Box.Location = box.Location;
         }
-        public override void draw(DrawContext con)
+        public override void Draw(DrawContext con)
         {
             Font f;
             if ((style & FONTSTYLE_BOLD) == 0)
@@ -75,23 +66,23 @@ namespace Assistment.Texts
                     f = font.getFontBold();
                 else
                     f = font.getFontBoldAndItalic();
-            con.drawString(text, f, brush, box.Location, box.Height);
+            con.drawString(text, f, brush, Box.Location, Box.Height);
 
             if ((style & FONTSTYLE_UNDERLINED) != 0)
-                con.drawLine(pen, box.Left, box.Bottom, box.Right, box.Bottom);
+                con.drawLine(pen, Box.Left, Box.Bottom, Box.Right, Box.Bottom);
             if ((style & FONTSTYLE_CROSSEDOUT) != 0)
-                con.drawLine(pen, box.Left, box.Top + box.Height / 2, box.Right, box.Top + box.Height / 2);
+                con.drawLine(pen, Box.Left, Box.Top + Box.Height / 2, Box.Right, Box.Top + Box.Height / 2);
             if ((style & FONTSTYLE_OVERLINED) != 0)
-                con.drawLine(pen, box.Left, box.Top, box.Right, box.Top);
+                con.drawLine(pen, Box.Left, Box.Top, Box.Right, Box.Top);
             if ((style & FONTSTYLE_RIGHTLINED) != 0)
-                con.drawLine(pen, box.Right, box.Top, box.Right, box.Bottom);
+                con.drawLine(pen, Box.Right, Box.Top, Box.Right, Box.Bottom);
             if ((style & FONTSTYLE_LEFTLINED) != 0)
-                con.drawLine(pen, box.Left, box.Top, box.Left, box.Bottom);
+                con.drawLine(pen, Box.Left, Box.Top, Box.Left, Box.Bottom);
         }
-        public override void update()
+        public override void Update()
         {
         }
-        public override DrawBox clone()
+        public override DrawBox Clone()
         {
             return new Word(text, brush, font, style, pen);
         }
@@ -99,7 +90,7 @@ namespace Assistment.Texts
         public override void InStringBuilder(StringBuilder sb, string tabs)
         {
             sb.AppendLine(tabs + "Word:");
-            sb.AppendLine(tabs + "\tbox: " + box);
+            sb.AppendLine(tabs + "\tbox: " + Box);
             sb.AppendLine(tabs + "\ttext: \"" + text + "\"");
             sb.AppendLine(tabs + "\tbrush: " + brush);
             sb.AppendLine(tabs + "\tfont: " + font);
@@ -111,112 +102,6 @@ namespace Assistment.Texts
         public override string ToString()
         {
             return text;
-        }
-    }
-    public class Whitespace : DrawBox
-    {
-        public Whitespace(float width, float height, bool endsLine)
-        {
-            this.box = new RectangleF(0, 0, width, height);
-            this.endsLine = endsLine;
-        }
-
-        public override float getSpace()
-        {
-            return this.box.Width * this.box.Height;
-        }
-        public override float getMin()
-        {
-            return this.box.Width;
-        }
-        public override float getMax()
-        {
-            return this.box.Width;
-        }
-
-        public override void setup(RectangleF box)
-        {
-            this.box.Location = box.Location;
-        }
-        public override void draw(DrawContext con)
-        {
-        }
-        public override void update()
-        {
-        }
-        public override DrawBox clone()
-        {
-            return new Whitespace(box.Width, box.Height, endsLine);
-        }
-        public override void InStringBuilder(StringBuilder sb, string tabs)
-        {
-            sb.AppendLine(tabs + "Whitespace:");
-            sb.AppendLine(tabs + "\tbox: " + box);
-            sb.AppendLine(tabs + ".");
-        }
-        public override string ToString()
-        {
-            return (box.Width > 0 ? " " : "") + (endsLine ? "\r\n" : "");
-        }
-    }
-    public class ImageBox : DrawBox
-    {
-        private Image image;
-        public Image Image { get { return image; } set { image = value; } }
-
-        public ImageBox(Image Image)
-        {
-            this.box.Size = Image.Size;
-            this.Image = Image;
-        }
-        public ImageBox(float width, Image Image)
-        {
-            this.box.Width = width;
-            this.box.Height = width * Image.Height / Image.Width;
-            this.Image = Image;
-        }
-        public ImageBox(SizeF size, Image Image)
-        {
-            this.box.Size = size;
-            this.Image = Image;
-        }
-        public ImageBox(float width, float height, Image Image) : this(new SizeF(width, height), Image)
-        {
-        }
-        public override float getSpace()
-        {
-            return box.Width * box.Height;
-        }
-        public override float getMin()
-        {
-            return box.Width;
-        }
-        public override float getMax()
-        {
-            return box.Width;
-        }
-
-        public override void update()
-        {
-        }
-        public override void setup(RectangleF box)
-        {
-            this.box.Location = box.Location;
-        }
-        public override void draw(DrawContext con)
-        {
-            con.drawImage(Image, box);
-        }
-
-        public override DrawBox clone()
-        {
-            return new ImageBox(box.Size, Image);
-        }
-        public override void InStringBuilder(StringBuilder sb, string tabs)
-        {
-            sb.AppendLine(tabs + "ImageBox:");
-            sb.AppendLine(tabs + "\tbox: " + box);
-            sb.AppendLine(tabs + ".");
         }
     }
 }

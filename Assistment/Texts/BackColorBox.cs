@@ -21,16 +21,16 @@ namespace Assistment.Texts
             this.RandPen = RandPen;
         }
 
-        public override void draw(DrawContext con)
+        public override void Draw(DrawContext con)
         {
             if (BackColor != null)
-                con.fillRectangle(BackColor, DrawBox.box);
+                con.fillRectangle(BackColor, DrawBox.Box);
             if (RandPen != null)
-                con.drawRectangle(RandPen, DrawBox.box);
-            base.draw(con);
+                con.drawRectangle(RandPen, DrawBox.Box);
+            base.Draw(con);
         }
 
-        public override DrawBox clone()
+        public override DrawBox Clone()
         {
             return new BackColorBox(BackColor, RandPen, DrawBox);
         }

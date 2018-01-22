@@ -37,7 +37,7 @@ namespace Assistment.Texts
 
             public void setup(RectangleF mainBox)
             {
-                this.drawOb.setup(getAbsBox(mainBox));
+                this.drawOb.Setup(getAbsBox(mainBox));
             }
         }
 
@@ -52,7 +52,7 @@ namespace Assistment.Texts
         }
         public FestesMosaik(RectangleF box, Brush backColor)
         {
-            this.box = box;
+            this.Box = box;
             this.backColor = backColor;
             //this.min = this.max = 0;
         }
@@ -73,49 +73,40 @@ namespace Assistment.Texts
         {
             string ttabs = "\t" + tabs;
             sb.AppendLine(tabs + "Festes Mosaik:");
-            sb.AppendLine(tabs + "\tbox: " + box);
+            sb.AppendLine(tabs + "\tbox: " + Box);
             sb.AppendLine(tabs + "\tbackColor: " + backColor);
             foreach (kachel item in kacheln)
                 item.InStringBuilder(sb, ttabs);
             sb.AppendLine(tabs);
         }
-        public override DrawBox clone()
+        public override DrawBox Clone()
         {
-            FestesMosaik m = new FestesMosaik(box, backColor);
+            FestesMosaik m = new FestesMosaik(Box, backColor);
             foreach (var item in kacheln)
                 m.kacheln.Add(new kachel(item.drawOb, item.relativBox));
             return m;
         }
-        public override void draw(DrawContext con)
+        public override void Draw(DrawContext con)
         {
-            con.fillRectangle(backColor, box);
+            con.fillRectangle(backColor, Box);
             foreach (kachel item in kacheln)
-                item.drawOb.draw(con);
+                item.drawOb.Draw(con);
         }
 
-        public override float getMax()
-        {
-            return box.Width;
-        }
-        public override float getMin()
-        {
-            return box.Width;
-        }
-        public override float getSpace()
-        {
-            return this.box.Width * this.box.Height;
-        }
+        public override float Max => Box.Width;
+        public override float Min => Box.Width;
+        public override float Space => this.Box.Width * this.Box.Height;
 
-        public override void setup(RectangleF box)
+        public override void Setup(RectangleF box)
         {
-            this.box.Location = box.Location;
+            this.Box.Location = box.Location;
             foreach (kachel item in kacheln)
-                item.setup(this.box);
+                item.setup(this.Box);
         }
-        public override void update()
+        public override void Update()
         {
             foreach (kachel item in kacheln)
-                item.drawOb.update();
+                item.drawOb.Update();
         }
 
         //public override void click(MouseEventArgs args)

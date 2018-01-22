@@ -15,8 +15,8 @@ namespace Assistment.Texts
 {
     public abstract class DrawContainer : DrawBox, ICollection<DrawBox>
     {
-        public float alignment = 0;
-        public xFont preferedFont = StandardFont;
+        public float Alignment = 0;
+        public xFont PreferedFont = StandardFont;
 
         public abstract int Count { get; }
 
@@ -29,154 +29,154 @@ namespace Assistment.Texts
                 item.Move(ToMove);
         }
 
-        public abstract void add(DrawBox word);
-        public virtual void addRange(IEnumerable<DrawBox> container)
+        public abstract void Add(DrawBox word);
+        public virtual void AddRange(IEnumerable<DrawBox> container)
         {
             foreach (var word in container)
-                add(word);
+                Add(word);
         }
-        #region addWort Überladungen
-        public void addWort(object text)
+        #region AddWort Überladungen
+        public void AddWort(object text)
         {
-            this.addWort(text.ToString(), Brushes.Black, preferedFont, 0, Pens.Black);
+            this.AddWort(text.ToString(), Brushes.Black, PreferedFont, 0, Pens.Black);
         }
-        public void addWort(object text, Pen pen)
+        public void AddWort(object text, Pen pen)
         {
-            this.addWort(text.ToString(), Brushes.Black, preferedFont, 0, pen);
+            this.AddWort(text.ToString(), Brushes.Black, PreferedFont, 0, pen);
         }
-        public void addWort(object text, byte style)
+        public void AddWort(object text, byte style)
         {
-            this.addWort(text.ToString(), Brushes.Black, preferedFont, style, Pens.Black);
+            this.AddWort(text.ToString(), Brushes.Black, PreferedFont, style, Pens.Black);
         }
-        public void addWort(object text, byte style, Pen pen)
+        public void AddWort(object text, byte style, Pen pen)
         {
-            this.addWort(text.ToString(), Brushes.Black, preferedFont, style, pen);
+            this.AddWort(text.ToString(), Brushes.Black, PreferedFont, style, pen);
         }
-        public void addWort(object text, xFont font)
+        public void AddWort(object text, xFont font)
         {
-            this.addWort(text.ToString(), Brushes.Black, font, 0, Pens.Black);
+            this.AddWort(text.ToString(), Brushes.Black, font, 0, Pens.Black);
         }
-        public void addWort(object text, xFont font, Pen pen)
+        public void AddWort(object text, xFont font, Pen pen)
         {
-            this.addWort(text.ToString(), Brushes.Black, font, 0, pen);
+            this.AddWort(text.ToString(), Brushes.Black, font, 0, pen);
         }
-        public void addWort(object text, xFont font, byte style)
+        public void AddWort(object text, xFont font, byte style)
         {
-            this.addWort(text.ToString(), Brushes.Black, font, style, Pens.Black);
+            this.AddWort(text.ToString(), Brushes.Black, font, style, Pens.Black);
         }
-        public void addWort(object text, xFont font, byte style, Pen pen)
+        public void AddWort(object text, xFont font, byte style, Pen pen)
         {
-            this.addWort(text.ToString(), Brushes.Black, font, style, pen);
+            this.AddWort(text.ToString(), Brushes.Black, font, style, pen);
         }
-        public void addWort(object text, Brush brush)
+        public void AddWort(object text, Brush brush)
         {
-            this.addWort(text.ToString(), brush, preferedFont, 0, Pens.Black);
+            this.AddWort(text.ToString(), brush, PreferedFont, 0, Pens.Black);
         }
-        public void addWort(object text, Brush brush, Pen pen)
+        public void AddWort(object text, Brush brush, Pen pen)
         {
-            this.addWort(text.ToString(), brush, preferedFont, 0, pen);
+            this.AddWort(text.ToString(), brush, PreferedFont, 0, pen);
         }
-        public void addWort(object text, Brush brush, byte style)
+        public void AddWort(object text, Brush brush, byte style)
         {
-            this.addWort(text.ToString(), brush, preferedFont, style, Pens.Black);
+            this.AddWort(text.ToString(), brush, PreferedFont, style, Pens.Black);
         }
-        public void addWort(object text, Brush brush, byte style, Pen pen)
+        public void AddWort(object text, Brush brush, byte style, Pen pen)
         {
-            this.addWort(text.ToString(), brush, preferedFont, style, pen);
+            this.AddWort(text.ToString(), brush, PreferedFont, style, pen);
         }
-        public void addWort(object text, Brush brush, xFont font)
+        public void AddWort(object text, Brush brush, xFont font)
         {
-            this.addWort(text.ToString(), brush, font, 0, Pens.Black);
+            this.AddWort(text.ToString(), brush, font, 0, Pens.Black);
         }
-        public void addWort(object text, Brush brush, xFont font, Pen pen)
+        public void AddWort(object text, Brush brush, xFont font, Pen pen)
         {
-            this.addWort(text.ToString(), brush, font, 0, pen);
+            this.AddWort(text.ToString(), brush, font, 0, pen);
         }
-        public void addWort(object text, Brush brush, xFont font, byte style)
+        public void AddWort(object text, Brush brush, xFont font, byte style)
         {
-            this.addWort(text.ToString(), brush, font, style, Pens.Black);
+            this.AddWort(text.ToString(), brush, font, style, Pens.Black);
         }
-        public void addWort(object text, Brush brush, xFont font, byte style, Pen pen)
+        public void AddWort(object text, Brush brush, xFont font, byte style, Pen pen)
         {
-            this.add(new Word(text.ToString(), brush, font, style, pen));
+            this.Add(new Word(text.ToString(), brush, font, style, pen));
         }
-        public void addWort(string text)
+        public void AddWort(string text)
         {
-            this.addWort(text, Brushes.Black, preferedFont, 0, Pens.Black);
+            this.AddWort(text, Brushes.Black, PreferedFont, 0, Pens.Black);
         }
-        public void addWort(string text, Pen pen)
+        public void AddWort(string text, Pen pen)
         {
-            this.addWort(text, Brushes.Black, preferedFont, 0, pen);
+            this.AddWort(text, Brushes.Black, PreferedFont, 0, pen);
         }
-        public void addWort(string text, byte style)
+        public void AddWort(string text, byte style)
         {
-            this.addWort(text, Brushes.Black, preferedFont, style, Pens.Black);
+            this.AddWort(text, Brushes.Black, PreferedFont, style, Pens.Black);
         }
-        public void addWort(string text, byte style, Pen pen)
+        public void AddWort(string text, byte style, Pen pen)
         {
-            this.addWort(text, Brushes.Black, preferedFont, style, pen);
+            this.AddWort(text, Brushes.Black, PreferedFont, style, pen);
         }
-        public void addWort(string text, xFont font)
+        public void AddWort(string text, xFont font)
         {
-            this.addWort(text, Brushes.Black, font, 0, Pens.Black);
+            this.AddWort(text, Brushes.Black, font, 0, Pens.Black);
         }
-        public void addWort(string text, xFont font, Pen pen)
+        public void AddWort(string text, xFont font, Pen pen)
         {
-            this.addWort(text, Brushes.Black, font, 0, pen);
+            this.AddWort(text, Brushes.Black, font, 0, pen);
         }
-        public void addWort(string text, xFont font, byte style)
+        public void AddWort(string text, xFont font, byte style)
         {
-            this.addWort(text, Brushes.Black, font, style, Pens.Black);
+            this.AddWort(text, Brushes.Black, font, style, Pens.Black);
         }
-        public void addWort(string text, xFont font, byte style, Pen pen)
+        public void AddWort(string text, xFont font, byte style, Pen pen)
         {
-            this.addWort(text, Brushes.Black, font, style, pen);
+            this.AddWort(text, Brushes.Black, font, style, pen);
         }
-        public void addWort(string text, Brush brush)
+        public void AddWort(string text, Brush brush)
         {
-            this.addWort(text, brush, preferedFont, 0, Pens.Black);
+            this.AddWort(text, brush, PreferedFont, 0, Pens.Black);
         }
-        public void addWort(string text, Brush brush, Pen pen)
+        public void AddWort(string text, Brush brush, Pen pen)
         {
-            this.addWort(text, brush, preferedFont, 0, pen);
+            this.AddWort(text, brush, PreferedFont, 0, pen);
         }
-        public void addWort(string text, Brush brush, byte style)
+        public void AddWort(string text, Brush brush, byte style)
         {
-            this.addWort(text, brush, preferedFont, style, Pens.Black);
+            this.AddWort(text, brush, PreferedFont, style, Pens.Black);
         }
-        public void addWort(string text, Brush brush, byte style, Pen pen)
+        public void AddWort(string text, Brush brush, byte style, Pen pen)
         {
-            this.addWort(text, brush, preferedFont, style, pen);
+            this.AddWort(text, brush, PreferedFont, style, pen);
         }
-        public void addWort(string text, Brush brush, xFont font)
+        public void AddWort(string text, Brush brush, xFont font)
         {
-            this.addWort(text, brush, font, 0, Pens.Black);
+            this.AddWort(text, brush, font, 0, Pens.Black);
         }
-        public void addWort(string text, Brush brush, xFont font, Pen pen)
+        public void AddWort(string text, Brush brush, xFont font, Pen pen)
         {
-            this.addWort(text, brush, font, 0, pen);
+            this.AddWort(text, brush, font, 0, pen);
         }
-        public void addWort(string text, Brush brush, xFont font, byte style)
+        public void AddWort(string text, Brush brush, xFont font, byte style)
         {
-            this.addWort(text, brush, font, style, Pens.Black);
+            this.AddWort(text, brush, font, style, Pens.Black);
         }
-        public void addWort(string text, Brush brush, xFont font, byte style, Pen pen)
+        public void AddWort(string text, Brush brush, xFont font, byte style, Pen pen)
         {
-            this.add(new Word(text, brush, font, style, pen));
+            this.Add(new Word(text, brush, font, style, pen));
         }
         #endregion
-        #region addImage Überladungen
-        public void addImage(Image img)
+        #region AddImage Überladungen
+        public void AddImage(Image img)
         {
-            addImage(img, img.Width, img.Height);
+            AddImage(img, img.Width, img.Height);
         }
-        public void addImage(Image img, float width)
+        public void AddImage(Image img, float width)
         {
-            addImage(img, width, width * img.Height / img.Width);
+            AddImage(img, width, width * img.Height / img.Width);
         }
-        public void addImage(Image img, float width, float height)
+        public void AddImage(Image img, float width, float height)
         {
-            add(new ImageBox(width, height, img));
+            Add(new ImageBox(width, height, img));
         }
         #endregion
         #region addWhitespace und addAbsatz Überladungen
@@ -184,32 +184,32 @@ namespace Assistment.Texts
         /// added n Leerzeichen in prefferdFont
         /// </summary>
         /// <param name="n"></param>
-        public void addWhitespace(int n)
+        public void AddWhitespace(int n)
         {
-            this.addWhitespace(n * preferedFont.getWhitespace(), preferedFont.getZeilenabstand());
+            this.AddWhitespace(n * PreferedFont.getWhitespace(), PreferedFont.getZeilenabstand());
         }
-        public void addWhitespace(xFont font)
+        public void AddWhitespace(xFont font)
         {
-            this.add(new Whitespace(font.getWhitespace(), font.getZeilenabstand(), false));
+            this.Add(new Whitespace(font.getWhitespace(), font.getZeilenabstand(), false));
         }
-        public void addWhitespace(float width)
+        public void AddWhitespace(float width)
         {
-            this.addWhitespace(width, 0, false);
+            this.AddWhitespace(width, 0, false);
         }
-        public void addWhitespace(float width, float height)
+        public void AddWhitespace(float width, float height)
         {
-            this.addWhitespace(width, height, false);
+            this.AddWhitespace(width, height, false);
         }
-        public void addWhitespace(float width, float height, bool endsLine)
+        public void AddWhitespace(float width, float height, bool endsLine)
         {
-            this.add(new Whitespace(width, height, endsLine));
+            this.Add(new Whitespace(width, height, endsLine));
         }
-        public void addAbsatz()
+        public void AddAbsatz()
         {
-            this.addWhitespace(0, 0, true);
+            this.AddWhitespace(0, 0, true);
         }
         #endregion
-        #region addRegex Überladungen
+        #region AddRegex Überladungen
         /// <summary>
         /// <para>\n : Absatz</para>
         /// <para></para>
@@ -232,7 +232,7 @@ namespace Assistment.Texts
         /// </summary>
         /// <param name="regex"></param>
         /// <param name="font"></param>
-        public void addRegex(string regex, xFont font)
+        public void AddRegex(string regex, xFont font)
         {
             int i = 0;
             ///anfang substring
@@ -246,10 +246,10 @@ namespace Assistment.Texts
                 {
                     case '\\':
                         if (i != a)
-                            this.addWort(regex.Substring(a, i - a), br, font, m, p);
+                            this.AddWort(regex.Substring(a, i - a), br, font, m, p);
                         i++;
                         if (regex.Length == i)
-                            this.addWort(@"\?", br, font, m, p);
+                            this.AddWort(@"\?", br, font, m, p);
                         else
                         {
                             switch (regex[i])
@@ -313,7 +313,7 @@ namespace Assistment.Texts
                                         p = new Pen(c);
                                     }
                                     else
-                                        this.addWort(regex.Substring(i - 1, regex.Length - i + 1) + new string('?', 9 - regex.Length + i), br, font, m, p);
+                                        this.AddWort(regex.Substring(i - 1, regex.Length - i + 1) + new string('?', 9 - regex.Length + i), br, font, m, p);
                                     i += 9;
                                     break;
                                 #endregion
@@ -350,7 +350,7 @@ namespace Assistment.Texts
                                 #region Format
                                 case 'n':
                                     i++;
-                                    this.addAbsatz();
+                                    this.AddAbsatz();
                                     break;
                                 case 't':
                                     int b = -1;
@@ -374,11 +374,11 @@ namespace Assistment.Texts
                                             width = Convert.ToSingle(regex.Substring(a, b - a));
                                             height = Convert.ToSingle(regex.Substring(b + 1, i - b - 1));
                                         }
-                                        addWhitespace(width * font.getWhitespace(), height * font.getZeilenabstand());
+                                        AddWhitespace(width * font.getWhitespace(), height * font.getZeilenabstand());
                                     }
                                     catch (FormatException)
                                     {
-                                        this.addWort("\\t" + regex.Substring(a, i - a) + "f?", br, font, m, p);
+                                        this.AddWort("\\t" + regex.Substring(a, i - a) + "f?", br, font, m, p);
                                     }
                                     i++;
                                     break;
@@ -387,11 +387,11 @@ namespace Assistment.Texts
                                     while ((i < regex.Length) && (regex[i] != 'f')) i++;
                                     try
                                     {
-                                        this.alignment = Convert.ToSingle(regex.Substring(a, i - a));
+                                        this.Alignment = Convert.ToSingle(regex.Substring(a, i - a));
                                     }
                                     catch (FormatException)
                                     {
-                                        this.addWort("\\m" + regex.Substring(a, i - a) + "f?", br, font, m, p);
+                                        this.AddWort("\\m" + regex.Substring(a, i - a) + "f?", br, font, m, p);
                                     }
                                     i++;
                                     break;
@@ -399,31 +399,31 @@ namespace Assistment.Texts
                                 #region Sonderzeichen
                                 case '{':
                                     i++;
-                                    this.addWort("{", br, font, m, p);
+                                    this.AddWort("{", br, font, m, p);
                                     break;
                                 case '}':
                                     i++;
-                                    this.addWort("}", br, font, m, p);
+                                    this.AddWort("}", br, font, m, p);
                                     break;
                                 case '[':
                                     i++;
-                                    this.addWort("[", br, font, m, p);
+                                    this.AddWort("[", br, font, m, p);
                                     break;
                                 case ']':
                                     i++;
-                                    this.addWort("]", br, font, m, p);
+                                    this.AddWort("]", br, font, m, p);
                                     break;
                                 case '\"':
                                     i++;
-                                    this.addWort("\"", br, font, m, p);
+                                    this.AddWort("\"", br, font, m, p);
                                     break;
                                 case '\\':
                                     i++;
-                                    this.addWort("\\", br, font, m, p);
+                                    this.AddWort("\\", br, font, m, p);
                                     break;
                                 #endregion
                                 default:
-                                    this.addWort("\\?", br, font, m, p);
+                                    this.AddWort("\\?", br, font, m, p);
                                     break;
                             }
                         }
@@ -435,14 +435,14 @@ namespace Assistment.Texts
                     case ',':
                     case ';':
                         i++;
-                        this.addWort(regex.Substring(a, i - a), br, font, m, p);
+                        this.AddWort(regex.Substring(a, i - a), br, font, m, p);
                         a = i;
                         break;
 
                     case '+':
                     case '-':
                         if (i != a)
-                            this.addWort(regex.Substring(a, i - a), br, font, m, p);
+                            this.AddWort(regex.Substring(a, i - a), br, font, m, p);
                         a = i;
                         i++;
                         break;
@@ -450,38 +450,38 @@ namespace Assistment.Texts
                     #region Container
                     case '{':
                         if (i != a)
-                            this.addWort(regex.Substring(a, i - a), br, font, m, p);
+                            this.AddWort(regex.Substring(a, i - a), br, font, m, p);
                         i++;
                         a = i;
-                        i = suchGeschweifteKlammerZu(i, regex);
+                        i = SuchGeschweifteKlammerZu(i, regex);
                         CString cs = new CString();
                         if (i != a)
-                            cs.addRegex(regex.Substring(a, i - a), font);
-                        this.add(cs);
+                            cs.AddRegex(regex.Substring(a, i - a), font);
+                        this.Add(cs);
                         i++;
                         a = i;
                         break;
                     case '[':
                         if (i != a)
-                            this.addWort(regex.Substring(a, i - a), br, font, m, p);
+                            this.AddWort(regex.Substring(a, i - a), br, font, m, p);
                         i++;
                         a = i;
-                        i = suchEckigeKlammerZu(i, regex);
+                        i = SuchEckigeKlammerZu(i, regex);
                         Text te = new Text();
                         if (i != a)
-                            te.addRegex(regex.Substring(a, i - a), font);
-                        this.add(te);
+                            te.AddRegex(regex.Substring(a, i - a), font);
+                        this.Add(te);
                         i++;
                         a = i;
                         break;
                     case '\"':
                         if (i != a)
-                            this.addWort(regex.Substring(a, i - a), br, font, m, p);
+                            this.AddWort(regex.Substring(a, i - a), br, font, m, p);
                         i++;
                         a = i;
-                        i = suchEndeAnfuhrungsZeichen(i, regex);
+                        i = SuchEndeAnfuhrungsZeichen(i, regex);
                         if (i != a)
-                            addWort(regex.Substring(a, i - a), br, font, m, p);
+                            AddWort(regex.Substring(a, i - a), br, font, m, p);
                         i++;
                         a = i;
                         break;
@@ -489,22 +489,22 @@ namespace Assistment.Texts
                     #region Whitespace
                     case ' ':
                         if (i != a)
-                            this.addWort(regex.Substring(a, i - a), br, font, m, p);
-                        this.addWhitespace(font);
+                            this.AddWort(regex.Substring(a, i - a), br, font, m, p);
+                        this.AddWhitespace(font);
                         //this.addWhitespace(font.getWhitespace());
                         i++;
                         a = i;
                         break;
                     case '\n':
                         if (i != a)
-                            this.addWort(regex.Substring(a, i - a), br, font, m, p);
-                        this.addAbsatz();
+                            this.AddWort(regex.Substring(a, i - a), br, font, m, p);
+                        this.AddAbsatz();
                         i++;
                         a = i;
                         break;
                     case '\r':
                         if (i != a)
-                            this.addWort(regex.Substring(a, i - a), br, font, m, p);
+                            this.AddWort(regex.Substring(a, i - a), br, font, m, p);
                         i++;
                         a = i;
                         break;
@@ -515,7 +515,7 @@ namespace Assistment.Texts
                 }
             }
             if ((a < regex.Length) && (i != a))
-                this.addWort(regex.Substring(a, i - a), br, font, m, p);
+                this.AddWort(regex.Substring(a, i - a), br, font, m, p);
         }
         /// <summary>
         /// <para>\n : Absatz</para>
@@ -539,9 +539,9 @@ namespace Assistment.Texts
         /// </summary>
         /// <param name="regex"></param>
         /// <param name="font"></param>
-        public void addRegex(string regex)
+        public void AddRegex(string regex)
         {
-            this.addRegex(regex, preferedFont);
+            this.AddRegex(regex, PreferedFont);
         }
         /// <summary>
         /// geht davon aus, dass regex[i - 1] = '['
@@ -555,7 +555,7 @@ namespace Assistment.Texts
         /// </summary>
         /// <param name="i"></param>
         /// <returns></returns>
-        private static int suchGeschweifteKlammerZu(int i, string regex)
+        private static int SuchGeschweifteKlammerZu(int i, string regex)
         {
             int klammer = 1;
             while (i < regex.Length)
@@ -568,7 +568,7 @@ namespace Assistment.Texts
                 else if ((regex[i] == '}') && (--klammer == 0))
                     break;
                 else if (regex[i] == '\"')
-                    i = Math.Min(suchEndeAnfuhrungsZeichen(i + 1, regex) + 1, regex.Length);
+                    i = Math.Min(SuchEndeAnfuhrungsZeichen(i + 1, regex) + 1, regex.Length);
                 else if (regex[i] == '\\')
                     i = Math.Min(i + 2, regex.Length);
                 else i++;
@@ -587,7 +587,7 @@ namespace Assistment.Texts
         /// </summary>
         /// <param name="i"></param>
         /// <returns></returns>
-        private static int suchEckigeKlammerZu(int i, string regex)
+        private static int SuchEckigeKlammerZu(int i, string regex)
         {
             int klammer = 1;
             while (i < regex.Length)
@@ -600,7 +600,7 @@ namespace Assistment.Texts
                 else if ((regex[i] == ']') && (--klammer == 0))
                     break;
                 else if (regex[i] == '\"')
-                    i = Math.Min(suchEndeAnfuhrungsZeichen(i + 1, regex) + 1, regex.Length);
+                    i = Math.Min(SuchEndeAnfuhrungsZeichen(i + 1, regex) + 1, regex.Length);
                 else if (regex[i] == '\\')
                     i = Math.Min(i + 2, regex.Length);
                 else i++;
@@ -617,7 +617,7 @@ namespace Assistment.Texts
         /// </summary>
         /// <param name="i"></param>
         /// <returns></returns>
-        private static int suchEndeAnfuhrungsZeichen(int i, string regex)
+        private static int SuchEndeAnfuhrungsZeichen(int i, string regex)
         {
             while (i < regex.Length)
             {
@@ -631,20 +631,20 @@ namespace Assistment.Texts
         }
         #endregion
 
-        public void addZoomedImage(Image Image, float DesiredHeight)
+        public void AddZoomedImage(Image Image, float DesiredHeight)
         {
-            this.addImage(Image, Image.Width * DesiredHeight / Image.Height, DesiredHeight);
+            this.AddImage(Image, Image.Width * DesiredHeight / Image.Height, DesiredHeight);
         }
-        public void addZoomedImage(Image Image)
+        public void AddZoomedImage(Image Image)
         {
-            this.addZoomedImage(Image, preferedFont.getZeilenabstand());
+            this.AddZoomedImage(Image, PreferedFont.getZeilenabstand());
         }
 
         /// <summary>
         /// true iff this container doesnt contain any DrawBoxes
         /// </summary>
         /// <returns></returns>
-        public virtual bool empty()
+        public virtual bool Empty()
         {
             return !this.GetEnumerator().MoveNext();
         }
@@ -654,20 +654,20 @@ namespace Assistment.Texts
         /// </summary>
         /// <param name="word"></param>
         /// <param name="index"></param>
-        public abstract void insert(int index, DrawBox word);
+        public abstract void Insert(int index, DrawBox word);
         /// <summary>
         /// entfernt ein Wort bei Stelle index ein
         /// <para>Durch das Entfernen von Objekten wird automatisch update() ausgelöst.</para>
         /// </summary>
         /// <param name="index"></param>
-        public abstract void remove(int index);
+        public abstract void Remove(int index);
         /// <summary>
         /// entfernt höchstens ein Vorkommen von word
         /// <para>Durch das Entfernen von Objekten wird automatisch update() ausgelöst.</para>
         /// </summary>
         /// <param name="word"></param>
         /// <returns>true iff genau eines entfernt wurde</returns>
-        public abstract bool remove(DrawBox word);
+        public abstract bool Remove(DrawBox word);
         public int RemoveWhitespaces()
         {
             List<DrawBox> ToRemove = new List<DrawBox>();
@@ -675,13 +675,13 @@ namespace Assistment.Texts
                 if (item is Whitespace)
                     ToRemove.Add(item);
             foreach (var item in ToRemove)
-                this.remove(item);
+                this.Remove(item);
             return ToRemove.Count;
         }
         /// <summary>
         /// entfernt alle Elemente
         /// </summary>
-        public abstract void clear();
+        public abstract void Clear();
 
         public abstract IEnumerator<DrawBox> GetEnumerator();
         System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
@@ -697,20 +697,8 @@ namespace Assistment.Texts
             return sb.ToString();
         }
 
-        public void Add(DrawBox item)
-        {
-            this.add(item);
-        }
-        public void Clear()
-        {
-            this.clear();
-        }
         public abstract bool Contains(DrawBox item);
         public abstract void CopyTo(DrawBox[] array, int arrayIndex);
-        public bool Remove(DrawBox item)
-        {
-            return this.remove(item);
-        }
 
         public static implicit operator DrawContainer(string text)
         {

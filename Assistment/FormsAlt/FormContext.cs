@@ -86,7 +86,7 @@ namespace Assistment.Forms
             this.form.BackgroundImage = new Bitmap(form.Width - DIFF_WIDTH, form.Height - DIFF_HEIGHT);
             this.g = Graphics.FromImage(this.form.BackgroundImage);
             box = new RectangleF(0, 0, this.form.BackgroundImage.Width, this.form.BackgroundImage.Height);
-            this.mainForm.setup(box);
+            this.mainForm.Setup(box);
         }
         public void draw()
         {
@@ -96,13 +96,13 @@ namespace Assistment.Forms
         }
         public void open()
         {
-            mainForm.setup(box);
+            mainForm.Setup(box);
             draw();
             form.Show();
         }
         public void openDialog()
         {
-            mainForm.setup(box);
+            mainForm.Setup(box);
             draw();
             form.ShowDialog();
         }
@@ -177,7 +177,7 @@ namespace Assistment.Forms
             if (setupAll)
             {
                 setupAll = false;
-                mainForm.setup(box);
+                mainForm.Setup(box);
                 drawAll = true;
             }
             if (drawAll)

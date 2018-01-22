@@ -464,6 +464,10 @@ namespace Assistment.Drawing.LinearAlgebra
         {
             return new SizeF(a.Width * c, a.Height * c);
         }
+        public static SizeF mul(this SizeF a, PointF c)
+        {
+            return new SizeF(a.Width * c.X, a.Height * c.Y);
+        }
         /// <summary>
         /// Size.Width / Size.Height
         /// </summary>

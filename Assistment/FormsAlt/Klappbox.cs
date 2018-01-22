@@ -24,88 +24,79 @@ namespace Assistment.Forms
             this.header = header;
             this.body = body;
             this.aufgeklappt = aufgeklappt;
-            update();
+            Update();
         }
 
         public void klapp()
         {
             this.aufgeklappt ^= true;
-            this.update();
+            this.Update();
         }
 
-        public override float getSpace()
-        {
-            return space;
-        }
-        public override float getMin()
-        {
-            return min;
-        }
-        public override float getMax()
-        {
-            return max;
-        }
+        public override float Space => space;
+        public override float Min => min;
+        public override float Max => max;
 
         public void setBody(FormBox body)
         {
             if (body == this)
                 throw new ArgumentException("I see what you did there...");
             this.body = body;
-            this.update();
+            this.Update();
         }
 
-        public override void update()
+        public override void Update()
         {
-            min = header.getMin();
-            max = header.getMax();
-            space = header.getSpace();
+            min = header.Min;
+            max = header.Max;
+            space = header.Space;
             if (aufgeklappt)
             {
-                min = Math.Max(min, body.getMin());
-                max = Math.Min(max, body.getMax());
-                space += body.getSpace();
+                min = Math.Max(min, body.Min);
+                max = Math.Min(max, body.Max);
+                space += body.Space;
             }
         }
-        public override void setup(RectangleF box)
+        public override void Setup(RectangleF box)
         {
-            this.box = box;
+            this.Box = box;
 
-            header.setup(box);
-            box.Y += header.box.Height;
-            this.box.Width = header.box.Width;
+            header.Setup(box);
+            box.Y += header.Box.Height;
+            this.Box.Width = header.Box.Width;
             if (aufgeklappt)
             {
-                body.setup(box);
-                box.Y += body.box.Height;
-                this.box.Width = Math.Max(box.Width, body.box.Width);
+                body.Setup(box);
+                box.Y += body.Box.Height;
+                this.Box.Width = Math.Max(box.Width, body.Box.Width);
             }
-            this.box.Height = box.Y - this.box.Y;
+            this.Box.Height = box.Y - this.Box.Y;
         }
-        public override void draw(DrawContext con)
+        public override void Draw(DrawContext con)
         {
-            header.draw(con);
+            header.Draw(con);
             if (aufgeklappt)
-                body.draw(con);
+                body.Draw(con);
         }
 
         public override void click(PointF point)
         {
-            if ((context.button == MouseButtons.Left) && header.check(point))
+            if ((context.button == MouseButtons.Left) && header.Check(point))
             {
                 klapp();
                 context.SetupAll();
             }
-            else if (aufgeklappt && body.check(point))
+            else if (aufgeklappt && body.Check(point))
                 body.click(point);
         }
         public override void move(PointF point)
         {
-            if (aufgeklappt && body.check(point))
+            if (aufgeklappt && body.Check(point))
                 body.move(point);
         }
         public override void release(PointF point)
         {
-            if (aufgeklappt && body.check(point))
+            if (aufgeklappt && body.Check(point))
                 body.release(point);
         }
 
@@ -113,7 +104,7 @@ namespace Assistment.Forms
         {
             string ttabs = "\t" + tabs;
             sb.AppendLine(tabs + "Klappbox:");
-            sb.AppendLine(tabs + "\tbox: " + box);
+            sb.AppendLine(tabs + "\tbox: " + Box);
             sb.AppendLine(tabs + "\taufgeklappt: " + aufgeklappt);
             sb.AppendLine(tabs + "\tHeader: ");
             header.InStringBuilder(sb, ttabs);
@@ -124,7 +115,7 @@ namespace Assistment.Forms
 
         public override FormBox flone()
         {
-            Klappbox kb = new Klappbox(header.clone(), body.flone(), aufgeklappt);
+            Klappbox kb = new Klappbox(header.Clone(), body.flone(), aufgeklappt);
             return kb;
         }
         public override void setContext(FormContext context)

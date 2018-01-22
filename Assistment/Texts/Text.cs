@@ -22,8 +22,8 @@ namespace Assistment.Texts
         public Text(string Regex, xFont Font)
             : this()
         {
-            this.preferedFont = Font;
-            this.addRegex(Regex);
+            this.PreferedFont = Font;
+            this.AddRegex(Regex);
         }
         public Text(PreText PreText)
             : base(PreText)
@@ -35,7 +35,7 @@ namespace Assistment.Texts
         {
             Line.SimpleAssignment();
         }
-        public override DrawBox clone()
+        public override DrawBox Clone()
         {
             return new Text(this);
         }
@@ -43,26 +43,26 @@ namespace Assistment.Texts
         {
             string ttabs = "\t" + tabs;
             sb.AppendLine(tabs + "Text:");
-            sb.AppendLine(tabs + "\tbox: " + box);
-            foreach (DrawBox item in words)
+            sb.AppendLine(tabs + "\tbox: " + Box);
+            foreach (DrawBox item in Words)
                 item.InStringBuilder(sb, ttabs);
             sb.AppendLine(tabs + ".");
         }
         public static implicit operator Text(string text)
         {
             Text t = new Text();
-            t.preferedFont = StandardFont;
-            t.addRegex(text);
+            t.PreferedFont = StandardFont;
+            t.AddRegex(text);
             return t;
         }
         public Text FirstLine()
         {
             Text t = new Text();
             foreach (var item in this)
-                if (item.endsLine)
+                if (item.EndsLine)
                     break;
                 else
-                    t.add(item);
+                    t.Add(item);
             return t;
         }
     }

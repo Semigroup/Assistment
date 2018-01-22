@@ -17,71 +17,74 @@ namespace Assistment.Texts
     {
         public static readonly xFont StandardFont = new FontGraphicsMeasurer("Calibri", 11);
 
-        public RectangleF box;
-        public bool endsLine;
+        public RectangleF Box;
+        public bool EndsLine { get; set; }
 
-        public float Top { get { return box.Top; } set { Move(0, value - box.Top); } }
-        public float Bottom { get { return box.Bottom; } set { Move(0, value - box.Bottom); } }
-        public float Left { get { return box.Left; } set { Move(value - box.Left, 0); } }
-        public float Right { get { return box.Right; } set { Move(value - box.Right, 0); } }
-        public PointF Location { get { return box.Location; } set { box.Location = value; } }
-        public SizeF Size { get { return box.Size; } set { box.Size = value; } }
+        public float Top { get { return Box.Top; } set { Move(0, value - Box.Top); } }
+        public float Bottom { get { return Box.Bottom; } set { Move(0, value - Box.Bottom); } }
+        public float Left { get { return Box.Left; } set { Move(value - Box.Left, 0); } }
+        public float Right { get { return Box.Right; } set { Move(value - Box.Right, 0); } }
+        public PointF Location { get { return Box.Location; } set { Box.Location = value; } }
+        public SizeF Size { get { return Box.Size; } set { Box.Size = value; } }
 
         /// <summary>
         /// gibt einen Wert zurück, der ungefähr breite*höhe entsprechen soll
         /// </summary>
         /// <returns></returns>
-        public abstract float getSpace();
+        public abstract float Space { get; }
         /// <summary>
         /// this method may only return zero iff space is zero, too
         /// </summary>
         /// <returns></returns>
-        public abstract float getMin();
-        public abstract float getMax();
+        public abstract float Min { get; }
+        /// <summary>
+        /// this method may only return zero iff space is zero, too
+        /// </summary>
+        /// <returns></returns>
+        public abstract float Max { get; }
 
         /// <summary>
         /// updates the values of min, max and space
         /// </summary>
-        public abstract void update();
+        public abstract void Update();
         /// <summary>
         /// computes the box of this and the boxes of any subdrawitems
         /// </summary>
         /// <param name="box"></param>
-        public abstract void setup(RectangleF box);
-        public void setup(PointF Location, float Width)
-        {
-            this.setup(new RectangleF(Location, new SizeF(Width, float.MaxValue)));
-        }
-        public void setup(PointF Location)
-        {
-            this.setup(new RectangleF(Location, new SizeF(this.getMin(), float.MaxValue)));
-        }
-        public void setup(SizeF Size)
-        {
-            this.setup(new RectangleF(box.Location, Size));
-        }
-        public void setup(float Width)
-        {
-            this.setup(box.Location, Width);
-        }
+        /// <param name="isFirstInLine">Is this the first object of the current line? If so, Whitespaces will reduce their width to zero.</param>
+        public virtual void Setup(RectangleF box, bool isFirstInLine)
+            => Setup(box);
+        /// <summary>
+        /// computes the box of this and the boxes of any subdrawitems
+        /// </summary>
+        /// <param name="box"></param>
+        public abstract void Setup(RectangleF box);
+        public void Setup(PointF Location, float Width)
+            => Setup(new RectangleF(Location, new SizeF(Width, float.MaxValue)));
+        public void Setup(PointF Location)
+            => Setup(new RectangleF(Location, new SizeF(this.Min, float.MaxValue)));
+        public void Setup(SizeF Size)
+            => Setup(new RectangleF(Box.Location, Size));
+        public void Setup(float Width)
+            => Setup(Box.Location, Width);
         /// <summary>
         /// draws the components of this item
         /// <para>use this after setup()</para>
         /// </summary>
         /// <param name="con"></param>
-        public abstract void draw(DrawContext con);
+        public abstract void Draw(DrawContext con);
         /// <summary>
         /// gibt möglichst tiefe Kopien zurück
         /// </summary>
         /// <returns></returns>
-        public abstract DrawBox clone();
+        public abstract DrawBox Clone();
         public virtual void InStringBuilder(StringBuilder sb, string tabs)
         {
             throw new NotImplementedException();
         }
         public virtual void Move(PointF ToMove)
         {
-            this.box = new RectangleF(box.Location.add(ToMove), box.Size);
+            this.Box = new RectangleF(Box.Location.add(ToMove), Box.Size);
         }
         public void Move(float x, float y)
         {
@@ -118,31 +121,31 @@ namespace Assistment.Texts
             return this.Colorize(BackColor.ToBrush());
         }
 
-        public virtual bool check(PointF punkt)
+        public virtual bool Check(PointF punkt)
         {
-            return box.Contains(punkt);
+            return Box.Contains(punkt);
         }
-        public bool check(float x, float y)
+        public bool Check(float x, float y)
         {
-            return check(new PointF(x, y));
+            return Check(new PointF(x, y));
         }
 
-        public void createImage(string name, float Scaling, Color BackColor)
+        public void CreateImage(string name, float Scaling, Color BackColor)
         {
-            createImage(name, getMin(), float.MaxValue, Scaling, BackColor);
+            CreateImage(name, Min, float.MaxValue, Scaling, BackColor);
         }
-        public void createImage(string name)
+        public void CreateImage(string name)
         {
-            createImage(name, getMin(), float.MaxValue, 1, Color.White);
+            CreateImage(name, Min, float.MaxValue, 1, Color.White);
         }
-        public void createImage(string name, float width, float height)
+        public void CreateImage(string name, float width, float height)
         {
-            createImage(name, width, height, 1, Color.White);
+            CreateImage(name, width, height, 1, Color.White);
         }
-        public void createImage(string name, float width, float height, float Scaling, Color BackColor)
+        public void CreateImage(string name, float width, float height, float Scaling, Color BackColor)
         {
-            this.setup(new RectangleF(0, 0, width, 0));
-            Size s = box.Size.mul(Scaling).ToSize();
+            this.Setup(new RectangleF(0, 0, width, 0));
+            Size s = Box.Size.mul(Scaling).ToSize();
             using (Bitmap b = new Bitmap(s.Width, s.Height))
             {
                 using (Graphics g = b.GetHighGraphics())
@@ -150,41 +153,41 @@ namespace Assistment.Texts
                     g.ScaleTransform(Scaling, Scaling);
                     g.Clear(BackColor);
                     using (DrawContextGraphics dcg = new DrawContextGraphics(g, BackColor.ToBrush(), height))
-                        this.draw(dcg);
+                        this.Draw(dcg);
                 }
                 b.Save(name + ".png");
             }
         }
 
-        public void createDinA3PDF(string name)
+        public void CreateDinA3PDF(string name)
         {
-            this.createPDF(name, 1400, float.MaxValue, iTextSharp.text.PageSize.A3);
+            this.CreatePDF(name, 1400, float.MaxValue, iTextSharp.text.PageSize.A3);
         }
-        public void createDinA5PDF(string name)
+        public void CreateDinA5PDF(string name)
         {
-            this.createPDF(name, 700, float.MaxValue, iTextSharp.text.PageSize.A5);
+            this.CreatePDF(name, 700, float.MaxValue, iTextSharp.text.PageSize.A5);
         }
-        public void createDinA4PDFLandscape(string name)
+        public void CreateDinA4PDFLandscape(string name)
         {
-            this.createPDF(name, iTextSharp.text.PageSize.A4_LANDSCAPE);
+            this.CreatePDF(name, iTextSharp.text.PageSize.A4_LANDSCAPE);
         }
-        public void createPDF(string name, iTextSharp.text.Rectangle PageSize)
+        public void CreatePDF(string name, iTextSharp.text.Rectangle PageSize)
         {
-            createPDF(name, PageSize.Width / DrawContextDocument.factor, float.MaxValue, PageSize);
+            CreatePDF(name, PageSize.Width / DrawContextDocument.factor, float.MaxValue, PageSize);
         }
-        public void createPDF(string name, Color backColor)
+        public void CreatePDF(string name, Color backColor)
         {
             iTextSharp.text.Rectangle PageSize = iTextSharp.text.PageSize.A4;
-            createPDF(name, PageSize.Width / DrawContextDocument.factor, float.MaxValue, PageSize, backColor);
+            CreatePDF(name, PageSize.Width / DrawContextDocument.factor, float.MaxValue, PageSize, backColor);
         }
-        public void createPDF(string name, float width, float height, iTextSharp.text.Rectangle PageSize)
+        public void CreatePDF(string name, float width, float height, iTextSharp.text.Rectangle PageSize)
         {
-            createPDF(name, width, height, PageSize, Color.White);
+            CreatePDF(name, width, height, PageSize, Color.White);
         }
-        public void createPDF(string name, float width, float height, iTextSharp.text.Rectangle PageSize, Color backColor)
+        public void CreatePDF(string name, float width, float height, iTextSharp.text.Rectangle PageSize, Color backColor)
         {
-            this.update();
-            this.setup(new RectangleF(0, 0, width, 0));
+            this.Update();
+            this.Setup(new RectangleF(0, 0, width, 0));
 
             iTextSharp.text.Rectangle pageSize = new iTextSharp.text.Rectangle(PageSize);
             pageSize.BackgroundColor = new iTextSharp.text.BaseColor(backColor);
@@ -198,21 +201,21 @@ namespace Assistment.Texts
                 PdfContentByte pCon = writer.DirectContent;
                 pCon.SetLineWidth(0.3f);
                 using (DrawContextDocument dcd = new DrawContextDocument(pCon, height))
-                    this.draw(dcd);
+                    this.Draw(dcd);
             }
         }
-        public void createPDF(string name)
+        public void CreatePDF(string name)
         {
-            this.createPDF(name, 1000, float.MaxValue);
+            this.CreatePDF(name, 1000, float.MaxValue);
         }
-        public void createPDF(string name, float width, float height)
+        public void CreatePDF(string name, float width, float height)
         {
-            this.createPDF(name, width, height, iTextSharp.text.PageSize.A4);
+            this.CreatePDF(name, width, height, iTextSharp.text.PageSize.A4);
         }
-        public void createLog(string name, float width)
+        public void CreateLog(string name, float width)
         {
-            this.update();
-            this.setup(new RectangleF(0, 0, width, 0));
+            this.Update();
+            this.Setup(new RectangleF(0, 0, width, 0));
 
             StringBuilder sb = new StringBuilder();
             this.InStringBuilder(sb, "");
@@ -224,29 +227,29 @@ namespace Assistment.Texts
 
         public static CString operator *(CString box1, DrawBox box2)
         {
-            CString t = box1.clone() as CString;
-            t.add(box2);
+            CString t = box1.Clone() as CString;
+            t.Add(box2);
             return t;
         }
         public static CString operator *(DrawBox box1, DrawBox box2)
         {
             CString t = new CString();
-            t.add(box1);
-            t.addAbsatz();
-            t.add(box2);
+            t.Add(box1);
+            t.AddAbsatz();
+            t.Add(box2);
             return t;
         }
         public static CString operator +(DrawBox box1, DrawBox box2)
         {
             CString t = new CString();
-            t.add(box1);
-            t.add(box2);
+            t.Add(box1);
+            t.Add(box2);
             return t;
         }
         public static DrawContainer operator +(DrawContainer box1, DrawBox box2)
         {
-            DrawContainer t = (DrawContainer)box1.clone();
-            t.add(box2);
+            DrawContainer t = (DrawContainer)box1.Clone();
+            t.Add(box2);
             return t;
         }
         public static implicit operator DrawBox(string text)

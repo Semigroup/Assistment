@@ -53,7 +53,7 @@ namespace Assistment.Texts.Paper
             Current = null;
         }
 
-        public override void add(DrawBox word)
+        public override void Add(DrawBox word)
         {
             int n = Zeilen * Spalten;
             int m = Eintrage % n;
@@ -73,22 +73,22 @@ namespace Assistment.Texts.Paper
             Eintrage++;
         }
 
-        public override void insert(int index, DrawBox word)
+        public override void Insert(int index, DrawBox word)
         {
             throw new NotImplementedException();
         }
 
-        public override void remove(int index)
+        public override void Remove(int index)
         {
             throw new NotImplementedException();
         }
 
-        public override bool remove(DrawBox word)
+        public override bool Remove(DrawBox word)
         {
             throw new NotImplementedException();
         }
 
-        public override void clear()
+        public override void Clear()
         {
             throw new NotImplementedException();
         }
@@ -98,55 +98,46 @@ namespace Assistment.Texts.Paper
             return Tabulars.GetEnumerator();
         }
 
-        public override float getSpace()
-        {
-            return Tabulars.Count * PageSize.Width * PageSize.Height;
-        }
+        public override float Space => Tabulars.Count * PageSize.Width * PageSize.Height;
 
-        public override float getMin()
-        {
-            return PageSize.Width;
-        }
+        public override float Min => PageSize.Width;
 
-        public override float getMax()
-        {
-            return PageSize.Width;
-        }
+        public override float Max => PageSize.Width;
 
-        public override void update()
+        public override void Update()
         {
             foreach (var item in Tabulars)
-                item.update();
+                item.Update();
         }
 
-        public override void setup(RectangleF box)
+        public override void Setup(RectangleF box)
         {
             int n = (box.Top / PageSize.Height).Ceil();
             FirstBreak = n > 0;
-            this.box.Y = PageSize.Height * n;
-            this.box.X = 0;
-            this.box.Width = PageSize.Width;
-            RectangleF r = new RectangleF(this.box.Location, PageSize);
+            this.Box.Y = PageSize.Height * n;
+            this.Box.X = 0;
+            this.Box.Width = PageSize.Width;
+            RectangleF r = new RectangleF(this.Box.Location, PageSize);
             foreach (var item in Tabulars)
             {
-                item.setup(r);
-                this.box.Height += PageSize.Height;
+                item.Setup(r);
+                this.Box.Height += PageSize.Height;
                 r.Y += PageSize.Height;
             }
         }
 
-        public override void draw(DrawContext con)
+        public override void Draw(DrawContext con)
         {
             if (FirstBreak)
                 con.newPage();
             foreach (var item in Tabulars)
             {
-                item.draw(con);
+                item.Draw(con);
                 con.newPage();
             }
         }
 
-        public override DrawBox clone()
+        public override DrawBox Clone()
         {
             throw new NotImplementedException();
         }

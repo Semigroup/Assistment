@@ -18,48 +18,48 @@ namespace Assistment.Texts
 
         public override bool IsReadOnly => false;
 
-        public override void add(DrawBox word)
+        public override void Add(DrawBox word)
         {
             Layers.Add(word);
-            min = Math.Max(word.getMin(), min);
-            max = Math.Max(word.getMax(), max);
-            space = Math.Max(word.getSpace(), space);
+            min = Math.Max(word.Min, min);
+            max = Math.Max(word.Max, max);
+            space = Math.Max(word.Space, space);
         }
 
-        public override void insert(int index, DrawBox word)
+        public override void Insert(int index, DrawBox word)
         {
             Layers.Insert(index, word);
-            min = Math.Max(word.getMin(), min);
-            max = Math.Max(word.getMax(), max);
-            space = Math.Max(word.getSpace(), space);
+            min = Math.Max(word.Min, min);
+            max = Math.Max(word.Max, max);
+            space = Math.Max(word.Space, space);
         }
 
-        public override void remove(int index)
+        public override void Remove(int index)
         {
             Layers.RemoveAt(index);
-            update();
+            Update();
         }
 
-        public override bool remove(DrawBox word)
+        public override bool Remove(DrawBox word)
         {
            bool b = Layers.Remove(word);
-            update();
+            Update();
             return b;
         }
 
-        public override void clear()
+        public override void Clear()
         {
             Layers.Clear();
             min = max = space = 0;
         }
 
-        public override void update()
+        public override void Update()
         {
             foreach (var word in Layers)
             {
-                   min = Math.Max(word.getMin(), min);
-            max = Math.Max(word.getMax(), max);
-            space = Math.Max(word.getSpace(), space);
+                   min = Math.Max(word.Min, min);
+            max = Math.Max(word.Max, max);
+            space = Math.Max(word.Space, space);
             }
         }
 
@@ -68,45 +68,36 @@ namespace Assistment.Texts
             return Layers.GetEnumerator();
         }
 
-        public override float getSpace()
-        {
-            return space;
-        }
+        public override float Space => space;
 
-        public override float getMin()
-        {
-            return min;
-        }
+        public override float Min => min;
 
-        public override float getMax()
-        {
-            return max;
-        }
+        public override float Max => max;
 
-        public override void setup(RectangleF box)
+        public override void Setup(RectangleF box)
         {
-            this.box = box;
+            this.Box = box;
             foreach (var item in Layers)
             {
-                item.setup(box);
-                this.box.Height = Math.Max(item.box.Height, this.box.Height);         
+                item.Setup(box);
+                this.Box.Height = Math.Max(item.Box.Height, this.Box.Height);         
             }
         }
 
-        public override void draw(DrawContext con)
+        public override void Draw(DrawContext con)
         {
             foreach (var item in Layers)
-                item.draw(con);
+                item.Draw(con);
         }
 
-        public override DrawBox clone()
+        public override DrawBox Clone()
         {
             LayerBox lb = new LayerBox();
             lb.min = min;
             lb.max = max;
             lb.space = space;
             foreach (var item in Layers)
-                lb.Layers.Add(item.clone());
+                lb.Layers.Add(item.Clone());
             return lb;
         }
 
@@ -114,7 +105,7 @@ namespace Assistment.Texts
         {
             string ttabs = "\t" + tabs;
             sb.AppendLine(tabs + "LayerBox:");
-            sb.AppendLine(tabs + "\tbox: " + box);
+            sb.AppendLine(tabs + "\tbox: " + Box);
             foreach (DrawBox item in Layers)
                 item.InStringBuilder(sb, ttabs);
             sb.AppendLine(tabs + ".");

@@ -259,12 +259,12 @@ namespace Assistment.Extensions
         public static void saveDinA3Pdf(this Image Image, string name)
         {
             ImageBox ib = new ImageBox(1403, Image);
-            ib.createDinA3PDF(name);
+            ib.CreateDinA3PDF(name);
         }
         public static void savePdf(this Image Image, string name)
         {
             ImageBox ib = new ImageBox(701, Image);
-            ib.createPDF(name);
+            ib.CreatePDF(name);
         }
         public static void savePdf(this Image Image, string name, int dinA, bool Hoch)
         {
@@ -287,7 +287,7 @@ namespace Assistment.Extensions
             iTextSharp.text.Rectangle p = dinAs[dinA];
             if (!Hoch)
                 p = p.Rotate();
-            ib.createPDF(name, s.Width, s.Height, p);
+            ib.CreatePDF(name, s.Width, s.Height, p);
         }
         public static void Raise(this Graphics Graphics)
         {
