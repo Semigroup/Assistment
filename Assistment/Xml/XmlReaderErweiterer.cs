@@ -23,7 +23,8 @@ namespace Assistment.Xml
         public static T getEnum<T>(this XmlReader reader, string name) where T : struct
         {
             T result = default(T);
-            Enum.TryParse<T>(reader.getString(name), out result);
+            string enumIdentifier = reader.getString(name);
+            Enum.TryParse<T>(enumIdentifier, out result);
             return result;
         }
 
