@@ -241,8 +241,8 @@ namespace Assistment.Drawing
                 for (int i = 0; i < samples; i++)
                 {
                     f = i * d;
-                    N[i] = mul(h(f), y.normale(f));
-                    P[samples + i] = y.weg(f);
+                    N[i] = mul(h(f), y.Normale(f));
+                    P[samples + i] = y.Weg(f);
                     P[i] = saxpy(P[samples + i], layer, N[i]);
                 }
             }
@@ -278,8 +278,8 @@ namespace Assistment.Drawing
                 for (int i = 0; i < samples; i++)
                 {
                     float t = i * 1f / samples;
-                    N[i] = y.normale(t).mul(h(t));
-                    P[i] = saxpy(y.weg(t), layer, N[i]);
+                    N[i] = y.Normale(t).mul(h(t));
+                    P[i] = saxpy(y.Weg(t), layer, N[i]);
                 }
             }
             #endregion
@@ -561,8 +561,8 @@ namespace Assistment.Drawing
             for (int i = 0; i < samples; i++)
             {
                 e = i * d;
-                p13[i] = y.weg(e);
-                norm[i] = y.normale(e);
+                p13[i] = y.Weg(e);
+                norm[i] = y.Normale(e);
                 e = hohe(e);
                 n[i].X = e * norm[i].X;
                 n[i].Y = e * norm[i].Y;
@@ -923,8 +923,8 @@ namespace Assistment.Drawing
         /// <param name="hohe"></param>
         public static void malSchatten(Graphics g, OrientierbarerWeg weg, Color wegFarbe, Color schattenFarbe, PointF lichtRichtung, int samples, Hohe hohe)
         {
-            PointF[] punkte = weg.getPolygon(samples, 0, 1);
-            PointF[] normale = weg.getNormalenPolygon(samples, 0, 1, hohe);
+            PointF[] punkte = weg.GetPolygon(samples, 0, 1);
+            PointF[] normale = weg.GetNormalenPolygon(samples, 0, 1, hohe);
             PointF[] punkteOff = new PointF[samples];
 
             for (int i = 0; i < samples; i++)
@@ -949,7 +949,7 @@ namespace Assistment.Drawing
         }
         public static void malWeg(Graphics g, OrientierbarerWeg weg, Pen stift, Brush pinsel, int samples)
         {
-            PointF[] poly = weg.getPolygon(samples, 0, 1);
+            PointF[] poly = weg.GetPolygon(samples, 0, 1);
             if (pinsel != null)
                 g.FillPolygon(pinsel, poly);
             if (stift != null)

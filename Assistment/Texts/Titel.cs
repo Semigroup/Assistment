@@ -233,7 +233,7 @@ namespace Assistment.Texts
 
             ow ^= stachel;
 
-            return ow.weg;
+            return ow.Weg;
         }
 
         public override DrawBox Clone()
@@ -341,7 +341,7 @@ namespace Assistment.Texts
 
             oy ^= stachel;
 
-            return oy.weg;
+            return oy.Weg;
         }
 
         public override DrawBox Clone()
@@ -477,7 +477,7 @@ namespace Assistment.Texts
                 new PointF(6 * ll, 0));
             w = w ^ stachel;
 
-            return w.weg;
+            return w.Weg;
         }
 
         public override DrawBox Clone()
@@ -515,14 +515,14 @@ namespace Assistment.Texts
             OrientierbarerWeg T = (OrientierbarerWeg.Triskele(RandHohe / 4, 1, RandHohe / 6).Trim(0.01f, 0.99f) ^ Math.PI) + new PointF(ll, RandHohe - RandHohe / 4 * (float)(1 + 2 / Math.Sqrt(3)));
 
             OrientierbarerWeg w =
-                OrientierbarerWeg.HartPolygon(new PointF(), T.weg(0))
+                OrientierbarerWeg.HartPolygon(new PointF(), T.Weg(0))
                 * T
-                * OrientierbarerWeg.HartPolygon(T.weg(1), new PointF(ll * 4, 0));
+                * OrientierbarerWeg.HartPolygon(T.Weg(1), new PointF(ll * 4, 0));
 
 
             w = w ^ stachel;
 
-            return w.weg;
+            return w.Weg;
         }
 
         public override DrawBox Clone()
@@ -560,14 +560,14 @@ namespace Assistment.Texts
             OrientierbarerWeg T = (OrientierbarerWeg.Pike(RandHohe).Trim(0.05f, 0.95f)) + new PointF(ll, 0);
 
             OrientierbarerWeg w =
-                OrientierbarerWeg.HartPolygon(new PointF(), T.weg(0))
+                OrientierbarerWeg.HartPolygon(new PointF(), T.Weg(0))
                 * T
-                * OrientierbarerWeg.HartPolygon(T.weg(1), new PointF(ll * 4, 0));
+                * OrientierbarerWeg.HartPolygon(T.Weg(1), new PointF(ll * 4, 0));
 
 
             w = w ^ stachel;
 
-            return w.weg;
+            return w.Weg;
         }
 
         public override DrawBox Clone()
@@ -605,16 +605,16 @@ namespace Assistment.Texts
                 new PointF(a, 0),
                 new PointF(0, a),
                 new PointF(a, 2 * a),
-            new PointF(0, 3 * a),
-            new PointF(b, 3 * a + b),
-            new PointF(2 * b + a, 2 * a),
-            new PointF(2 * b, a),
-            new PointF(2 * b + a, 0),
-            new PointF(2 * b + a + a, 0));
+                new PointF(0, 3 * a),
+                new PointF(b, 3 * a + b),
+                new PointF(2 * b + a, 2 * a),
+                new PointF(2 * b, a),
+                new PointF(2 * b + a, 0),
+                new PointF(2 * b + a + a, 0));
 
             w = w ^ stachel;
 
-            return w.weg;
+            return w.Weg;
         }
 
         public override DrawBox Clone()

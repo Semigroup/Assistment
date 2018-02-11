@@ -48,7 +48,7 @@ namespace Assistment.Drawing.Geometries
                 float t = i / (samples - 1f);
                 PointF v = y(t);
                 float x = v.X / L;
-                Samples[i] = oy.weg(x).saxpy(v.Y, oy.normale(x));
+                Samples[i] = oy.Weg(x).saxpy(v.Y, oy.Normale(x));
                 //Samples[i] = oy.weg(t).add(-v.X * n.Y + v.Y * n.X, v.X * n.X + v.Y * n.Y); n = oy.normale(t)
             }
             Samples[samples - 1] = Samples[0];
@@ -94,6 +94,30 @@ namespace Assistment.Drawing.Geometries
                 return new PointF(P.X / numberOfRepetitions + lengthOfUnit * i, P.Y);
             };
         }
+        public static float Length(this Weg weg, int approxPoints)
+        {
+            PointF[] points = new PointF[approxPoints];
+            for (int i = 0; i < approxPoints; i++)
+                points[i] = weg(i / (approxPoints - 1f));
+            float length = 0;
+            for (int i = 0; i < approxPoints - 1; i++)
+                length += points[i].dist(points[i + 1]);
+            return length;
+        }
+        public static Weg Normalize(this Weg Weg)
+            => t => Weg(t).normalize();
+        public static Weg FlipSign(this Weg Weg)
+           => t =>
+           {
+               PointF p = Weg(t);
+               return new PointF(-p.X, -p.Y);
+           };
+        public static Weg LinksOrtho(this Weg Weg)
+          => t =>
+          {
+              PointF p = Weg(t);
+              return new PointF(p.Y, -p.X);
+          };
     }
 
     public static class FlacheErweiterer
