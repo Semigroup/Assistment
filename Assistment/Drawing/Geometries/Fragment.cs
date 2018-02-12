@@ -212,7 +212,7 @@ namespace Assistment.Drawing.Geometries
                         new PointF(0, height),
                         new PointF(width / 2, height),
                         new PointF(width / 2, 0));
-                    int nOCP = 10;
+                    int nOCP = 20;
                     PointF[] pts = new PointF[nOCP + 2];
                     for (int i = 1; i < nOCP + 1; i++)
                         pts[i] = new PointF((width/2) + (i * width )/ (2 * nOCP + 2), height*d.NextFloat());
@@ -224,15 +224,18 @@ namespace Assistment.Drawing.Geometries
                     return o1 * o2;
 
                 case Style.Halbmond:
-                    o1 = OrientierbarerWeg.EllipsenStuck(width / 2, height / 2, Math.PI / 2, 5 * Math.PI / 2) + new PointF(width/2, height /2);
-                    o2 = OrientierbarerWeg.EllipsenStuck(width * 2 / 5, height * 2 / 5, Math.PI / 2, 5 * Math.PI / 2) + new PointF(width / 2, height * 3 / 5);
+                    float midWidth = width * 0.5f;
+                    width = width * 0.8f;
+                    o1 = OrientierbarerWeg.EllipsenStuck(width / 2, height / 2, Math.PI / 2, 5 * Math.PI / 2) + new PointF(midWidth, height /2);
+                    o2 = OrientierbarerWeg.EllipsenStuck(width * 2 / 5, height * 2 / 5, Math.PI / 2, 5 * Math.PI / 2) + new PointF(midWidth, height * 3 / 5);
+                    width = width * 1.25f;
                     o2.Invertier();
                     PointF A = o1.Weg(0.45f);
                     PointF B = o1.Weg(0.55f);
                     return OrientierbarerWeg.HartPolygon(new PointF(), new PointF(A.X, 0), A)
-                        * o1.Trim(0.45f, 0.05f)
-                        | o2.Trim(0.05f, 0.95f)
-                        | o1.Trim(0.95f, 0.55f)
+                        * o1.Trim(0.45f, 0.1f)
+                        | o2.Trim(0.1f, 0.9f)
+                        | o1.Trim(0.9f, 0.55f)
                         * OrientierbarerWeg.HartPolygon(B, new PointF(B.X, 0), new PointF(width, 0));
 
                 case Style._0_Rund_:
@@ -272,5 +275,8 @@ namespace Assistment.Drawing.Geometries
                     throw new NotImplementedException();
             }
         }
+
+        public static bool IsRandom(Style style)
+            => (style == Style.Chaos) || (style == Style._1_Chaos_); 
     }
 }

@@ -843,6 +843,14 @@ namespace Assistment.Drawing.Geometries
         /// <returns></returns>
         public static OrientierbarerWeg operator ^(OrientierbarerWeg gamma, double Winkel)
             => new OrientierbarerWeg(gamma.Weg.rot(Winkel), gamma.Normale.rot(Winkel), gamma.Tangente.rot(Winkel), gamma.L);
+        /// <summary>
+        /// Gibt y1 * (y2 + y1(1) - y2(0)) zurück
+        /// </summary>
+        /// <param name="gamma1"></param>
+        /// <param name="gamma2"></param>
+        /// <returns></returns>
+        public static OrientierbarerWeg operator +(OrientierbarerWeg gamma1, OrientierbarerWeg gamma2)
+            => gamma1 * (gamma2 + gamma1.Weg(1) - gamma2.Weg(0));
 
         /// <summary>
         /// 0,5 mal Pi
