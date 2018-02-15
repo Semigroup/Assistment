@@ -399,7 +399,7 @@ namespace Assistment.Drawing.LinearAlgebra
         {
             return Color.A.ToString("x2") + Color.R.ToString("x2") + Color.G.ToString("x2") + Color.B.ToString("x2");
         }
-        public static Color ToColor( this string hex)
+        public static Color ToColor(this string hex)
         {
             int c = 0;
             int j;

@@ -63,9 +63,9 @@ namespace Assistment.Texts
                     f = font.getFontItalic();
             else
                 if ((style & FONTSTYLE_ITALIC) == 0)
-                    f = font.getFontBold();
-                else
-                    f = font.getFontBoldAndItalic();
+                f = font.getFontBold();
+            else
+                f = font.getFontBoldAndItalic();
             con.drawString(text, f, brush, Box.Location, Box.Height);
 
             if ((style & FONTSTYLE_UNDERLINED) != 0)
@@ -102,6 +102,18 @@ namespace Assistment.Texts
         public override string ToString()
         {
             return text;
+        }
+
+        public override void ForceWordStyle(Brush brush, xFont font, byte? style, Pen pen)
+        {
+            if (brush != null)
+                this.brush = brush;
+            if (font != null)
+                this.font = font;
+            if (style.HasValue)
+                this.style = style.Value;
+            if (pen != null)
+                this.pen = pen;
         }
     }
 }

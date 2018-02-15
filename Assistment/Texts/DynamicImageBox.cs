@@ -76,5 +76,8 @@ namespace Assistment.Texts
             sb.AppendLine(tabs + "\tbox" + Box);
             sb.AppendLine(tabs + ".");
         }
+        public override void ForceWordStyle(Brush brush, xFont font, byte? style, Pen pen)
+        {
+        }
     }
 }

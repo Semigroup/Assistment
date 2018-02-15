@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 
@@ -49,6 +50,10 @@ namespace Assistment.Texts
         public override void Draw(DrawContext con)
         {
             drawBox.Draw(con);
+        }
+        public override void ForceWordStyle(Brush brush = null, xFont font = null, byte? style = null, Pen pen = null)
+        {
+            drawBox.ForceWordStyle(brush, font, style, pen);
         }
     }
 }

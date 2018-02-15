@@ -131,6 +131,7 @@
     <Compile Include="Drawing\Algorithms\PolygonFillingAlgorithm.cs" />
     <Compile Include="Drawing\CyberShadex.cs" />
     <Compile Include="Drawing\Geometries\Erweiterer.cs" />
+    <Compile Include="Drawing\Geometries\FlacheErweiterer.cs" />
     <Compile Include="Drawing\Geometries\Fragment.cs" />
     <Compile Include="Drawing\Geometries\Geometrie.cs" />
     <Compile Include="Drawing\Geometries\Gerade.cs" />

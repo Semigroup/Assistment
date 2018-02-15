@@ -225,6 +225,19 @@ namespace Assistment.Texts
             f.Dispose();
         }
 
+        /// <summary>
+        /// Falls diese DrawBox ein Wort ist, übernimmt es diese Daten.
+        /// Ist es ein Container, dann reicht er diese Daten rekursiv weiter.
+        /// Werte, die null sind, werden nicht erzwungen.
+        /// </summary>
+        /// <param name="brush"></param>
+        /// <param name="font"></param>
+        /// <param name="style"></param>
+        /// <param name="pen"></param>
+        public virtual void ForceWordStyle(Brush brush = null, xFont font = null, byte? style = null, Pen pen = null)
+        {
+        }
+
         public static CString operator *(CString box1, DrawBox box2)
         {
             CString t = box1.Clone() as CString;

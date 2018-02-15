@@ -704,5 +704,10 @@ namespace Assistment.Texts
         {
             return (Text)text;
         }
+        public override void ForceWordStyle(Brush brush = null, xFont font = null, byte? style = null, Pen pen = null)
+        {
+            foreach (var item in this)
+                item.ForceWordStyle(brush, font, style, pen);
+        }
     }
 }
