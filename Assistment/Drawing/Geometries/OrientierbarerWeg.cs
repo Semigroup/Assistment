@@ -412,6 +412,15 @@ namespace Assistment.Drawing.Geometries
                 return N.add(gN.mul(-2 * skp));
             }, L);
         }
+        /// <summary>
+        /// Setzt y(0) = position
+        /// </summary>
+        /// <param name="position"></param>
+        public void SetPosition(PointF position)
+        {
+            PointF act = this.Weg(0);
+            this.Weg = add(this.Weg, position.sub(act));
+        }
 
         /// <summary>
         /// Gibt im Wesentlichen new OW(punkte[0], punkte[1]) * new OW(punkte[1], punkte[2]) * ... zurück 
