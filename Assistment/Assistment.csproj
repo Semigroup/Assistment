@@ -132,7 +132,7 @@
     <Compile Include="Drawing\CyberShadex.cs" />
     <Compile Include="Drawing\Geometries\Erweiterer.cs" />
     <Compile Include="Drawing\Geometries\FlacheErweiterer.cs" />
-    <Compile Include="Drawing\Geometries\Fragment.cs" />
+    <Compile Include="Drawing\Geometries\Fragments.cs" />
     <Compile Include="Drawing\Geometries\Geometrie.cs" />
     <Compile Include="Drawing\Geometries\Gerade.cs" />
     <Compile Include="Drawing\Geometries\Ellipse.cs" />
@@ -317,9 +317,14 @@
     <Compile Include="Texts\DrawBox.cs" />
     <Compile Include="Texts\DrawContainer.cs" />
     <Compile Include="Texts\DrawContext.cs" />
+    <Compile Include="Texts\DrawContextDocument.cs" />
+    <Compile Include="Texts\DrawContextGraphics.cs" />
     <Compile Include="Texts\DrawList.cs" />
+    <Compile Include="Texts\DummyFont.cs" />
     <Compile Include="Texts\DynamicImageBox.cs" />
     <Compile Include="Texts\FixedBox.cs" />
+    <Compile Include="Texts\FontErweiterer.cs" />
+    <Compile Include="Texts\FontGraphicsMeasurer.cs" />
     <Compile Include="Texts\FontMeasurer.cs" />
     <Compile Include="FormsAlt\AlignedDrawForm.cs" />
     <Compile Include="FormsAlt\DoubleBufferedForm.cs">

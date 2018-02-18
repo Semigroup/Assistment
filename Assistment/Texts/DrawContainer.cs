@@ -186,11 +186,11 @@ namespace Assistment.Texts
         /// <param name="n"></param>
         public void AddWhitespace(int n)
         {
-            this.AddWhitespace(n * PreferedFont.getWhitespace(), PreferedFont.getZeilenabstand());
+            this.AddWhitespace(n * PreferedFont.GetWhitespace(), PreferedFont.GetZeilenabstand());
         }
         public void AddWhitespace(xFont font)
         {
-            this.Add(new Whitespace(font.getWhitespace(), font.getZeilenabstand(), false));
+            this.Add(new Whitespace(font.GetWhitespace(), font.GetZeilenabstand(), false));
         }
         public void AddWhitespace(float width)
         {
@@ -374,7 +374,7 @@ namespace Assistment.Texts
                                             width = Convert.ToSingle(regex.Substring(a, b - a));
                                             height = Convert.ToSingle(regex.Substring(b + 1, i - b - 1));
                                         }
-                                        AddWhitespace(width * font.getWhitespace(), height * font.getZeilenabstand());
+                                        AddWhitespace(width * font.GetWhitespace(), height * font.GetZeilenabstand());
                                     }
                                     catch (FormatException)
                                     {
@@ -637,7 +637,7 @@ namespace Assistment.Texts
         }
         public void AddZoomedImage(Image Image)
         {
-            this.AddZoomedImage(Image, PreferedFont.getZeilenabstand());
+            this.AddZoomedImage(Image, PreferedFont.GetZeilenabstand());
         }
 
         /// <summary>

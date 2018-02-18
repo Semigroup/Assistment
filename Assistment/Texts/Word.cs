@@ -42,7 +42,7 @@ namespace Assistment.Texts
             this.font = font;
             this.style = style;
             this.pen = pen;
-            this.Box = new RectangleF(0, 0, font.xMass(text), font.yMass(text));
+            this.Box = new RectangleF(0, 0, font.XMass(text), font.YMass(text));
         }
 
         public override float Space => this.Box.Width * this.Box.Height;
@@ -58,26 +58,26 @@ namespace Assistment.Texts
             Font f;
             if ((style & FONTSTYLE_BOLD) == 0)
                 if ((style & FONTSTYLE_ITALIC) == 0)
-                    f = font.getFont();
+                    f = font.GetFont();
                 else
-                    f = font.getFontItalic();
+                    f = font.GetFontItalic();
             else
                 if ((style & FONTSTYLE_ITALIC) == 0)
-                f = font.getFontBold();
+                f = font.GetFontBold();
             else
-                f = font.getFontBoldAndItalic();
-            con.drawString(text, f, brush, Box.Location, Box.Height);
+                f = font.GetFontBoldAndItalic();
+            con.DrawString(text, f, brush, Box.Location, Box.Height);
 
             if ((style & FONTSTYLE_UNDERLINED) != 0)
-                con.drawLine(pen, Box.Left, Box.Bottom, Box.Right, Box.Bottom);
+                con.DrawLine(pen, Box.Left, Box.Bottom, Box.Right, Box.Bottom);
             if ((style & FONTSTYLE_CROSSEDOUT) != 0)
-                con.drawLine(pen, Box.Left, Box.Top + Box.Height / 2, Box.Right, Box.Top + Box.Height / 2);
+                con.DrawLine(pen, Box.Left, Box.Top + Box.Height / 2, Box.Right, Box.Top + Box.Height / 2);
             if ((style & FONTSTYLE_OVERLINED) != 0)
-                con.drawLine(pen, Box.Left, Box.Top, Box.Right, Box.Top);
+                con.DrawLine(pen, Box.Left, Box.Top, Box.Right, Box.Top);
             if ((style & FONTSTYLE_RIGHTLINED) != 0)
-                con.drawLine(pen, Box.Right, Box.Top, Box.Right, Box.Bottom);
+                con.DrawLine(pen, Box.Right, Box.Top, Box.Right, Box.Bottom);
             if ((style & FONTSTYLE_LEFTLINED) != 0)
-                con.drawLine(pen, Box.Left, Box.Top, Box.Left, Box.Bottom);
+                con.DrawLine(pen, Box.Left, Box.Top, Box.Left, Box.Bottom);
         }
         public override void Update()
         {

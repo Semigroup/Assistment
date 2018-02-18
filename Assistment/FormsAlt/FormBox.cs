@@ -38,23 +38,23 @@ namespace Assistment.Forms
         public virtual void click(PointF point)
         {
             if (Check(point))
-                context.activate(this);
+                context.Activate(this);
             else
-                context.deactivate(this);
+                context.Deactivate(this);
         }
         public virtual void move(PointF point)
         {
             if (Check(point))
-                context.activate(this);
+                context.Activate(this);
             else
-                context.deactivate(this);
+                context.Deactivate(this);
         }
         public virtual void release(PointF point)
         {
             if (Check(point))
-                context.activate(this);
+                context.Activate(this);
             else
-                context.deactivate(this);
+                context.Deactivate(this);
         }
 
         public virtual void draw()
@@ -63,7 +63,7 @@ namespace Assistment.Forms
         }
         public virtual void drawAgain()
         {
-            context.clear(Box);
+            context.Clear(Box);
             draw();
         }
 
@@ -77,18 +77,18 @@ namespace Assistment.Forms
         {
             FormBox fb = this.flone();
             FormContext con = new FormContext();
-            con.setMain(fb);
-            con.setup();
-            con.open();
+            con.SetMain(fb);
+            con.Setup();
+            con.Open();
             return con;
         }
         public FormContext showDialog()
         {
             FormBox fb = this.flone();
             FormContext con = new FormContext();
-            con.setMain(fb);
-            con.setup();
-            con.openDialog();
+            con.SetMain(fb);
+            con.Setup();
+            con.OpenDialog();
             return con;
         }
     }

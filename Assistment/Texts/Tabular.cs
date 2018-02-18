@@ -225,7 +225,7 @@ namespace Assistment.Texts
                 if (height > con.Bildhohe)
                     return;
                 if (item.pen != null)
-                    con.drawLine(item.pen, Box.X, height, Box.Right, height);
+                    con.DrawLine(item.pen, Box.X, height, Box.Right, height);
                 for (int i = 0; i < Columns; i++)
                 {
                     drawBox = item.drawBoxes[i];
@@ -238,7 +238,7 @@ namespace Assistment.Texts
             }
             for (int i = 0; i < Columns + 1; i++)
                 if (columnPens[i] != null)
-                    con.drawLine(columnPens[i], widths[i], Box.Top, widths[i], Box.Bottom);
+                    con.DrawLine(columnPens[i], widths[i], Box.Top, widths[i], Box.Bottom);
         }
         public override DrawBox Clone()
         {

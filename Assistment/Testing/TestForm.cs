@@ -138,9 +138,9 @@ namespace Assistment.Testing
         public override void Draw(DrawContext con)
         {
             if (brush != null)
-                con.fillRectangle(brush, Box);
+                con.FillRectangle(brush, Box);
             if (pen != null)
-                con.drawRectangle(pen, Box);
+                con.DrawRectangle(pen, Box);
         }
 
         public override void Update()

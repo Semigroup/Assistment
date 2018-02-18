@@ -129,11 +129,11 @@ namespace Assistment.Texts.Paper
         public override void Draw(DrawContext con)
         {
             if (FirstBreak)
-                con.newPage();
+                con.NewPage();
             foreach (var item in Tabulars)
             {
                 item.Draw(con);
-                con.newPage();
+                con.NewPage();
             }
         }
 

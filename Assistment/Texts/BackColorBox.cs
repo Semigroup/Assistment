@@ -24,9 +24,9 @@ namespace Assistment.Texts
         public override void Draw(DrawContext con)
         {
             if (BackColor != null)
-                con.fillRectangle(BackColor, DrawBox.Box);
+                con.FillRectangle(BackColor, DrawBox.Box);
             if (RandPen != null)
-                con.drawRectangle(RandPen, DrawBox.Box);
+                con.DrawRectangle(RandPen, DrawBox.Box);
             base.Draw(con);
         }
 

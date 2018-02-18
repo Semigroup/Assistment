@@ -100,7 +100,7 @@ namespace Assistment.Texts
                 Weg z = t => y(t);
                 Pen RandFarbe = (Pen)this.RandFarbe.Clone();
                 g.FillDrawWegAufOrientierbarerWeg(HintergrundFarbe, RandFarbe, z, ow, samples);
-                con.drawImage(Image, Box);
+                con.DrawImage(Image, Box);
             }
             Inhalt.Draw(con);
         }

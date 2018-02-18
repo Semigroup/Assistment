@@ -88,7 +88,7 @@ namespace Assistment.Texts
         }
         public override void Draw(DrawContext con)
         {
-            con.fillRectangle(backColor, Box);
+            con.FillRectangle(backColor, Box);
             foreach (kachel item in kacheln)
                 item.drawOb.Draw(con);
         }

@@ -115,7 +115,7 @@ namespace Assistment.Forms
         }
         public override void Draw(DrawContext con)
         {
-            con.drawClippedImage(cache, destination, source);
+            con.DrawClippedImage(cache, destination, source);
             drawBars(con);
         }
         /// <summary>
@@ -127,16 +127,16 @@ namespace Assistment.Forms
             if (cache.Width > destination.Width)
             {
                 if (horizontalActive)
-                    con.fillRectangle(Brushes.Red, horizontalBar);
+                    con.FillRectangle(Brushes.Red, horizontalBar);
                 else
-                    con.fillRectangle(Brushes.Blue, horizontalBar);
+                    con.FillRectangle(Brushes.Blue, horizontalBar);
             }
             if (cache.Height + barBreite > Box.Height)
             {
                 if (verticalActive)
-                    con.fillRectangle(Brushes.Red, verticalBar);
+                    con.FillRectangle(Brushes.Red, verticalBar);
                 else
-                    con.fillRectangle(Brushes.Blue, verticalBar);
+                    con.FillRectangle(Brushes.Blue, verticalBar);
             }
         }
 
@@ -144,7 +144,7 @@ namespace Assistment.Forms
         {
             if (Box.Contains(point))
             {
-                context.activate(this);
+                context.Activate(this);
                 if (destination.Contains(point))
                 {
                     if (body.Check(point))
@@ -167,7 +167,7 @@ namespace Assistment.Forms
             else
             {
                 verticalActive = horizontalActive = false;
-                context.deactivate(this);
+                context.Deactivate(this);
             }
             context.DrawMe(this);
         }
@@ -192,7 +192,7 @@ namespace Assistment.Forms
         public override void release(PointF point)
         {
             verticalActive = horizontalActive = false;
-            context.deactivate(this);
+            context.Deactivate(this);
             context.DrawMe(this);
         }
 

@@ -60,7 +60,7 @@ namespace Assistment.Texts
 
         public override void Draw(DrawContext con)
         {
-            con.drawImage(Image, Box);
+            con.DrawImage(Image, Box);
         }
 
         public override DrawBox Clone()

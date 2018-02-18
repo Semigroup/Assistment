@@ -53,11 +53,11 @@ namespace Assistment.Drawing
         }
         public void clear(Brush brush)
         {
-            context.fillRectangle(brush, drawingRegion);
+            context.FillRectangle(brush, drawingRegion);
         }
         public void DrawString(string s, Font font, Brush brush, PointF P, float height)
         {
-            context.drawString(s, font, brush, align(P), height);
+            context.DrawString(s, font, brush, align(P), height);
         }
         public void DrawLine(Pen pen, float x1, float y1, float x2, float y2)
         {
@@ -65,14 +65,14 @@ namespace Assistment.Drawing
         }
         public void DrawLine(Pen pen, PointF pt1, PointF pt2)
         {
-            context.drawLine(pen, align(pt1), align(pt2));
+            context.DrawLine(pen, align(pt1), align(pt2));
         }
         public void DrawPolygon(Pen pen, PointF[] points)
         {
             PointF[] p = new PointF[points.Length];
             for (int i = 0; i < p.Length; i++)
                 p[i] = align(points[i]);
-            context.drawPolygon(pen, p);
+            context.DrawPolygon(pen, p);
         }
         public void DrawRectangle(Pen pen, float x, float y, float width, float height)
         {
@@ -81,17 +81,17 @@ namespace Assistment.Drawing
         public void DrawRectangle(Pen pen, RectangleF re)
         {
             re = align(re);
-            context.drawRectangle(pen, re.X, re.Y, re.Width, re.Height);
+            context.DrawRectangle(pen, re.X, re.Y, re.Width, re.Height);
         }
         public void DrawEllipse(Pen pen, RectangleF re)
         {
             re = align(re);
-            context.drawEllipse(pen, re);
+            context.DrawEllipse(pen, re);
         }
 
         public void FillEllipse(Brush brush, RectangleF re)
         {
-            context.fillEllipse(brush, align(re));
+            context.FillEllipse(brush, align(re));
         }
         public void FillSphere(Brush brush, PointF mid, float radius)
         {
@@ -99,7 +99,7 @@ namespace Assistment.Drawing
         }
         public void FillRectangle(Brush brush, RectangleF re)
         {
-            context.fillRectangle(brush, align(re));
+            context.FillRectangle(brush, align(re));
         }
 
         public RectangleF align(RectangleF R)
@@ -147,7 +147,7 @@ namespace Assistment.Drawing
 
         public void drawRahmen(Pen stift)
         {
-            context.drawRectangle(stift, drawingRegion);
+            context.DrawRectangle(stift, drawingRegion);
         }
         public void drawGrid(Pen stift, int spalten, int zeilen)
         {
@@ -156,13 +156,13 @@ namespace Assistment.Drawing
             for (int i = 1; i < spalten; i++)
             {
                 f = i * w + drawingRegion.X;
-                context.drawLine(stift, f, drawingRegion.Top, f, drawingRegion.Bottom);
+                context.DrawLine(stift, f, drawingRegion.Top, f, drawingRegion.Bottom);
             }
             w = drawingRegion.Height / zeilen;
             for (int i = 1; i < zeilen; i++)
             {
                 f = i * w + drawingRegion.Y;
-                context.drawLine(stift, drawingRegion.Right, f, drawingRegion.Left, f);
+                context.DrawLine(stift, drawingRegion.Right, f, drawingRegion.Left, f);
             }
         }
     }

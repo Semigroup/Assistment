@@ -5,6 +5,7 @@ using System.Text;
 using Assistment.Texts;
 using System.Windows.Forms;
 using System.Drawing;
+using System.Drawing.Imaging;
 
 namespace Assistment.Forms
 {
@@ -17,37 +18,37 @@ namespace Assistment.Forms
         {
             get
             {
-                return args.X;
+                return Args.X;
             }
         }
         public int Y
         {
             get
             {
-                return args.Y;
+                return Args.Y;
             }
         }
         public Point position
         {
             get
             {
-                return args.Location;
+                return Args.Location;
             }
         }
         public MouseButtons button
         {
             get
             {
-                return args.Button;
+                return Args.Button;
             }
         }
 
-        public RectangleF box { get; private set; }
-        public Form form { get; private set; }
+        public RectangleF Box { get; private set; }
+        public Form Form { get; private set; }
         private FormWindowState oldWindowState = FormWindowState.Normal;
         private Graphics g;
-        public long time { get; private set; }
-        public MouseEventArgs args { get; private set; }
+        public long Time { get; private set; }
+        public MouseEventArgs Args { get; private set; }
         private List<FormBox> activeBoxes = new List<FormBox>();
 
         private bool setupAll, drawAll = false;
@@ -58,53 +59,53 @@ namespace Assistment.Forms
 
         public FormContext()
         {
-            this.time = 0;
-            this.backcolor = Brushes.White;
-            this.makeForm();
+            this.Time = 0;
+            this.Backcolor = Brushes.White;
+            this.MakeForm();
         }
-        private void makeForm()
+        private void MakeForm()
         {
-            this.form = new DoubleBufferedForm();
-            this.form.MouseDown += new MouseEventHandler(mouseDown);
-            this.form.MouseMove += new MouseEventHandler(mouseMove);
-            this.form.MouseUp += new MouseEventHandler(mouseUp);
-            this.form.ResizeEnd += new EventHandler(resizeEnd);
-            this.form.Resize += new EventHandler(resize);
-            this.form.BackgroundImageLayout = ImageLayout.None;
+            this.Form = new DoubleBufferedForm();
+            this.Form.MouseDown += new MouseEventHandler(MouseDown);
+            this.Form.MouseMove += new MouseEventHandler(MouseMove);
+            this.Form.MouseUp += new MouseEventHandler(MouseUp);
+            this.Form.ResizeEnd += new EventHandler(ResizeEnd);
+            this.Form.Resize += new EventHandler(Resize);
+            this.Form.BackgroundImageLayout = ImageLayout.None;
 
-            this.form.Width = 1000;
-            this.form.Height = 600;
+            this.Form.Width = 1000;
+            this.Form.Height = 600;
         }
 
-        public void setMain(FormBox mainForm)
+        public void SetMain(FormBox mainForm)
         {
             this.mainForm = mainForm;
             mainForm.setContext(this);
         }
-        public void setup()
+        public void Setup()
         {
-            this.form.BackgroundImage = new Bitmap(form.Width - DIFF_WIDTH, form.Height - DIFF_HEIGHT);
-            this.g = Graphics.FromImage(this.form.BackgroundImage);
-            box = new RectangleF(0, 0, this.form.BackgroundImage.Width, this.form.BackgroundImage.Height);
-            this.mainForm.Setup(box);
+            this.Form.BackgroundImage = new Bitmap(Form.Width - DIFF_WIDTH, Form.Height - DIFF_HEIGHT);
+            this.g = Graphics.FromImage(this.Form.BackgroundImage);
+            Box = new RectangleF(0, 0, this.Form.BackgroundImage.Width, this.Form.BackgroundImage.Height);
+            this.mainForm.Setup(Box);
         }
-        public void draw()
+        public void Draw()
         {
-            this.g.FillRectangle(backcolor, box);
+            this.g.FillRectangle(Backcolor, Box);
             mainForm.draw();
-            form.Refresh();
+            Form.Refresh();
         }
-        public void open()
+        public void Open()
         {
-            mainForm.Setup(box);
-            draw();
-            form.Show();
+            mainForm.Setup(Box);
+            Draw();
+            Form.Show();
         }
-        public void openDialog()
+        public void OpenDialog()
         {
-            mainForm.Setup(box);
-            draw();
-            form.ShowDialog();
+            mainForm.Setup(Box);
+            Draw();
+            Form.ShowDialog();
         }
 
         //public void SetupMe(FormBox obj)
@@ -126,27 +127,27 @@ namespace Assistment.Forms
             this.drawAll = true;
         }
 
-        public void mouseDown(object sender, MouseEventArgs args)
+        public void MouseDown(object sender, MouseEventArgs args)
         {
-            this.args = args;
+            this.Args = args;
             List<FormBox> boxes = new List<FormBox>(activeBoxes);
             mainForm.click();
             foreach (FormBox item in boxes)
                 item.click();
             repair();
         }
-        public void mouseUp(object sender, MouseEventArgs args)
+        public void MouseUp(object sender, MouseEventArgs args)
         {
-            this.args = args;
+            this.Args = args;
             List<FormBox> boxes = new List<FormBox>(activeBoxes);
             mainForm.release();
             foreach (FormBox item in boxes)
                 item.release();
             repair();
         }
-        public void mouseMove(object sender, MouseEventArgs args)
+        public void MouseMove(object sender, MouseEventArgs args)
         {
-            this.args = args;
+            this.Args = args;
             if (args.Button != MouseButtons.None)
             {
                 List<FormBox> boxes = new List<FormBox>(activeBoxes);
@@ -156,20 +157,20 @@ namespace Assistment.Forms
                 repair();
             }
         }
-        public void resizeEnd(object sender, EventArgs args)
+        public void ResizeEnd(object sender, EventArgs args)
         {
             if (mainForm != null)
             {
-                setup();
-                draw();
+                Setup();
+                Draw();
             }
 
         }
-        public void resize(object sender, EventArgs args)
+        public void Resize(object sender, EventArgs args)
         {
-            if (this.form.WindowState == FormWindowState.Maximized || this.oldWindowState == FormWindowState.Maximized)
-                resizeEnd(sender, args);
-            this.oldWindowState = this.form.WindowState;
+            if (this.Form.WindowState == FormWindowState.Maximized || this.oldWindowState == FormWindowState.Maximized)
+                ResizeEnd(sender, args);
+            this.oldWindowState = this.Form.WindowState;
         }
 
         public void repair()
@@ -177,96 +178,100 @@ namespace Assistment.Forms
             if (setupAll)
             {
                 setupAll = false;
-                mainForm.Setup(box);
+                mainForm.Setup(Box);
                 drawAll = true;
             }
             if (drawAll)
             {
-                draw();
+                Draw();
                 drawAll = false;
             }
             else foreach (var item in drawThese)
                     item.drawAgain();
             drawThese.Clear();
-            form.Refresh();
+            Form.Refresh();
         }
 
-        public void activate(FormBox box)
+        public void Activate(FormBox box)
         {
             if ((box != mainForm) && !activeBoxes.Contains(box))
                 activeBoxes.Add(box);
         }
-        public void deactivate(FormBox box)
+        public void Deactivate(FormBox box)
         {
             activeBoxes.Remove(box);
         }
-        public bool isActive(FormBox box)
+        public bool IsActive(FormBox box)
         {
             return activeBoxes.Contains(box) || (box == mainForm);
         }
 
-        public override void drawRectangle(Pen pen, float x, float y, float width, float height)
+        public override void DrawRectangle(Pen pen, float x, float y, float width, float height)
         {
             g.DrawRectangle(pen, x, y, width, height);
         }
-        public override void fillRectangle(Brush brush, float x, float y, float width, float height)
+        public override void FillRectangle(Brush brush, float x, float y, float width, float height)
         {
             g.FillRectangle(brush, x, y, width, height);
         }
-        public override void drawLine(Pen pen, float x1, float y1, float x2, float y2)
+        public override void DrawLine(Pen pen, float x1, float y1, float x2, float y2)
         {
             g.DrawLine(pen, x1, y1, x2, y2);
         }
-        public override void drawString(string text, Font font, Brush brush, float x, float y, float height)
+        public override void DrawString(string text, Font font, Brush brush, float x, float y, float height)
         {
             g.DrawString(text, font, brush, x, y);
         }
-        public override void drawImage(Image img, float x, float y)
+        public override void DrawImage(Image img, float x, float y)
         {
             g.DrawImage(img, x, y);
         }
-        public override void drawImage(Image img, float x, float y, float width, float height)
+        public override void DrawImage(Image img, float x, float y, float width, float height, ImageAttributes imageAttributes)
         {
-            g.DrawImage(img, x, y, width, height);
+            g.DrawImage(img,
+              new PointF[] { new PointF(x, y), new PointF(x + width, y), new PointF(x, y + height) },
+              new RectangleF(0, 0, img.Width, img.Height),
+              GraphicsUnit.Pixel,
+              imageAttributes);
         }
-        public override void drawClippedImage(Image img, float x, float y, RectangleF source)
+        public override void DrawClippedImage(Image img, float x, float y, RectangleF source)
         {
             g.DrawImage(img, x, y, source, GraphicsUnit.Pixel);
         }
-        public override void drawClippedImage(Image img, RectangleF destination, RectangleF source)
+        public override void DrawClippedImage(Image img, RectangleF destination, RectangleF source)
         {
             g.DrawImage(img, destination, source, GraphicsUnit.Pixel);
         }
-        public override void drawEllipse(Pen pen, float x, float y, float width, float height)
+        public override void DrawEllipse(Pen pen, float x, float y, float width, float height)
         {
             g.DrawEllipse(pen, x, y, width, height);
         }
-        public override void fillEllipse(Brush brush, float x, float y, float width, float height)
+        public override void FillEllipse(Brush brush, float x, float y, float width, float height)
         {
             g.FillEllipse(brush, x, y, width, height);
         }
-        public override void drawPolygon(Pen pen, PointF[] polygon)
+        public override void DrawPolygon(Pen pen, PointF[] polygon)
         {
             g.DrawPolygon(pen, polygon);
         }
-        public void clear(RectangleF box)
+        public void Clear(RectangleF box)
         {
-            g.FillRectangle(backcolor, box);
+            g.FillRectangle(Backcolor, box);
         }
 
         public override void Dispose()
         {
             g.Dispose();
-            form.Close();
-            form.Dispose();
+            Form.Close();
+            Form.Dispose();
         }
 
-        public override void newPage()
+        public override void NewPage()
         {
             throw new NotImplementedException();
         }
 
-        public override void fillPolygon(Brush Brush, PointF[] polygon)
+        public override void FillPolygon(Brush Brush, PointF[] polygon)
         {
             throw new NotImplementedException();
         }

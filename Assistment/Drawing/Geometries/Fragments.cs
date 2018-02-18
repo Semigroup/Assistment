@@ -29,11 +29,25 @@ namespace Assistment.Drawing.Geometries
             Blitz,
             ReissZahn,
             _1_Chaos_,
+            _Chaos_1_1_Chaos_,
             Halbmond,
             _0_Rund_,
             _0_Dreieck_,
             Pentagon,
         }
+
+        private static OrientierbarerWeg GetChaos(float width, float height, int numberOfChaosPoints)
+        {
+            PointF[] pts = new PointF[numberOfChaosPoints + 2];
+            for (int i = 1; i < numberOfChaosPoints + 1; i++)
+                pts[i] = new PointF(i * width /(numberOfChaosPoints + 1), height * d.NextFloat());
+            pts[0] = new PointF(0, 0);
+            pts[numberOfChaosPoints + 1] = new PointF(width, 0);
+            OrientierbarerWeg chaos = OrientierbarerWeg.HartPolygon(pts);
+            chaos.Invertier();
+            return chaos;
+        }
+
         /// <summary>
         /// Ein Fragment ist ein Weg von (0,0) nach (width, 0)
         ///<para>mit einem Style, das bis zu (..., height) bzw. (..., - height) erreicht</para>
@@ -223,6 +237,17 @@ namespace Assistment.Drawing.Geometries
                     o2.Invertier();
                     return o1 * o2;
 
+                case Style._Chaos_1_1_Chaos_:
+                    o2 = OrientierbarerWeg.HartPolygon(
+                        new PointF(0, 0),
+                        new PointF(0, height),
+                        new PointF(width / 2, height),
+                        new PointF(width / 2, 0));
+                    o2.Invertier();
+                    o1 = GetChaos(width / 4, height, 10);
+                    o3 = GetChaos(width / 4, height, 10);
+                    return o1 + o2 + o3;
+
                 case Style.Halbmond:
                     float midWidth = width * 0.5f;
                     width = width * 0.8f;
@@ -277,6 +302,6 @@ namespace Assistment.Drawing.Geometries
         }
 
         public static bool IsRandom(Style style)
-            => (style == Style.Chaos) || (style == Style._1_Chaos_); 
+            => (style == Style.Chaos) || (style == Style._1_Chaos_) || (style == Style._Chaos_1_1_Chaos_); 
     }
 }

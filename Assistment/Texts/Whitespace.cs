@@ -37,7 +37,7 @@ namespace Assistment.Texts
         }
         public override DrawBox Clone()
         {
-            return new Whitespace(Box.Width, Box.Height, EndsLine);
+            return new Whitespace(OriginalBox.Width, OriginalBox.Height, EndsLine);
         }
         public override void InStringBuilder(StringBuilder sb, string tabs)
         {
