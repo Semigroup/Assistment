@@ -251,5 +251,9 @@ namespace Assistment.form
         {
             AddWertePaar(WerteListe, new FontBox(), value, Name);
         }
+        public static void AddRectangleFBox(this IWerteListe WerteListe, RectangleF value, string Name)
+        {
+            AddWertePaar(WerteListe, new RectangleFBox(), value, Name);
+        }
     }
 }

@@ -33,7 +33,7 @@ namespace Assistment.Xml
         }
         public virtual void ReadIntern(XmlReader Reader)
         {
-            this.Name = Reader.getString("Name");
+            this.Name = Reader.GetString("Name");
         }
         public SortedDictionary<string, K> ReadCollection<K>(XmlReader Reader, string listName) where K : XmlFile, new()
         {
@@ -98,7 +98,7 @@ namespace Assistment.Xml
         }
         public virtual void WriteIntern(XmlWriter Writer)
         {
-            Writer.writeAttribute("Name", Name);
+            Writer.WriteAttribute("Name", Name);
         }
         public void WriteCollection(XmlWriter Writer, string listName, IEnumerable<XmlFile> Collection)
         {

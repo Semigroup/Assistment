@@ -40,8 +40,15 @@ namespace Assistment.form
 
         private void Schriftart_Click(object sender, EventArgs e)
         {
-            if (fontDialog1.ShowDialog() == DialogResult.OK)
-                UserValue = fontDialog1.Font;
+            try
+            {
+                if (fontDialog1.ShowDialog() == DialogResult.OK)
+                    UserValue = fontDialog1.Font;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
         public Font GetValue()
         {

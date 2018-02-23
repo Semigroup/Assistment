@@ -16,19 +16,19 @@ namespace Assistment.Xml
     {
         public static CultureInfo PreferedCultureInfo = new CultureInfo(1031);
 
-        public static void writeEnum<T>(this XmlWriter writer, string name, T value)
+        public static void WriteEnum<T>(this XmlWriter writer, string name, T value)
         {
-            writer.writeAttribute(name, Enum.GetName(typeof(T), value));
+            writer.WriteAttribute(name, Enum.GetName(typeof(T), value));
         }
-        public static T getEnum<T>(this XmlReader reader, string name) where T : struct
+        public static T GetEnum<T>(this XmlReader reader, string name) where T : struct
         {
             T result = default(T);
-            string enumIdentifier = reader.getString(name);
+            string enumIdentifier = reader.GetString(name);
             Enum.TryParse<T>(enumIdentifier, out result);
             return result;
         }
 
-        public static Image getImage(this XmlReader reader, string name)
+        public static Image GetImage(this XmlReader reader, string name)
         {
             string s = reader.GetAttribute(name);
             if (s == null || s == "")
@@ -36,7 +36,7 @@ namespace Assistment.Xml
             else
                 return new Bitmap(s);
         }
-        public static string getString(this XmlReader reader, string name)
+        public static string GetString(this XmlReader reader, string name)
         {
             string s = reader.GetAttribute(name);
             if (s == null)
@@ -44,11 +44,11 @@ namespace Assistment.Xml
             else
                 return s;
         }
-        public static string[] getStrings(this XmlReader reader, string name, string seperators)
+        public static string[] GetStrings(this XmlReader reader, string name, string seperators)
         {
-            return reader.getString(name).Split(seperators.ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
+            return reader.GetString(name).Split(seperators.ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
         }
-        public static int getInt(this XmlReader reader, string name)
+        public static int GetInt(this XmlReader reader, string name)
         {
             string s = reader.GetAttribute(name);
             if (s == null || s == "")
@@ -56,7 +56,7 @@ namespace Assistment.Xml
             else
                 return int.Parse(s, PreferedCultureInfo);
         }
-        public static float getFloat(this XmlReader reader, string name)
+        public static float GetFloat(this XmlReader reader, string name)
         {
             string s = reader.GetAttribute(name);
             if (s == null || s == "")
@@ -64,23 +64,23 @@ namespace Assistment.Xml
             else
                 return float.Parse(s, PreferedCultureInfo);
         }
-        public static SizeF getSizeF(this XmlReader reader, string name)
+        public static SizeF GetSizeF(this XmlReader reader, string name)
         {
-            return new SizeF(getFloat(reader, name + "_X"), getFloat(reader, name + "_Y"));
+            return new SizeF(GetFloat(reader, name + "_X"), GetFloat(reader, name + "_Y"));
         }
-        public static PointF getPointF(this XmlReader reader, string name)
+        public static PointF GetPointF(this XmlReader reader, string name)
         {
-            return new PointF(getFloat(reader, name + "_X"), getFloat(reader, name + "_Y"));
+            return new PointF(GetFloat(reader, name + "_X"), GetFloat(reader, name + "_Y"));
         }
-        public static Size getSize(this XmlReader reader, string name)
+        public static Size GetSize(this XmlReader reader, string name)
         {
-            return new Size(getInt(reader, name + "_X"), getInt(reader, name + "_Y"));
+            return new Size(GetInt(reader, name + "_X"), GetInt(reader, name + "_Y"));
         }
-        public static Point getPoint(this XmlReader reader, string name)
+        public static Point GetPoint(this XmlReader reader, string name)
         {
-            return new Point(getInt(reader, name + "_X"), getInt(reader, name + "_Y"));
+            return new Point(GetInt(reader, name + "_X"), GetInt(reader, name + "_Y"));
         }
-        public static bool getBoolean(this XmlReader reader, string name)
+        public static bool GetBoolean(this XmlReader reader, string name)
         {
             string s = reader.GetAttribute(name);
             if (s == null || s == "")
@@ -88,7 +88,7 @@ namespace Assistment.Xml
             else
                 return bool.Parse(s);
         }
-        public static DateTime getDate(this XmlReader reader, string name)
+        public static DateTime GetDate(this XmlReader reader, string name)
         {
             string s = reader.GetAttribute(name);
             if (s == null || s == "")
@@ -96,13 +96,21 @@ namespace Assistment.Xml
             else
                 return DateTime.Parse(s, PreferedCultureInfo);
         }
-
-        public static xFont getFontX(this XmlReader reader, string name)
+        public static RectangleF GetRectangle(this XmlReader reader, string name)
         {
-            return new FontGraphicsMeasurer(reader.getString(name), reader.getFloat(name + "_Size"));
+            return new RectangleF(
+                reader.GetFloat(name + "_X"),
+                reader.GetFloat(name + "_Y"),
+                reader.GetFloat(name + "_Width"),
+                reader.GetFloat(name + "_Height"));
         }
 
-        public static Color getColorHexARGB(this XmlReader reader, string name)
+        public static xFont GetFontX(this XmlReader reader, string name)
+        {
+            return new FontGraphicsMeasurer(reader.GetString(name), reader.GetFloat(name + "_Size"));
+        }
+
+        public static Color GetColorHexARGB(this XmlReader reader, string name)
         {
             string s = reader.GetAttribute(name);
             if (s == null || s == "")
@@ -117,7 +125,7 @@ namespace Assistment.Xml
         /// <typeparam name="T"></typeparam>
         /// <param name="listOfLists"></param>
         /// <returns></returns>
-        public static IEnumerable<T> multiConcat<T>(this IEnumerable<IEnumerable<T>> listOfLists)
+        public static IEnumerable<T> MultiConcat<T>(this IEnumerable<IEnumerable<T>> listOfLists)
         {
             IEnumerable<T> enumerable = new List<T>();
             foreach (var item in listOfLists)
@@ -145,7 +153,7 @@ namespace Assistment.Xml
         /// <param name="writer"></param>
         /// <param name="name"></param>
         /// <param name="value"></param>
-        public static void writeAttribute(this XmlWriter writer, string name, string value)
+        public static void WriteAttribute(this XmlWriter writer, string name, string value)
         {
             if (!(value == null || value == ""))
                 writer.WriteAttributeString(name, value);
@@ -156,7 +164,7 @@ namespace Assistment.Xml
         /// <param name="writer"></param>
         /// <param name="name"></param>
         /// <param name="value"></param>
-        public static void writeBoolean(this XmlWriter writer, string name, bool value)
+        public static void WriteBoolean(this XmlWriter writer, string name, bool value)
         {
             if (value)
                 writer.WriteAttributeString(name, value.ToString(PreferedCultureInfo));
@@ -167,57 +175,64 @@ namespace Assistment.Xml
         /// <param name="writer"></param>
         /// <param name="name"></param>
         /// <param name="value"></param>
-        public static void writeInt(this XmlWriter writer, string name, int value)
+        public static void WriteInt(this XmlWriter writer, string name, int value)
         {
             if (value != 0)
                 writer.WriteAttributeString(name, value.ToString(PreferedCultureInfo));
         }
-        public static void writeFloat(this XmlWriter writer, string name, float value)
+        public static void WriteFloat(this XmlWriter writer, string name, float value)
         {
             if (value != 0)
                 writer.WriteAttributeString(name, value.ToString(PreferedCultureInfo));
         }
-        public static void writeSize(this XmlWriter writer, string name, SizeF Size)
+        public static void WriteSize(this XmlWriter writer, string name, SizeF Size)
         {
-            writeFloat(writer, name + "_X", Size.Width);
-            writeFloat(writer, name + "_Y", Size.Height);
+            WriteFloat(writer, name + "_X", Size.Width);
+            WriteFloat(writer, name + "_Y", Size.Height);
         }
-        public static void writePoint(this XmlWriter writer, string name, PointF Point)
+        public static void WritePoint(this XmlWriter writer, string name, PointF Point)
         {
-            writeFloat(writer, name + "_X", Point.X);
-            writeFloat(writer, name + "_Y", Point.Y);
+            WriteFloat(writer, name + "_X", Point.X);
+            WriteFloat(writer, name + "_Y", Point.Y);
         }
-        public static void writeColorHexARGB(this XmlWriter writer, string name, Color Color)
+        public static void WriteRectangle(this XmlWriter writer, string name, RectangleF rectangle)
+        {
+            writer.WriteFloat(name + "_X", rectangle.X);
+            writer.WriteFloat(name + "_Y", rectangle.Y);
+            writer.WriteFloat(name + "_Width", rectangle.Width);
+            writer.WriteFloat(name + "_Height", rectangle.Height);
+        }
+        public static void WriteColorHexARGB(this XmlWriter writer, string name, Color Color)
         {
             writer.WriteAttributeString(name, Color.ToArgb().ToString("x8"));
         }
 
-        public static Pen getPen(this XmlReader reader, string name)
+        public static Pen GetPen(this XmlReader reader, string name)
         {
-            return new Pen(reader.getColorHexARGB(name + "_color"), reader.getFloat(name + "_width"));
+            return new Pen(reader.GetColorHexARGB(name + "_color"), reader.GetFloat(name + "_width"));
         }
-        public static void writePen(this XmlWriter writer, string name, Pen Pen)
+        public static void WritePen(this XmlWriter writer, string name, Pen Pen)
         {
             if (Pen != null)
             {
-                writer.writeColorHexARGB(name + "_color", Pen.Color);
-                writer.writeFloat(name + "_width", Pen.Width);
+                writer.WriteColorHexARGB(name + "_color", Pen.Color);
+                writer.WriteFloat(name + "_width", Pen.Width);
             }
         }
-        public static Font getFont(this XmlReader reader, string name)
+        public static Font GetFont(this XmlReader reader, string name)
         {
-            string s = reader.getString(name + "_name");
+            string s = reader.GetString(name + "_name");
             if (s.Length == 0)
                 return null;
-            return new Font(s, reader.getFloat(name + "_size"), reader.getEnum<FontStyle>(name + "_style"));
+            return new Font(s, reader.GetFloat(name + "_size"), reader.GetEnum<FontStyle>(name + "_style"));
         }
-        public static void writeFont(this XmlWriter writer, string name, Font Font)
+        public static void WriteFont(this XmlWriter writer, string name, Font Font)
         {
             if (Font != null)
             {
-                writer.writeAttribute(name + "_name", Font.Name);
-                writer.writeEnum(name + "_style", Font.Style);
-                writer.writeAttribute(name + "_size", Font.Size.ToString());
+                writer.WriteAttribute(name + "_name", Font.Name);
+                writer.WriteEnum(name + "_style", Font.Style);
+                writer.WriteAttribute(name + "_size", Font.Size.ToString());
             }
         }
 

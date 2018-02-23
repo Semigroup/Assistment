@@ -277,6 +277,12 @@
     <Compile Include="form\PpmBox.Designer.cs">
       <DependentUpon>PpmBox.cs</DependentUpon>
     </Compile>
+    <Compile Include="form\RectangleFBox.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="form\RectangleFBox.Designer.cs">
+      <DependentUpon>RectangleFBox.cs</DependentUpon>
+    </Compile>
     <Compile Include="form\ScrollBox.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -426,6 +432,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="form\PpmBox.resx">
       <DependentUpon>PpmBox.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="form\RectangleFBox.resx">
+      <DependentUpon>RectangleFBox.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Testing\TestForm.resx">
       <DependentUpon>TestForm.cs</DependentUpon>
