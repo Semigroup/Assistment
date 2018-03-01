@@ -15,6 +15,11 @@ namespace Assistment.Texts
     /// </summary>
     public class CString : PreText
     {
+        public CString(xFont font)
+           : this()
+        {
+            this.PreferedFont = font;
+        }
         public CString()
             : base()
         {

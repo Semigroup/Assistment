@@ -16,7 +16,7 @@ namespace Assistment.Drawing
 {
     public static class Shadex
     {
-        private class knotenHohenVergleicher : IComparer<Knoten>
+        private class KnotenHohenVergleicher : IComparer<Knoten>
         {
             public int Compare(Knoten x, Knoten y)
             {
@@ -126,7 +126,7 @@ namespace Assistment.Drawing
             return t => h(t) + g;
         }
 
-        public static Hohe bezierStachelrand(Hohe h, int stachel)
+        public static Hohe BezierStachelrand(Hohe h, int stachel)
         {
             float f = 1.0f / stachel;
             /// t[0] zw. 0 und f
@@ -164,7 +164,7 @@ namespace Assistment.Drawing
                     return c[i] * (t[i] - T) * (t[i] - T);
                 };
         }
-        public static Hohe negativerBezierStachelrand(Hohe h, int stachel)
+        public static Hohe NegativerBezierStachelrand(Hohe h, int stachel)
         {
             float f = 1.0f / stachel;
             /// t[0] zw. 0 und f
@@ -204,7 +204,7 @@ namespace Assistment.Drawing
         /// </summary>
         /// <param name="werte"></param>
         /// <returns></returns>
-        public static Hohe linearApprox(float[] werte)
+        public static Hohe LinearApprox(float[] werte)
         {
             float[] diff = new float[werte.Length];
             for (int i = 0; i < werte.Length - 1; i++)
@@ -228,10 +228,10 @@ namespace Assistment.Drawing
         /// <param name="basis"></param>
         /// <param name="samples"></param>
         /// <param name="stachel"></param>
-        public static void malBezierrand(Graphics g, Brush[] brushes, OrientierbarerWeg y, Hohe hohe, int samples, int stachel)
+        public static void MalBezierrand(Graphics g, Brush[] brushes, OrientierbarerWeg y, Hohe hohe, int samples, int stachel)
         {
             int layer = brushes.Length;
-            Hohe h = bezierStachelrand(t => hohe(t) / layer, stachel);
+            Hohe h = BezierStachelrand(t => hohe(t) / layer, stachel);
             PointF[] P = new PointF[2 * samples];
             PointF[] N = new PointF[samples];
             #region Berechen P und N
@@ -267,10 +267,10 @@ namespace Assistment.Drawing
         /// <param name="basis"></param>
         /// <param name="samples"></param>
         /// <param name="stachel"></param>
-        public static void malBezierhulle(Graphics g, Brush[] brushes, OrientierbarerWeg y, Hohe hohe, int samples, int stachel)
+        public static void MalBezierhulle(Graphics g, Brush[] brushes, OrientierbarerWeg y, Hohe hohe, int samples, int stachel)
         {
             int layer = brushes.Length;
-            Hohe h = bezierStachelrand(t => hohe(t) / layer, stachel);
+            Hohe h = BezierStachelrand(t => hohe(t) / layer, stachel);
             PointF[] P = new PointF[samples];
             PointF[] N = new PointF[samples];
             #region Berechne P und N
@@ -292,7 +292,7 @@ namespace Assistment.Drawing
             }
         }
 
-        public static Brush[] brushTable(Color c, int layer)
+        public static Brush[] BrushTable(Color c, int layer)
         {
             Brush[] b = new Brush[layer];
             for (int i = 0; i < layer; i++)
@@ -308,7 +308,7 @@ namespace Assistment.Drawing
         /// <param name="p"></param>
         /// <param name="tan">muss normiert sein</param>
         /// <returns></returns>
-        public static float getDist(RectangleF r, PointF p, PointF tan)
+        public static float GetDist(RectangleF r, PointF p, PointF tan)
         {
             float dx, dy;
             if (tan.X >= 0)
@@ -331,7 +331,7 @@ namespace Assistment.Drawing
         /// <param name="burst"></param>
         /// <param name="strings">strings kleiner gleich 100; samples = 100</param>
         /// <param name="layers"></param>
-        public static unsafe void chaosSphere(Graphics g, PointF p, float radius, float burst, int strings, Brush[] layers)
+        public static unsafe void ChaosSphere(Graphics g, PointF p, float radius, float burst, int strings, Brush[] layers)
         {
             int samples = 100;
             int nLayers = layers.Length + 1;
@@ -355,7 +355,7 @@ namespace Assistment.Drawing
             punkte02[samples] = punkte02[0];
             for (int j = 0; j < strings; j++)
                 hohen[j] = (float)(burst * (1 - 2 * dice.NextDouble())) + radius / nLayers;
-            h = Shadex.linearApprox(hohen);
+            h = Shadex.LinearApprox(hohen);
             for (int j = 0; j < samples; j++)
             {
                 punkte13[j] = p;
@@ -371,7 +371,7 @@ namespace Assistment.Drawing
                 {
                     for (int j = 0; j < strings; j++)
                         hohen[j] = (float)(burst * (1 - 2 * dice.NextDouble())) + radius * i / nLayers;
-                    h = Shadex.linearApprox(hohen);
+                    h = Shadex.LinearApprox(hohen);
                     #region P zuweisen
                     PointF* P;
                     switch (i % 4)
@@ -455,9 +455,9 @@ namespace Assistment.Drawing
         /// <param name="layers">layers.count = 2 + 4*n !</param>
         /// <param name="burst"></param>
         /// <param name="strings"></param>
-        public static unsafe void chaosRect(Graphics g, RectangleF r, Schema schema)
+        public static unsafe void ChaosRect(Graphics g, RectangleF r, Schema schema)
         {
-            chaosRect(g, r, schema.farben, schema.burst, schema.strings);
+            ChaosRect(g, r, schema.farben, schema.burst, schema.strings);
         }
         /// <summary>
         /// 
@@ -467,7 +467,7 @@ namespace Assistment.Drawing
         /// <param name="layers">layers.count = 2 + 4*n !</param>
         /// <param name="burst"></param>
         /// <param name="strings"></param>
-        public static unsafe void chaosRect(Graphics g, RectangleF r, Brush[] layers, float burst, int strings)
+        public static unsafe void ChaosRect(Graphics g, RectangleF r, Brush[] layers, float burst, int strings)
         {
             float nenner = r.Width / (strings - 1);
             int sam2 = 2 * strings;
@@ -546,7 +546,7 @@ namespace Assistment.Drawing
         /// <param name="strings"></param>
         /// <param name="hohe"></param>
         /// <param name="samples"></param>
-        public static unsafe void chaosWeg(Graphics g, OrientierbarerWeg y, Brush[] layers, float burst, int strings, Hohe hohe, int samples)
+        public static unsafe void ChaosWeg(Graphics g, OrientierbarerWeg y, Brush[] layers, float burst, int strings, Hohe hohe, int samples)
         {
             PointF[] p13 = new PointF[2 * samples];
             PointF[] p24 = new PointF[2 * samples];
@@ -581,7 +581,7 @@ namespace Assistment.Drawing
             {
                 for (int i = 0; i < strings; i++)
                     werte[i] = (float)(burst * (1 - 2 * dice.NextDouble()));
-                app = linearApprox(werte);
+                app = LinearApprox(werte);
                 for (int i = 0; i < samples; i++)
                 {
                     e = i * d;
@@ -594,7 +594,7 @@ namespace Assistment.Drawing
             {
                 for (int i = 0; i < strings; i++)
                     werte[i] = (float)(burst * (1 - 2 * dice.NextDouble()));
-                app = linearApprox(werte);
+                app = LinearApprox(werte);
                 for (int i = 0; i < samples; i++)
                 {
                     e = i * d;
@@ -615,7 +615,7 @@ namespace Assistment.Drawing
                 g.FillPolygon(layers[0], p13);
                 #endregion
                 #region Schritt
-                for (int i = 1; i < layersLength - 1; )
+                for (int i = 1; i < layersLength - 1;)
                 {
 
                     ADD();
@@ -639,9 +639,9 @@ namespace Assistment.Drawing
                 #endregion
             }
         }
-        public static unsafe void chaosWeg(Graphics g, OrientierbarerWeg y, Schema schema)
+        public static unsafe void ChaosWeg(Graphics g, OrientierbarerWeg y, Schema schema)
         {
-            chaosWeg(g, y, schema.farben, schema.burst, schema.strings, schema.hohe, (int)(schema.sampleRate * y.L));
+            ChaosWeg(g, y, schema.farben, schema.burst, schema.strings, schema.hohe, (int)(schema.sampleRate * y.L));
         }
 
         //public static void ChaosFlache(Graphics g, FlachenSchema schema)
@@ -721,13 +721,61 @@ namespace Assistment.Drawing
             foreach (var item in schema.Thumb.Enumerate())
             {
                 Netz n = new Netz(schema, item);
-                //n.PrintThumbs().Save("test");
-                //System.Windows.Forms.MessageBox.Show(n.Print());
                 n.Map(schema.Flache);
                 if (schema.DrawingRegion.HasValue)
                     n.Bound(schema.DrawingRegion.Value);
                 n.Paint(g);
             }
+        }
+        public static void ChaosFlacheBase(Graphics g, FlachenSchema schema)
+        {
+            if (schema.BackColor.HasValue && schema.DrawingRegion.HasValue)
+                g.FillRectangle(new SolidBrush(schema.BackColor.Value), schema.DrawingRegion.Value);
+            foreach (var item in schema.Thumb.Enumerate())
+                for (int x = 1 - schema.Thumb.X; x < schema.Boxes.X; x += schema.Thumb.X)
+                    for (int y = 1 - schema.Thumb.Y; y < schema.Boxes.Y; y += schema.Thumb.Y)
+                    {
+                        RectangleF rectangle =
+                            new RectangleF(x, y, schema.Thumb.X, schema.Thumb.Y).div(schema.Boxes);
+                        int n = schema.Samples.X;// (int)(schema.Samples.X * rectangle.Width) + 2;
+                        int m = schema.Samples.Y;//(int)(schema.Samples.X * rectangle.Width) + 2;
+                        PointF[] poly = new PointF[2 * (n + m)];
+                        for (int i = 0; i < n; i++)
+                        {
+                            float t = i / (n - 1f);
+                            PointF p = new PointF(rectangle.Left * t + (1 - t) * rectangle.Right, rectangle.Top);
+                            poly[i] = schema.Flache(p.X, p.Y);
+                            p.Y = rectangle.Bottom;
+                            poly[2 * n + m - 1 - i] = schema.Flache(p.X, p.Y);
+                        }
+                        for (int i = 0; i < m; i++)
+                        {
+                            float t = i / (m - 1f);
+                            PointF p = new PointF(rectangle.Right,
+                                rectangle.Top * t + (1 - t) * rectangle.Bottom);
+                            poly[n + i] = schema.Flache(p.X, p.Y);
+                            p.X = rectangle.Left;
+                            poly[2 * n + 2 * m - 1 - i] = schema.Flache(p.X, p.Y);
+                        }
+
+                        PointF center = rectangle.Center();
+                        if (schema.Pinsel != null)
+                            g.FillPolygon(schema.Pinsel(center.X, center.Y), poly);
+                        if (schema.Stift != null)
+                        {
+                            Pen stift = schema.Stift(center.X, center.Y);
+                            if (schema.ULinien)
+                            {
+                                g.DrawLines(stift, poly.SubSequence(0, n, 1));
+                                g.DrawLines(stift, poly.SubSequence(n + m, 2 * n + m, 1));
+                            }
+                            if (schema.VLinien)
+                            {
+                                g.DrawLines(stift, poly.SubSequence(n, n + m, 1));
+                                g.DrawLines(stift, poly.SubSequence(2 * n + m, 2 * (n + m), 1));
+                            }
+                        }
+                    }
         }
 
         /// <summary>
@@ -798,7 +846,7 @@ namespace Assistment.Drawing
             breite /= n;
             bool[] offen = new bool[n];
             float[] streckenStucke = new float[Strecke.Length];
-            SortedList<Knoten, int> sortedHohen = new SortedList<Knoten, int>(new knotenHohenVergleicher());
+            SortedList<Knoten, int> sortedHohen = new SortedList<Knoten, int>(new KnotenHohenVergleicher());
             Knoten wurzel = new Knoten(new PointF(0, 0), stift);
             offen[linesLinks] = true;
             sortedHohen.Add(wurzel, linesLinks);

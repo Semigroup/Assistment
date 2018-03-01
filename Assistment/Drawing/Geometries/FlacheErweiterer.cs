@@ -56,8 +56,27 @@ namespace Assistment.Drawing.Geometries
 
         public static FlachenFunktion<PointF> Determinieren(this FlachenFunktion<PointF> flache, int USamples, int VSamples)
         {
-           return ReSample(Samples(flache, USamples, VSamples));
+            return ReSample(Samples(flache, USamples, VSamples));
         }
+        /// <summary>
+        /// Die FlächenFunktion ist auf den Rändern Null.
+        /// </summary>
+        /// <param name="flache"></param>
+        /// <param name="USamples"></param>
+        /// <param name="VSamples"></param>
+        /// <returns></returns>
+        public static FlachenFunktion<PointF> KompaktDeterminieren(this FlachenFunktion<PointF> flache, int USamples, int VSamples)
+        {
+            PointF[,] samples = Samples(flache, USamples, VSamples);
+
+            for (int i = 0; i < USamples; i++)
+                samples[i, VSamples - 1] = samples[i, 0] = new PointF();
+            for (int i = 0; i < VSamples; i++)
+                samples[USamples - 1, i] = samples[0, i] = new PointF();
+
+            return ReSample(samples);
+        }
+
 
         public static FlachenFunktion<PointF> ReSample(this PointF[,] samples)
         {
@@ -65,22 +84,24 @@ namespace Assistment.Drawing.Geometries
             int m = samples.GetLength(1) - 1;
             return (u, v) =>
             {
+                u = ((u % 1) + 1) % 1;
+                v = ((v % 1) + 1) % 1;
                 u *= n;
                 v *= m;
                 int x = (int)u;
                 int y = (int)v;
 
                 PointF bottomLeft = samples[x, y];
-                PointF bottomRight = samples[Math.Min(x+1, n), y];
-                PointF topLeft = samples[x, Math.Min(y+1, m)];
-                PointF topRight = samples[Math.Min(x+1, n), Math.Min(y+1, m)];
+                PointF bottomRight = samples[Math.Min(x + 1, n), y];
+                PointF topLeft = samples[x, Math.Min(y + 1, m)];
+                PointF topRight = samples[Math.Min(x + 1, n), Math.Min(y + 1, m)];
 
                 u -= x;
                 v -= y;
 
                 PointF bottom = bottomLeft.tween(bottomRight, u);
                 PointF top = topLeft.tween(topRight, u);
-                return bottom.tween(top,  v);
+                return bottom.tween(top, v);
             };
         }
 
@@ -96,14 +117,14 @@ namespace Assistment.Drawing.Geometries
             float d = t / schritte;
             return (u, v) =>
             {
-                PointF position = new PointF(u,v);
+                PointF position = new PointF(u, v);
                 for (int i = 0; i < schritte; i++)
                     position = position.saxpy(d, Vektorfeld(position.X, position.Y)).sat();
                 return position;
             };
         }
 
-        public static T[] Process<T>(this FlachenFunktion<T> flache,PointF[] punkte)
+        public static T[] Process<T>(this FlachenFunktion<T> flache, PointF[] punkte)
         {
             T[] ts = new T[punkte.Length];
             for (int i = 0; i < punkte.Length; i++)

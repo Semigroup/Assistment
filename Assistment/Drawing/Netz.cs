@@ -200,7 +200,6 @@ namespace Assistment.Drawing
             Vertikalen.First().BoundLeft(Rectangle);
             Vertikalen.Last().BoundRight(Rectangle);
         }
-
         public void Map(FlachenFunktion<PointF> f)
         {
             foreach (var item in Horizontalen)
@@ -208,7 +207,6 @@ namespace Assistment.Drawing
             foreach (var item in Vertikalen)
                 item.Map(f);
         }
-
         private void AdjustOffset(Point Offset)
         {
             this.Offset = Offset;
@@ -226,7 +224,6 @@ namespace Assistment.Drawing
             this.AntiOffset = this.AntiOffset.add(
                 Thumb.mul(Thumbs));
         }
-
         public Polygon GetThumb(Point whichThumb)
         {
             Point p = Offset.add(Thumb.mul(whichThumb));
@@ -238,7 +235,6 @@ namespace Assistment.Drawing
             res = res.Concat(Vertikalen[x].GetReversedThumb(y));
             return new Polygon(res);
         }
-
         public void Paint(Graphics g)
         {
             foreach (var item in Thumbs.Enumerate())
@@ -258,7 +254,6 @@ namespace Assistment.Drawing
         {
             return Thumbs.Enumerate().Map(p => GetThumb(p)).GetEnumerator();
         }
-
         System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
         {
             return GetEnumerator();
