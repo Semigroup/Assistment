@@ -9,6 +9,20 @@ namespace Assistment.Mathematik
     public static class FastMath
     {
         /// <summary>
+        /// Wurzel von 2
+        /// </summary>
+        public const float SQRT_2 = 1.4142135623730950488016887242097f;
+        /// <summary>
+        /// Wurzel von 3
+        /// </summary>
+        public const float SQRT_3 = 1.7320508075688772935274463415059f;
+        /// <summary>
+        /// Wurzel von 5
+        /// </summary>
+        public const float SQRT_5 = 2.2360679774997896964091736687313f;
+
+
+        /// <summary>
         /// Macht Bogenmaß zu Grad.
         /// </summary>
         /// <param name="Bogenmass"></param>

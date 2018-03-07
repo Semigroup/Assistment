@@ -100,8 +100,18 @@ namespace Assistment.Texts
         {
         }
 
-        public override void FillPolygon(System.Drawing.Brush Brush, System.Drawing.PointF[] polygon)
+        public override void FillPolygon(Brush Brush, PointF[] polygon)
         {
+            if (Brush == null)
+            {
+                throw new System.ArgumentNullException(nameof(Brush));
+            }
+
+            if (polygon == null)
+            {
+                throw new System.ArgumentNullException(nameof(polygon));
+            }
+
             g.FillPolygon(Brush, polygon);
         }
     }
