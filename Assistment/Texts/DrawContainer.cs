@@ -429,18 +429,19 @@ namespace Assistment.Texts
                         }
                         a = i;
                         break;
-                    #region Interpunktion
+                    #region Interpunktion und Plus und Bindestrich
                     case ':':
                     case '.':
                     case ',':
                     case ';':
+                    case '-':
                         i++;
                         this.AddWort(regex.Substring(a, i - a), br, font, m, p);
                         a = i;
                         break;
 
+                    case '−':
                     case '+':
-                    case '-':
                         if (i != a)
                             this.AddWort(regex.Substring(a, i - a), br, font, m, p);
                         a = i;
