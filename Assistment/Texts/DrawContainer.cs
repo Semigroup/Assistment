@@ -434,10 +434,24 @@ namespace Assistment.Texts
                     case '.':
                     case ',':
                     case ';':
-                    case '-':
                         i++;
                         this.AddWort(regex.Substring(a, i - a), br, font, m, p);
                         a = i;
+                        break;
+
+                    case '-':
+                        if (i != a)
+                            this.AddWort(regex.Substring(a, i - a), br, font, m, p);
+                        a = i;
+                        i++;
+                        if (regex.Length == i)
+                            this.AddWort(@"-", br, font, m, p);
+                        else if (regex[i] == '-')
+                        {
+                            this.AddWort(@"−", br, font, m, p);
+                            i++;
+                            a = i;
+                        }
                         break;
 
                     case '−':
