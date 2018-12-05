@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Drawing;
 using Assistment.Extensions;
 
 namespace Assistment.Drawing.Style
@@ -124,26 +123,6 @@ namespace Assistment.Drawing.Style
         System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
         {
             return GetEnumerator();
-        }
-    }
-
-    public static class FarbSchemaColorErweiterer
-    {
-        public static Brush GetBrush(this FarbSchema<Color> Schema, FarbSchema<Color>.Typ Typ)
-        {
-            return new SolidBrush(Schema[Typ]);
-        }
-        public static Brush GetBrush(this FarbSchema<Color> Schema, int Alpha, FarbSchema<Color>.Typ Typ)
-        {
-            return new SolidBrush(Color.FromArgb(Alpha, Schema[Typ]));
-        }
-        public static Brush GetBrush(this FarbSchema<Color> Schema, float Alpha, FarbSchema<Color>.Typ Typ)
-        {
-            return new SolidBrush(Color.FromArgb((int)(255 * Alpha), Schema[Typ]));
-        }
-        public static Pen GetPen(this FarbSchema<Color> Schema, FarbSchema<Color>.Typ Typ)
-        {
-            return new Pen(Schema[Typ]);
         }
     }
 }

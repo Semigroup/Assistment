@@ -110,49 +110,4 @@ namespace Assistment.Algebra
             return new Konkatenation2<C>(this, Funktion);
         }
     }
-    public interface Operiert<in A, in B>
-    {
-        void Add(A Preimage, B Wert);
-    }
-
-    public class LeereAbbildung<A, B> : Abbildung<A, B>
-    {
-        public override B Get(A Preimage)
-        {
-            return default(B);
-        }
-
-        public override IEnumerable<A> Support()
-        {
-            return new A[0];
-        }
-    }
-    public class Tupel<A, B> : Abbildung<A, B>
-    {
-        public A Preimage;
-        public B Image;
-
-        public Tupel(A Preimage, B Image)
-        {
-            this.Preimage = Preimage;
-            this.Image = Image;
-        }
-        public Tupel()
-        {
-
-        }
-
-        public override B Get(A Preimage)
-        {
-            if (this.Preimage.Equals(Preimage))
-                return Image;
-            else
-                return default(B);
-        }
-
-        public override IEnumerable<A> Support()
-        {
-            return new A[] { Preimage };
-        }
-    }
 }
