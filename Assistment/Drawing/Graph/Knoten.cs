@@ -250,8 +250,10 @@ namespace Assistment.Drawing.Graph
                 List<Kante> kantenListe;
                 if (inklusiveRoot)
                 {
-                    kantenListe = new List<Kante>();
-                    kantenListe.Add(new Kante(root, null));
+                    kantenListe = new List<Kante>
+                    {
+                        new Kante(root, null)
+                    };
                 }
                 else
                     kantenListe = root.kanten;

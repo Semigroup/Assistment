@@ -206,8 +206,11 @@
     <Compile Include="Drawing\Style\FlachenSchema.cs" />
     <Compile Include="Drawing\Style\Schema.cs" />
     <Compile Include="Extensions\CollectionExtender.cs" />
+    <Compile Include="Extensions\ColorF.cs" />
+    <Compile Include="Extensions\ColorMatrix.cs" />
     <Compile Include="Extensions\EnumerableExtender.cs" />
     <Compile Include="Extensions\EnumeratorExtender.cs" />
+    <Compile Include="Extensions\GraphicsExtender.cs" />
     <Compile Include="Extensions\ImageExtender.cs" />
     <Compile Include="Extensions\PrimitiveExtender.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />

@@ -569,15 +569,15 @@ namespace Assistment.Drawing
                 ladder[i].X = p13[i].X + 0.5f * n[i].X;
                 ladder[i].Y = p13[i].Y + 0.5f * n[i].Y;
             }
-            Mach ADD = () =>
+            void ADD()
             {
                 for (int i = 0; i < samples; i++)
                 {
                     ladder[i].X += n[i].X;
                     ladder[i].Y += n[i].Y;
                 }
-            };
-            ModPolygon MOD = (p) =>
+            }
+            void MOD(PointF* p)
             {
                 for (int i = 0; i < strings; i++)
                     werte[i] = (float)(burst * (1 - 2 * dice.NextDouble()));
@@ -589,8 +589,8 @@ namespace Assistment.Drawing
                     p[i].X = norm[i].X * e + ladder[i].X;
                     p[i].Y = norm[i].Y * e + ladder[i].Y;
                 }
-            };
-            ModPolygon MOD2 = (p) =>
+            }
+            void MOD2(PointF* p)
             {
                 for (int i = 0; i < strings; i++)
                     werte[i] = (float)(burst * (1 - 2 * dice.NextDouble()));
@@ -602,7 +602,7 @@ namespace Assistment.Drawing
                     (p - i)->X = norm[i].X * e + ladder[i].X;
                     (p - i)->Y = norm[i].Y * e + ladder[i].Y;
                 }
-            };
+            }
             #endregion
             fixed (PointF* p1 = p13, p2 = p24)
             {
