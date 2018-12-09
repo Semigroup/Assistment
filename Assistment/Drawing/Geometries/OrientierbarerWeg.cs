@@ -700,7 +700,7 @@ namespace Assistment.Drawing.Geometries
         {
             double w = Windungen * 2 * Math.PI;
             Weg y = t => new PointF(sin(Windungen * t), cos(Windungen * t)).mul(Radius * (1 - t));
-            Weg T0 = t => new PointF(cos(Windungen * t), -sin(Windungen * t)).mul((1 - t) * (float)w);
+            PointF T0(float t) => new PointF(cos(Windungen * t), -sin(Windungen * t)).mul((1 - t) * (float)w);
             Weg T1 = t => T0(t).sub(sin(Windungen * t), cos(Windungen * t));
             Weg n1 = t => T1(t).linksOrtho();
             double d = Math.Sqrt(w * w + 1);
