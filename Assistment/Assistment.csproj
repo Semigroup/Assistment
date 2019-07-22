@@ -383,6 +383,7 @@
     <Compile Include="Texts\DrawContext.cs" />
     <Compile Include="Texts\DrawContextDocument.cs" />
     <Compile Include="Texts\DrawContextGraphics.cs" />
+    <Compile Include="Texts\DrawContextGraphicsFlip.cs" />
     <Compile Include="Texts\DrawList.cs" />
     <Compile Include="Texts\DummyFont.cs" />
     <Compile Include="Texts\DynamicImageBox.cs" />
