@@ -21,6 +21,16 @@ namespace Assistment.Drawing.LinearAlgebra
             return new PointF(a.X + c * b.X, a.Y + c * b.Y);
         }
         /// <summary>
+        /// returns alpha * this + beta * b
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="alpha"></param>
+        /// <param name="b"></param>
+        /// <param name="beta"></param>
+        /// <returns></returns>
+        public static PointF LinKomb(this PointF a, float alpha, PointF b, float beta)
+            => new PointF(a.X * alpha + b.X * beta, a.Y * alpha + b.Y * beta);
+        /// <summary>
         /// erstellt einen neuen Vektor, der Summe der beiden Summanden ist
         /// </summary>
         /// <param name="a"></param>
