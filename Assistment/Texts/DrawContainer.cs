@@ -224,6 +224,8 @@ namespace Assistment.Texts
         /// <para>\x : Wort ist horizontal durchgestrichen</para>
         /// <para></para>
         /// <para>\tXf, \tXxYf : Whitespace mit Breite X * Leerzeichen und Höhe Y * Zeilenabstand</para>
+        /// <para>\mAf : Alignment auf A setzen</para>
+        /// <para></para>
         /// <para>\{...} : CString, der ... als regex added</para>
         /// <para>\[...] : Text, der ... als regex added</para>
         /// <para>\"...\" : interpretiert ... nicht und added es als Wort</para>
@@ -546,6 +548,8 @@ namespace Assistment.Texts
         /// <para>\x : Wort ist horizontal durchgestrichen</para>
         /// <para></para>
         /// <para>\tXf, \tXxYf : Whitespace mit Breite X * Leerzeichen und Höhe Y * Zeilenabstand</para>
+        /// <para>\mAf : Alignment auf A setzen</para>
+        /// <para></para>
         /// <para>\{...} : CString, der ... als regex added</para>
         /// <para>\[...] : Text, der ... als regex added</para>
         /// <para>\"...\" : interpretiert ... nicht und added es als Wort</para>
