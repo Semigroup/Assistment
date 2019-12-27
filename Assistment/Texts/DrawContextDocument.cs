@@ -234,6 +234,8 @@ namespace Assistment.Texts
         }
         private void adjustPageNumber(float y)
         {
+            //Console.WriteLine("adjustPageNumber: " + y);
+            //Console.WriteLine("yOff: " + yOff);
             const float HOHEN_TOLERANZ = 1;
             y -= HOHEN_TOLERANZ;
             if (pCon.PdfDocument.PageNumber * pCon.PdfDocument.PageSize.Height < factor * y)
@@ -242,6 +244,7 @@ namespace Assistment.Texts
                 {
                     //schreibSeitennummer();
                     yOff += pCon.PdfDocument.PageSize.Height;
+                    //Console.WriteLine("yOff: " + yOff);
                     pCon.PdfDocument.NewPage();
                 }
             }
@@ -378,6 +381,11 @@ namespace Assistment.Texts
         }
         public override void DrawClippedImage(Image img, RectangleF destination, RectangleF source)
         {
+            RectangleF T = source.GetTransformation(destination);
+            RectangleF Pic = new RectangleF(new PointF(), img.Size);
+            RectangleF Dest = Pic.Transform(T);
+            adjustPageNumber(Dest.Y);
+
             pCon.SaveState();
             pCon.Rectangle(factor * destination.X,
                 yOff - factor * destination.Y - factor * destination.Height,
@@ -386,10 +394,7 @@ namespace Assistment.Texts
             pCon.Clip();
             pCon.NewPath();
 
-            RectangleF T = source.GetTransformation(destination);
-            RectangleF Pic = new RectangleF(new PointF(), img.Size);
-
-            DrawImage(img, Pic.Transform(T));
+            DrawImage(img, Dest);
 
             pCon.RestoreState();
         }

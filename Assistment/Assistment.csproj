@@ -377,6 +377,7 @@
     <Compile Include="Sound\Notes\Sum.cs" />
     <Compile Include="Sound\WaveWriter.cs" />
     <Compile Include="Texts\BackColorBox.cs" />
+    <Compile Include="Texts\ClippedImageBox.cs" />
     <Compile Include="Texts\CString.cs" />
     <Compile Include="Texts\DrawBox.cs" />
     <Compile Include="Texts\DrawContainer.cs" />
@@ -533,17 +534,6 @@
     <Content Include="Fonts\Plain Germanica.ttf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <None Include="app.config" />
-    <None Include="Fonts\Stencil Army WW I.ttf">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="packages.config" />
-    <None Include="Subprozesse\MakePDF.vshost.exe.manifest">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-  <ItemGroup />
-  <ItemGroup>
     <Content Include="Subprozesse\Assistment.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -559,10 +549,13 @@
     <Content Include="Subprozesse\MakePDF.pdb">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Subprozesse\MakePDF.vshost.exe">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
+    <None Include="app.config" />
+    <None Include="Fonts\Stencil Army WW I.ttf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

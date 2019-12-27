@@ -60,6 +60,9 @@ namespace Assistment.form
         {
             InitializeComponent();
 
+            if (Drawer != null)
+                this.targetDinAFormatBox.UserValue = Drawer.GetDInA();
+
             RadioButtons = new RadioButton[Formats.Length];
             for (int i = 0; i < RadioButtons.Length; i++)
             {
@@ -115,9 +118,17 @@ namespace Assistment.form
             backgroundWorker1.RunWorkerAsync();
 
             int a = Drawer.GetDInA();
+            int targetDinA = targetDinAFormatBox.UserValue;
             string imageFile = Speicherort + "." + Format;
+            bool targetHoch = Hoch ^ (targetDinA - a % 2 == 1);
+
+            SizeF GrosseInMM = new SizeF();
+            SizeF alignment = new SizeF(0.5f, 0.5f);
+
             using (Image img = Drawer.Draw(Hoch, ppm))
             {
+                GrosseInMM.Width = img.Width / ppm;
+                GrosseInMM.Height = img.Height / ppm;
                 using (FileStream fs = new FileStream(imageFile, FileMode.Create))
                 {
                     img.Save(fs, Format);
@@ -143,7 +154,14 @@ namespace Assistment.form
                 }
             }
             else if (PDF && UseSubprozess)
-                Process.Start(Directory.GetCurrentDirectory() + Subprozess, "\"" + imageFile + "\" " + a);
+                Process.Start(Directory.GetCurrentDirectory() + Subprozess,
+                    "\"" + imageFile + "\""
+                    + " " + targetDinA
+                    + " " + targetHoch
+                    + " " + GrosseInMM.Width
+                     + " " + GrosseInMM.Height
+                     + " " + alignment.Width
+                     + " " + alignment.Height);
         }
         /// <summary>
         /// PPI
@@ -180,8 +198,10 @@ namespace Assistment.form
         {
             if (progressBar1.InvokeRequired)
             {
-                progressBar1.Invoke((MethodInvoker)delegate { progressBar1.Value = (progressBar1.Value + 73) % 100;
-                progressBar1.Refresh();
+                progressBar1.Invoke((MethodInvoker)delegate
+                {
+                    progressBar1.Value = (progressBar1.Value + 73) % 100;
+                    progressBar1.Refresh();
                 });
             }
             else
@@ -194,8 +214,10 @@ namespace Assistment.form
         {
             if (progressBar1.InvokeRequired)
             {
-                progressBar1.Invoke((MethodInvoker)delegate { progressBar1.Value = 0;
-                progressBar1.Refresh();
+                progressBar1.Invoke((MethodInvoker)delegate
+                {
+                    progressBar1.Value = 0;
+                    progressBar1.Refresh();
                 });
             }
             else
