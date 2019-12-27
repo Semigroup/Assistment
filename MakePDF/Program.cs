@@ -14,6 +14,7 @@ using System.Diagnostics;
 using Assistment.Drawing;
 using Assistment.Drawing.LinearAlgebra;
 using iTextSharp.text.pdf;
+using Assistment.PDF;
 
 namespace MakePDF
 {
@@ -81,80 +82,19 @@ namespace MakePDF
                 Console.WriteLine("pageSizePixel: " + pageSizePixel);
                 Console.WriteLine("totalPixelSize: " + totalPixelSize);
 
-                RectangleF currentPagePixel = new RectangleF(0, 0, targetRect.Width, targetRect.Height).div(DrawContextDocument.factor);
-                Console.WriteLine("currentPagePixel: " + currentPagePixel);
-                using (iTextSharp.text.Document doc = new iTextSharp.text.Document())
-                {
-                    PdfWriter writer = PdfWriter.GetInstance(doc, File.Create(Speicherort));
-                    doc.SetPageSize(targetRect);
-                    doc.NewPage();
-                    doc.Open();
-                    PdfContentByte pCon = writer.DirectContent;
-                    using (DrawContextDocument dcd = new DrawContextDocument(pCon))
+                List<string> pages = new List<string>();
+
+                for (int i = 0; i < count.Height; i++)
+                    for (int j = 0; j < count.Width; j++)
                     {
-                        for (int i = 0; i < count.Height; i++)
-                            for (int j = 0; j < count.Width; j++)
-                            {
-                                Console.WriteLine("Embedding Page " + (1 + i * count.Width + j) + " of " + (count.Width * count.Height));
-                                if (i + j != 0)
-                                    dcd.NewPage();
-                                dcd.DrawImage(parts[i, j], currentPagePixel);
-                                currentPagePixel = currentPagePixel.move(0, currentPagePixel.Height);
-                            }
+                        Console.WriteLine("Writing Page " + (1 + i * count.Width + j) + " of " + (count.Width * count.Height));
+                        pages.Add(WritePage(Speicherort, parts[i, j], i, j, targetRect));
                     }
-                }
-                //Console.ReadKey();
-
-
-                //SizeF offsetMM = ((SizeF)count).sub(fCount).mul(pageSizeMM).mul(horizontalAlignment, verticalAlignment);
-
-
-                //Console.WriteLine("offsetMM: " + offsetMM);
-
-                //RectangleF destinationPixel = new RectangleF(offsetMM.ToPointF(), totalSizeMM);
-                //float pdfCoordinateByMM = DinAs[4].Width / (DrawContextDocument.factor * 210);
-                //destinationPixel = destinationPixel.mul(pdfCoordinateByMM);
-
-
-                //Console.WriteLine("pdfCoordinateByMM: " + pdfCoordinateByMM);
-                //Console.WriteLine("destinationPixel: " + destinationPixel);
-                //Console.WriteLine("pageSizePixel: " + pageSizePixel);
-
-                //using (Image image = Image.FromFile(imageFile))
-                //using (iTextSharp.text.Document doc = new iTextSharp.text.Document())
-                //{
-                //    RectangleF sourcePixel = new RectangleF(new PointF(), image.Size);
-                //    RectangleF transform = sourcePixel.GetTransformation(destinationPixel);
-                //    Console.WriteLine("sourcePixel: " + sourcePixel);
-                //    Console.WriteLine("transform: " + transform);
-
-                //    PdfWriter writer = PdfWriter.GetInstance(doc, File.Create(Speicherort));
-                //    doc.SetPageSize(targetRect);
-                //    doc.NewPage();
-                //    doc.Open();
-                //    PdfContentByte pCon = writer.DirectContent;
-                //    using (DrawContextDocument dcd = new DrawContextDocument(pCon))
-                //    {
-                //        for (int j = 0; j < count.Height; j++)
-                //            for (int i = 0; i < count.Width; i++)
-                //            {
-                //                if (i + j != 0)
-                //                    dcd.NewPage();
-                //                pageSizePixel.Location = new PointF(i, j).mul(pageSizePixel.Size);
-                //                RectangleF preImage = pageSizePixel.InvertTransform(transform);
-                //                preImage.Intersect(sourcePixel);
-                //                RectangleF destImage = preImage.Transform(transform);
-                //                //destImage = destImage.move(pageSizePixel.Location.mul(-1));
-
-                //                Console.WriteLine("pageSizePixel: " + pageSizePixel);
-                //                Console.WriteLine("preImage: " + preImage);
-                //                Console.WriteLine("destImage: " + destImage);
-
-                //                dcd.DrawClippedImage(image, destImage, preImage);
-                //            }
-                //    }
-                //}
-                //Console.ReadKey();
+                Console.WriteLine("Concatting...");
+                PDFHelper.Concat(Speicherort, pages);
+                Console.WriteLine("Cleaning Up...");
+                foreach (var item in pages)
+                    File.Delete(item);
             }
             catch (Exception e)
             {
@@ -167,6 +107,23 @@ namespace MakePDF
             }
         }
 
+        static string WritePage(string speicherort, Bitmap part, int i, int j, iTextSharp.text.Rectangle targetRect)
+        {
+            string partFile = speicherort + "." + i + "." + j + ".pdf";
+            RectangleF currentPagePixel = new RectangleF(0, 0, targetRect.Width, targetRect.Height).div(DrawContextDocument.factor);
+            using (iTextSharp.text.Document doc = new iTextSharp.text.Document())
+            {
+                PdfWriter writer = PdfWriter.GetInstance(doc, File.Create(partFile));
+                doc.SetPageSize(targetRect);
+                doc.NewPage();
+                doc.Open();
+                PdfContentByte pCon = writer.DirectContent;
+                using (DrawContextDocument dcd = new DrawContextDocument(pCon))
+                    dcd.DrawImage(part, currentPagePixel);
+            }
+            //part.Save(speicherort + "." + i + "." + j + ".png");
 
+            return partFile;
+        }
     }
 }

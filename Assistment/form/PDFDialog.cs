@@ -120,7 +120,7 @@ namespace Assistment.form
             int a = Drawer.GetDInA();
             int targetDinA = targetDinAFormatBox.UserValue;
             string imageFile = Speicherort + "." + Format;
-            bool targetHoch = Hoch ^ (targetDinA - a % 2 == 1);
+            bool targetHoch = Hoch ^ ((targetDinA - a) % 2 == 1);
 
             SizeF GrosseInMM = new SizeF();
             SizeF alignment = new SizeF(0.5f, 0.5f);

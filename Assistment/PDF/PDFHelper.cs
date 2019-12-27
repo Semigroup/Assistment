@@ -48,6 +48,13 @@ namespace Assistment.PDF
         /// <param name="output"></param>
         /// <param name="pdfFiles"></param>
         public static void Concat(string output, params string[] pdfFiles)
+            => Concat(output, pdfFiles as IEnumerable<string>);
+        /// <summary>
+        /// kein .pdf an output anhängen, macht er automatisch
+        /// </summary>
+        /// <param name="output"></param>
+        /// <param name="pdfFiles"></param>
+        public static void Concat(string output, IEnumerable<string> pdfFiles)
         {
             using (var ms = new MemoryStream())
             {
