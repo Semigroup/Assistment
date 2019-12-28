@@ -45,7 +45,7 @@ namespace MakePDF
                 Console.WriteLine("DrawContextDocument.factor: " + DrawContextDocument.factor);
 
                 string imageFile = args[0];
-                string Speicherort = imageFile.Verzeichnis() + imageFile.FileName() + ".pdf";
+                string Speicherort = imageFile.Verzeichnis() + imageFile.FileName();
                 int targetDinA = int.Parse(args[1]);
                 bool hoch = bool.Parse(args[2]);
                 float widthInMM = float.Parse(args[3]);
@@ -72,11 +72,14 @@ namespace MakePDF
                 Console.WriteLine("count: " + count);
 
                 SizeF totalPixelSize;
-                Bitmap[,] parts;
+                string[,] parts;
                 using (Image image = Image.FromFile(imageFile))
                 {
                     totalPixelSize = image.Size;
-                    parts = ImageSplitter.Split(image, alignment, totalPixelSize, count.Height, count.Width);
+                    parts = ImageSplitter.Split(image, 
+                        alignment, totalPixelSize,
+                        count.Height, count.Width,
+                        imageFile, ImageFormat.Jpeg, "jpg");
                 }
                 SizeF pageSizePixel = totalPixelSize.div(count);
                 Console.WriteLine("pageSizePixel: " + pageSizePixel);
@@ -95,6 +98,8 @@ namespace MakePDF
                 Console.WriteLine("Cleaning Up...");
                 foreach (var item in pages)
                     File.Delete(item);
+                foreach (var item in parts)
+                    File.Delete(item);
             }
             catch (Exception e)
             {
@@ -107,7 +112,7 @@ namespace MakePDF
             }
         }
 
-        static string WritePage(string speicherort, Bitmap part, int i, int j, iTextSharp.text.Rectangle targetRect)
+        static string WritePage(string speicherort, string part, int i, int j, iTextSharp.text.Rectangle targetRect)
         {
             string partFile = speicherort + "." + i + "." + j + ".pdf";
             RectangleF currentPagePixel = new RectangleF(0, 0, targetRect.Width, targetRect.Height).div(DrawContextDocument.factor);
@@ -119,7 +124,8 @@ namespace MakePDF
                 doc.Open();
                 PdfContentByte pCon = writer.DirectContent;
                 using (DrawContextDocument dcd = new DrawContextDocument(pCon))
-                    dcd.DrawImage(part, currentPagePixel);
+                using (Image img = Image.FromFile(part))
+                    dcd.DrawImage(img, currentPagePixel);
             }
             //part.Save(speicherort + "." + i + "." + j + ".png");
 

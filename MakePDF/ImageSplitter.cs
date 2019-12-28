@@ -18,24 +18,32 @@ namespace MakePDF
 {
     public static class ImageSplitter
     {
-        public static Bitmap[,] Split(Image image, SizeF alignment, SizeF bigPixelSize, int rows, int columns)
+        public static string[,] Split(Image image, 
+            SizeF alignment, SizeF bigPixelSize,
+            int rows, int columns,
+            string fileName, ImageFormat partsFormat, string partsEnding)
         {
             PointF offset = bigPixelSize.sub(image.Size).mul(alignment).ToPointF();
-            Bitmap[,] parts = new Bitmap[rows, columns];
+            string[,] parts = new string[rows, columns];
             Size partPixelSize = Round(bigPixelSize.div(columns, rows));
             for (int i = 0; i < rows; i++)
                 for (int j = 0; j < columns; j++)
                 {
-                    Bitmap bitmap = new Bitmap(partPixelSize.Width, partPixelSize.Height);
                     PointF displace = offset.sub(j * partPixelSize.Width, i * partPixelSize.Height);
+                    string name = fileName + "." + i + "." + j + "." + partsEnding;
+
+                    using (Bitmap bitmap = new Bitmap(partPixelSize.Width, partPixelSize.Height))
                     using (Graphics g = bitmap.GetHighGraphics())
+                    {
                         g.DrawImage(image, displace);
-                    parts[i, j] = bitmap;
+                        bitmap.Save(name, partsFormat);
+                    }
+                    parts[i, j] = name;
                 }
             return parts;
         }
 
-       public static Size Round(SizeF fCount)
-           => new Size((int)Math.Round(fCount.Width), (int)Math.Round(fCount.Height));
+        public static Size Round(SizeF fCount)
+            => new Size((int)Math.Round(fCount.Width), (int)Math.Round(fCount.Height));
     }
 }

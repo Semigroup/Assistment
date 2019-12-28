@@ -104,7 +104,7 @@
             this.floatBox2.Name = "floatBox2";
             this.floatBox2.Size = new System.Drawing.Size(38, 18);
             this.floatBox2.TabIndex = 8;
-            this.floatBox2.UserValue = 254F;
+            this.floatBox2.UserValue = 600F;
             this.floatBox2.UserValueMaximum = 100000F;
             this.floatBox2.UserValueMinimum = 1E-08F;
             this.floatBox2.UserValueChanged += new System.EventHandler(this.floatBox2_UserValueChanged);
@@ -116,7 +116,7 @@
             this.floatBox1.Name = "floatBox1";
             this.floatBox1.Size = new System.Drawing.Size(38, 18);
             this.floatBox1.TabIndex = 4;
-            this.floatBox1.UserValue = 10F;
+            this.floatBox1.UserValue = 600F / 25.4F;
             this.floatBox1.UserValueMaximum = 100000F;
             this.floatBox1.UserValueMinimum = 1E-08F;
             this.floatBox1.UserValueChanged += new System.EventHandler(this.floatBox1_UserValueChanged);

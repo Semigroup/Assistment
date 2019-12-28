@@ -42,7 +42,7 @@ namespace Assistment.form
         public ImageFormat Format = ImageFormat.Png;
         public bool PDF = false;
         public bool Hoch = false;
-        public float ppm = 10;
+        public float ppm = 600 / 25.4f;
 
         public IDrawer Drawer;
         public string Speicherort;
@@ -66,10 +66,12 @@ namespace Assistment.form
             RadioButtons = new RadioButton[Formats.Length];
             for (int i = 0; i < RadioButtons.Length; i++)
             {
-                RadioButtons[i] = new RadioButton();
-                RadioButtons[i].Location = new Point(10, 10 + 20 * i);
-                RadioButtons[i].Text = Formats[i].ToString();
-                RadioButtons[i].AutoSize = true;
+                RadioButtons[i] = new RadioButton
+                {
+                    Location = new Point(10, 10 + 20 * i),
+                    Text = Formats[i].ToString(),
+                    AutoSize = true
+                };
                 RadioButtons[i].CheckedChanged += Change;
                 this.Controls.Add(RadioButtons[i]);
             }
