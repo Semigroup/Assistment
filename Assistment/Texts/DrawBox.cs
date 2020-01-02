@@ -10,6 +10,7 @@ using System.IO;
 using Assistment.Drawing;
 using Assistment.Extensions;
 using Assistment.Drawing.LinearAlgebra;
+using System.Drawing.Imaging;
 
 namespace Assistment.Texts
 {
@@ -138,11 +139,17 @@ namespace Assistment.Texts
         {
             CreateImage(name, Min, float.MaxValue, 1, Color.White);
         }
+        public void CreateImage(string name, ImageFormat format)
+        {
+            CreateImage(name, Min, float.MaxValue, 1, Color.White, format);
+        }
         public void CreateImage(string name, float width, float height)
         {
             CreateImage(name, width, height, 1, Color.White);
         }
         public void CreateImage(string name, float width, float height, float Scaling, Color BackColor)
+            => CreateImage(name, width, height, Scaling, BackColor, ImageFormat.Png);
+        public void CreateImage(string name, float width, float height, float Scaling, Color BackColor, ImageFormat format)
         {
             this.Setup(new RectangleF(0, 0, width, 0));
             Size s = Box.Size.mul(Scaling).ToSize();
@@ -155,8 +162,39 @@ namespace Assistment.Texts
                     using (DrawContextGraphics dcg = new DrawContextGraphics(g, BackColor.ToBrush(), height))
                         this.Draw(dcg);
                 }
-                b.Save(name + ".png");
+                b.Save(name + "." + GetImageEnding(format), format);
             }
+        }
+        private static string GetImageEnding(ImageFormat format)
+        {
+            var formats = new Guid[]{
+                ImageFormat.Bmp.Guid ,
+                ImageFormat.Emf.Guid ,
+                ImageFormat.Exif.Guid ,
+                ImageFormat.Gif.Guid ,
+                ImageFormat.Icon.Guid ,
+                ImageFormat.Jpeg.Guid ,
+                ImageFormat.MemoryBmp.Guid ,
+                ImageFormat.Png.Guid ,
+                ImageFormat.Tiff.Guid ,
+                ImageFormat.Wmf.Guid
+            };
+            var endings = new string[]{
+                "bmp" ,
+                "emf" ,
+                "exif" ,
+                "gif" ,
+                "ico" ,
+                "jpg" ,
+                "bmp" ,
+                "png" ,
+                "tif" ,
+                "wmf"
+            };
+            for (int i = 0; i < formats.Length; i++)
+                if (format.Guid == formats[i])
+                    return endings[i];
+            throw new NotImplementedException();
         }
 
         public void CreateDinA3PDF(string name)
