@@ -11,6 +11,7 @@ namespace Assistment.Extensions
     public static class StringExtensions
     {
         public static readonly Regex FILENAME_CLEANER = new Regex(@"\W+");
+        public static readonly Regex FILENAME_CLEANER_SINGLE_CHARACTER = new Regex(@"\W");
 
         /// <summary>
         /// Speichert den String unter name.txt
@@ -113,6 +114,15 @@ namespace Assistment.Extensions
         public static string ToFileName(this string text)
         {
             return FILENAME_CLEANER.Replace(text, " ");
+        }
+        /// <summary>
+        /// Ersetzt alles, was W matcht durch replaceIllegalCharacterByThis
+        /// </summary>
+        /// <param name="text"></param>
+        /// <returns></returns>
+        public static string ToFileName(this string text, string replaceIllegalCharacterByThis)
+        {
+            return FILENAME_CLEANER_SINGLE_CHARACTER.Replace(text, replaceIllegalCharacterByThis);
         }
         /// <summary>
         /// Falls bereits eine Datei mit diesem Path vorhanden ist, wird der FileName angepasst, bis er nicht mehr mit einer anderen Datei kollidiert.
