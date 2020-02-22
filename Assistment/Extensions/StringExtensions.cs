@@ -6,6 +6,7 @@ using System.IO;
 using System.Drawing;
 using System.Text.RegularExpressions;
 
+
 namespace Assistment.Extensions
 {
     public static class StringExtensions
