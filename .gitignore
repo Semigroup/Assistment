@@ -230,3 +230,4 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 Assistment/Assistment.csproj
+Assistment/Google/KeyGenerator.cs
