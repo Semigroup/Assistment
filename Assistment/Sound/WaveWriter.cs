@@ -116,7 +116,7 @@ namespace Assistment.Sound
         }
         /// <summary>
         /// data = UInt32[samples][channels]
-        /// <para>nur benutzen, falls bitsProSample == 16</para>
+        /// <para>nur benutzen, falls bitsProSample == 32</para>
         /// </summary>
         /// <param name="data"></param>
         public void WriteData(int[,] data)
