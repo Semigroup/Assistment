@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Linq;
 using System.Drawing;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Runtime.InteropServices;
 
 using Assistment.Extensions;
 
@@ -210,6 +213,19 @@ namespace Assistment.Texts
     //}
     public class FontGraphicsMeasurer : xFont
     {
+        //[DllImport("User32.dll")]
+        //static extern int SetThreadDpiAwarenessContext(int PROCESS_DPI_AWARENESS);
+        [DllImport("User32.dll")]
+        static extern int GetDpiForSystem();
+
+        // According to https://msdn.microsoft.com/en-us/library/windows/desktop/dn280512(v=vs.85).aspx
+        private enum DpiAwareness
+        {
+            None = 0,
+            SystemAware = 1,
+            PerMonitorAware = 2
+        }
+
         private Bitmap b;
         private Graphics g;
         private Font Font;
@@ -248,10 +264,48 @@ namespace Assistment.Texts
             FontItalic = new Font(Font, FontStyle.Italic);
             FontBoldAndItalic = new Font(Font, FontStyle.Italic | FontStyle.Bold);
 
-            Zeilenabstand = Font.Height;
             WhiteSpace = Font.Size / 2;//g.MeasureString(" ", Font).Width;//xMass(' ');
             CharToleranz = 0;// Font.Size / 2;
+            Zeilenabstand = Font.GetHeight() * 96f / GetDpiForSystem(); //Font.Height depends on current DPI Awareness
+            //DetermineLineHeight(schrift, grose);
+            Console.Out.WriteLine(schrift + ", " + grose + " : " + Zeilenabstand + " vs " + Font.Height + " vs " + Font.GetHeight());
+            Console.Out.WriteLine(GetDpiForSystem());
         }
+
+        //private void DetermineLineHeight(string schrift, float grose)
+        //{
+        //    //Doesn work... Thread does not use its own DPI for Font.LineHeight
+        //    Thread thread = new Thread(() =>
+        //      {
+        //          SetThreadDpiAwarenessContext((int)DpiAwareness.None);
+        //          Console.Out.WriteLine(GetDpiForSystem());
+
+        //          float lineHeight = 0;
+        //          Bitmap b = new Bitmap(100, 100);
+        //          Graphics g = b.GetHighGraphics();
+        //          g.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAlias;
+        //          Font font = new Font(schrift, grose);
+        //          lineHeight = font.GetHeight();
+        //          Console.Out.WriteLine(schrift + ", " + grose + " --> " + font.GetHeight());
+        //      });
+        //    thread.Start();
+        //    thread.Join();
+        //    //Task<float> task = Task.Factory.StartNew(() =>
+        //    //{
+        //    //    SetThreadDpiAwarenessContext((int)DpiAwareness.None);
+
+        //    //    float lineHeight = 0;
+        //    //    Bitmap b = new Bitmap(100, 100);
+        //    //    Graphics g = b.GetHighGraphics();
+        //    //    g.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAlias;
+        //    //    Font font = new Font(schrift, grose);
+        //    //    lineHeight = font.GetHeight();
+        //    //    Console.Out.WriteLine(schrift + ", " + grose + " --> " + font.GetHeight());
+        //    //    return lineHeight;
+        //    //});
+        //    //task.Wait();
+        //    //this.Zeilenabstand = task.Result;
+        //}
 
         public Font GetFont()
         {
