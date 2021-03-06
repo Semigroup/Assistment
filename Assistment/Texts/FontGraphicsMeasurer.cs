@@ -268,8 +268,8 @@ namespace Assistment.Texts
             CharToleranz = 0;// Font.Size / 2;
             Zeilenabstand = Font.GetHeight() * 96f / GetDpiForSystem(); //Font.Height depends on current DPI Awareness
             //DetermineLineHeight(schrift, grose);
-            Console.Out.WriteLine(schrift + ", " + grose + " : " + Zeilenabstand + " vs " + Font.Height + " vs " + Font.GetHeight());
-            Console.Out.WriteLine(GetDpiForSystem());
+            //Console.Out.WriteLine(schrift + ", " + grose + " : " + Zeilenabstand + " vs " + Font.Height + " vs " + Font.GetHeight());
+            //Console.Out.WriteLine(GetDpiForSystem());
         }
 
         //private void DetermineLineHeight(string schrift, float grose)
