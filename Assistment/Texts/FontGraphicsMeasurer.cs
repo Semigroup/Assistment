@@ -226,8 +226,8 @@ namespace Assistment.Texts
             PerMonitorAware = 2
         }
 
-        private Bitmap b;
-        private Graphics g;
+        private Bitmap Bitmap;
+        private Graphics Graphics;
         private Font Font;
         private Font FontBold;
         private Font FontItalic;
@@ -255,9 +255,9 @@ namespace Assistment.Texts
             //    grose *= 1.25f;// 1.248f;
             //}
 
-            b = new Bitmap(100, 100);
-            g = b.GetHighGraphics();
-            g.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAlias;
+            Bitmap = new Bitmap(100, 100);
+            Graphics = Bitmap.GetHighGraphics();
+            Graphics.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAlias;
 
             Font = new Font(schrift, grose);
             FontBold = new Font(Font, FontStyle.Bold);
@@ -378,7 +378,7 @@ namespace Assistment.Texts
         }
         public SizeF Size(string s)
         {
-            SizeF size = g.MeasureString(s, Font, int.MaxValue, StringFormat.GenericTypographic);
+            SizeF size = Graphics.MeasureString(s, Font, int.MaxValue, StringFormat.GenericTypographic);
             size.Width += s.Count(c => c == ' ') * WhiteSpace;
             return size;
         }
