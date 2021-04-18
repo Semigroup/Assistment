@@ -24,6 +24,15 @@ namespace Assistment.Extensions
             File.WriteAllText(name + ".txt", text);
         }
         /// <summary>
+        /// Speichert den String unter name.extension
+        /// </summary>
+        /// <param name="text"></param>
+        /// <param name="name"></param>
+        public static void Save(this string text, string name, string extension)
+        {
+            File.WriteAllText(name + "."+ extension, text);
+        }
+        /// <summary>
         /// Speichert den String unter test.txt
         /// </summary>
         /// <param name="text"></param>
