@@ -34,14 +34,16 @@ namespace Assistment.form.Internet
         private CseResource.ListRequest List;
         public Button MoreResults { get; set; }
         public DialogResult Dialog { get; set; }
-        private ScrollBox ScrollBox;
-        private PictureBox PictureBox;
+        private ScrollBox ScrollBox = new ScrollBox();
+        private PictureBox PictureBox = new PictureBox();
 
         public float PPM => ppmBox1.Ppm;
         public SizeF DesiredSize => pointFBox1.UserSize;
 
         public InternetChoosePictureForm()
         {
+            ScrollBox.SetControl(PictureBox);
+
             InitializeComponent();
             Search = ServiceProvider.GetSearchService();
 
@@ -53,9 +55,6 @@ namespace Assistment.form.Internet
             MoreResults.Click += MoreResults_Click;
             this.Dialog = new DialogResult();
 
-            ScrollBox = new ScrollBox();
-            PictureBox = new PictureBox();
-            ScrollBox.SetControl(PictureBox);
             ScrollBox.Top = scrollList1.Top;
             this.Controls.Add(ScrollBox);
             InternetChoosePictureForm_SizeChanged(this, new EventArgs());

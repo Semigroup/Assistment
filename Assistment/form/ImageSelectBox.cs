@@ -51,6 +51,7 @@ namespace Assistment.form
                 SetPath(value);
             }
         }
+
         public event EventHandler ImageChanged = delegate { };
         public event EventHandler InvalidChange = delegate { };
         private Graphics g;
@@ -83,7 +84,7 @@ namespace Assistment.form
             g = Graphics.FromImage(label1.Image);
             SetPath(null);
             internetResultsDirectory = Path.GetTempPath();
-            this.InternetButton.Enabled = true;
+            this.InternetButton.Enabled = false; //true
         }
         private void SetPath(string path)
         {

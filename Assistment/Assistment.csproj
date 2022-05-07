@@ -250,6 +250,12 @@
     <Compile Include="form\EnumBox.Designer.cs">
       <DependentUpon>EnumBox.cs</DependentUpon>
     </Compile>
+    <Compile Include="form\FileBox.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="form\FileBox.Designer.cs">
+      <DependentUpon>FileBox.cs</DependentUpon>
+    </Compile>
     <Compile Include="form\FloatBox.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -453,6 +459,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="form\EnumBox.resx">
       <DependentUpon>EnumBox.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="form\FileBox.resx">
+      <DependentUpon>FileBox.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="form\FloatBox.resx">
       <DependentUpon>FloatBox.cs</DependentUpon>

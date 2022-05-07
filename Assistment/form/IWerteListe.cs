@@ -255,5 +255,9 @@ namespace Assistment.form
         {
             AddWertePaar(WerteListe, new RectangleFBox(), value, Name);
         }
+        public static void AddFileBox(this IWerteListe WerteListe, string file, string Name)
+        {
+            AddWertePaar(WerteListe, new FileBox(), file, Name);
+        }
     }
 }

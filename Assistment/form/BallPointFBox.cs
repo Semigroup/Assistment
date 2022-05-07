@@ -35,6 +35,7 @@ namespace Assistment.form
 
         private PointF imgSize = new PointF(200, 200);
         private PointF offPoint { get { return new PointF(200, 200).sub(imgSize).mul(0.5f); } }
+        private PointF KorrekturWert = new PointF(50, 50); //wegen 4k HD scaling notwendig?
         private Graphics g;
 
         private bool Working = false;
@@ -85,10 +86,14 @@ namespace Assistment.form
 
         private void label1_MouseClick(object sender, MouseEventArgs e)
         {
-            if (e.Button == System.Windows.Forms.MouseButtons.Left)
+            if (e.Button == MouseButtons.Left)
             {
                 Working = true;
-                pointFBox1.UserPoint = ((PointF)e.Location).sub(offPoint).div(imgSize);
+                pointFBox1.UserPoint = ((PointF)e.Location).sub(KorrekturWert).sub(offPoint).div(imgSize);
+                Console.WriteLine(e.Location);
+                Console.WriteLine(imgSize);
+                Console.WriteLine(offPoint);
+                Console.WriteLine(pointFBox1.UserPoint);
                 Working = false;
                 OnUserValueChanged(this, e);
             }

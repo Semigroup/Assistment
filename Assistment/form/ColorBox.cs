@@ -9,7 +9,7 @@ using System.Windows.Forms;
 
 namespace Assistment.form
 {
-    public partial class ColorBox : UserControl,IWertBox<Color>
+    public partial class ColorBox : UserControl, IWertBox<Color>
     {
         public event EventHandler ColorChanged = delegate { };
         public event EventHandler InvalidChange = delegate { };
