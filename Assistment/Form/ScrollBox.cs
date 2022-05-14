@@ -42,6 +42,8 @@ namespace Assistment.form
             hScrollBar = new HScrollBar();
             hScrollBar.ValueChanged += new EventHandler(AdjustControlLocation);
             hActive = false;
+
+            this.MouseWheel += ScrollBox_MouseWheel;
         }
 
         public ScrollBox(Control Control) : this()
@@ -124,6 +126,13 @@ namespace Assistment.form
             if (hActive)
                 hScrollBar.Maximum = Control.Width;
             base.Refresh();
+        }
+
+        private void ScrollBox_MouseWheel(object sender, MouseEventArgs e)
+        {
+            var newValue = this.vScrollBar.Value - e.Delta * this.vScrollBar.SmallChange;
+            this.vScrollBar.Value = Math.Max(this.vScrollBar.Minimum,
+                Math.Min(this.vScrollBar.Maximum - this.vScrollBar.LargeChange, newValue));
         }
     }
 }

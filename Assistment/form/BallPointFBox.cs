@@ -35,7 +35,8 @@ namespace Assistment.form
 
         private PointF imgSize = new PointF(200, 200);
         private PointF offPoint { get { return new PointF(200, 200).sub(imgSize).mul(0.5f); } }
-        private PointF KorrekturWert = new PointF(50, 50); //wegen 4k HD scaling notwendig?
+        private PointF KorrekturWert = new PointF(0, 0);// new PointF(50, 50); //wegen 4k HD scaling notwendig?
+        private PointF MousePoint;
         private Graphics g;
 
         private bool Working = false;
@@ -90,10 +91,7 @@ namespace Assistment.form
             {
                 Working = true;
                 pointFBox1.UserPoint = ((PointF)e.Location).sub(KorrekturWert).sub(offPoint).div(imgSize);
-                Console.WriteLine(e.Location);
-                Console.WriteLine(imgSize);
-                Console.WriteLine(offPoint);
-                Console.WriteLine(pointFBox1.UserPoint);
+                this.MousePoint = e.Location;
                 Working = false;
                 OnUserValueChanged(this, e);
             }
@@ -105,10 +103,11 @@ namespace Assistment.form
             g.Clear(Color.White);
             if (image != null)
                 g.DrawImage(image, new RectangleF(offPoint, imgSize.ToSize()));
-            PointF Target = offPoint.add(pointFBox1.UserPoint.mul(imgSize));
             g.FillEllipse(BallColor,
                 new RectangleF(
-                Target.sub(radius, radius), new SizeF(2, 2).mul(radius)));
+                MousePoint
+                .sub(radius, radius),
+                new SizeF(2, 2).mul(radius)));
             label1.Refresh();
         }
 
@@ -116,6 +115,7 @@ namespace Assistment.form
         {
             if (Working)
                 return;
+            this.MousePoint = offPoint.add(pointFBox1.UserPoint.mul(imgSize));
             UserValueChanged(sender, e);
         }
         protected void OnInvalidChanged(object sender, EventArgs e)
