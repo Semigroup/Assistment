@@ -60,7 +60,17 @@ namespace Assistment.PDF
             {
                 using (var document = new Document())
                 {
-                    PdfCopy writer = new PdfCopy(document, ms);
+                    PdfCopy writer = null;
+                    // TODO
+                    // replace itextsharp by something better...
+                    try
+                    {
+                        writer = new PdfCopy(document, ms);
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine(e.ToString());
+                    }
                     document.Open();
                     foreach (var item in pdfFiles)
                         using (PdfReader reader = new PdfReader(item))
