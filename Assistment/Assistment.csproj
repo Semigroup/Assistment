@@ -250,6 +250,12 @@
     <Compile Include="form\EnumBox.Designer.cs">
       <DependentUpon>EnumBox.cs</DependentUpon>
     </Compile>
+    <Compile Include="form\DirectoryBox.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="form\DirectoryBox.Designer.cs">
+      <DependentUpon>DirectoryBox.cs</DependentUpon>
+    </Compile>
     <Compile Include="form\FileBox.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -358,6 +364,11 @@
     <Compile Include="form\StringBox.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="form\WerteListe.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="form\WerteListeErweiterer.cs" />
+    <Compile Include="form\WertEventArgs.cs" />
     <Compile Include="form\WertPaar.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -459,6 +470,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="form\EnumBox.resx">
       <DependentUpon>EnumBox.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="form\DirectoryBox.resx">
+      <DependentUpon>DirectoryBox.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="form\FileBox.resx">
       <DependentUpon>FileBox.cs</DependentUpon>
