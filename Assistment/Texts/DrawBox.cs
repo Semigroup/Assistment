@@ -83,6 +83,12 @@ namespace Assistment.Texts
         {
             throw new NotImplementedException();
         }
+        public string Explain()
+        {
+            StringBuilder sb = new StringBuilder();
+            InStringBuilder(sb, "");
+            return sb.ToString();
+        }
         public virtual void Move(PointF ToMove)
         {
             this.Box = new RectangleF(Box.Location.add(ToMove), Box.Size);

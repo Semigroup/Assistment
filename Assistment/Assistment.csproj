@@ -422,6 +422,7 @@
     <Compile Include="FormsAlt\FormContext.cs" />
     <Compile Include="FormsAlt\Klappbox.cs" />
     <Compile Include="FormsAlt\Mosaik.cs" />
+    <Compile Include="Texts\Fonts\MonoFont.cs" />
     <Compile Include="Texts\GeometryBox.cs" />
     <Compile Include="Texts\ImageBox.cs" />
     <Compile Include="Texts\LayerBox.cs" />

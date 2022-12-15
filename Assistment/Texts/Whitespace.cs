@@ -1,5 +1,6 @@
 ﻿using System.Text;
 using System.Drawing;
+using System;
 
 namespace Assistment.Texts
 {
@@ -47,7 +48,7 @@ namespace Assistment.Texts
         }
         public override string ToString()
         {
-            return (Box.Width > 0 ? " " : "") + (EndsLine ? "\r\n" : "");
+            return (OriginalBox.Width > 0 ? " " : "") + (EndsLine ? "\r\n" : "");
         }
     }
 }

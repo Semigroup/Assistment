@@ -11,7 +11,8 @@ using System.Diagnostics;
 namespace Assistment.Texts
 {
     /// <summary>
-    /// A Text uses a simple algorithm to order wordblocks in a line, so it assumes that every word it contains has a fixed width and a fixed space.
+    /// A Text uses a simple algorithm to order wordblocks in a line, so it assumes that every 
+    /// word it contains has a fixed width and a fixed space.
     /// </summary>
     public class Text : PreText
     {
@@ -31,7 +32,7 @@ namespace Assistment.Texts
 
         }
 
-        protected override void Assigne(PreText.Line Line)
+        protected override void Assigne(Line Line)
         {
             Line.SimpleAssignment();
         }
