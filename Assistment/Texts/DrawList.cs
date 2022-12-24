@@ -18,18 +18,18 @@ namespace Assistment.Texts
         {
 
         }
-        public DrawList(xFont preferedFont)
+        public DrawList(IFontMeasurer preferedFont)
         {
             this.PreferedFont = preferedFont;
         }
-        public DrawList(xFont preferedFont, IEnumerable<string> Zeilen)
+        public DrawList(IFontMeasurer preferedFont, IEnumerable<string> Zeilen)
         {
             this.PreferedFont = preferedFont;
 
             foreach (var item in Zeilen)
                 this.AddWort(item);
         }
-        public DrawList(xFont preferedFont, params string[] Zeilen)
+        public DrawList(IFontMeasurer preferedFont, params string[] Zeilen)
             : this(preferedFont, (IEnumerable<string>)Zeilen)
         {
         }

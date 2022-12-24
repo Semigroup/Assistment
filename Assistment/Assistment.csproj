@@ -403,12 +403,11 @@
     <Compile Include="Texts\DrawContextGraphics.cs" />
     <Compile Include="Texts\DrawContextGraphicsFlip.cs" />
     <Compile Include="Texts\DrawList.cs" />
-    <Compile Include="Texts\DummyFont.cs" />
     <Compile Include="Texts\DynamicImageBox.cs" />
     <Compile Include="Texts\FixedBox.cs" />
-    <Compile Include="Texts\FontErweiterer.cs" />
-    <Compile Include="Texts\FontGraphicsMeasurer.cs" />
-    <Compile Include="Texts\FontMeasurer.cs" />
+    <Compile Include="Texts\Fonts\FontExtender.cs" />
+    <Compile Include="Texts\Fonts\FontGraphicsMeasurer.cs" />
+    <Compile Include="Texts\Fonts\IFontMeasurer.cs" />
     <Compile Include="FormsAlt\AlignedDrawForm.cs" />
     <Compile Include="FormsAlt\DoubleBufferedForm.cs">
       <SubType>Form</SubType>

@@ -15,7 +15,7 @@ namespace Assistment.Texts
     /// </summary>
     public class CString : PreText
     {
-        public CString(xFont font)
+        public CString(IFontMeasurer font)
            : this()
         {
             this.PreferedFont = font;

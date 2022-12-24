@@ -16,7 +16,7 @@ namespace Assistment.Texts
 {
     public abstract class DrawBox
     {
-        public static readonly xFont StandardFont = new FontGraphicsMeasurer("Calibri", 11);
+        public static readonly IFontMeasurer StandardFont = new FontGraphicsMeasurer("Calibri", 11);
 
         public RectangleF Box;
         public bool EndsLine { get; set; }
@@ -278,7 +278,7 @@ namespace Assistment.Texts
         /// <param name="font"></param>
         /// <param name="style"></param>
         /// <param name="pen"></param>
-        public virtual void ForceWordStyle(Brush brush = null, xFont font = null, byte? style = null, Pen pen = null)
+        public virtual void ForceWordStyle(Brush brush = null, IFontMeasurer font = null, byte? style = null, Pen pen = null)
         {
         }
 

@@ -20,7 +20,7 @@ namespace Assistment.Texts
             : base()
         {
         }
-        public Text(string Regex, xFont Font)
+        public Text(string Regex, IFontMeasurer Font)
             : this()
         {
             this.PreferedFont = Font;

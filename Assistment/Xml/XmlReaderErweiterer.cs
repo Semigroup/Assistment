@@ -105,7 +105,7 @@ namespace Assistment.Xml
                 reader.GetFloat(name + "_Height"));
         }
 
-        public static xFont GetFontX(this XmlReader reader, string name)
+        public static IFontMeasurer GetFontX(this XmlReader reader, string name)
         {
             return new FontGraphicsMeasurer(reader.GetString(name), reader.GetFloat(name + "_Size"));
         }

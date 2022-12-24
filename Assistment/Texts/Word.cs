@@ -24,7 +24,7 @@ namespace Assistment.Texts
         /// <para>[6:linksgestrichen][5:rechtsgestrichen][4:(overline)quer][3:durchgestrichen][2:unterstrichen][1:kursiv][0:fett]</para>
         /// </summary>
         private byte style;
-        private xFont font;
+        private IFontMeasurer font;
         private Pen pen;
         /// <summary>
         /// 
@@ -35,14 +35,14 @@ namespace Assistment.Texts
         /// <param name="style">von höherwertig (rechts) nach niederwertig (links)
         /// <para>[6:linksgestrichen][5:rechtsgestrichen][4:(overline)quer][3:durchgestrichen][2:unterstrichen][1:kursiv][0:fett]</para></param>
         /// <param name="pen"></param>
-        public Word(string text, Brush brush, xFont font, byte style, Pen pen)
+        public Word(string text, Brush brush, IFontMeasurer font, byte style, Pen pen)
         {
             this.text = text;
             this.brush = brush;
             this.font = font;
             this.style = style;
             this.pen = pen;
-            this.Box = new RectangleF(0, 0, font.XMass(text), font.YMass(text));
+            this.Box = new RectangleF(new PointF(), font.Size(text, style));
         }
 
         public override float Space => this.Box.Width * this.Box.Height;
@@ -104,7 +104,7 @@ namespace Assistment.Texts
             return text;
         }
 
-        public override void ForceWordStyle(Brush brush, xFont font, byte? style, Pen pen)
+        public override void ForceWordStyle(Brush brush, IFontMeasurer font, byte? style, Pen pen)
         {
             if (brush != null)
                 this.brush = brush;

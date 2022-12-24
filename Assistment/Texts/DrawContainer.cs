@@ -16,7 +16,7 @@ namespace Assistment.Texts
     public abstract class DrawContainer : DrawBox, ICollection<DrawBox>
     {
         public float Alignment = 0;
-        public xFont PreferedFont = StandardFont;
+        public IFontMeasurer PreferedFont = StandardFont;
 
         public abstract int Count { get; }
 
@@ -52,19 +52,19 @@ namespace Assistment.Texts
         {
             this.AddWort(text.ToString(), Brushes.Black, PreferedFont, style, pen);
         }
-        public void AddWort(object text, xFont font)
+        public void AddWort(object text, IFontMeasurer font)
         {
             this.AddWort(text.ToString(), Brushes.Black, font, 0, Pens.Black);
         }
-        public void AddWort(object text, xFont font, Pen pen)
+        public void AddWort(object text, IFontMeasurer font, Pen pen)
         {
             this.AddWort(text.ToString(), Brushes.Black, font, 0, pen);
         }
-        public void AddWort(object text, xFont font, byte style)
+        public void AddWort(object text, IFontMeasurer font, byte style)
         {
             this.AddWort(text.ToString(), Brushes.Black, font, style, Pens.Black);
         }
-        public void AddWort(object text, xFont font, byte style, Pen pen)
+        public void AddWort(object text, IFontMeasurer font, byte style, Pen pen)
         {
             this.AddWort(text.ToString(), Brushes.Black, font, style, pen);
         }
@@ -84,19 +84,19 @@ namespace Assistment.Texts
         {
             this.AddWort(text.ToString(), brush, PreferedFont, style, pen);
         }
-        public void AddWort(object text, Brush brush, xFont font)
+        public void AddWort(object text, Brush brush, IFontMeasurer font)
         {
             this.AddWort(text.ToString(), brush, font, 0, Pens.Black);
         }
-        public void AddWort(object text, Brush brush, xFont font, Pen pen)
+        public void AddWort(object text, Brush brush, IFontMeasurer font, Pen pen)
         {
             this.AddWort(text.ToString(), brush, font, 0, pen);
         }
-        public void AddWort(object text, Brush brush, xFont font, byte style)
+        public void AddWort(object text, Brush brush, IFontMeasurer font, byte style)
         {
             this.AddWort(text.ToString(), brush, font, style, Pens.Black);
         }
-        public void AddWort(object text, Brush brush, xFont font, byte style, Pen pen)
+        public void AddWort(object text, Brush brush, IFontMeasurer font, byte style, Pen pen)
         {
             this.Add(new Word(text.ToString(), brush, font, style, pen));
         }
@@ -116,19 +116,19 @@ namespace Assistment.Texts
         {
             this.AddWort(text, Brushes.Black, PreferedFont, style, pen);
         }
-        public void AddWort(string text, xFont font)
+        public void AddWort(string text, IFontMeasurer font)
         {
             this.AddWort(text, Brushes.Black, font, 0, Pens.Black);
         }
-        public void AddWort(string text, xFont font, Pen pen)
+        public void AddWort(string text, IFontMeasurer font, Pen pen)
         {
             this.AddWort(text, Brushes.Black, font, 0, pen);
         }
-        public void AddWort(string text, xFont font, byte style)
+        public void AddWort(string text, IFontMeasurer font, byte style)
         {
             this.AddWort(text, Brushes.Black, font, style, Pens.Black);
         }
-        public void AddWort(string text, xFont font, byte style, Pen pen)
+        public void AddWort(string text, IFontMeasurer font, byte style, Pen pen)
         {
             this.AddWort(text, Brushes.Black, font, style, pen);
         }
@@ -148,19 +148,19 @@ namespace Assistment.Texts
         {
             this.AddWort(text, brush, PreferedFont, style, pen);
         }
-        public void AddWort(string text, Brush brush, xFont font)
+        public void AddWort(string text, Brush brush, IFontMeasurer font)
         {
             this.AddWort(text, brush, font, 0, Pens.Black);
         }
-        public void AddWort(string text, Brush brush, xFont font, Pen pen)
+        public void AddWort(string text, Brush brush, IFontMeasurer font, Pen pen)
         {
             this.AddWort(text, brush, font, 0, pen);
         }
-        public void AddWort(string text, Brush brush, xFont font, byte style)
+        public void AddWort(string text, Brush brush, IFontMeasurer font, byte style)
         {
             this.AddWort(text, brush, font, style, Pens.Black);
         }
-        public void AddWort(string text, Brush brush, xFont font, byte style, Pen pen)
+        public void AddWort(string text, Brush brush, IFontMeasurer font, byte style, Pen pen)
         {
             this.Add(new Word(text, brush, font, style, pen));
         }
@@ -188,7 +188,7 @@ namespace Assistment.Texts
         {
             this.AddWhitespace(n * PreferedFont.GetWhitespace(), PreferedFont.GetZeilenabstand());
         }
-        public void AddWhitespace(xFont font)
+        public void AddWhitespace(IFontMeasurer font)
         {
             this.Add(new Whitespace(font.GetWhitespace(), font.GetZeilenabstand(), false));
         }
@@ -234,7 +234,7 @@ namespace Assistment.Texts
         /// </summary>
         /// <param name="regex"></param>
         /// <param name="font"></param>
-        public void AddRegex(string regex, xFont font)
+        public void AddRegex(string regex, IFontMeasurer font)
         {
             int i = 0;
             ///anfang substring
@@ -723,7 +723,7 @@ namespace Assistment.Texts
         {
             return (Text)text;
         }
-        public override void ForceWordStyle(Brush brush = null, xFont font = null, byte? style = null, Pen pen = null)
+        public override void ForceWordStyle(Brush brush = null, IFontMeasurer font = null, byte? style = null, Pen pen = null)
         {
             foreach (var item in this)
                 item.ForceWordStyle(brush, font, style, pen);

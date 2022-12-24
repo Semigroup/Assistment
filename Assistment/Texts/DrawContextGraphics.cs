@@ -39,7 +39,7 @@ namespace Assistment.Texts
         }
         public override void DrawString(string text, Font font, Brush brush, float x, float y, float height)
         {
-            g.DrawString(text, font, brush, x - font.SizeInPoints * 0.2f, y);
+            g.DrawString(text, font, brush, x - font.SizeInPoints * 0.2f, y, FontGraphicsMeasurer.Format);
         }
         public override void DrawImage(Image img, float x, float y)
         {

@@ -51,7 +51,7 @@ namespace Assistment.Texts
         {
             drawBox.Draw(con);
         }
-        public override void ForceWordStyle(Brush brush = null, xFont font = null, byte? style = null, Pen pen = null)
+        public override void ForceWordStyle(Brush brush = null, IFontMeasurer font = null, byte? style = null, Pen pen = null)
         {
             drawBox.ForceWordStyle(brush, font, style, pen);
         }

@@ -17,7 +17,7 @@ namespace Assistment.Testing
         float textWidth;
         bool trace;
         Graphics g;
-        xFont font;
+        IFontMeasurer font;
 
         public TestForm() : this(new CString())
         {

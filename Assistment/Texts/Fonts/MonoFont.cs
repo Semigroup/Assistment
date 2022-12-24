@@ -12,7 +12,7 @@ namespace Assistment.Texts.Fonts
     /// Simple, Abstract Font that assigns to each character the same height and width.
     /// Does not provide Fonts!
     /// </summary>
-    public class MonoFont : xFont
+    public class MonoFont : IFontMeasurer
     {
         public float SymbolWidth;
         public float SymbolHeight;
@@ -60,7 +60,7 @@ namespace Assistment.Texts.Fonts
             throw new NotSupportedException();
         }
 
-        public xFont GetFontOfSize(float size)
+        public IFontMeasurer GetFontOfSize(float size)
             => new MonoFont(SymbolWidth * size, SymbolHeight * size);
 
         public float GetGeviertgrose()
@@ -72,22 +72,54 @@ namespace Assistment.Texts.Fonts
         public float GetZeilenabstand()
             => SymbolHeight;
 
-        public SizeF Size(char c)
+        public SizeF Size(char c, byte style)
             => new SizeF(SymbolWidth, SymbolHeight);
 
-        public SizeF Size(string s)
+        public SizeF Size(string s, byte style)
             => new SizeF(SymbolWidth * s.Length, SymbolHeight);
 
-        public float XMass(char c)
+        public float XMass(char c, byte style)
             => SymbolWidth;
 
-        public float XMass(string s)
+        public float XMass(string s, byte style)
             => SymbolWidth * s.Length;
 
-        public float YMass(char c)
+        public float YMass(char c, byte style)
             => SymbolHeight;
 
-        public float YMass(string s)
+        public float YMass(string s, byte style)
             => SymbolHeight;
+
+        public float XMass(char c, FontStyle style)
+            => XMass(c, (byte)style);
+        public float XMass(string s, FontStyle style)
+            => XMass(s, (byte)style);
+        public float YMass(char c, FontStyle style)
+            => YMass(c, (byte)style);
+        public float YMass(string s, FontStyle style)
+            => YMass(s, (byte)style);
+        public SizeF Size(char c, FontStyle style)
+            => Size(c, (byte)style);
+        public SizeF Size(string s, FontStyle style)
+            => Size(s, (byte)style);
+
+        public Font GetFont(FontStyle style)
+            => GetFont((byte)style);
+        public Font GetFont(byte style)
+        {
+            switch (style & 3)
+            {
+                case 0:
+                    return GetFont();
+                case 1:
+                    return GetFontBold();
+                case 2:
+                    return GetFontItalic();
+                case 3:
+                    return GetFontBoldAndItalic();
+                default:
+                    throw new NotImplementedException();
+            }
+        }
     }
 }
