@@ -220,7 +220,7 @@ namespace Assistment.Forms
         }
         public override void DrawString(string text, Font font, Brush brush, float x, float y, float height)
         {
-            g.DrawString(text, font, brush, x, y);
+            g.DrawString(text, font, brush, x, y, FontGraphicsMeasurer.Format);
         }
         public override void DrawImage(Image img, float x, float y)
         {

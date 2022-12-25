@@ -45,7 +45,7 @@ namespace Assistment.Texts
             if (FlippedX)
             {
                 FlipX();
-                SizeF size = g.MeasureString(text, font);
+                SizeF size = g.MeasureString(text, font, int.MaxValue, FontGraphicsMeasurer.Format);
                 x = Frame.Right - x - size.Width;
                 base.DrawString(text, font, brush, x, y, height);
 
