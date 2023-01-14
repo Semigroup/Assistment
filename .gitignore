@@ -231,3 +231,7 @@ $RECYCLE.BIN/
 *.lnk
 Assistment/Assistment.csproj
 Assistment/Google/KeyGenerator.cs
+
+
+.vs/
+
