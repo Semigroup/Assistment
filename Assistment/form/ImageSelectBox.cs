@@ -12,8 +12,6 @@ using System.Net;
 
 using Assistment.Extensions;
 
-using Assistment.form.Internet;
-
 using Assistment.Drawing.LinearAlgebra;
 
 namespace Assistment.form
@@ -24,20 +22,6 @@ namespace Assistment.form
         /// Maximum für Image.Width * Image.Height
         /// </summary>
         public int MaximumImageSize { get; set; }
-        private string internetResultsDirectory;
-        /// <summary>
-        /// Bilder aus dem Internet werden hier abgespeichert.
-        /// <para>Ist dieser Wert null (Defaultwert), so wird der Internet-Button ausgegraut.</para>
-        /// </summary>
-        public string InternetResultsDirectory
-        {
-            get { return internetResultsDirectory; }
-            set
-            {
-                internetResultsDirectory = value;
-                InternetButton.Enabled = value != null;
-            }
-        }
 
         private string path;
         public string ImagePath
@@ -56,10 +40,6 @@ namespace Assistment.form
         public event EventHandler InvalidChange = delegate { };
         private Graphics g;
         private bool valid = true;
-        /// <summary>
-        /// in mm
-        /// </summary>
-        public SizeF DesiredInternetSize { get; set; } = new SizeF(10, 10);
 
         private bool showImage = true;
         public bool ShowImage
@@ -72,7 +52,6 @@ namespace Assistment.form
                 int y = value ? 147 : 0;
                 button1.Location = new Point(button1.Left, y);
                 button2.Location = new Point(button2.Left, y);
-                InternetButton.Location = new Point(InternetButton.Left, y);
                 this.Height = button1.Bottom;
             }
         }
@@ -83,8 +62,6 @@ namespace Assistment.form
             label1.Image = new Bitmap(label1.Width, label1.Height);
             g = Graphics.FromImage(label1.Image);
             SetPath(null);
-            internetResultsDirectory = Path.GetTempPath();
-            this.InternetButton.Enabled = false; //true
         }
         private void SetPath(string path)
         {
@@ -172,38 +149,6 @@ namespace Assistment.form
             this.Dispose();
             if (g != null)
                 g.Dispose();
-        }
-        private void InternetButton_Click(object sender, EventArgs e)
-        {
-            using (InternetChoosePictureForm Form = new InternetChoosePictureForm())
-            {
-                Form.SetDesiredSize(DesiredInternetSize);
-                Form.ShowDialog();
-                if (Form.Dialog.Success)
-                    using (WebClient myClient = new WebClient())
-                    {
-                        Google.Apis.Customsearch.v1.Data.Result Result = Form.Dialog.Result;
-                        if (!Directory.Exists(internetResultsDirectory))
-                            Directory.CreateDirectory(internetResultsDirectory);
-                        string path = Path.Combine(internetResultsDirectory,
-                            Result.Title.ToFileName() + Path.GetExtension(Result.Link));
-                        path = path.DecollideFilename();
-                        try
-                        {
-                            myClient.DownloadFile(Result.Link, path);
-                        }
-                        catch (Exception)
-                        {
-                            MessageBox.Show("Das Bild bei der Adresse\r\n"
-                                + Result.Link
-                                + "\r\nkonnte nicht am Ort\r\n"
-                                + path
-                                + "\r\ngespeichert werden.");
-                            return;
-                        }
-                        this.ImagePath = path;
-                    }
-            }
         }
     }
 }

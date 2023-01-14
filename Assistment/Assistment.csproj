@@ -61,18 +61,6 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Google.Apis, Version=1.29.1.0, Culture=neutral, PublicKeyToken=4b01fa6e34db77ab, processorArchitecture=MSIL">
-      <HintPath>..\..\Werwolf\Software\Werwolf\packages\Google.Apis.1.29.1\lib\net45\Google.Apis.dll</HintPath>
-    </Reference>
-    <Reference Include="Google.Apis.Core, Version=1.29.1.0, Culture=neutral, PublicKeyToken=4b01fa6e34db77ab, processorArchitecture=MSIL">
-      <HintPath>..\..\Werwolf\Software\Werwolf\packages\Google.Apis.Core.1.29.1\lib\net45\Google.Apis.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="Google.Apis.Customsearch.v1, Version=1.29.1.896, Culture=neutral, PublicKeyToken=4b01fa6e34db77ab, processorArchitecture=MSIL">
-      <HintPath>..\..\Werwolf\Software\Werwolf\packages\Google.Apis.Customsearch.v1.1.29.1.896\lib\net45\Google.Apis.Customsearch.v1.dll</HintPath>
-    </Reference>
-    <Reference Include="Google.Apis.PlatformServices, Version=1.29.1.0, Culture=neutral, PublicKeyToken=4b01fa6e34db77ab, processorArchitecture=MSIL">
-      <HintPath>..\..\Werwolf\Software\Werwolf\packages\Google.Apis.1.29.1\lib\net45\Google.Apis.PlatformServices.dll</HintPath>
-    </Reference>
     <Reference Include="itextsharp">
       <HintPath>..\..\..\itextsharp-all-5.5.1\itextsharp-dll-core\itextsharp.dll</HintPath>
     </Reference>
@@ -287,18 +275,6 @@
     <Compile Include="form\IntBox.Designer.cs">
       <DependentUpon>IntBox.cs</DependentUpon>
     </Compile>
-    <Compile Include="form\Internet\InternetChoosePictureForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="form\Internet\InternetChoosePictureForm.Designer.cs">
-      <DependentUpon>InternetChoosePictureForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="form\Internet\InternetImageResult.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="form\Internet\InternetImageResult.Designer.cs">
-      <DependentUpon>InternetImageResult.cs</DependentUpon>
-    </Compile>
     <Compile Include="form\IntPlusMinusBox.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -372,9 +348,6 @@
     <Compile Include="form\WertPaar.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="GoogleKeys\IKeyGenerator.cs" />
-    <Compile Include="GoogleKeys\KeyGenerator.cs" />
-    <Compile Include="GoogleKeys\ServiceProvider.cs" />
     <Compile Include="Latex\LatexWriter.cs" />
     <Compile Include="Mathematik\FastMath.cs" />
     <Compile Include="Mathematik\LinearSolver.cs" />
@@ -488,12 +461,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="form\IntBox.resx">
       <DependentUpon>IntBox.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="form\Internet\InternetChoosePictureForm.resx">
-      <DependentUpon>InternetChoosePictureForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="form\Internet\InternetImageResult.resx">
-      <DependentUpon>InternetImageResult.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="form\IntPlusMinusBox.resx">
       <DependentUpon>IntPlusMinusBox.cs</DependentUpon>
