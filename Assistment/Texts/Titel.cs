@@ -37,18 +37,20 @@ namespace Assistment.Texts
         public Brush HintergrundFarbe { get;  set; }
         public Pen RandFarbe { get;  set; }
         public float RandHohe { get;  set; }
+        public float TextHorizontalMargin { get;  set; }
         public DrawBox Inhalt { get; set; }
         public float Scaling { get; set; }
 
-        public Titel(DrawBox Inhalt, float RandHohe, Pen RandFarbe, Brush HintergrundFarbe)
-            : this(Inhalt, RandHohe, RandFarbe, HintergrundFarbe, 1)
+        public Titel(DrawBox Inhalt, float RandHohe, float TextHorizontalMargin, Pen RandFarbe, Brush HintergrundFarbe)
+            : this(Inhalt, RandHohe, TextHorizontalMargin, RandFarbe, HintergrundFarbe, 1)
         {
         }
-        public Titel(DrawBox Inhalt, float RandHohe, Pen RandFarbe, Brush HintergrundFarbe, float Scaling)
+        public Titel(DrawBox Inhalt, float RandHohe, float TextHorizontalMargin, Pen RandFarbe, Brush HintergrundFarbe, float Scaling)
         {
-            this.Inhalt = Inhalt.Geometry(RandHohe, 0, RandHohe, 0);
+            this.Inhalt = Inhalt.Geometry(RandHohe + TextHorizontalMargin, 0, RandHohe, 0);
             this.RandHohe = RandHohe;
             this.RandFarbe = RandFarbe;
+            this.TextHorizontalMargin= TextHorizontalMargin;
             this.HintergrundFarbe = HintergrundFarbe;
             this.Scaling = Scaling;
         }
@@ -109,34 +111,34 @@ namespace Assistment.Texts
             throw new NotImplementedException();
         }
 
-        public static Titel GetTitel(Art Art, DrawBox Inhalt, float RandHohe, Pen RandFarbe, Brush HintergrundFarbe)
+        public static Titel GetTitel(Art Art, DrawBox Inhalt, float RandHohe, float TextHorizontalMargin, Pen RandFarbe, Brush HintergrundFarbe)
         {
             switch (Art)
             {
                 case Art.Rund:
-                    return new RunderTitel(Inhalt, RandHohe, RandFarbe, HintergrundFarbe);
+                    return new RunderTitel(Inhalt, RandHohe, TextHorizontalMargin, RandFarbe, HintergrundFarbe);
                 case Art.Stachel:
-                    return new StachelTitel(Inhalt, RandHohe, RandFarbe, HintergrundFarbe);
+                    return new StachelTitel(Inhalt, RandHohe, TextHorizontalMargin, RandFarbe, HintergrundFarbe);
                 case Art.Zahn:
-                    return new ZahnTitel(Inhalt, RandHohe, RandFarbe, HintergrundFarbe);
+                    return new ZahnTitel(Inhalt, RandHohe, TextHorizontalMargin, RandFarbe, HintergrundFarbe);
                 case Art.Wellen:
-                    return new WellenTitel(Inhalt, RandHohe, RandFarbe, HintergrundFarbe);
+                    return new WellenTitel(Inhalt, RandHohe, TextHorizontalMargin, RandFarbe, HintergrundFarbe);
                 case Art.Sagezahn:
-                    return new SagezahnTitel(Inhalt, RandHohe, RandFarbe, HintergrundFarbe);
+                    return new SagezahnTitel(Inhalt, RandHohe, TextHorizontalMargin, RandFarbe, HintergrundFarbe);
                 case Art.VierStufen:
-                    return new VierStufenTitel(Inhalt, RandHohe, RandFarbe, HintergrundFarbe);
+                    return new VierStufenTitel(Inhalt, RandHohe, TextHorizontalMargin, RandFarbe, HintergrundFarbe);
                 case Art.Konig:
-                    return new KonigTitel(Inhalt, RandHohe, RandFarbe, HintergrundFarbe);
+                    return new KonigTitel(Inhalt, RandHohe, TextHorizontalMargin, RandFarbe, HintergrundFarbe);
                 case Art.Chaos:
-                    return new ChaosTitel(Inhalt, RandHohe, RandFarbe, HintergrundFarbe);
+                    return new ChaosTitel(Inhalt, RandHohe, TextHorizontalMargin, RandFarbe, HintergrundFarbe);
                 case Art.Kreuz:
-                    return new KreuzTitel(Inhalt, RandHohe, RandFarbe, HintergrundFarbe);
+                    return new KreuzTitel(Inhalt, RandHohe, TextHorizontalMargin, RandFarbe, HintergrundFarbe);
                 case Art.Triskelen:
-                    return new TriskelenTitel(Inhalt, RandHohe, RandFarbe, HintergrundFarbe);
+                    return new TriskelenTitel(Inhalt, RandHohe, TextHorizontalMargin, RandFarbe, HintergrundFarbe);
                 case Art.Pik:
-                    return new PikTitel(Inhalt, RandHohe, RandFarbe, HintergrundFarbe);
+                    return new PikTitel(Inhalt, RandHohe, TextHorizontalMargin, RandFarbe, HintergrundFarbe);
                 case Art.Blitz:
-                    return new BlitzTitel(Inhalt, RandHohe, RandFarbe, HintergrundFarbe);
+                    return new BlitzTitel(Inhalt, RandHohe, TextHorizontalMargin, RandFarbe, HintergrundFarbe);
                 default:
                     throw new NotImplementedException();
             }
@@ -145,13 +147,13 @@ namespace Assistment.Texts
 
     public class RunderTitel : Titel
     {
-        public RunderTitel(DrawBox Inhalt, float RandHohe, Pen RandFarbe, Brush HintergrundFarbe)
-            : base(Inhalt, RandHohe, RandFarbe, HintergrundFarbe)
+        public RunderTitel(DrawBox Inhalt, float RandHohe, float TextHorizontalMargin, Pen RandFarbe, Brush HintergrundFarbe)
+            : base(Inhalt, RandHohe, TextHorizontalMargin, RandFarbe, HintergrundFarbe)
         {
 
         }
-        public RunderTitel(DrawBox Inhalt, float RandHohe, Pen RandFarbe, Brush HintergrundFarbe, float Scaling)
-            : base(Inhalt, RandHohe, RandFarbe, HintergrundFarbe, Scaling)
+        public RunderTitel(DrawBox Inhalt, float RandHohe, float TextHorizontalMargin, Pen RandFarbe, Brush HintergrundFarbe, float Scaling)
+            : base(Inhalt, RandHohe, TextHorizontalMargin, RandFarbe, HintergrundFarbe, Scaling)
         {
 
         }
@@ -163,7 +165,7 @@ namespace Assistment.Texts
 
         public override DrawBox Clone()
         {
-            return new RunderTitel(Inhalt.Clone(), RandHohe, RandFarbe, HintergrundFarbe, Scaling);
+            return new RunderTitel(Inhalt.Clone(), RandHohe, TextHorizontalMargin, RandFarbe, HintergrundFarbe, Scaling);
         }
 
         public override Titel.Art GetArt()
@@ -173,14 +175,14 @@ namespace Assistment.Texts
     }
     public class StachelTitel : Titel
     {
-        public StachelTitel(DrawBox Inhalt, float RandHohe, Pen RandFarbe, Brush HintergrundFarbe)
-            : base(Inhalt, RandHohe,
+        public StachelTitel(DrawBox Inhalt, float RandHohe, float TextHorizontalMargin, Pen RandFarbe, Brush HintergrundFarbe)
+            : base(Inhalt, RandHohe, TextHorizontalMargin,
             RandFarbe, HintergrundFarbe)
         {
 
         }
-        public StachelTitel(DrawBox Inhalt, float RandHohe, Pen RandFarbe, Brush HintergrundFarbe, float Scaling)
-            : base(Inhalt, RandHohe, RandFarbe, HintergrundFarbe, Scaling)
+        public StachelTitel(DrawBox Inhalt, float RandHohe, float TextHorizontalMargin, Pen RandFarbe, Brush HintergrundFarbe, float Scaling)
+            : base(Inhalt, RandHohe, TextHorizontalMargin, RandFarbe, HintergrundFarbe, Scaling)
         {
 
         }
@@ -200,7 +202,7 @@ namespace Assistment.Texts
 
         public override DrawBox Clone()
         {
-            return new StachelTitel(Inhalt.Clone(), RandHohe, RandFarbe, HintergrundFarbe, Scaling);
+            return new StachelTitel(Inhalt.Clone(), RandHohe, TextHorizontalMargin, RandFarbe, HintergrundFarbe, Scaling);
         }
 
         public override Titel.Art GetArt()
@@ -210,13 +212,13 @@ namespace Assistment.Texts
     }
     public class ZahnTitel : Titel
     {
-        public ZahnTitel(DrawBox Inhalt, float RandHohe, Pen RandFarbe, Brush HintergrundFarbe)
-            : base(Inhalt, RandHohe, RandFarbe, HintergrundFarbe)
+        public ZahnTitel(DrawBox Inhalt, float RandHohe, float TextHorizontalMargin, Pen RandFarbe, Brush HintergrundFarbe)
+            : base(Inhalt, RandHohe, TextHorizontalMargin, RandFarbe, HintergrundFarbe)
         {
 
         }
-        public ZahnTitel(DrawBox Inhalt, float RandHohe, Pen RandFarbe, Brush HintergrundFarbe, float Scaling)
-            : base(Inhalt, RandHohe, RandFarbe, HintergrundFarbe, Scaling)
+        public ZahnTitel(DrawBox Inhalt, float RandHohe, float TextHorizontalMargin, Pen RandFarbe, Brush HintergrundFarbe, float Scaling)
+            : base(Inhalt, RandHohe, TextHorizontalMargin, RandFarbe, HintergrundFarbe, Scaling)
         {
 
         }
@@ -238,7 +240,7 @@ namespace Assistment.Texts
 
         public override DrawBox Clone()
         {
-            return new ZahnTitel(Inhalt.Clone(), RandHohe, RandFarbe, HintergrundFarbe, Scaling);
+            return new ZahnTitel(Inhalt.Clone(), RandHohe, TextHorizontalMargin, RandFarbe, HintergrundFarbe, Scaling);
         }
         public override Titel.Art GetArt()
         {
@@ -247,13 +249,13 @@ namespace Assistment.Texts
     }
     public class WellenTitel : Titel
     {
-        public WellenTitel(DrawBox Inhalt, float RandHohe, Pen RandFarbe, Brush HintergrundFarbe)
-            : base(Inhalt, RandHohe, RandFarbe, HintergrundFarbe)
+        public WellenTitel(DrawBox Inhalt, float RandHohe, float TextHorizontalMargin, Pen RandFarbe, Brush HintergrundFarbe)
+            : base(Inhalt, RandHohe, TextHorizontalMargin, RandFarbe, HintergrundFarbe)
         {
 
         }
-        public WellenTitel(DrawBox Inhalt, float RandHohe, Pen RandFarbe, Brush HintergrundFarbe, float Scaling)
-            : base(Inhalt, RandHohe, RandFarbe, HintergrundFarbe, Scaling)
+        public WellenTitel(DrawBox Inhalt, float RandHohe, float TextHorizontalMargin, Pen RandFarbe, Brush HintergrundFarbe, float Scaling)
+            : base(Inhalt, RandHohe, TextHorizontalMargin, RandFarbe, HintergrundFarbe, Scaling)
         {
 
         }
@@ -271,7 +273,7 @@ namespace Assistment.Texts
 
         public override DrawBox Clone()
         {
-            return new WellenTitel(Inhalt.Clone(), RandHohe, RandFarbe, HintergrundFarbe, Scaling);
+            return new WellenTitel(Inhalt.Clone(), RandHohe, TextHorizontalMargin,  RandFarbe, HintergrundFarbe, Scaling);
         }
         public override Titel.Art GetArt()
         {
@@ -280,13 +282,13 @@ namespace Assistment.Texts
     }
     public class SagezahnTitel : Titel
     {
-        public SagezahnTitel(DrawBox Inhalt, float RandHohe, Pen RandFarbe, Brush HintergrundFarbe)
-            : base(Inhalt, RandHohe, RandFarbe, HintergrundFarbe)
+        public SagezahnTitel(DrawBox Inhalt, float RandHohe, float TextHorizontalMargin, Pen RandFarbe, Brush HintergrundFarbe)
+            : base(Inhalt, RandHohe, TextHorizontalMargin, RandFarbe, HintergrundFarbe)
         {
 
         }
-        public SagezahnTitel(DrawBox Inhalt, float RandHohe, Pen RandFarbe, Brush HintergrundFarbe, float Scaling)
-            : base(Inhalt, RandHohe, RandFarbe, HintergrundFarbe, Scaling)
+        public SagezahnTitel(DrawBox Inhalt, float RandHohe, float TextHorizontalMargin, Pen RandFarbe, Brush HintergrundFarbe, float Scaling)
+            : base(Inhalt, RandHohe, TextHorizontalMargin, RandFarbe, HintergrundFarbe, Scaling)
         {
 
         }
@@ -302,7 +304,7 @@ namespace Assistment.Texts
         }
         public override DrawBox Clone()
         {
-            return new SagezahnTitel(Inhalt.Clone(), RandHohe, RandFarbe, HintergrundFarbe, Scaling);
+            return new SagezahnTitel(Inhalt.Clone(), RandHohe, TextHorizontalMargin, RandFarbe, HintergrundFarbe, Scaling);
         }
         public override Titel.Art GetArt()
         {
@@ -311,13 +313,13 @@ namespace Assistment.Texts
     }
     public class VierStufenTitel : Titel
     {
-        public VierStufenTitel(DrawBox Inhalt, float RandHohe, Pen RandFarbe, Brush HintergrundFarbe)
-            : base(Inhalt, RandHohe, RandFarbe, HintergrundFarbe)
+        public VierStufenTitel(DrawBox Inhalt, float RandHohe, float TextHorizontalMargin, Pen RandFarbe, Brush HintergrundFarbe)
+            : base(Inhalt, RandHohe, TextHorizontalMargin, RandFarbe, HintergrundFarbe)
         {
 
         }
-        public VierStufenTitel(DrawBox Inhalt, float RandHohe, Pen RandFarbe, Brush HintergrundFarbe, float Scaling)
-            : base(Inhalt, RandHohe, RandFarbe, HintergrundFarbe, Scaling)
+        public VierStufenTitel(DrawBox Inhalt, float RandHohe, float TextHorizontalMargin, Pen RandFarbe, Brush HintergrundFarbe, float Scaling)
+            : base(Inhalt, RandHohe, TextHorizontalMargin, RandFarbe, HintergrundFarbe, Scaling)
         {
 
         }
@@ -346,7 +348,7 @@ namespace Assistment.Texts
 
         public override DrawBox Clone()
         {
-            return new VierStufenTitel(Inhalt.Clone(), RandHohe, RandFarbe, HintergrundFarbe, Scaling);
+            return new VierStufenTitel(Inhalt.Clone(), RandHohe, TextHorizontalMargin, RandFarbe, HintergrundFarbe, Scaling);
         }
         public override Titel.Art GetArt()
         {
@@ -355,13 +357,13 @@ namespace Assistment.Texts
     }
     public class KonigTitel : Titel
     {
-        public KonigTitel(DrawBox Inhalt, float RandHohe, Pen RandFarbe, Brush HintergrundFarbe)
-            : base(Inhalt, RandHohe, RandFarbe, HintergrundFarbe)
+        public KonigTitel(DrawBox Inhalt, float RandHohe, float TextHorizontalMargin, Pen RandFarbe, Brush HintergrundFarbe)
+            : base(Inhalt, RandHohe, TextHorizontalMargin, RandFarbe, HintergrundFarbe)
         {
 
         }
-        public KonigTitel(DrawBox Inhalt, float RandHohe, Pen RandFarbe, Brush HintergrundFarbe, float Scaling)
-            : base(Inhalt, RandHohe, RandFarbe, HintergrundFarbe, Scaling)
+        public KonigTitel(DrawBox Inhalt, float RandHohe, float TextHorizontalMargin, Pen RandFarbe, Brush HintergrundFarbe, float Scaling)
+            : base(Inhalt, RandHohe, TextHorizontalMargin, RandFarbe, HintergrundFarbe, Scaling)
         {
 
         }
@@ -386,7 +388,7 @@ namespace Assistment.Texts
 
         public override DrawBox Clone()
         {
-            return new KonigTitel(Inhalt.Clone(), RandHohe, RandFarbe, HintergrundFarbe, Scaling);
+            return new KonigTitel(Inhalt.Clone(), RandHohe, TextHorizontalMargin, RandFarbe, HintergrundFarbe, Scaling);
         }
         public override Titel.Art GetArt()
         {
@@ -395,13 +397,13 @@ namespace Assistment.Texts
     }
     public class ChaosTitel : Titel
     {
-        public ChaosTitel(DrawBox Inhalt, float RandHohe, Pen RandFarbe, Brush HintergrundFarbe)
-            : base(Inhalt, RandHohe, RandFarbe, HintergrundFarbe)
+        public ChaosTitel(DrawBox Inhalt, float RandHohe, float TextHorizontalMargin, Pen RandFarbe, Brush HintergrundFarbe)
+            : base(Inhalt, RandHohe, TextHorizontalMargin, RandFarbe, HintergrundFarbe)
         {
 
         }
-        public ChaosTitel(DrawBox Inhalt, float RandHohe, Pen RandFarbe, Brush HintergrundFarbe, float Scaling)
-            : base(Inhalt, RandHohe, RandFarbe, HintergrundFarbe, Scaling)
+        public ChaosTitel(DrawBox Inhalt, float RandHohe, float TextHorizontalMargin, Pen RandFarbe, Brush HintergrundFarbe, float Scaling)
+            : base(Inhalt, RandHohe, TextHorizontalMargin, RandFarbe, HintergrundFarbe, Scaling)
         {
 
         }
@@ -431,7 +433,7 @@ namespace Assistment.Texts
 
         public override DrawBox Clone()
         {
-            return new ChaosTitel(Inhalt.Clone(), RandHohe, RandFarbe, HintergrundFarbe, Scaling);
+            return new ChaosTitel(Inhalt.Clone(), RandHohe, TextHorizontalMargin, RandFarbe, HintergrundFarbe, Scaling);
         }
         public override Titel.Art GetArt()
         {
@@ -440,13 +442,13 @@ namespace Assistment.Texts
     }
     public class KreuzTitel : Titel
     {
-        public KreuzTitel(DrawBox Inhalt, float RandHohe, Pen RandFarbe, Brush HintergrundFarbe)
-            : base(Inhalt, RandHohe, RandFarbe, HintergrundFarbe)
+        public KreuzTitel(DrawBox Inhalt, float RandHohe, float TextHorizontalMargin, Pen RandFarbe, Brush HintergrundFarbe)
+            : base(Inhalt, RandHohe, TextHorizontalMargin, RandFarbe, HintergrundFarbe)
         {
 
         }
-        public KreuzTitel(DrawBox Inhalt, float RandHohe, Pen RandFarbe, Brush HintergrundFarbe, float Scaling)
-            : base(Inhalt, RandHohe, RandFarbe, HintergrundFarbe, Scaling)
+        public KreuzTitel(DrawBox Inhalt, float RandHohe, float TextHorizontalMargin, Pen RandFarbe, Brush HintergrundFarbe, float Scaling)
+            : base(Inhalt, RandHohe, TextHorizontalMargin, RandFarbe, HintergrundFarbe, Scaling)
         {
 
         }
@@ -482,7 +484,7 @@ namespace Assistment.Texts
 
         public override DrawBox Clone()
         {
-            return new KreuzTitel(Inhalt.Clone(), RandHohe, RandFarbe, HintergrundFarbe, Scaling);
+            return new KreuzTitel(Inhalt.Clone(), RandHohe, TextHorizontalMargin, RandFarbe, HintergrundFarbe, Scaling);
         }
         public override Titel.Art GetArt()
         {
@@ -491,13 +493,13 @@ namespace Assistment.Texts
     }
     public class TriskelenTitel : Titel
     {
-        public TriskelenTitel(DrawBox Inhalt, float RandHohe, Pen RandFarbe, Brush HintergrundFarbe)
-            : base(Inhalt, RandHohe, RandFarbe, HintergrundFarbe)
+        public TriskelenTitel(DrawBox Inhalt, float RandHohe, float TextHorizontalMargin, Pen RandFarbe, Brush HintergrundFarbe)
+            : base(Inhalt, RandHohe, TextHorizontalMargin, RandFarbe, HintergrundFarbe)
         {
 
         }
-        public TriskelenTitel(DrawBox Inhalt, float RandHohe, Pen RandFarbe, Brush HintergrundFarbe, float Scaling)
-            : base(Inhalt, RandHohe, RandFarbe, HintergrundFarbe, Scaling)
+        public TriskelenTitel(DrawBox Inhalt, float RandHohe, float TextHorizontalMargin, Pen RandFarbe, Brush HintergrundFarbe, float Scaling)
+            : base(Inhalt, RandHohe, TextHorizontalMargin, RandFarbe, HintergrundFarbe, Scaling)
         {
 
         }
@@ -527,7 +529,7 @@ namespace Assistment.Texts
 
         public override DrawBox Clone()
         {
-            return new TriskelenTitel(Inhalt.Clone(), RandHohe, RandFarbe, HintergrundFarbe, Scaling);
+            return new TriskelenTitel(Inhalt.Clone(), RandHohe, TextHorizontalMargin, RandFarbe, HintergrundFarbe, Scaling);
         }
         public override Titel.Art GetArt()
         {
@@ -536,13 +538,13 @@ namespace Assistment.Texts
     }
     public class PikTitel : Titel
     {
-        public PikTitel(DrawBox Inhalt, float RandHohe, Pen RandFarbe, Brush HintergrundFarbe)
-            : base(Inhalt, RandHohe, RandFarbe, HintergrundFarbe)
+        public PikTitel(DrawBox Inhalt, float RandHohe, float TextHorizontalMargin, Pen RandFarbe, Brush HintergrundFarbe)
+            : base(Inhalt, RandHohe, TextHorizontalMargin, RandFarbe, HintergrundFarbe)
         {
 
         }
-        public PikTitel(DrawBox Inhalt, float RandHohe, Pen RandFarbe, Brush HintergrundFarbe, float Scaling)
-            : base(Inhalt, RandHohe, RandFarbe, HintergrundFarbe, Scaling)
+        public PikTitel(DrawBox Inhalt, float RandHohe, float TextHorizontalMargin, Pen RandFarbe, Brush HintergrundFarbe, float Scaling)
+            : base(Inhalt, RandHohe, TextHorizontalMargin, RandFarbe, HintergrundFarbe, Scaling)
         {
 
         }
@@ -572,7 +574,7 @@ namespace Assistment.Texts
 
         public override DrawBox Clone()
         {
-            return new PikTitel(Inhalt.Clone(), RandHohe, RandFarbe, HintergrundFarbe, Scaling);
+            return new PikTitel(Inhalt.Clone(), RandHohe, TextHorizontalMargin, RandFarbe, HintergrundFarbe, Scaling);
         }
         public override Titel.Art GetArt()
         {
@@ -581,13 +583,13 @@ namespace Assistment.Texts
     }
     public class BlitzTitel : Titel
     {
-        public BlitzTitel(DrawBox Inhalt, float RandHohe, Pen RandFarbe, Brush HintergrundFarbe)
-            : base(Inhalt, RandHohe, RandFarbe, HintergrundFarbe)
+        public BlitzTitel(DrawBox Inhalt, float RandHohe, float TextHorizontalMargin, Pen RandFarbe, Brush HintergrundFarbe)
+            : base(Inhalt, RandHohe, TextHorizontalMargin, RandFarbe, HintergrundFarbe)
         {
 
         }
-        public BlitzTitel(DrawBox Inhalt, float RandHohe, Pen RandFarbe, Brush HintergrundFarbe, float Scaling)
-            : base(Inhalt, RandHohe, RandFarbe, HintergrundFarbe, Scaling)
+        public BlitzTitel(DrawBox Inhalt, float RandHohe, float TextHorizontalMargin, Pen RandFarbe, Brush HintergrundFarbe, float Scaling)
+            : base(Inhalt, RandHohe, TextHorizontalMargin, RandFarbe, HintergrundFarbe, Scaling)
         {
 
         }
@@ -619,7 +621,7 @@ namespace Assistment.Texts
 
         public override DrawBox Clone()
         {
-            return new BlitzTitel(Inhalt.Clone(), RandHohe, RandFarbe, HintergrundFarbe, Scaling);
+            return new BlitzTitel(Inhalt.Clone(), RandHohe, TextHorizontalMargin, RandFarbe, HintergrundFarbe, Scaling);
         }
         public override Titel.Art GetArt()
         {
