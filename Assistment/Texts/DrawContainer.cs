@@ -209,7 +209,7 @@ namespace Assistment.Texts
             this.AddWhitespace(0, 0, true);
         }
         #endregion
-        #region AddRegex Überladungen
+        #region AddFormat Überladungen
         /// <summary>
         /// <para>\n : Absatz</para>
         /// <para></para>
@@ -226,15 +226,15 @@ namespace Assistment.Texts
         /// <para>\tXf, \tXxYf : Whitespace mit Breite X * Leerzeichen und Höhe Y * Zeilenabstand</para>
         /// <para>\mAf : Alignment auf A setzen</para>
         /// <para></para>
-        /// <para>\{...} : CString, der ... als regex added</para>
-        /// <para>\[...] : Text, der ... als regex added</para>
+        /// <para>\{...} : CString, der ... als formattedString added</para>
+        /// <para>\[...] : Text, der ... als formattedString added</para>
         /// <para>\"...\" : interpretiert ... nicht und added es als Wort</para>
         /// <para></para>
         /// <para> \\ : \</para>
         /// </summary>
-        /// <param name="regex"></param>
+        /// <param name="formattedString"></param>
         /// <param name="font"></param>
-        public void AddRegex(string regex, IFontMeasurer font)
+        public void AddFormat(string formattedString, IFontMeasurer font)
         {
             int i = 0;
             ///anfang substring
@@ -242,19 +242,19 @@ namespace Assistment.Texts
             Pen p = Pens.Black;
             Brush br = Brushes.Black;
             byte m = 0;
-            while (i < regex.Length)
+            while (i < formattedString.Length)
             {
-                switch (regex[i])
+                switch (formattedString[i])
                 {
                     case '\\':
                         if (i != a)
-                            this.AddWort(regex.Substring(a, i - a), br, font, m, p);
+                            this.AddWort(formattedString.Substring(a, i - a), br, font, m, p);
                         i++;
-                        if (regex.Length == i)
+                        if (formattedString.Length == i)
                             this.AddWort(@"\?", br, font, m, p);
                         else
                         {
-                            switch (regex[i])
+                            switch (formattedString[i])
                             {
                                 #region Farben
                                 case 'r':
@@ -308,14 +308,14 @@ namespace Assistment.Texts
                                     p = Pens.White;
                                     break;
                                 case 'c':
-                                    if (regex.Length - i - 8 > 0)
+                                    if (formattedString.Length - i - 8 > 0)
                                     {
-                                        Color c = regex.Substring(i + 1, 8).ToColor();
+                                        Color c = formattedString.Substring(i + 1, 8).ToColor();
                                         br = new SolidBrush(c);
                                         p = new Pen(c);
                                     }
                                     else
-                                        this.AddWort(regex.Substring(i - 1, regex.Length - i + 1) + new string('?', 9 - regex.Length + i), br, font, m, p);
+                                        this.AddWort(formattedString.Substring(i - 1, formattedString.Length - i + 1) + new string('?', 9 - formattedString.Length + i), br, font, m, p);
                                     i += 9;
                                     break;
                                 #endregion
@@ -357,9 +357,9 @@ namespace Assistment.Texts
                                 case 't':
                                     int b = -1;
                                     a = i + 1;
-                                    while ((i < regex.Length) && (regex[i] != 'f'))
+                                    while ((i < formattedString.Length) && (formattedString[i] != 'f'))
                                     {
-                                        if (regex[i] == 'x')
+                                        if (formattedString[i] == 'x')
                                             b = i;
                                         i++;
                                     }
@@ -368,32 +368,32 @@ namespace Assistment.Texts
                                     {
                                         if (b == -1)
                                         {
-                                            width = Convert.ToSingle(regex.Substring(a, i - a));
+                                            width = Convert.ToSingle(formattedString.Substring(a, i - a));
                                             height = 0;
                                         }
                                         else
                                         {
-                                            width = Convert.ToSingle(regex.Substring(a, b - a));
-                                            height = Convert.ToSingle(regex.Substring(b + 1, i - b - 1));
+                                            width = Convert.ToSingle(formattedString.Substring(a, b - a));
+                                            height = Convert.ToSingle(formattedString.Substring(b + 1, i - b - 1));
                                         }
                                         AddWhitespace(width * font.GetWhitespace(), height * font.GetZeilenabstand());
                                     }
                                     catch (FormatException)
                                     {
-                                        this.AddWort("\\t" + regex.Substring(a, i - a) + "f?", br, font, m, p);
+                                        this.AddWort("\\t" + formattedString.Substring(a, i - a) + "f?", br, font, m, p);
                                     }
                                     i++;
                                     break;
                                 case 'm':
                                     a = i + 1;
-                                    while ((i < regex.Length) && (regex[i] != 'f')) i++;
+                                    while ((i < formattedString.Length) && (formattedString[i] != 'f')) i++;
                                     try
                                     {
-                                        this.Alignment = Convert.ToSingle(regex.Substring(a, i - a));
+                                        this.Alignment = Convert.ToSingle(formattedString.Substring(a, i - a));
                                     }
                                     catch (FormatException)
                                     {
-                                        this.AddWort("\\m" + regex.Substring(a, i - a) + "f?", br, font, m, p);
+                                        this.AddWort("\\m" + formattedString.Substring(a, i - a) + "f?", br, font, m, p);
                                     }
                                     i++;
                                     break;
@@ -437,18 +437,18 @@ namespace Assistment.Texts
                     case ',':
                     case ';':
                         i++;
-                        this.AddWort(regex.Substring(a, i - a), br, font, m, p);
+                        this.AddWort(formattedString.Substring(a, i - a), br, font, m, p);
                         a = i;
                         break;
 
                     case '-':
                         if (i != a)
-                            this.AddWort(regex.Substring(a, i - a), br, font, m, p);
+                            this.AddWort(formattedString.Substring(a, i - a), br, font, m, p);
                         a = i;
                         i++;
-                        if (regex.Length == i)
+                        if (formattedString.Length == i)
                             this.AddWort(@"-", br, font, m, p);
-                        else if (regex[i] == '-')
+                        else if (formattedString[i] == '-')
                         {
                             this.AddWort(@"−", br, font, m, p);
                             i++;
@@ -459,7 +459,7 @@ namespace Assistment.Texts
                     case '−':
                     case '+':
                         if (i != a)
-                            this.AddWort(regex.Substring(a, i - a), br, font, m, p);
+                            this.AddWort(formattedString.Substring(a, i - a), br, font, m, p);
                         a = i;
                         i++;
                         break;
@@ -467,38 +467,38 @@ namespace Assistment.Texts
                     #region Container
                     case '{':
                         if (i != a)
-                            this.AddWort(regex.Substring(a, i - a), br, font, m, p);
+                            this.AddWort(formattedString.Substring(a, i - a), br, font, m, p);
                         i++;
                         a = i;
-                        i = SuchGeschweifteKlammerZu(i, regex);
+                        i = SuchGeschweifteKlammerZu(i, formattedString);
                         CString cs = new CString();
                         if (i != a)
-                            cs.AddRegex(regex.Substring(a, i - a), font);
+                            cs.AddFormat(formattedString.Substring(a, i - a), font);
                         this.Add(cs);
                         i++;
                         a = i;
                         break;
                     case '[':
                         if (i != a)
-                            this.AddWort(regex.Substring(a, i - a), br, font, m, p);
+                            this.AddWort(formattedString.Substring(a, i - a), br, font, m, p);
                         i++;
                         a = i;
-                        i = SuchEckigeKlammerZu(i, regex);
+                        i = SuchEckigeKlammerZu(i, formattedString);
                         Text te = new Text();
                         if (i != a)
-                            te.AddRegex(regex.Substring(a, i - a), font);
+                            te.AddFormat(formattedString.Substring(a, i - a), font);
                         this.Add(te);
                         i++;
                         a = i;
                         break;
                     case '\"':
                         if (i != a)
-                            this.AddWort(regex.Substring(a, i - a), br, font, m, p);
+                            this.AddWort(formattedString.Substring(a, i - a), br, font, m, p);
                         i++;
                         a = i;
-                        i = SuchEndeAnfuhrungsZeichen(i, regex);
+                        i = SuchEndeAnfuhrungsZeichen(i, formattedString);
                         if (i != a)
-                            AddWort(regex.Substring(a, i - a), br, font, m, p);
+                            AddWort(formattedString.Substring(a, i - a), br, font, m, p);
                         i++;
                         a = i;
                         break;
@@ -506,7 +506,7 @@ namespace Assistment.Texts
                     #region Whitespace
                     case ' ':
                         if (i != a)
-                            this.AddWort(regex.Substring(a, i - a), br, font, m, p);
+                            this.AddWort(formattedString.Substring(a, i - a), br, font, m, p);
                         this.AddWhitespace(font);
                         //this.addWhitespace(font.getWhitespace());
                         i++;
@@ -514,14 +514,14 @@ namespace Assistment.Texts
                         break;
                     case '\n':
                         if (i != a)
-                            this.AddWort(regex.Substring(a, i - a), br, font, m, p);
+                            this.AddWort(formattedString.Substring(a, i - a), br, font, m, p);
                         this.AddAbsatz();
                         i++;
                         a = i;
                         break;
                     case '\r':
                         if (i != a)
-                            this.AddWort(regex.Substring(a, i - a), br, font, m, p);
+                            this.AddWort(formattedString.Substring(a, i - a), br, font, m, p);
                         i++;
                         a = i;
                         break;
@@ -531,8 +531,8 @@ namespace Assistment.Texts
                         break;
                 }
             }
-            if ((a < regex.Length) && (i != a))
-                this.AddWort(regex.Substring(a, i - a), br, font, m, p);
+            if ((a < formattedString.Length) && (i != a))
+                this.AddWort(formattedString.Substring(a, i - a), br, font, m, p);
         }
         /// <summary>
         /// <para>\n : Absatz</para>
@@ -550,100 +550,100 @@ namespace Assistment.Texts
         /// <para>\tXf, \tXxYf : Whitespace mit Breite X * Leerzeichen und Höhe Y * Zeilenabstand</para>
         /// <para>\mAf : Alignment auf A setzen</para>
         /// <para></para>
-        /// <para>\{...} : CString, der ... als regex added</para>
-        /// <para>\[...] : Text, der ... als regex added</para>
+        /// <para>\{...} : CString, der ... als formattedString added</para>
+        /// <para>\[...] : Text, der ... als formattedString added</para>
         /// <para>\"...\" : interpretiert ... nicht und added es als Wort</para>
         /// <para></para>
         /// <para> \\ : \</para>
         /// </summary>
-        /// <param name="regex"></param>
+        /// <param name="formattedString"></param>
         /// <param name="font"></param>
-        public void AddRegex(string regex)
+        public void AddFormat(string formattedString)
         {
-            this.AddRegex(regex, PreferedFont);
+            this.AddFormat(formattedString, PreferedFont);
         }
         /// <summary>
-        /// geht davon aus, dass regex[i - 1] = '['
-        /// <para>gibt j zurück, sodass regex[j] = ']'</para>
+        /// geht davon aus, dass formattedString[i - 1] = '['
+        /// <para>gibt j zurück, sodass formattedString[j] = ']'</para>
         /// <para>und die klammerzahl = 0 ist</para>
         /// <para>und dinge in "..." ignoriert wurden.</para>
         /// <para>Ignoriert zeichen die direkt hinter einem '\\' stehen.</para>
         /// <para></para>
-        /// <para>Falls ein solches j nicht existiert, wird regex.length zurückgegeben</para>
-        /// <para>(i darf regex.length sein)</para>
+        /// <para>Falls ein solches j nicht existiert, wird formattedString.length zurückgegeben</para>
+        /// <para>(i darf formattedString.length sein)</para>
         /// </summary>
         /// <param name="i"></param>
         /// <returns></returns>
-        private static int SuchGeschweifteKlammerZu(int i, string regex)
+        private static int SuchGeschweifteKlammerZu(int i, string formattedString)
         {
             int klammer = 1;
-            while (i < regex.Length)
+            while (i < formattedString.Length)
             {
-                if (regex[i] == '{')
+                if (formattedString[i] == '{')
                 {
                     klammer++;
                     i++;
                 }
-                else if ((regex[i] == '}') && (--klammer == 0))
+                else if ((formattedString[i] == '}') && (--klammer == 0))
                     break;
-                else if (regex[i] == '\"')
-                    i = Math.Min(SuchEndeAnfuhrungsZeichen(i + 1, regex) + 1, regex.Length);
-                else if (regex[i] == '\\')
-                    i = Math.Min(i + 2, regex.Length);
+                else if (formattedString[i] == '\"')
+                    i = Math.Min(SuchEndeAnfuhrungsZeichen(i + 1, formattedString) + 1, formattedString.Length);
+                else if (formattedString[i] == '\\')
+                    i = Math.Min(i + 2, formattedString.Length);
                 else i++;
             }
             return i;
         }
         /// <summary>
-        /// geht davon aus, dass regex[i - 1] = '['
-        /// <para>gibt j zurück, sodass regex[j] = ']'</para>
+        /// geht davon aus, dass formattedString[i - 1] = '['
+        /// <para>gibt j zurück, sodass formattedString[j] = ']'</para>
         /// <para>und die klammerzahl = 0 ist</para>
         /// <para>und dinge in "..." ignoriert wurden.</para>
         /// <para>Ignoriert zeichen die direkt hinter einem '\\' stehen.</para>
         /// <para></para>
-        /// <para>Falls ein solches j nicht existiert, wird regex.length zurückgegeben</para>
-        /// <para>(i darf regex.length sein)</para>
+        /// <para>Falls ein solches j nicht existiert, wird formattedString.length zurückgegeben</para>
+        /// <para>(i darf formattedString.length sein)</para>
         /// </summary>
         /// <param name="i"></param>
         /// <returns></returns>
-        private static int SuchEckigeKlammerZu(int i, string regex)
+        private static int SuchEckigeKlammerZu(int i, string formattedString)
         {
             int klammer = 1;
-            while (i < regex.Length)
+            while (i < formattedString.Length)
             {
-                if (regex[i] == '[')
+                if (formattedString[i] == '[')
                 {
                     klammer++;
                     i++;
                 }
-                else if ((regex[i] == ']') && (--klammer == 0))
+                else if ((formattedString[i] == ']') && (--klammer == 0))
                     break;
-                else if (regex[i] == '\"')
-                    i = Math.Min(SuchEndeAnfuhrungsZeichen(i + 1, regex) + 1, regex.Length);
-                else if (regex[i] == '\\')
-                    i = Math.Min(i + 2, regex.Length);
+                else if (formattedString[i] == '\"')
+                    i = Math.Min(SuchEndeAnfuhrungsZeichen(i + 1, formattedString) + 1, formattedString.Length);
+                else if (formattedString[i] == '\\')
+                    i = Math.Min(i + 2, formattedString.Length);
                 else i++;
             }
             return i;
         }
         /// <summary>
-        /// geht davon aus, dass regex[i - 1] = '\"'
-        /// <para>gibt j zurück, sodass regex[j] = '"\'</para>
+        /// geht davon aus, dass formattedString[i - 1] = '\"'
+        /// <para>gibt j zurück, sodass formattedString[j] = '"\'</para>
         /// <para>ignoriert '"', falls direkt davor ein '\\' steht.</para>
         /// <para></para>
-        /// <para>Falls ein solches j nicht existiert, wird regex.length zurückgegeben</para>
-        /// <para>(i darf regex.length sein)</para>
+        /// <para>Falls ein solches j nicht existiert, wird formattedString.length zurückgegeben</para>
+        /// <para>(i darf formattedString.length sein)</para>
         /// </summary>
         /// <param name="i"></param>
         /// <returns></returns>
-        private static int SuchEndeAnfuhrungsZeichen(int i, string regex)
+        private static int SuchEndeAnfuhrungsZeichen(int i, string formattedString)
         {
-            while (i < regex.Length)
+            while (i < formattedString.Length)
             {
-                if (regex[i] == '\"')
+                if (formattedString[i] == '\"')
                     break;
-                else if (regex[i] == '\\')
-                    i = Math.Min(i + 2, regex.Length);
+                else if (formattedString[i] == '\\')
+                    i = Math.Min(i + 2, formattedString.Length);
                 else i++;
             }
             return i;

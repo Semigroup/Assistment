@@ -24,7 +24,7 @@ namespace Assistment.Texts
             : this()
         {
             this.PreferedFont = Font;
-            this.AddRegex(Regex);
+            this.AddFormat(Regex);
         }
         public Text(PreText PreText)
             : base(PreText)
@@ -53,7 +53,7 @@ namespace Assistment.Texts
         {
             Text t = new Text();
             t.PreferedFont = StandardFont;
-            t.AddRegex(text);
+            t.AddFormat(text);
             return t;
         }
         public Text FirstLine()

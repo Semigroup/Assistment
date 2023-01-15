@@ -95,7 +95,7 @@ namespace Assistment.Testing
         private void textBox1_TextChanged_1(object sender, EventArgs e)
         {
             cs = new CString();
-            cs.AddRegex(textBox1.Text, font);
+            cs.AddFormat(textBox1.Text, font);
             this.mal();
         }
 
