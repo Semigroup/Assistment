@@ -103,7 +103,6 @@
     <Compile Include="Algebra\Operiert.cs" />
     <Compile Include="Algebra\Tupel.cs" />
     <Compile Include="Drawing\Algorithms\PolygonFillingAlgorithm.cs" />
-    <Compile Include="Drawing\CyberShadex.cs" />
     <Compile Include="Drawing\Geometries\Extensions\PolygonExtension.cs" />
     <Compile Include="Drawing\Geometries\Extensions\FlacheErweiterer.cs" />
     <Compile Include="Drawing\Geometries\Fragments.cs" />

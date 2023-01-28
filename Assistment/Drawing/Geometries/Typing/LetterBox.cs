@@ -45,16 +45,16 @@ namespace Assistment.Drawing.Geometries.Typing
             }
         }
 
-        public static LetterBox GetGoldenCut(float Width)
+        public static LetterBox GetGoldenCut(float Width, Style style = Style.Hard)
         {
             return new LetterBox()
             {
                 UpperHeight = 0.618f * Width,
                 MiddleHeight = Width,
                 LowerHeight = 0.618f * Width,
-                 Width = Width,
-                 InterimWidth = 0.2f * Width,
-                 CornerStyle = Style.Hard,
+                Width = Width,
+                InterimWidth = 0.2f * Width,
+                CornerStyle = style,
             };
         }
     }

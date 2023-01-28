@@ -971,6 +971,8 @@ namespace Assistment.Drawing
         /// <param name="hohe"></param>
         public static void malSchatten(Graphics g, OrientierbarerWeg weg, Color wegFarbe, Color schattenFarbe, PointF lichtRichtung, int samples, Hohe hohe)
         {
+            var defaultBrush = new SolidBrush(wegFarbe);
+
             PointF[] punkte = weg.GetPolygon(samples, 0, 1);
             PointF[] normale = weg.GetNormalenPolygon(samples, 0, 1, hohe);
             PointF[] punkteOff = new PointF[samples];
@@ -988,11 +990,23 @@ namespace Assistment.Drawing
 
             for (int i = 0; i < samples - 1; i++)
             {
-                LinearGradientBrush brush = new LinearGradientBrush(punkte[i], punkte[i].add(normale[i]), wegFarbe, schattenFarbe);
-                //brush.Transform = new Matrix();
-                //brush.Transform.Shear(lichtRichtung.X * 100, lichtRichtung.Y * 100);
                 PointF[] poly = { punkte[i], punkte[i + 1], punkteOff[i + 1], punkteOff[i], punkte[i] };
-                g.FillPolygon(brush, poly);
+                var p = punkte[i];
+                var n = normale[i];
+                if (n.normSquared() < 1e-3)
+                    g.FillPolygon(defaultBrush, poly);
+                else
+                    try
+                    {
+                        //LinearGradientBrush Ctor is very buggy
+                        using (Brush brush = new LinearGradientBrush(p, p.add(n), wegFarbe, schattenFarbe))
+                            g.FillPolygon(brush, poly);
+                    }
+                    catch (Exception e) when (e is OutOfMemoryException
+                    || e is ExternalException)
+                    {
+                        g.FillPolygon(defaultBrush, poly);
+                    }
             }
         }
         public static void malWeg(Graphics g, OrientierbarerWeg weg, Pen stift, Brush pinsel, int samples)

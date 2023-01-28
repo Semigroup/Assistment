@@ -4,6 +4,9 @@ using System;
 using Assistment;
 using Assistment.Drawing.Algorithms;
 using Assistment.Extensions;
+using Assistment.Drawing.Geometries.Typing;
+using Assistment.Drawing.Geometries;
+using Assistment.Drawing;
 
 namespace DemoCode
 {
@@ -14,7 +17,7 @@ namespace DemoCode
 
         static void Main(string[] args)
         {
-            Example1();
+            Example2();
         }
 
         static Image getDogImage()
@@ -52,6 +55,93 @@ namespace DemoCode
                     }
                     demo.Save(outputDir + "demo1.jpg", ImageFormat.Jpeg);
                 }
+            }
+        }
+        /// <summary>
+        /// Typing with Drawing.Geometries.Typing.Digital
+        /// <para></para>
+        /// Differences in Letterbox Styles: LetterBox.Style.Hard, LetterBox.Style.Fitting, LetterBox.Style.Approx 
+        /// </summary>
+        static void Example2()
+        {
+            var abc = new Alphabet();
+            abc.MakeDigital();
+
+            string line = "Typing with Curves";
+            int fontSize = 100;
+
+            int imageWidth = (int)(1.2f * fontSize * (line.Length + 1));
+            int imageHeight = 9 * fontSize;
+
+            var styles = new LetterBox.Style[] { LetterBox.Style.Hard, LetterBox.Style.Fitting, LetterBox.Style.Approx };
+
+            Hohe heightFunction = t => (float)(1 + Math.Sin(Math.Tau * t));
+
+            using (var demo = new Bitmap(imageWidth, imageHeight))
+            using (var graphics = demo.GetHighGraphics())
+            {
+                graphics.Clear(Color.White);
+
+                var offset = new PointF(fontSize / 2, fontSize / 2);
+
+                foreach (var style in styles)
+                {
+                    foreach (var curve in abc.Type(offset, line, fontSize, style))
+                    {
+                        Hohe hScaled = t => 10 * heightFunction((curve.L * t / 30) % 1);
+                        var redSinus = curve.GetPolygon(10000, 0, 1, hScaled);
+                        graphics.DrawCurve(new Pen(Color.Red, 2), redSinus);
+
+                        var blackBase = curve.GetPolygon(1000, 0, 1);
+                        graphics.DrawCurve(new Pen(Color.Black, 3), blackBase);
+                    }
+                    offset.Y += 3 * fontSize;
+                }
+
+                demo.Save(outputDir + "demo2.jpg", ImageFormat.Jpeg);
+            }
+        }
+
+        /// <summary>
+        /// Typing with Shadow
+        /// </summary>
+        static void Example3()
+        {
+            var abc = new Alphabet();
+            abc.MakeDigital();
+
+            string line = "Typing with Shadow";
+            int fontSize = 100;
+
+            int imageWidth = (int)(1.2f * fontSize * (line.Length + 1));
+            int imageHeight = 12 * fontSize;
+
+            var heightFunctions = new Hohe[]{
+                t => 3,
+                t => (float)(3 * Math.Sin(Math.Tau * t)),
+                t => (float)(2 + Math.Sin(Math.Tau * t)),
+                t => t < 0.5 ? (t < 0.25 ? 1 : 0) : (t< 0.75 ? 1 : 2)
+            };
+            var shadow = new PointF(1f / (float)Math.Sqrt(2), 1f / (float)Math.Sqrt(2));
+
+            using (var demo = new Bitmap(imageWidth, imageHeight))
+            using (var graphics = demo.GetHighGraphics())
+            {
+                graphics.Clear(Color.White);
+
+                var offset = new PointF(fontSize / 2, fontSize / 2);
+
+                foreach (var h in heightFunctions)
+                {
+                    foreach (var curve in abc.Type(offset, line, fontSize, LetterBox.Style.Fitting))
+                    {
+                        Hohe hScaled = t => 10 * h((curve.L * t / 50) % 1);
+                        Shadex.malSchatten(graphics, curve, Color.Red, Color.Black, shadow, 10000, hScaled);
+                    }
+                    offset.Y += 3 * fontSize;
+                }
+
+                demo.Save(outputDir + "demo3.jpg", ImageFormat.Jpeg);
             }
         }
     }

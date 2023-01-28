@@ -83,5 +83,21 @@ namespace Assistment.Drawing.Geometries.Typing
                     Letters.Add(index, value);
             }
         }
+
+        public IEnumerable<OrientierbarerWeg> Type(PointF location, string line, float fontSize, LetterBox.Style style = LetterBox.Style.Hard)
+        {
+            var box = LetterBox.GetGoldenCut(fontSize, style);
+            foreach (char symbol in line)
+            {
+                if (symbol == ' ')
+                    location.X += box.Width;
+                else
+                {
+                    foreach (var curve in box.GetCurves(this[symbol]))
+                        yield return curve + location;
+                    location.X += box.Width + box.InterimWidth;
+                }
+            }
+        }
     }
 }
