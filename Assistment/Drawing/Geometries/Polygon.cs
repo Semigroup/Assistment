@@ -262,5 +262,15 @@ namespace Assistment.Drawing.Geometries
 
             return poly;
         }
+
+        public override string ToString()
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.Append("Polygon{");
+            foreach (var item in punkte)
+                sb.Append("("+item.X + ";"+item.Y +")-");
+            sb.Remove(sb.Length - 1, 1);
+            return sb.ToString();
+        }
     }
 }

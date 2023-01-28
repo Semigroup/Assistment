@@ -12,7 +12,7 @@ using Assistment.Extensions;
 
 namespace Assistment.Drawing.Algorithms
 {
-    public class PolygonFillingAlgorithm : ImageAlgorithmBase
+    public class PolygonFillingAlgorithm
     {
         /// <summary>
         /// Kachelung über [0,1]^2
@@ -27,7 +27,7 @@ namespace Assistment.Drawing.Algorithms
             this.Tesselation = Tesselation;
         }
 
-        public override void Execute(Bitmap inputImage, Graphics g)
+        public void AverageMosaic(Bitmap inputImage, Graphics g, PointF location)
         {
             using (Bitmap b = rasterize(inputImage.Size))
             {
@@ -55,7 +55,7 @@ namespace Assistment.Drawing.Algorithms
                        (byte)(table[i, 1] * 1f / n),
                        (byte)(table[i, 2] * 1f / n),
                        (byte)(table[i, 3] * 1f / n));
-                    g.FillPolygon(c.ToBrush(), item);
+                    g.FillPolygon(c.ToBrush(), item + location);
                     i++;
                 }
             }
@@ -75,7 +75,7 @@ namespace Assistment.Drawing.Algorithms
             Bitmap map = new Bitmap(s.Width, s.Height);
             using (Graphics g = map.GetLowGraphics())
             {
-                g.ScaleTransform(s.Width, s.Height);
+                //g.ScaleTransform(s.Width, s.Height);
                 g.Clear(Color.FromArgb(-1));
                 int i = 0;
                 foreach (var item in Tesselation)
@@ -114,5 +114,9 @@ namespace Assistment.Drawing.Algorithms
             }
             return new PolygonFillingAlgorithm(tess);
         }
+        public PolygonFillingAlgorithm Scale(SizeF size)
+            => new PolygonFillingAlgorithm(Tesselation.Map(poly => poly * size).ToList());
+        public PolygonFillingAlgorithm Move(PointF offset)
+            => new PolygonFillingAlgorithm(Tesselation.Map(poly => poly + offset).ToList());
     }
 }

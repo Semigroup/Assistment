@@ -5,6 +5,8 @@ VisualStudioVersion = 17.4.33122.133
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assistment", "Assistment\Assistment.csproj", "{0C5CE078-5B2A-4160-B9DF-DBD11094422B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DemoCode", "DemoCode\DemoCode.csproj", "{40694785-BABE-4EC0-B92B-85BA31AFAA91}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -25,6 +27,18 @@ Global
 		{0C5CE078-5B2A-4160-B9DF-DBD11094422B}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{0C5CE078-5B2A-4160-B9DF-DBD11094422B}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{0C5CE078-5B2A-4160-B9DF-DBD11094422B}.Release|x86.ActiveCfg = Release|Any CPU
+		{40694785-BABE-4EC0-B92B-85BA31AFAA91}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{40694785-BABE-4EC0-B92B-85BA31AFAA91}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{40694785-BABE-4EC0-B92B-85BA31AFAA91}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{40694785-BABE-4EC0-B92B-85BA31AFAA91}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{40694785-BABE-4EC0-B92B-85BA31AFAA91}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{40694785-BABE-4EC0-B92B-85BA31AFAA91}.Debug|x86.Build.0 = Debug|Any CPU
+		{40694785-BABE-4EC0-B92B-85BA31AFAA91}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{40694785-BABE-4EC0-B92B-85BA31AFAA91}.Release|Any CPU.Build.0 = Release|Any CPU
+		{40694785-BABE-4EC0-B92B-85BA31AFAA91}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{40694785-BABE-4EC0-B92B-85BA31AFAA91}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{40694785-BABE-4EC0-B92B-85BA31AFAA91}.Release|x86.ActiveCfg = Release|Any CPU
+		{40694785-BABE-4EC0-B92B-85BA31AFAA91}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
