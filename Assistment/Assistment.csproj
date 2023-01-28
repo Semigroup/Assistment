@@ -104,14 +104,14 @@
     <Compile Include="Algebra\Tupel.cs" />
     <Compile Include="Drawing\Algorithms\PolygonFillingAlgorithm.cs" />
     <Compile Include="Drawing\CyberShadex.cs" />
-    <Compile Include="Drawing\Geometries\Erweiterer.cs" />
-    <Compile Include="Drawing\Geometries\FlacheErweiterer.cs" />
+    <Compile Include="Drawing\Geometries\Extensions\PolygonExtension.cs" />
+    <Compile Include="Drawing\Geometries\Extensions\FlacheErweiterer.cs" />
     <Compile Include="Drawing\Geometries\Fragments.cs" />
     <Compile Include="Drawing\Geometries\Geometrie.cs" />
-    <Compile Include="Drawing\Geometries\GeometrieErweiterer.cs" />
+    <Compile Include="Drawing\Geometries\Extensions\GeometrieErweiterer.cs" />
     <Compile Include="Drawing\Geometries\Gerade.cs" />
     <Compile Include="Drawing\Geometries\Ellipse.cs" />
-    <Compile Include="Drawing\Geometries\GeradenErweiterer.cs" />
+    <Compile Include="Drawing\Geometries\Extensions\GeradenErweiterer.cs" />
     <Compile Include="Drawing\Geometries\PointFComparer.cs" />
     <Compile Include="Drawing\Geometries\Polygon.cs" />
     <Compile Include="Drawing\Geometries\Typing\Alphabet.cs" />
@@ -154,7 +154,7 @@
     <Compile Include="Drawing\Geometries\Typing\Digital\ALetter.cs" />
     <Compile Include="Drawing\Geometries\Typing\Letter.cs" />
     <Compile Include="Drawing\Geometries\Typing\LetterBox.cs" />
-    <Compile Include="Drawing\Geometries\WegErweiterer.cs" />
+    <Compile Include="Drawing\Geometries\Extensions\WegErweiterer.cs" />
     <Compile Include="Drawing\Graph\Kante.cs" />
     <Compile Include="Drawing\Graph\Knoten.cs" />
     <Compile Include="Drawing\Geometries\OrientierbarerWeg.cs" />

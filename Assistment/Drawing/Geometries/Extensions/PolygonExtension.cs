@@ -7,7 +7,7 @@ using Assistment.Drawing.LinearAlgebra;
 
 namespace Assistment.Drawing.Geometries
 {
-    public static class Erweiterer
+    public static class PolygonExtension
     {
         public static void DrawPolygon(this Graphics Graphics, Pen Pen, Polygon Polygon)
         {
