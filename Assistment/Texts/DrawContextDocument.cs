@@ -5,7 +5,7 @@ using System.Drawing;
 using System.IO;
 using iTextSharp.text.pdf;
 using System.Drawing.Imaging;
-using Assistment.Drawing.LinearAlgebra;
+using Assistment.Drawing;
 using Assistment.Extensions;
 
 namespace Assistment.Texts

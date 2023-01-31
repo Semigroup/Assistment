@@ -9,6 +9,7 @@ using System.IO;
 using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
 using Assistment.Mathematik;
+using Assistment.Drawing;
 
 namespace Assistment.Extensions
 {

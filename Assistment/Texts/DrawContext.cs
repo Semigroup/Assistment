@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Text;
 using System.Drawing;
-using Assistment.Drawing.LinearAlgebra;
+using Assistment.Drawing;
 using Microsoft.Win32;
 using System.Drawing.Imaging;
 

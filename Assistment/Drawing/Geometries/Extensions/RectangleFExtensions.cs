@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Drawing;
 
-namespace Assistment.Drawing.LinearAlgebra
+namespace Assistment.Drawing
 {
     public static class RectangleFExtensions
     {

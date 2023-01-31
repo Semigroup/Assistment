@@ -12,8 +12,8 @@ namespace Assistment.Drawing.Geometries.Typing.Digital
         {
             Segments = new Segment[1];
             Segments[0] = new Segment(
-                    0f, 0,
-                    0f, 2);
+                    0.5f, 0,
+                    0.5f, 2);
 
             AssociatedCharacters = "I";
         }

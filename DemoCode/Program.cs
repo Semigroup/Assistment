@@ -7,6 +7,7 @@ using Assistment.Extensions;
 using Assistment.Drawing.Geometries.Typing;
 using Assistment.Drawing.Geometries;
 using Assistment.Drawing;
+using System.Security.Cryptography;
 
 namespace DemoCode
 {
@@ -17,7 +18,7 @@ namespace DemoCode
 
         static void Main(string[] args)
         {
-            Example2();
+            Example4();
         }
 
         static Image getDogImage()
@@ -101,7 +102,6 @@ namespace DemoCode
                 demo.Save(outputDir + "demo2.jpg", ImageFormat.Jpeg);
             }
         }
-
         /// <summary>
         /// Typing with Shadow
         /// </summary>
@@ -142,6 +142,57 @@ namespace DemoCode
                 }
 
                 demo.Save(outputDir + "demo3.jpg", ImageFormat.Jpeg);
+            }
+        }
+        /// <summary>
+        /// Typing on Shapes
+        /// </summary>
+        static void Example4()
+        {
+            var abc = new Alphabet();
+            abc.MakeDigital();
+
+            string line = "Typing on Shapes  ";
+            int fontSize = 30;
+
+            int imageWidth = 1000;
+            int imageHeight = 1000;
+
+            RectangleF topBox = new RectangleF(0, 0, fontSize * line.Length * 1.2f, fontSize * 2);
+
+            var spiral = OrientierbarerWeg.Spirale(300, 8);
+            spiral.Invertier();
+            spiral = spiral.Spiegel(new Gerade(0, 0, 0, 1));
+
+            OrientierbarerWeg[] baseCurves = {
+                OrientierbarerWeg.Kreisbogen(400, 0, 1) + new PointF(500, 500),
+                spiral + new PointF(500, 500)
+            };
+
+
+            using (var demo = new Bitmap(imageWidth, imageHeight))
+            using (var graphics = demo.GetHighGraphics())
+            {
+                graphics.Clear(Color.White);
+                foreach (var baseCurve in baseCurves)
+                {
+                    var blackBase = baseCurve.GetPolygon(1000, 0, 1);
+                    graphics.DrawCurve(new Pen(Color.Black, 3), blackBase);
+
+                    int iterations = (int)(baseCurve.L / 300);
+
+                    foreach (var curve in abc.Type(new PointF(), line, fontSize))
+                        for (int i = 0; i < iterations; i++)
+                        {
+                            float t0 = i * 1f / iterations;
+                            float t1 = (i + 1f) / iterations;
+                            var result = OrientierbarerWeg.TransformAlong(baseCurve, curve, topBox, t0, t1, fontSize);
+                            var redTop = result.GetPolygon(10000, 0, 1);
+                            graphics.DrawCurve(new Pen(Color.Red, 2), redTop);
+                        }
+                }
+
+                demo.Save(outputDir + "demo4.jpg", ImageFormat.Jpeg);
             }
         }
     }

@@ -5,7 +5,7 @@ using System.Text;
 using System.Drawing;
 using Assistment.Mathematik;
 
-namespace Assistment.Drawing.LinearAlgebra
+namespace Assistment.Drawing
 {
     public static class PointFErweiterer
     {

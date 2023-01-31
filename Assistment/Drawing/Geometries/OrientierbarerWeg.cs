@@ -690,6 +690,56 @@ namespace Assistment.Drawing.Geometries
             return new OrientierbarerWeg(Y, N.Normalize(), T.Normalize(), Y.Length(9));
         }
 
+        public static OrientierbarerWeg TransformAlong(OrientierbarerWeg baseCurve,
+            OrientierbarerWeg topCurve, RectangleF topBox,
+            float t0, float t1, float height)
+        {
+            float delta = t1 - t0;
+            (float t2, PointF basePoint, float h) get(float t)
+            {
+                var topPoint = topCurve.Weg(t);
+                var t2 = (topPoint.X - topBox.X) / topBox.Width;
+                t2 = t0 + t2 * delta;
+                var basePoint = baseCurve.Weg(t2);
+                var h = (topBox.Bottom - topPoint.Y) / topBox.Height;
+
+                return (t2, basePoint, h);
+            }
+
+            (float a, float b, float c, float d) getMatrix(float t2)
+            {
+                var tan = baseCurve.Tangente(t2);
+                var n = baseCurve.Normale(t2);
+                return (tan.X, n.X, tan.Y, n.Y);
+            }
+
+            PointF mul((float a, float b, float c, float d) m, PointF v)
+                => new PointF(m.a * v.X + m.b * v.Y, m.c * v.X + m.d * v.Y);
+
+            Weg curve = t =>
+            {
+                (float t2, PointF basePoint, float h) = get(t);
+                var n = baseCurve.Normale(t2);
+                return basePoint.saxpy(height * h, n);
+            };
+            Weg tangent = t =>
+            {
+                (float t2, PointF basePoint, float h) = get(t);
+                var m = getMatrix(t2);
+                var topTan = topCurve.Tangente(t2);
+                return mul(m, topTan);
+            };
+            Weg normal = t =>
+            {
+                (float t2, PointF basePoint, float h) = get(t);
+                var m = getMatrix(t2);
+                var topTan = topCurve.Normale(t2);
+                return mul(m, topTan);
+            };
+            var length = curve.Length(1000);
+            return new OrientierbarerWeg(curve, normal, tangent, length);
+        }
+
         /// <summary>
         /// Nicht nach Bogenlänge parametrisiert. Normale und Länge werden billig approximiert.
         /// </summary>

@@ -6,7 +6,7 @@ using Assistment;
 using Assistment.Texts;
 using System.Drawing;
 using iTextSharp.text;
-using Assistment.Drawing.LinearAlgebra;
+using Assistment.Drawing;
 using Assistment.Mathematik;
 
 namespace Assistment.Texts.Paper

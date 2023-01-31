@@ -165,8 +165,8 @@
     <Compile Include="Drawing\Huge\SlaveErweiterer.cs" />
     <Compile Include="Drawing\IDrawable.cs" />
     <Compile Include="Drawing\LinearAlgebra\Matrix2.cs" />
-    <Compile Include="Drawing\LinearAlgebra\PointFErweiterer.cs" />
-    <Compile Include="Drawing\LinearAlgebra\RectangleFExtensions.cs" />
+    <Compile Include="Drawing\Geometries\Extensions\PointFErweiterer.cs" />
+    <Compile Include="Drawing\Geometries\Extensions\RectangleFExtensions.cs" />
     <Compile Include="Drawing\Netz.cs" />
     <Compile Include="Drawing\Spatials\Plane.cs" />
     <Compile Include="Drawing\Spatials\Spatial.cs" />
@@ -183,6 +183,7 @@
     <Compile Include="Extensions\GraphicsExtender.cs" />
     <Compile Include="Extensions\ImageExtender.cs" />
     <Compile Include="Extensions\PrimitiveExtender.cs" />
+    <Compile Include="Extensions\RandomExtension.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="form\BallPointFBox.cs">
       <SubType>UserControl</SubType>

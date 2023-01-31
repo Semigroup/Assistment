@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 
 using Assistment.Extensions;
-using Assistment.Drawing.LinearAlgebra;
+using Assistment.Drawing;
 
 namespace Assistment.Texts
 {
