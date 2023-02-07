@@ -644,36 +644,6 @@ namespace Assistment.Drawing
             ChaosWeg(g, y, schema.farben, schema.burst, schema.strings, schema.hohe, (int)(schema.sampleRate * y.L));
         }
 
-        //public static void ChaosFlache(Graphics g, FlachenSchema schema)
-        //{
-        //    Polygon samples = new Polygon(2 * schema.Samples.X + 1);
-        //    int n = 2 * schema.Samples.X - 1;
-        //    float hohe = 1 / (schema.Samples.Y - 1f);
-        //    for (int i = 0; i < schema.Samples.X; i++)
-        //    {
-        //        float t = i / (schema.Samples.X - 1f);
-        //        samples[i] = new PointF(t, 0);
-        //        samples[n - i] = new PointF(t, hohe);
-        //    }
-        //    samples.Close();
-
-        //    g.FillPolygon(schema.Pinsel(0.5f, 0), samples.Map(schema.Flache));
-        //    hohe = 1 - hohe;
-        //    Polygon neu = samples + new PointF(0, hohe);
-        //    g.FillPolygon(schema.Pinsel(0.5f, 1), neu.Map(schema.Flache));
-
-        //    hohe = -1 / (schema.Samples.Y - 1f);
-        //    for (int i = 0; i < schema.Samples.X; i++)
-        //        samples[i] = samples[i].add(0, hohe);
-        //    samples.Close();
-
-        //    for (int i = 1; i < schema.Samples.Y - 1; i++)
-        //    {
-        //        hohe = i / (schema.Samples.Y - 1f);
-        //        neu = samples + new PointF(0, hohe);
-        //        g.FillPolygon(schema.Pinsel(0.5f, hohe), neu.Map(schema.Flache));
-        //    }
-        //}
         public static void ChaosFlache(Graphics g, FlachenSchema schema)
         {
             RectangleF thumb;
