@@ -9,6 +9,7 @@ using System.Windows.Forms;
 
 using Assistment.Drawing;
 using Assistment.Extensions;
+using Assistment.Drawing.Geometries.Extensions;
 
 namespace Assistment.form
 {

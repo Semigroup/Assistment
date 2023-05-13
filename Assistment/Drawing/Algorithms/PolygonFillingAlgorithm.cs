@@ -6,9 +6,9 @@ using System.Text;
 using System.Threading.Tasks;
 using Assistment.Drawing;
 using Assistment.Drawing.Geometries;
-using Assistment.Drawing.LinearAlgebra;
 using System.Drawing.Imaging;
 using Assistment.Extensions;
+using Assistment.Drawing.Geometries.Extensions;
 
 namespace Assistment.Drawing.Algorithms
 {

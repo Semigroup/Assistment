@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Assistment.Drawing;
+using Assistment.Drawing.Geometries.Extensions;
 
 namespace Assistment.Extensions
 {

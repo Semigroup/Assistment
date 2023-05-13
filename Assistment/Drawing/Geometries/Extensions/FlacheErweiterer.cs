@@ -1,9 +1,8 @@
 ﻿using System.Drawing;
-using Assistment.Drawing.LinearAlgebra;
 using Assistment.Mathematik;
 using System;
 
-namespace Assistment.Drawing.Geometries
+namespace Assistment.Drawing.Geometries.Extensions
 {
     public static class FlacheErweiterer
     {

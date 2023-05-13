@@ -1,20 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Collections;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using System.IO;
-using System.Diagnostics;
-using System.Threading;
 
-using Assistment.Drawing.LinearAlgebra;
-using Assistment.Texts;
-using Assistment.form;
-using Assistment.Extensions;
 
 namespace Assistment.form
 {

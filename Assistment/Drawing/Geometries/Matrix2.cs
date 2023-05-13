@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Drawing;
+using Assistment.Drawing.Geometries.Extensions;
 
-namespace Assistment.Drawing.LinearAlgebra
+namespace Assistment.Drawing.Geometries
 {
     public class Matrix2
     {

@@ -1,12 +1,6 @@
-﻿using System.Drawing;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿
 using System.Text;
-using Assistment.Mathematik;
-using Assistment.Extensions;
-using Assistment.Drawing.LinearAlgebra;
-using System.Diagnostics;
+
 
 namespace Assistment.Texts
 {

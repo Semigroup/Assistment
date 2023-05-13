@@ -5,7 +5,7 @@ using System.Text;
 using Assistment.Drawing.Style;
 using System.Drawing;
 using Assistment.Extensions;
-using Assistment.Drawing.LinearAlgebra;
+using Assistment.Drawing.Geometries.Extensions;
 using Assistment.Drawing.Geometries;
 using Assistment.Mathematik;
 

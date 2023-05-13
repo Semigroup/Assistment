@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Drawing;
-using Assistment.Drawing.LinearAlgebra;
 
-namespace Assistment.Drawing.Geometries
+namespace Assistment.Drawing.Geometries.Extensions
 {
     public static class PolygonExtension
     {

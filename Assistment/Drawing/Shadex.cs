@@ -7,7 +7,7 @@ using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
 using Assistment.Drawing.Graph;
 using System.Drawing.Drawing2D;
-using Assistment.Drawing.LinearAlgebra;
+using Assistment.Drawing.Geometries.Extensions;
 using Assistment.Drawing.Geometries;
 using Assistment.Drawing.Style;
 using Assistment.Extensions;

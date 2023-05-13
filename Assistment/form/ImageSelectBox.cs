@@ -10,7 +10,7 @@ using System.Windows.Media.Imaging;
 using System.IO;
 using System.Net;
 
-using Assistment.Extensions;
+using Assistment.Drawing.Geometries.Extensions;
 
 using Assistment.Drawing;
 

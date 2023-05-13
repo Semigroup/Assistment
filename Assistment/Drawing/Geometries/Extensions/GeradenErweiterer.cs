@@ -1,11 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Drawing;
-using Assistment.Drawing.LinearAlgebra;
 using Assistment.Mathematik;
 using Assistment.Extensions;
 
-namespace Assistment.Drawing.Geometries
+namespace Assistment.Drawing.Geometries.Extensions
 {
     public static class GeradenErweiterer
     {

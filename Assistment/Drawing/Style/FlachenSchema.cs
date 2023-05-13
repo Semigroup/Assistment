@@ -6,7 +6,7 @@ using System.Drawing.Drawing2D;
 using System.Drawing;
 using Assistment.Drawing.Geometries;
 using Assistment.Extensions;
-using Assistment.Drawing.LinearAlgebra;
+using Assistment.Drawing.Geometries.Extensions;
 using Assistment.Mathematik;
 
 namespace Assistment.Drawing.Style

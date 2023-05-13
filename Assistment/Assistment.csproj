@@ -164,7 +164,7 @@
     <Compile Include="Drawing\Huge\Slave.cs" />
     <Compile Include="Drawing\Huge\SlaveErweiterer.cs" />
     <Compile Include="Drawing\IDrawable.cs" />
-    <Compile Include="Drawing\LinearAlgebra\Matrix2.cs" />
+    <Compile Include="Drawing\Geometries\Matrix2.cs" />
     <Compile Include="Drawing\Geometries\Extensions\PointFErweiterer.cs" />
     <Compile Include="Drawing\Geometries\Extensions\RectangleFExtensions.cs" />
     <Compile Include="Drawing\Netz.cs" />

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Drawing;
-using Assistment.Drawing;
+using Assistment.Drawing.Geometries.Extensions;
 
 namespace Assistment.Texts
 {

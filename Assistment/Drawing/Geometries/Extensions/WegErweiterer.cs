@@ -1,7 +1,7 @@
 ﻿using System.Drawing;
-using Assistment.Drawing.LinearAlgebra;
+using Assistment.Drawing.Geometries;
 
-namespace Assistment.Drawing.Geometries
+namespace Assistment.Drawing.Geometries.Extensions
 {
     public static class WegErweiterer
     {

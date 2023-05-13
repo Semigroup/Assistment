@@ -9,7 +9,7 @@ using System.IO;
 
 using Assistment.Drawing;
 using Assistment.Extensions;
-using Assistment.Drawing.LinearAlgebra;
+using Assistment.Drawing.Geometries.Extensions;
 using System.Drawing.Imaging;
 
 namespace Assistment.Texts

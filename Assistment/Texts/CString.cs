@@ -1,12 +1,6 @@
 ﻿//#define CSTRINGDEBUG
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Drawing;
-using Assistment.Mathematik;
-using Assistment.Drawing.LinearAlgebra;
 
 namespace Assistment.Texts
 {
