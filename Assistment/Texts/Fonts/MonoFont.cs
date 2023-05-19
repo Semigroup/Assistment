@@ -10,12 +10,17 @@ namespace Assistment.Texts.Fonts
 {
     /// <summary>
     /// Simple, Abstract Font that assigns to each character the same height and width.
-    /// Does not provide Fonts!
+    /// Provides the Calibri 11 Font
     /// </summary>
     public class MonoFont : IFontMeasurer
     {
         public float SymbolWidth;
         public float SymbolHeight;
+
+        private static Font Default = new Font("Calibri", 11);
+        private static Font DefaultBold = new Font("Calibri", 11, FontStyle.Bold);
+        private static Font DefaultItalic = new Font("Calibri", 11, FontStyle.Italic);
+        private static Font DefaultBoldItalic = new Font("Calibri", 11, FontStyle.Bold | FontStyle.Italic);
 
         public MonoFont(float SymbolWidth, float SymbolHeight)
         {
@@ -28,37 +33,21 @@ namespace Assistment.Texts.Fonts
             => 0;
 
         public Font GetFont()
-        {
-            throw new NotSupportedException();
-        }
+            => Default;
         public Font GetFont(float scale)
-        {
-            throw new NotSupportedException();
-        }
+        => new Font("Calibri", 11 * scale);
         public Font GetFontBold()
-        {
-            throw new NotSupportedException();
-        }
+        => DefaultBold;
         public Font GetFontBold(float scale)
-        {
-            throw new NotSupportedException();
-        }
+                => new Font("Calibri", 11 * scale, FontStyle.Bold);
         public Font GetFontBoldAndItalic()
-        {
-            throw new NotSupportedException();
-        }
+            => DefaultBoldItalic;
         public Font GetFontBoldAndItalic(float scale)
-        {
-            throw new NotSupportedException();
-        }
+            => new Font("Calibri", 11 * scale, FontStyle.Bold | FontStyle.Italic);
         public Font GetFontItalic()
-        {
-            throw new NotSupportedException();
-        }
+            => DefaultItalic;
         public Font GetFontItalic(float scale)
-        {
-            throw new NotSupportedException();
-        }
+                => new Font("Calibri", 11 * scale, FontStyle.Italic);
 
         public IFontMeasurer GetFontOfSize(float size)
             => new MonoFont(SymbolWidth * size, SymbolHeight * size);
